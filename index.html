@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <!-- دعم تشغيل جميع الصفحات كـ Web App ملء الشاشة -->
+    <!-- دعم تشغيل التطبيق بملء الشاشة على الآيفون -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="الموسى التجارية">
-    <meta name="mobile-web-app-capable" content="yes">
 
-    <!-- أيقونة التطبيق -->
+    <!-- أيقونة التطبيق عند الحفظ على الشاشة الرئيسية (Home Screen Icons) -->
     <link rel="apple-touch-icon" sizes="180x180" href="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM">
     <link rel="icon" type="image/png" sizes="32x32" href="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM">
+    <link rel="shortcut icon" href="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM">
 
     <title>لوحة التحكم الاحترافية - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
         :root {
             --primary: #0f172a;
@@ -25,7 +24,7 @@
             --accent-hover: #1d4ed8;    
             --accent-light: #eff6ff;    
             --accent-border: #bfdbfe;   
-            --bg-body: #f8fafc;
+            --bg-body: #f8fafc;        /* خلفية بيضاء / فاتحة متطابقة مع المبيعات */
             --bg-card: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
@@ -56,6 +55,7 @@
             max-width: 480px;
         }
 
+        /* رأس الصفحة (الهيدر) */
         header {
             display: flex;
             justify-content: space-between;
@@ -98,6 +98,7 @@
             margin-top: 1px;
         }
 
+        /* شبكة الأيقونات */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -131,6 +132,7 @@
             transform: scale(0.97);
         }
 
+        /* الأيقونة العائمة */
         .icon-box {
             width: 60px;
             height: 60px;
@@ -161,6 +163,7 @@
             line-height: 1.3;
         }
 
+        /* تدرجات ألوان الأيقونات الطبيعية */
         .ic-sales { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #ffffff; }
         .ic-warehouse { background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; }
         .ic-stock { background: linear-gradient(135deg, #22c55e, #15803d); color: #ffffff; }
@@ -171,11 +174,13 @@
         .ic-water { background: linear-gradient(135deg, #06b6d4, #0e7490); color: #ffffff; }
         .ic-electricity { background: linear-gradient(135deg, #eab308, #a16207); color: #ffffff; }
 
+        /* العناصر غير المتاحة (منع النقر مع الحفاظ على الألوان الطبيعية) */
         .menu-item.disabled {
             cursor: not-allowed;
             pointer-events: none;
         }
 
+        /* بادج برتقالي مميز وجذاب */
         .badge-orange {
             position: absolute;
             top: 8px;
@@ -197,6 +202,7 @@
             font-size: 8px;
         }
 
+        /* التذييل */
         footer {
             text-align: center;
             margin-top: 30px;
@@ -208,6 +214,7 @@
 <body>
 
 <div class="dashboard-container">
+    <!-- الهيدر الأبيض مع اللوجو -->
     <header>
         <div class="logo-container">
             <img src="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM" alt="الموسى التجارية" class="brand-logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'42\' height=\'42\'><rect width=\'42\' height=\'42\' fill=\'%23f1f5f9\'/><text x=\'50%\' y=\'50%\' font-size=\'9\' fill=\'%2364748b\' dominant-baseline=\'middle\' text-anchor=\'middle\'>LOGO</text></svg>';">
@@ -218,7 +225,9 @@
         </div>
     </header>
 
+    <!-- الأقسام والأيقونات -->
     <div class="menu-grid">
+        
         <!-- المبيعات (متاح) -->
         <a href="sales.html" class="menu-item">
             <div class="icon-box ic-sales">
@@ -306,31 +315,26 @@
             <div class="menu-title">فواتير الكهرباء</div>
             <div class="menu-desc">العدادات والسدادات</div>
         </div>
+
     </div>
 
     <footer>
         نظام الموسى التجارية الاحترافي © 2026
     </footer>
 </div>
-
-<!-- سكريبت التنقل الذكي الخاص بـ Web App -->
 <script>
-    (function(a, b, c) {
-        if (c in b && b[c]) {
-            var d, e = a.location, f = /javascript:/i;
-            a.addEventListener("click", function(a) {
-                d = a.target;
-                while (d.nodeName !== "A" && d.parentNode) {
-                    d = d.parentNode;
-                }
-                if ("href" in d && (d.href.indexOf("http") || ~d.href.indexOf(e.host)) && !f.test(d.href) && d.target !== "_blank") {
-                    a.preventDefault();
-                    e.href = d.href;
-                }
-            }, false);
+    // التأكد من إبقاء التنقل كاملاً داخل الـ PWA Standalone Mode
+    document.addEventListener("click", function(e) {
+        var anchor = e.target.closest("a");
+        if (anchor && anchor.href) {
+            var targetUrl = new URL(anchor.href, window.location.href);
+            // إذا كان الرابط تابعاً لنفس الموقع ولم يُفتح في تبويب جديد
+            if (targetUrl.origin === window.location.origin && anchor.target !== "_blank") {
+                e.preventDefault();
+                window.location.assign(anchor.href);
+            }
         }
-    })(document, window.navigator, "standalone");
+    }, true);
 </script>
-
 </body>
 </html>
