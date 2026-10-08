@@ -3,14 +3,16 @@
 <head>
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- تم تعديل viewport لتفعيل التكبير بالأصابع على شاشات الجوال -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <title>مبيعات الفروع - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- Chart.js & Zoom Plugin -->
+    <!-- Hammer.js & Chart.js & Zoom Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
     
@@ -352,12 +354,13 @@
             border-color: var(--accent);
         }
 
+        /* تم تعديل touch-action لـ none لتمكين Pinch-to-zoom */
         .chart-container-box {
             height: 210px;
             position: relative;
             width: 100%;
             padding: 0;
-            touch-action: pan-x;
+            touch-action: none;
         }
 
         .section-header {
@@ -1321,6 +1324,7 @@
                         position: 'top',
                         labels: { boxWidth: 10, font: { family: 'Cairo', size: 10 } }
                     },
+                    // تفعيل إضافة التكبير بـ Pinch و Pan على الجوال
                     zoom: {
                         pan: {
                             enabled: true,
