@@ -3,7 +3,6 @@
 <head>
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
-    <!-- تم تعديل viewport لتفعيل التكبير بالأصابع على شاشات الجوال -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
@@ -354,7 +353,6 @@
             border-color: var(--accent);
         }
 
-        /* تم تعديل touch-action لـ none لتمكين Pinch-to-zoom */
         .chart-container-box {
             height: 210px;
             position: relative;
@@ -763,7 +761,7 @@
         <div class="hero-amount" id="totalSalesAmount">0.00 ر.س</div>
     </div>
 
-    <!-- مؤشر أداء المبيعات بالساعات مع خاصية التكبير والتصغير -->
+    <!-- مؤشر أداء المبيعات بالساعات مع خاصية التكبير والتصغير السلسة -->
     <div class="main-chart-card">
         <div class="main-chart-title">
             <span>📈 مقارنة المبيعات بالساعات (9ص - 12م)</span>
@@ -1311,12 +1309,7 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 layout: {
-                    padding: {
-                        left: 0,
-                        right: 0,
-                        top: 5,
-                        bottom: 0
-                    }
+                    padding: { left: 0, right: 0, top: 5, bottom: 0 }
                 },
                 plugins: {
                     legend: {
@@ -1324,32 +1317,21 @@
                         position: 'top',
                         labels: { boxWidth: 10, font: { family: 'Cairo', size: 10 } }
                     },
-                    // تفعيل إضافة التكبير بـ Pinch و Pan على الجوال
-                 // البحث عن قسم الملحق zoom داخل options.plugins
-zoom: {
-    pan: {
-        enabled: true,
-        mode: 'x',
-        threshold: 10 // تقليل الحساسية للحركة الأفقية ليكون السحب أملس
-    },
-    zoom: {
-        wheel: {
-            enabled: true,
-            speed: 0.05 // إبطاء التكبير بعجلة الماوس
-        },
-        pinch: {
-            enabled: true
-        },
-        mode: 'x',
-        // ضبط معامل الحساسية والتكبير ليكون بطيئاً وسلساً على الجوال
-        sensitivity: 0.3, // تقليل الحساسية للأصابع (القيمة الافتراضية 1)
-    },
-    limits: {
-        x: {
-            minRange: 6 // تحدد الحد الأدنى للتقريب (مثلاً لا يقل عن 3 نقاط) لمنع التكبير المفاجئ والسريع جداً
-        }
-    }
-}
+                    zoom: {
+                        pan: {
+                            enabled: true,
+                            mode: 'x',
+                            threshold: 5
+                        },
+                        zoom: {
+                            wheel: { enabled: true, speed: 0.05 },
+                            pinch: { enabled: true },
+                            mode: 'x'
+                        },
+                        limits: {
+                            x: { minRange: 4 }
+                        }
+                    }
                 },
                 scales: {
                     y: {
@@ -1364,9 +1346,12 @@ zoom: {
                         offset: false,
                         grid: { display: false },
                         ticks: { 
-                            font: { family: 'Cairo', size: 8, weight: 'bold' },
+                            font: { family: 'Cairo', size: 9, weight: 'bold' },
                             maxRotation: 0,
-                            autoSkip: false
+                            autoSkip: false,
+                            callback: function(val, index) {
+                                return index % 2 === 0 ? this.getLabelForValue(val) : '';
+                            }
                         }
                     }
                 }
