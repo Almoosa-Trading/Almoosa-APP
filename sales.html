@@ -309,11 +309,11 @@
             gap: 6px;
         }
 
-        /* كارت الرسم البياني المعدل لتوسيع الإطار بالأسر */
+        /* كارت الرسم البياني */
         .main-chart-card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 15px 10px 10px 10px;
+            padding: 15px 8px 10px 8px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             margin-bottom: 20px;
@@ -329,10 +329,11 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 4px;
         }
 
         .chart-container-box {
-            height: 200px;
+            height: 210px;
             position: relative;
             width: 100%;
         }
@@ -503,7 +504,6 @@
             cursor: pointer;
         }
 
-        /* تنسيق التقرير (LTR) */
         #reportPDFContent {
             direction: ltr !important;
             text-align: left;
@@ -737,7 +737,7 @@
         <div class="hero-amount" id="totalSalesAmount">0.00 ر.س</div>
     </div>
 
-    <!-- كارت الرسم البياني -->
+    <!-- كارت الرسم البياني الرئيسية -->
     <div class="main-chart-card">
         <div class="main-chart-title">
             <span>📈 مقارنة المبيعات بالساعات (9ص - 12م)</span>
@@ -1193,7 +1193,7 @@
         renderMainHourlyChart(filtered, filteredPrev);
     }
 
-    /* تعديل جذري لمنع حجز المساحة اليسرى تماماً مع إخفاء أرقام المحور Y الجانبية لتمديد الشاشة بنسبة 100% */
+    /* تعديل دالة رسم الشارت لمنع قص الأطراف وإعادة المحور Y إلى أقصى اليمين */
     function renderMainHourlyChart(currentData, prevData) {
         const labels = ["9ص", "10ص", "11ص", "12م", "1م", "2م", "3م", "4م", "5م", "6م", "7م", "8م", "9م", "10م", "11م", "12ص"];
 
@@ -1237,7 +1237,8 @@
                         tension: 0.3,
                         borderWidth: 2,
                         pointBackgroundColor: '#059669',
-                        pointRadius: 2.5
+                        pointRadius: 3,
+                        clip: false // منع القص عند حواف الرسم البياني
                     },
                     {
                         label: 'الفترة السابقة (أمس)',
@@ -1249,7 +1250,8 @@
                         tension: 0.3,
                         borderWidth: 1.8,
                         pointBackgroundColor: '#dc2626',
-                        pointRadius: 2
+                        pointRadius: 2.5,
+                        clip: false
                     }
                 ]
             },
@@ -1258,9 +1260,9 @@
                 maintainAspectRatio: false,
                 layout: {
                     padding: {
-                        left: 0,
-                        right: 0,
-                        top: 5,
+                        left: 5,
+                        right: 5,
+                        top: 10,
                         bottom: 0
                     }
                 },
@@ -1279,12 +1281,23 @@
                 },
                 scales: {
                     y: {
-                        display: false, // إخفاء محور الأرقام الرأسي تماماً للتخلص من المساحة الصفراء اليسرى 100%
-                        beginAtZero: true
+                        display: true,
+                        position: 'right', // نقل محور الصادات Y إلى اليمين
+                        beginAtZero: true,
+                        grid: {
+                            color: '#f1f5f9'
+                        },
+                        ticks: {
+                            font: { family: 'Cairo', size: 8 },
+                            color: '#64748b',
+                            callback: function(value) {
+                                if (value >= 1000) return (value / 1000).toFixed(0) + 'k';
+                                return value;
+                            }
+                        }
                     },
                     x: {
-                        bounds: 'ticks',
-                        offset: false, // يمتد الرسم البياني من الحافة إلى الحافة تماماً
+                        offset: false, // مد الرسم من أول نقطة إلى آخر نقطة
                         grid: { display: false },
                         ticks: { 
                             font: { family: 'Cairo', size: 8.5, weight: 'bold' },
