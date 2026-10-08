@@ -309,10 +309,11 @@
             gap: 6px;
         }
 
+        /* تعديل كارت الرسم البياني ليستخدم كامل العرض */
         .main-chart-card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 15px 10px;
+            padding: 15px 8px 10px 8px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             margin-bottom: 20px;
@@ -327,7 +328,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 5px;
+            padding: 0 4px;
+        }
+
+        .chart-container-box {
+            height: 200px;
+            position: relative;
+            width: 100%;
         }
 
         .section-header {
@@ -730,13 +737,13 @@
         <div class="hero-amount" id="totalSalesAmount">0.00 ر.س</div>
     </div>
 
-    <!-- مؤشر أداء المبيعات بالساعات (الشاشة الرئيسية) -->
+    <!-- كارت الرسم البياني المعدل -->
     <div class="main-chart-card">
         <div class="main-chart-title">
             <span>📈 مقارنة المبيعات بالساعات (9ص - 12م)</span>
             <span id="chartSubLabel" style="font-size: 10px; color: var(--text-muted);">مقارنة بالفترة السابقة</span>
         </div>
-        <div style="height: 180px; position: relative; width: 100%;">
+        <div class="chart-container-box">
             <canvas id="mainHourlyChart"></canvas>
         </div>
     </div>
@@ -1186,6 +1193,7 @@
         renderMainHourlyChart(filtered, filteredPrev);
     }
 
+    /* تعديل إعدادات Chart.js لإلغاء الهامش الأيسر نهائياً وتمديد الرسم */
     function renderMainHourlyChart(currentData, prevData) {
         const labels = ["9ص", "10ص", "11ص", "12م", "1م", "2م", "3م", "4م", "5م", "6م", "7م", "8م", "9م", "10م", "11م", "12ص"];
 
@@ -1226,20 +1234,20 @@
                         borderColor: '#059669',
                         backgroundColor: 'rgba(5, 150, 105, 0.12)',
                         fill: true,
-                        tension: 0.35,
-                        borderWidth: 2.5,
+                        tension: 0.3,
+                        borderWidth: 2,
                         pointBackgroundColor: '#059669',
-                        pointRadius: 3
+                        pointRadius: 2.5
                     },
                     {
                         label: 'الفترة السابقة (أمس)',
                         data: prevHourly,
                         borderColor: '#dc2626',
-                        backgroundColor: 'rgba(220, 38, 38, 0.05)',
-                        borderDash: [4, 4],
+                        backgroundColor: 'transparent',
+                        borderDash: [3, 3],
                         fill: false,
-                        tension: 0.35,
-                        borderWidth: 2,
+                        tension: 0.3,
+                        borderWidth: 1.8,
                         pointBackgroundColor: '#dc2626',
                         pointRadius: 2
                     }
@@ -1250,8 +1258,8 @@
                 maintainAspectRatio: false,
                 layout: {
                     padding: {
-                        left: 5,
-                        right: 5,
+                        left: 0,
+                        right: 0,
                         top: 5,
                         bottom: 0
                     }
@@ -1261,25 +1269,32 @@
                         display: true,
                         position: 'top',
                         align: 'center',
-                        rtl: true,
-                        textDirection: 'rtl',
+                        rtl: false, // لضمان التنسيق المستقر دون دفع للجانب
                         labels: { 
-                            boxWidth: 12, 
+                            boxWidth: 10, 
                             font: { family: 'Cairo', size: 10 },
-                            padding: 10
+                            padding: 8,
+                            usePointStyle: true
                         }
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        position: 'right',
+                        position: 'left', // إلغاء الموضع الأيمن المعقد لمنع ترك الفراغ الأيسر
                         grid: { color: '#f1f5f9' },
-                        ticks: { font: { family: 'Cairo', size: 9 } }
+                        ticks: { 
+                            font: { family: 'Cairo', size: 8 },
+                            padding: 2
+                        }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } }
+                        ticks: { 
+                            font: { family: 'Cairo', size: 8.5, weight: 'bold' },
+                            maxRotation: 0,
+                            autoSkip: false
+                        }
                     }
                 }
             }
