@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>مبيعات الفروع - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -314,16 +312,13 @@
             gap: 6px;
         }
 
-        /* كارت الرسم البياني */
         .main-chart-card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 15px 8px 10px 8px;
+            padding: 15px 8px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             margin-bottom: 20px;
-            width: 100%;
-            overflow: hidden;
         }
 
         .main-chart-title {
@@ -331,16 +326,17 @@
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 10px;
+            padding: 0 7px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 4px;
         }
 
         .chart-container-box {
             height: 210px;
             position: relative;
             width: 100%;
+            padding: 0;
         }
 
         .section-header {
@@ -509,6 +505,7 @@
             cursor: pointer;
         }
 
+        /* تنسيق التقرير (LTR) */
         #reportPDFContent {
             direction: ltr !important;
             text-align: left;
@@ -684,7 +681,7 @@
             <p>متابعة مبيعات نقاط البيع</p>
         </div>
         <div class="header-left-group">
-            <button class="action-btn" onclick="loadPOSData()" title="تحديث">🔄</button>
+            <button class="action-btn" onclick="forceAppUpdate()" title="تحديث">🔄</button>
             <button class="action-btn" onclick="goBack()" title="رجوع">⬅ رجوع</button>
             <a href="index.html" class="action-btn" title="الرئيسية">🏠 الرئيسية</a>
         </div>
@@ -742,7 +739,7 @@
         <div class="hero-amount" id="totalSalesAmount">0.00 ر.س</div>
     </div>
 
-    <!-- كارت الرسم البياني الرئيسية -->
+    <!-- مؤشر أداء المبيعات بالساعات (الشاشة الرئيسية) -->
     <div class="main-chart-card">
         <div class="main-chart-title">
             <span>📈 مقارنة المبيعات بالساعات (9ص - 12م)</span>
@@ -868,6 +865,31 @@
     document.addEventListener('DOMContentLoaded', () => {
         setPreset('today', document.querySelector('.chip.active'));
     });
+
+    async function forceAppUpdate() {
+        if ('serviceWorker' in navigator) {
+            try {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (let registration of registrations) {
+                    await registration.unregister();
+                }
+            } catch (err) {
+                console.error("خطأ أثناء إلغاء Service Worker:", err);
+            }
+        }
+
+        if ('caches' in window) {
+            try {
+                const keys = await caches.keys();
+                await Promise.all(keys.map(key => caches.delete(key)));
+            } catch (err) {
+                console.error("خطأ أثناء مسح الكاش:", err);
+            }
+        }
+
+        const cleanUrl = window.location.origin + window.location.pathname + '?v=' + new Date().getTime();
+        window.location.href = cleanUrl;
+    }
 
     function goBack() {
         if (window.history.length > 1) {
@@ -1198,31 +1220,32 @@
         renderMainHourlyChart(filtered, filteredPrev);
     }
 
-    /* تعديل دالة رسم الشارت لمنع قص الأطراف وإعادة المحور Y إلى أقصى اليمين */
     function renderMainHourlyChart(currentData, prevData) {
-        const labels = ["9ص", "10ص", "11ص", "12م", "1م", "2م", "3م", "4م", "5م", "6م", "7م", "8م", "9م", "10م", "11م", "12ص"];
+        // 16 ساعة متسلسلة من 9 صباحاً حتى 12 منتصف الليل
+        const labels = ["9ص", "10ص", "11ص", "12ظ", "1م", "2م", "3م", "4م", "5م", "6م", "7م", "8م", "9م", "10م", "11م", "12ل"];
 
         let currentHourly = new Array(16).fill(0);
         let prevHourly = new Array(16).fill(0);
 
-        currentData.forEach(inv => {
-            if (inv.posting_time) {
-                const hour = parseInt(inv.posting_time.split(':')[0], 10);
-                if (hour >= 9 && hour <= 24) {
-                    const idx = hour - 9;
-                    if (idx >= 0 && idx < 16) currentHourly[idx] += parseFloat(inv.grand_total || 0);
-                }
+        function parseHourIndex(timeStr) {
+            if (!timeStr) return -1;
+            const hour = parseInt(timeStr.split(':')[0], 10);
+            if (hour >= 9 && hour <= 23) {
+                return hour - 9;
+            } else if (hour === 0) {
+                return 15;
             }
+            return -1;
+        }
+
+        currentData.forEach(inv => {
+            const idx = parseHourIndex(inv.posting_time);
+            if (idx !== -1) currentHourly[idx] += parseFloat(inv.grand_total || 0);
         });
 
         prevData.forEach(inv => {
-            if (inv.posting_time) {
-                const hour = parseInt(inv.posting_time.split(':')[0], 10);
-                if (hour >= 9 && hour <= 24) {
-                    const idx = hour - 9;
-                    if (idx >= 0 && idx < 16) prevHourly[idx] += parseFloat(inv.grand_total || 0);
-                }
-            }
+            const idx = parseHourIndex(inv.posting_time);
+            if (idx !== -1) prevHourly[idx] += parseFloat(inv.grand_total || 0);
         });
 
         if (mainHourlyChartInstance) mainHourlyChartInstance.destroy();
@@ -1242,21 +1265,19 @@
                         tension: 0.3,
                         borderWidth: 2,
                         pointBackgroundColor: '#059669',
-                        pointRadius: 3,
-                        clip: false // منع القص عند حواف الرسم البياني
+                        pointRadius: 3
                     },
                     {
                         label: 'الفترة السابقة (أمس)',
                         data: prevHourly,
                         borderColor: '#dc2626',
-                        backgroundColor: 'transparent',
-                        borderDash: [3, 3],
+                        backgroundColor: 'rgba(220, 38, 38, 0.05)',
+                        borderDash: [4, 4],
                         fill: false,
                         tension: 0.3,
-                        borderWidth: 1.8,
+                        borderWidth: 2,
                         pointBackgroundColor: '#dc2626',
-                        pointRadius: 2.5,
-                        clip: false
+                        pointRadius: 2
                     }
                 ]
             },
@@ -1265,9 +1286,9 @@
                 maintainAspectRatio: false,
                 layout: {
                     padding: {
-                        left: 5,
-                        right: 5,
-                        top: 10,
+                        left: 0,
+                        right: 0,
+                        top: 5,
                         bottom: 0
                     }
                 },
@@ -1275,37 +1296,22 @@
                     legend: {
                         display: true,
                         position: 'top',
-                        align: 'center',
-                        labels: { 
-                            boxWidth: 10, 
-                            font: { family: 'Cairo', size: 10 },
-                            padding: 8,
-                            usePointStyle: true
-                        }
+                        labels: { boxWidth: 10, font: { family: 'Cairo', size: 10 } }
                     }
                 },
                 scales: {
                     y: {
-                        display: true,
-                        position: 'left', // نقل محور الصادات Y إلى اليمين
                         beginAtZero: true,
-                        grid: {
-                            color: '#f1f5f9'
-                        },
-                        ticks: {
-                            font: { family: 'Cairo', size: 8 },
-                            color: '#64748b',
-                            callback: function(value) {
-                                if (value >= 1000) return (value / 1000).toFixed(0) + 'k';
-                                return value;
-                            }
-                        }
+                        position: 'right',
+                        grid: { color: '#f1f5f9' },
+                        ticks: { font: { family: 'Cairo', size: 9 } }
                     },
                     x: {
-                        offset: false, // مد الرسم من أول نقطة إلى آخر نقطة
+                        bounds: 'data',
+                        offset: false,
                         grid: { display: false },
                         ticks: { 
-                            font: { family: 'Cairo', size: 8.5, weight: 'bold' },
+                            font: { family: 'Cairo', size: 8, weight: 'bold' },
                             maxRotation: 0,
                             autoSkip: false
                         }
@@ -1403,48 +1409,30 @@
                     categoryPercentage: 0.8
                 }]
             },
-           options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    // 1. إلغاء أي الهوامش الداخلية حول الرسم
-    layout: {
-        padding: {
-            left: 0,
-            right: 0,
-            top: 10,
-            bottom: 0
-        }
-    },
-    plugins: {
-        legend: {
-            display: true,
-            position: 'top',
-            labels: { boxWidth: 10, font: { family: 'Cairo', size: 10 } }
-        }
-    },
-    scales: {
-        y: {
-            beginAtZero: true,
-            display: true, // أو ضع false إذا كنت تريد إخفاء قيم المحور Y تماماً للتمدد الأقصى
-            position: 'right', // لضمان عدم ترك فراغ على اليسار في الواجهات العربية
-            grid: { color: '#f1f5f9' },
-            ticks: { font: { family: 'Cairo', size: 9 } }
-        },
-        x: {
-            // 2. إجبار النقاط الأولى والأخيرة على الالتصاق بالحواف فوراً
-            bounds: 'data',
-            offset: false, 
-            grid: { display: false },
-            ticks: { 
-                font: { family: 'Cairo', size: 8, weight: 'bold' },
-                maxRotation: 0,
-                autoSkip: false
+            options: {
+                animation: false,
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'right',
+                        labels: { boxWidth: 8, font: { size: 8, weight: 'bold' } }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#d9d9d9' },
+                        ticks: { font: { size: 9 }, color: '#000' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 9, weight: 'bold' }, color: '#000' }
+                    }
+                }
             }
-        }
-    }
-}
-        }
-    );
+        });
         setInstance(newInstance);
     }
 
@@ -1539,47 +1527,5 @@
         }
     }, true);
 </script>
-
-
-<!-- زر تحديث التطبيق إلى أحدث نسخة -->
-<script>
-    // 1. دالة التحديث الشاملة عند الضغط على زر التحديث أو استدعائها
-    async function forceAppUpdate() {
-        if ('serviceWorker' in navigator) {
-            try {
-                // إلغاء تسجيل جميع الـ Service Workers المسجلة
-                const registrations = await navigator.serviceWorker.getRegistrations();
-                for (let registration of registrations) {
-                    await registration.unregister();
-                }
-            } catch (err) {
-                console.error("خطأ أثناء إلغاء Service Worker:", err);
-            }
-        }
-
-        // مسح جميع أنواع Cache المخزنة في المتصفح
-        if ('caches' in window) {
-            try {
-                const keys = await caches.keys();
-                await Promise.all(keys.map(key => caches.delete(key)));
-            } catch (err) {
-                console.error("خطأ أثناء مسح الكاش:", err);
-            }
-        }
-
-        // إعادة تحميل الصفحة القسرية مع إضافة وقت للتأكد من عدم جلب التخزين القديم
-        const cleanUrl = window.location.origin + window.location.pathname + '?v=' + new Date().getTime();
-        window.location.href = cleanUrl;
-    }
-
-    // 2. تحديث زر التحديث 🔄 في أعلى الصفحة ليدعو دالة التحديث
-    document.addEventListener('DOMContentLoaded', () => {
-        const updateBtn = document.querySelector('.header-left-group .action-btn[title="تحديث"]');
-        if (updateBtn) {
-            updateBtn.setAttribute('onclick', 'forceAppUpdate()');
-        }
-    });
-</script>
-
 </body>
 </html>
