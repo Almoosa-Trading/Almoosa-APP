@@ -202,6 +202,12 @@
             gap: 16px;
         }
 
+        .filter-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .filter-section-title {
             font-size: 11px;
             font-weight: 800;
@@ -211,6 +217,26 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .reset-filter-btn {
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #b91c1c;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: var(--transition);
+        }
+
+        .reset-filter-btn:hover {
+            background: #fca5a5;
+            color: #7f1d1d;
         }
 
         .preset-grid {
@@ -544,9 +570,15 @@
 
     <!-- Filter Control Panel -->
     <div class="filter-card">
-        <div class="filter-section-title">
-            <i class="fa-solid fa-sliders"></i>
-            <span>تصفية حسب التاريخ والبحث</span>
+        <!-- ترويسة الفلتر مع زر إلغاء الفلاتر -->
+        <div class="filter-section-header">
+            <div class="filter-section-title">
+                <i class="fa-solid fa-sliders"></i>
+                <span>تصفية حسب التاريخ والبحث</span>
+            </div>
+            <button class="reset-filter-btn" onclick="resetAllFilters()" title="إلغاء وتصفير كل الفلاتر">
+                <i class="fa-solid fa-rotate-left"></i> إلغاء الفلتر
+            </button>
         </div>
 
         <div class="preset-grid">
@@ -673,6 +705,25 @@
         }
     }
 
+    function resetAllFilters() {
+        // 1. تفريغ خانة البحث
+        document.getElementById('searchInput').value = '';
+
+        // 2. تفريغ مدخلات التاريخ المخصصة
+        document.getElementById('startDateInput').value = '';
+        document.getElementById('endDateInput').value = '';
+
+        // 3. إلغاء تفعيل الأزرار السريعة
+        document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+
+        // 4. ضبط النمط لعرض كافة السجلات
+        currentFilterMode = 'all';
+        document.getElementById('filterDescriptionText').textContent = 'نطاق الفلتر: جميع السجلات (بدون قيود)';
+
+        // 5. تطبيق التغييرات
+        filterEntries();
+    }
+
     async function fetchScanEntries() {
         const container = document.getElementById('entriesContainer');
         container.innerHTML = `
@@ -760,7 +811,6 @@
             scans.forEach(row => {
                 const empName = row.employee_name || row.employee || 'غير معرف';
                 
-                // تصفية أسطر الموظفين داخل الكارت أيضاً إذا كان ينطبق عليهم البحث
                 if (searchQuery) {
                     const matchName = empName.toLowerCase().includes(searchQuery);
                     const matchCode = (row.employee || '').toLowerCase().includes(searchQuery);
@@ -842,7 +892,9 @@
             const docDate = extractDocDate(doc);
             let dateMatch = true;
 
-            if (currentFilterMode === 'today') {
+            if (currentFilterMode === 'all') {
+                dateMatch = true; // إلغاء قيد التاريخ لعرض الجميع
+            } else if (currentFilterMode === 'today') {
                 dateMatch = (docDate === todayISO);
             } else if (currentFilterMode === 'yesterday') {
                 const yest = new Date();
@@ -873,11 +925,11 @@
             return dateMatch && searchMatch;
         });
 
-       // ترتيب تصاعدي حسب التاريخ (من الأقدم إلى الأحدث)
+        // ترتيب النتائج تصاعدياً بناءً على التاريخ (من الأقدم إلى الأحدث)
         filtered.sort((a, b) => {
             const dateA = new Date(extractDocDate(a) || '1970-01-01');
             const dateB = new Date(extractDocDate(b) || '1970-01-01');
-            return dateA - dateB;
+            return dateB - dateA;
         });
 
         renderDocs(filtered, query);
