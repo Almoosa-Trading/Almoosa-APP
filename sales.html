@@ -312,10 +312,11 @@
         .main-chart-card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 15px;
+            padding: 15px 10px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             margin-bottom: 20px;
+            width: 100%;
         }
 
         .main-chart-title {
@@ -326,6 +327,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 5px;
         }
 
         .section-header {
@@ -1221,7 +1223,7 @@
                     {
                         label: 'الفترة المحددة (اليوم)',
                         data: currentHourly,
-                        borderColor: '#059669', // لون أخضر للفترة المحددة
+                        borderColor: '#059669',
                         backgroundColor: 'rgba(5, 150, 105, 0.12)',
                         fill: true,
                         tension: 0.35,
@@ -1232,7 +1234,7 @@
                     {
                         label: 'الفترة السابقة (أمس)',
                         data: prevHourly,
-                        borderColor: '#dc2626', // لون أحمر للفترة السابقة
+                        borderColor: '#dc2626',
                         backgroundColor: 'rgba(220, 38, 38, 0.05)',
                         borderDash: [4, 4],
                         fill: false,
@@ -1246,16 +1248,32 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 5,
+                        right: 5,
+                        top: 5,
+                        bottom: 0
+                    }
+                },
                 plugins: {
                     legend: {
                         display: true,
                         position: 'top',
-                        labels: { boxWidth: 10, font: { family: 'Cairo', size: 10 } }
+                        align: 'center',
+                        rtl: true,
+                        textDirection: 'rtl',
+                        labels: { 
+                            boxWidth: 12, 
+                            font: { family: 'Cairo', size: 10 },
+                            padding: 10
+                        }
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
+                        position: 'right',
                         grid: { color: '#f1f5f9' },
                         ticks: { font: { family: 'Cairo', size: 9 } }
                     },
