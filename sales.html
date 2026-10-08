@@ -309,6 +309,25 @@
             gap: 6px;
         }
 
+        .main-chart-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 15px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .main-chart-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
         .section-header {
             font-size: 14px;
             font-weight: 700;
@@ -709,6 +728,17 @@
         <div class="hero-amount" id="totalSalesAmount">0.00 ر.س</div>
     </div>
 
+    <!-- مؤشر أداء المبيعات بالساعات (الشاشة الرئيسية) -->
+    <div class="main-chart-card">
+        <div class="main-chart-title">
+            <span>📈 مقارنة المبيعات بالساعات (9ص - 12م)</span>
+            <span id="chartSubLabel" style="font-size: 10px; color: var(--text-muted);">مقارنة بالفترة السابقة</span>
+        </div>
+        <div style="height: 180px; position: relative; width: 100%;">
+            <canvas id="mainHourlyChart"></canvas>
+        </div>
+    </div>
+
     <div class="section-header">المبيعات حسب الفروع / نقاط البيع</div>
     <div class="branches-list" id="branchesContainer">
         <div class="status-msg">جاري تحميل البيانات...</div>
@@ -806,16 +836,20 @@
     };
 
     let allInvoicesCache = [];
+    let previousPeriodInvoicesCache = [];
     let availableBranches = new Set();
     
     let currentQueryFrom = '';
     let currentQueryTo = '';
+    let previousQueryFrom = '';
+    let previousQueryTo = '';
     
     let selectionState = { startDate: null, endDate: null };
     let viewDate = new Date();
 
     let qtyChartInstance = null;
     let salesChartInstance = null;
+    let mainHourlyChartInstance = null;
 
     document.addEventListener('DOMContentLoaded', () => {
         setPreset('today', document.querySelector('.chip.active'));
@@ -902,6 +936,7 @@
             }
         }
 
+        calculatePreviousPeriod();
         updateDateButtonText();
         renderCalendar();
         loadPOSData();
@@ -936,7 +971,7 @@
             end = new Date(start);
         } else if (type === 'week') {
             start = new Date(today);
-            start.setDate(today.getDate() - 7);
+            start.setDate(today.getDate() - 6);
             end = new Date(today);
         } else if (type === 'month') {
             start = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -953,9 +988,36 @@
         selectionState.endDate = currentQueryTo;
         viewDate = new Date(end);
 
+        calculatePreviousPeriod();
         updateDateButtonText();
         renderCalendar();
         loadPOSData();
+    }
+
+    function calculatePreviousPeriod() {
+        const dFrom = new Date(currentQueryFrom);
+        const dTo = new Date(currentQueryTo);
+
+        const diffTime = Math.abs(dTo - dFrom);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+        const prevToObj = new Date(dFrom);
+        prevToObj.setDate(prevToObj.getDate() - 1);
+
+        const prevFromObj = new Date(prevToObj);
+        prevFromObj.setDate(prevFromObj.getDate() - (diffDays - 1));
+
+        previousQueryFrom = formatDateStr(prevFromObj);
+        previousQueryTo = formatDateStr(prevToObj);
+
+        const subLabel = document.getElementById('chartSubLabel');
+        if (subLabel) {
+            if (previousQueryFrom === previousQueryTo) {
+                subLabel.textContent = `مقارنة بـ (${previousQueryFrom})`;
+            } else {
+                subLabel.textContent = `مقارنة بـ (${previousQueryFrom} إلى ${previousQueryTo})`;
+            }
+        }
     }
 
     function formatDateStr(d) {
@@ -985,13 +1047,12 @@
                 },
                 body: JSON.stringify({
                     doctype: "POS Invoice",
-                    fields: ["set_warehouse", "sum(grand_total) as grand_total", "sum(total_qty) as total_qty", "count(name) as total_invoices"],
+                    fields: ["set_warehouse", "grand_total", "total_qty", "posting_time"],
                     filters: [
                         ["posting_date", ">=", currentQueryFrom],
                         ["posting_date", "<=", currentQueryTo],
                         ["docstatus", "=", 1]
                     ],
-                    group_by: "set_warehouse",
                     limit_page_length: 0
                 })
             });
@@ -1002,9 +1063,36 @@
             } else {
                 allInvoicesCache = [];
             }
+
+            const prevResponse = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`
+                },
+                body: JSON.stringify({
+                    doctype: "POS Invoice",
+                    fields: ["set_warehouse", "grand_total", "posting_time"],
+                    filters: [
+                        ["posting_date", ">=", previousQueryFrom],
+                        ["posting_date", "<=", previousQueryTo],
+                        ["docstatus", "=", 1]
+                    ],
+                    limit_page_length: 0
+                })
+            });
+
+            if (prevResponse.ok) {
+                const prevResData = await prevResponse.json();
+                previousPeriodInvoicesCache = prevResData.message || [];
+            } else {
+                previousPeriodInvoicesCache = [];
+            }
+
         } catch (err) {
             console.warn("API Error:", err);
             allInvoicesCache = [];
+            previousPeriodInvoicesCache = [];
         }
 
         populateBranchSelect();
@@ -1041,22 +1129,23 @@
         container.innerHTML = '';
 
         let filtered = allInvoicesCache;
+        let filteredPrev = previousPeriodInvoicesCache;
+
         if (selectedBranch !== "ALL") {
             filtered = allInvoicesCache.filter(inv => inv.set_warehouse === selectedBranch);
+            filteredPrev = previousPeriodInvoicesCache.filter(inv => inv.set_warehouse === selectedBranch);
         }
 
         let totalSales = 0;
-        let totalInvoices = 0;
+        let totalInvoices = filtered.length;
         let totalQtySum = 0;
         let branchTotals = {};
 
         filtered.forEach(inv => {
             const amount = parseFloat(inv.grand_total || 0);
-            const count = parseInt(inv.total_invoices || 0);
             const qty = parseFloat(inv.total_qty || 0);
 
             totalSales += amount;
-            totalInvoices += count;
             totalQtySum += qty;
             
             const bName = inv.set_warehouse || 'غير محدد';
@@ -1064,7 +1153,7 @@
                 branchTotals[bName] = { amount: 0, count: 0, qty: 0 };
             }
             branchTotals[bName].amount += amount;
-            branchTotals[bName].count += count;
+            branchTotals[bName].count += 1;
             branchTotals[bName].qty += qty;
         });
 
@@ -1076,21 +1165,106 @@
 
         if (sortedBranches.length === 0) {
             container.innerHTML = `<div class="status-msg">لا توجد مبيعات مسجلة في هذه الفترة</div>`;
-            return;
+        } else {
+            sortedBranches.forEach(bName => {
+                const bData = branchTotals[bName];
+                const card = document.createElement('div');
+                card.className = 'branch-card';
+                card.innerHTML = `
+                    <div class="branch-info">
+                        <h3>${bName}</h3>
+                        <div class="branch-meta">${bData.count.toLocaleString('ar-SA')} فاتورة | ${bData.qty.toLocaleString('ar-SA')} قطعة</div>
+                    </div>
+                    <div class="branch-amount">${bData.amount.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س</div>
+                `;
+                container.appendChild(card);
+            });
         }
 
-        sortedBranches.forEach(bName => {
-            const bData = branchTotals[bName];
-            const card = document.createElement('div');
-            card.className = 'branch-card';
-            card.innerHTML = `
-                <div class="branch-info">
-                    <h3>${bName}</h3>
-                    <div class="branch-meta">${bData.count.toLocaleString('ar-SA')} فاتورة | ${bData.qty.toLocaleString('ar-SA')} قطعة</div>
-                </div>
-                <div class="branch-amount">${bData.amount.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س</div>
-            `;
-            container.appendChild(card);
+        renderMainHourlyChart(filtered, filteredPrev);
+    }
+
+    function renderMainHourlyChart(currentData, prevData) {
+        const labels = ["9ص", "10ص", "11ص", "12م", "1م", "2م", "3م", "4م", "5م", "6م", "7م", "8م", "9م", "10م", "11م", "12ص"];
+
+        let currentHourly = new Array(16).fill(0);
+        let prevHourly = new Array(16).fill(0);
+
+        currentData.forEach(inv => {
+            if (inv.posting_time) {
+                const hour = parseInt(inv.posting_time.split(':')[0], 10);
+                if (hour >= 9 && hour <= 24) {
+                    const idx = hour - 9;
+                    if (idx >= 0 && idx < 16) currentHourly[idx] += parseFloat(inv.grand_total || 0);
+                }
+            }
+        });
+
+        prevData.forEach(inv => {
+            if (inv.posting_time) {
+                const hour = parseInt(inv.posting_time.split(':')[0], 10);
+                if (hour >= 9 && hour <= 24) {
+                    const idx = hour - 9;
+                    if (idx >= 0 && idx < 16) prevHourly[idx] += parseFloat(inv.grand_total || 0);
+                }
+            }
+        });
+
+        if (mainHourlyChartInstance) mainHourlyChartInstance.destroy();
+
+        const ctx = document.getElementById('mainHourlyChart').getContext('2d');
+        mainHourlyChartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'الفترة المحددة (اليوم)',
+                        data: currentHourly,
+                        borderColor: '#059669', // لون أخضر للفترة المحددة
+                        backgroundColor: 'rgba(5, 150, 105, 0.12)',
+                        fill: true,
+                        tension: 0.35,
+                        borderWidth: 2.5,
+                        pointBackgroundColor: '#059669',
+                        pointRadius: 3
+                    },
+                    {
+                        label: 'الفترة السابقة (أمس)',
+                        data: prevHourly,
+                        borderColor: '#dc2626', // لون أحمر للفترة السابقة
+                        backgroundColor: 'rgba(220, 38, 38, 0.05)',
+                        borderDash: [4, 4],
+                        fill: false,
+                        tension: 0.35,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#dc2626',
+                        pointRadius: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: { boxWidth: 10, font: { family: 'Cairo', size: 10 } }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9' },
+                        ticks: { font: { family: 'Cairo', size: 9 } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } }
+                    }
+                }
+            }
         });
     }
 
@@ -1107,7 +1281,7 @@
                 await screen.orientation.lock('landscape');
             }
         } catch (e) {
-            console.log("تغيير اتجاه الشاشة تلقائياً غير مدعوم على هذا المتصفح:", e);
+            console.log("تغيير اتجاه الشاشة غير مدعوم:", e);
         }
     }
 
@@ -1209,51 +1383,46 @@
         setInstance(newInstance);
     }
 
-    // دالة توليد ملف الـ PDF المعدلة لضغط حجم الملف بفعالية ليكون أقل من 1 ميجابايت
-async function generatePDFBlob() {
-    const element = document.getElementById('reportPDFContent');
-    const actionsBar = document.getElementById('modalActionsBar');
-    
-    // إخفاء أزرار التحكم قبل التوليد
-    actionsBar.style.display = 'none';
+    async function generatePDFBlob() {
+        const element = document.getElementById('reportPDFContent');
+        const actionsBar = document.getElementById('modalActionsBar');
+        
+        actionsBar.style.display = 'none';
 
-    // 1. استخدام scale: 3.5 للحصول على دقة فائقة جداً للأرقام والنصوص
-    const canvas = await html2canvas(element, {
-        scale: 3.5,
-        useCORS: true,
-        logging: false,
-        backgroundColor: "#ffffff"
-    });
+        const canvas = await html2canvas(element, {
+            scale: 3.5,
+            useCORS: true,
+            logging: false,
+            backgroundColor: "#ffffff"
+        });
 
-    // إعادة إظهار الأزرار
-    actionsBar.style.display = 'flex';
+        actionsBar.style.display = 'flex';
 
-    // 2. تحويل الشاشة إلى JPEG بجودة 0.95 (تضمن دقة عالية وتضبط الحجم ليكون أقل من 15 ميجا)
-    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
 
-    const { jsPDF } = window.jspdf;
-    
-    // 3. إنشاء ملف PDF مع تفعيل الضغط الداخلي لتفادي تجاوز 15 ميجابايت
-    const pdf = new jsPDF({
-        orientation: 'landscape',
-        unit: 'mm',
-        format: 'a4',
-        compress: true
-    });
+        const { jsPDF } = window.jspdf;
+        
+        const pdf = new jsPDF({
+            orientation: 'landscape',
+            unit: 'mm',
+            format: 'a4',
+            compress: true
+        });
 
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
 
-    const imgWidth = pdfWidth - 10;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        const imgWidth = pdfWidth - 10;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    let yPos = (pdfHeight - imgHeight) / 2;
-    if (yPos < 5) yPos = 5;
+        let yPos = (pdfHeight - imgHeight) / 2;
+        if (yPos < 5) yPos = 5;
 
-    pdf.addImage(imgData, 'JPEG', 5, yPos, imgWidth, imgHeight, undefined, 'FAST');
+        pdf.addImage(imgData, 'JPEG', 5, yPos, imgWidth, imgHeight, undefined, 'FAST');
 
-    return pdf;
-}
+        return pdf;
+    }
+
     async function downloadPDF() {
         try {
             const pdf = await generatePDFBlob();
@@ -1294,12 +1463,10 @@ async function generatePDFBlob() {
     }
 </script>
 <script>
-    // التأكد من إبقاء التنقل كاملاً داخل الـ PWA Standalone Mode
     document.addEventListener("click", function(e) {
         var anchor = e.target.closest("a");
         if (anchor && anchor.href) {
             var targetUrl = new URL(anchor.href, window.location.href);
-            // إذا كان الرابط تابعاً لنفس الموقع ولم يُفتح في تبويب جديد
             if (targetUrl.origin === window.location.origin && anchor.target !== "_blank") {
                 e.preventDefault();
                 window.location.assign(anchor.href);
