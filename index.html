@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
+
+
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -336,5 +342,47 @@
         }
     }, true);
 </script>
+
+
+<!-- زر تحديث التطبيق إلى أحدث نسخة -->
+<script>
+    // 1. دالة التحديث الشاملة عند الضغط على زر التحديث أو استدعائها
+    async function forceAppUpdate() {
+        if ('serviceWorker' in navigator) {
+            try {
+                // إلغاء تسجيل جميع الـ Service Workers المسجلة
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (let registration of registrations) {
+                    await registration.unregister();
+                }
+            } catch (err) {
+                console.error("خطأ أثناء إلغاء Service Worker:", err);
+            }
+        }
+
+        // مسح جميع أنواع Cache المخزنة في المتصفح
+        if ('caches' in window) {
+            try {
+                const keys = await caches.keys();
+                await Promise.all(keys.map(key => caches.delete(key)));
+            } catch (err) {
+                console.error("خطأ أثناء مسح الكاش:", err);
+            }
+        }
+
+        // إعادة تحميل الصفحة القسرية مع إضافة وقت للتأكد من عدم جلب التخزين القديم
+        const cleanUrl = window.location.origin + window.location.pathname + '?v=' + new Date().getTime();
+        window.location.href = cleanUrl;
+    }
+
+    // 2. تحديث زر التحديث 🔄 في أعلى الصفحة ليدعو دالة التحديث
+    document.addEventListener('DOMContentLoaded', () => {
+        const updateBtn = document.querySelector('.header-left-group .action-btn[title="تحديث"]');
+        if (updateBtn) {
+            updateBtn.setAttribute('onclick', 'forceAppUpdate()');
+        }
+    });
+</script>
+
 </body>
 </html>
