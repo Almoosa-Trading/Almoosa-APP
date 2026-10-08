@@ -332,12 +332,13 @@
             justify-content: space-between;
         }
 
-        .chart-container-box {
-            height: 210px;
-            position: relative;
-            width: 100%;
-            padding: 0;
-        }
+      .chart-container-box {
+    height: 210px;
+    position: relative;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
 
         .section-header {
             font-size: 14px;
@@ -1220,106 +1221,107 @@
         renderMainHourlyChart(filtered, filteredPrev);
     }
 
-    function renderMainHourlyChart(currentData, prevData) {
-        // 16 ساعة متسلسلة من 9 صباحاً حتى 12 منتصف الليل
-        const labels = ["9ص", "10ص", "11ص", "12ظ", "1م", "2م", "3م", "4م", "5م", "6م", "7م", "8م", "9م", "10م", "11م", "12ل"];
+   function renderMainHourlyChart(currentData, prevData) {
+    const labels = ["9ص", "10ص", "11ص", "12ظ", "1م", "2م", "3م", "4م", "5م", "6م", "7م", "8م", "9م", "10م", "11م", "12ل"];
 
-        let currentHourly = new Array(16).fill(0);
-        let prevHourly = new Array(16).fill(0);
+    let currentHourly = new Array(16).fill(0);
+    let prevHourly = new Array(16).fill(0);
 
-        function parseHourIndex(timeStr) {
-            if (!timeStr) return -1;
-            const hour = parseInt(timeStr.split(':')[0], 10);
-            if (hour >= 9 && hour <= 23) {
-                return hour - 9;
-            } else if (hour === 0) {
-                return 15;
-            }
-            return -1;
+    function parseHourIndex(timeStr) {
+        if (!timeStr) return -1;
+        const hour = parseInt(timeStr.split(':')[0], 10);
+        if (hour >= 9 && hour <= 23) {
+            return hour - 9;
+        } else if (hour === 0) {
+            return 15;
         }
+        return -1;
+    }
 
-        currentData.forEach(inv => {
-            const idx = parseHourIndex(inv.posting_time);
-            if (idx !== -1) currentHourly[idx] += parseFloat(inv.grand_total || 0);
-        });
+    currentData.forEach(inv => {
+        const idx = parseHourIndex(inv.posting_time);
+        if (idx !== -1) currentHourly[idx] += parseFloat(inv.grand_total || 0);
+    });
 
-        prevData.forEach(inv => {
-            const idx = parseHourIndex(inv.posting_time);
-            if (idx !== -1) prevHourly[idx] += parseFloat(inv.grand_total || 0);
-        });
+    prevData.forEach(inv => {
+        const idx = parseHourIndex(inv.posting_time);
+        if (idx !== -1) prevHourly[idx] += parseFloat(inv.grand_total || 0);
+    });
 
-        if (mainHourlyChartInstance) mainHourlyChartInstance.destroy();
+    if (mainHourlyChartInstance) mainHourlyChartInstance.destroy();
 
-        const ctx = document.getElementById('mainHourlyChart').getContext('2d');
-        mainHourlyChartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'الفترة المحددة (اليوم)',
-                        data: currentHourly,
-                        borderColor: '#059669',
-                        backgroundColor: 'rgba(5, 150, 105, 0.12)',
-                        fill: true,
-                        tension: 0.3,
-                        borderWidth: 2,
-                        pointBackgroundColor: '#059669',
-                        pointRadius: 3
-                    },
-                    {
-                        label: 'الفترة السابقة (أمس)',
-                        data: prevHourly,
-                        borderColor: '#dc2626',
-                        backgroundColor: 'rgba(220, 38, 38, 0.05)',
-                        borderDash: [4, 4],
-                        fill: false,
-                        tension: 0.3,
-                        borderWidth: 2,
-                        pointBackgroundColor: '#dc2626',
-                        pointRadius: 2
-                    }
-                ]
+    const ctx = document.getElementById('mainHourlyChart').getContext('2d');
+    mainHourlyChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'الفترة المحددة (اليوم)',
+                    data: currentHourly,
+                    borderColor: '#059669',
+                    backgroundColor: 'rgba(5, 150, 105, 0.12)',
+                    fill: true,
+                    tension: 0.3,
+                    borderWidth: 2,
+                    pointBackgroundColor: '#059669',
+                    pointRadius: 2
+                },
+                {
+                    label: 'الفترة السابقة (أمس)',
+                    data: prevHourly,
+                    borderColor: '#dc2626',
+                    backgroundColor: 'rgba(220, 38, 38, 0.05)',
+                    borderDash: [4, 4],
+                    fill: false,
+                    tension: 0.3,
+                    borderWidth: 2,
+                    pointBackgroundColor: '#dc2626',
+                    pointRadius: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            // 1. تصفير هوامش Chart.js من جميع الأطراف
+            layout: {
+                padding: {
+                    left: 0,
+                    right: 0,
+                    top: 5,
+                    bottom: 0
+                }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                layout: {
-                    padding: {
-                        left: 0,
-                        right: 0,
-                        top: 5,
-                        bottom: 0
-                    }
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: { boxWidth: 10, font: { family: 'Cairo', size: 10 } }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    position: 'right', // وضع قيم المحور الرأسي في اليمين للغة العربية
+                    grid: { color: '#f1f5f9' },
+                    ticks: { font: { family: 'Cairo', size: 9 } }
                 },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: { boxWidth: 10, font: { family: 'Cairo', size: 10 } }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        position: 'right',
-                        grid: { color: '#f1f5f9' },
-                        ticks: { font: { family: 'Cairo', size: 9 } }
-                    },
-                    x: {
-                        bounds: 'data',
-                        offset: false,
-                        grid: { display: false },
-                        ticks: { 
-                            font: { family: 'Cairo', size: 8, weight: 'bold' },
-                            maxRotation: 0,
-                            autoSkip: false
-                        }
+                x: {
+                    type: 'category',
+                    bounds: 'data',
+                    offset: false, // إلغاء الفراغ الافتراضي قبل أول نقطة وبعد آخر نقطة
+                    grid: { display: false },
+                    ticks: { 
+                        font: { family: 'Cairo', size: 8, weight: 'bold' },
+                        maxRotation: 0,
+                        autoSkip: false
                     }
                 }
             }
-        });
-    }
+        }
+    });
+}
 
     async function openReportModal() {
         const d = new Date(currentQueryFrom);
