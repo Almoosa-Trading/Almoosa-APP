@@ -873,7 +873,7 @@
             return dateMatch && searchMatch;
         });
 
-        filtered.sort((a, b) => extractDocDate(a).localeCompare(extractDocDate(b)));
+        filtered.sort((b, a) => extractDocDate(a).localeCompare(extractDocDate(b)));
         renderDocs(filtered, query);
     }
 </script>
