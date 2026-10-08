@@ -1403,30 +1403,48 @@
                     categoryPercentage: 0.8
                 }]
             },
-            options: {
-                animation: false,
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'right',
-                        labels: { boxWidth: 8, font: { size: 8, weight: 'bold' } }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#d9d9d9' },
-                        ticks: { font: { size: 9 }, color: '#000' }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { size: 9, weight: 'bold' }, color: '#000' }
-                    }
-                }
+           options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    // 1. إلغاء أي الهوامش الداخلية حول الرسم
+    layout: {
+        padding: {
+            left: 0,
+            right: 0,
+            top: 10,
+            bottom: 0
+        }
+    },
+    plugins: {
+        legend: {
+            display: true,
+            position: 'top',
+            labels: { boxWidth: 10, font: { family: 'Cairo', size: 10 } }
+        }
+    },
+    scales: {
+        y: {
+            beginAtZero: true,
+            display: true, // أو ضع false إذا كنت تريد إخفاء قيم المحور Y تماماً للتمدد الأقصى
+            position: 'right', // لضمان عدم ترك فراغ على اليسار في الواجهات العربية
+            grid: { color: '#f1f5f9' },
+            ticks: { font: { family: 'Cairo', size: 9 } }
+        },
+        x: {
+            // 2. إجبار النقاط الأولى والأخيرة على الالتصاق بالحواف فوراً
+            bounds: 'data',
+            offset: false, 
+            grid: { display: false },
+            ticks: { 
+                font: { family: 'Cairo', size: 8, weight: 'bold' },
+                maxRotation: 0,
+                autoSkip: false
             }
-        });
+        }
+    }
+}
+        }
+    );
         setInstance(newInstance);
     }
 
