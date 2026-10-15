@@ -134,9 +134,29 @@
         }
 
         .hero-amount {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             margin-bottom: 8px;
+        }
+
+        .hero-grid-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .hero-sub-stat label {
+            font-size: 10px;
+            color: #dbeafe;
+            display: block;
+        }
+
+        .hero-sub-stat span {
+            font-size: 13px;
+            font-weight: 700;
         }
 
         .filter-panel {
@@ -365,11 +385,24 @@
             margin-top: 3px;
         }
 
+        .branch-financials {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
         .branch-amount {
             font-size: 14px;
             font-weight: 700;
             color: var(--success);
             text-align: left;
+        }
+
+        .branch-amount span {
+            display: block;
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: normal;
         }
 
         .status-msg {
@@ -726,6 +759,17 @@
             </div>
         </div>
         <div class="hero-amount" id="totalSalesAmount">0.00 ر.س</div>
+        
+        <div class="hero-grid-stats">
+            <div class="hero-sub-stat">
+                <label>إجمالي التكلفة (Cost):</label>
+                <span id="totalCostAmount">0.00 ر.س</span>
+            </div>
+            <div class="hero-sub-stat">
+                <label>هامش الربح (Margin):</label>
+                <span id="totalMarginAmount">0.00 ر.س (0%)</span>
+            </div>
+        </div>
     </div>
 
     <!-- مؤشر أداء المبيعات بالساعات (الشاشة الرئيسية) -->
@@ -1036,9 +1080,10 @@
 
     async function loadPOSData() {
         const container = document.getElementById('branchesContainer');
-        container.innerHTML = `<div class="status-msg">جاري جلب البيانات...</div>`;
+        container.innerHTML = `<div class="status-msg">جاري جلب بيانات المبيعات والتكاليف من بنود الفواتير...</div>`;
 
         try {
+            // 1. جلب رأس الفواتير الأساسية
             const response = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
                 method: "POST",
                 headers: {
@@ -1047,7 +1092,7 @@
                 },
                 body: JSON.stringify({
                     doctype: "POS Invoice",
-                    fields: ["set_warehouse", "grand_total", "total_qty", "posting_time"],
+                    fields: ["name", "set_warehouse", "grand_total", "total_qty", "posting_time", "posting_date"],
                     filters: [
                         ["posting_date", ">=", currentQueryFrom],
                         ["posting_date", "<=", currentQueryTo],
@@ -1064,6 +1109,48 @@
                 allInvoicesCache = [];
             }
 
+            // 2. جلب بنود الفواتير (POS Invoice Item) لحساب التكلفة الفعلية بناءً على سعر التقييم (valuation_rate أو incoming_rate)
+            const itemsResponse = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`
+                },
+                body: JSON.stringify({
+                    doctype: "POS Invoice Item",
+                    fields: ["parent", "qty", "valuation_rate", "incoming_rate"],
+                    filters: [
+                        ["docstatus", "=", 1],
+                        ["posting_date", ">=", currentQueryFrom],
+                        ["posting_date", "<=", currentQueryTo]
+                    ],
+                    limit_page_length: 0
+                })
+            });
+
+            let allInvoiceItems = [];
+            if (itemsResponse.ok) {
+                const itemsData = await itemsResponse.json();
+                allInvoiceItems = itemsData.message || [];
+            }
+
+            // تجميع وتوزيع التكلفة على كل فاتورة بناءً على بنودها
+            let costMap = {};
+            allInvoiceItems.forEach(item => {
+                if (!costMap[item.parent]) {
+                    costMap[item.parent] = 0;
+                }
+                const itemQty = parseFloat(item.qty || 0);
+                const itemCostRate = parseFloat(item.valuation_rate || item.incoming_rate || 0);
+                costMap[item.parent] += (itemQty * itemCostRate);
+            });
+
+            // ربط التكلفة المحسوبة بكل فاتورة في الذاكرة المؤقتة
+            allInvoicesCache.forEach(inv => {
+                inv.calculated_cost = costMap[inv.name] || 0;
+            });
+
+            // 3. جلب الفترة السابقة للمقارنة بالساعات
             const prevResponse = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
                 method: "POST",
                 headers: {
@@ -1137,6 +1224,7 @@
         }
 
         let totalSales = 0;
+        let totalCost = 0;
         let totalInvoices = filtered.length;
         let totalQtySum = 0;
         let branchTotals = {};
@@ -1144,20 +1232,29 @@
         filtered.forEach(inv => {
             const amount = parseFloat(inv.grand_total || 0);
             const qty = parseFloat(inv.total_qty || 0);
+            const cost = parseFloat(inv.calculated_cost || 0);
 
             totalSales += amount;
             totalQtySum += qty;
+            totalCost += cost;
             
             const bName = inv.set_warehouse || 'غير محدد';
             if (!branchTotals[bName]) {
-                branchTotals[bName] = { amount: 0, count: 0, qty: 0 };
+                branchTotals[bName] = { amount: 0, cost: 0, count: 0, qty: 0 };
             }
             branchTotals[bName].amount += amount;
+            branchTotals[bName].cost += cost;
             branchTotals[bName].count += 1;
             branchTotals[bName].qty += qty;
         });
 
+        const totalMargin = totalSales - totalCost;
+        const totalMarginPercentage = totalSales > 0 ? (totalMargin / totalSales) * 100 : 0;
+
         document.getElementById('totalSalesAmount').textContent = totalSales.toLocaleString('ar-SA', { minimumFractionDigits: 2 }) + ' ر.س';
+        document.getElementById('totalCostAmount').textContent = totalCost.toLocaleString('ar-SA', { minimumFractionDigits: 2 }) + ' ر.س';
+        document.getElementById('totalMarginAmount').textContent = `${totalMargin.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س (${totalMarginPercentage.toFixed(1)}%)`;
+
         document.getElementById('invoiceCountBadge').textContent = `${totalInvoices.toLocaleString('ar-SA')} فاتورة`;
         document.getElementById('totalQtyBadge').textContent = `${totalQtySum.toLocaleString('ar-SA')} قطعة`;
 
@@ -1168,14 +1265,21 @@
         } else {
             sortedBranches.forEach(bName => {
                 const bData = branchTotals[bName];
+                const bMargin = bData.amount - bData.cost;
+                const bMarginPct = bData.amount > 0 ? (bMargin / bData.amount) * 100 : 0;
+
                 const card = document.createElement('div');
                 card.className = 'branch-card';
                 card.innerHTML = `
                     <div class="branch-info">
                         <h3>${bName}</h3>
                         <div class="branch-meta">${bData.count.toLocaleString('ar-SA')} فاتورة | ${bData.qty.toLocaleString('ar-SA')} قطعة</div>
+                        <div class="branch-financials">التكلفة: ${bData.cost.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س</div>
                     </div>
-                    <div class="branch-amount">${bData.amount.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س</div>
+                    <div class="branch-amount">
+                        ${bData.amount.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س
+                        <span>الهامش: ${bMargin.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} (${bMarginPct.toFixed(1)}%)</span>
+                    </div>
                 `;
                 container.appendChild(card);
             });
@@ -1458,19 +1562,16 @@
 
     async function shareEmail() {
         try {
-            // 1. تجهيز وتنزيل ملف PDF تلقائياً لإرفاقه يدوياً
             const pdf = await generatePDFBlob();
             const dateText = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} to ${currentQueryTo}`;
             const fileName = `Daily_Sales_Summary_Report_${currentQueryFrom}.pdf`;
             pdf.save(fileName);
 
-            // 2. إعداد الحقول المطلوبة للإرسال
             const to = "mohd@almoosa.com.sa";
             const cc = "arshad@almoosa.com.sa,kashif@almoosa.com.sa,ibrahim@almoosa.com.sa,lordini.group@outlook.com";
             const subject = `Daily Report Sales dated ${dateText}`;
             const body = `Dear all This is Sales for ${dateText}`;
 
-            // 3. فتح تطبيق البريد الإلكتروني مع تعبئة العناوين والموضوع والنص تلقائياً
             const mailtoUrl = `mailto:${to}?cc=${encodeURIComponent(cc)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             window.location.href = mailtoUrl;
         } catch (err) {
