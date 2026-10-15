@@ -3,18 +3,10 @@
 <head>
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>مبيعات الفروع - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Hammer.js & Chart.js & Zoom Plugin -->
-    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2.0.1/dist/chartjs-plugin-zoom.min.js"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
@@ -320,7 +312,7 @@
         .main-chart-card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 15px 5px;
+            padding: 15px;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             margin-bottom: 20px;
@@ -331,34 +323,9 @@
             font-weight: 700;
             color: var(--primary);
             margin-bottom: 10px;
-            padding: 0 5px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-        }
-
-        .reset-zoom-btn {
-            background: var(--bg-body);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 10px;
-            padding: 2px 6px;
-            cursor: pointer;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .reset-zoom-btn:hover {
-            color: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .chart-container-box {
-            height: 210px;
-            position: relative;
-            width: 100%;
-            padding: 0;
-            touch-action: none;
         }
 
         .section-header {
@@ -703,7 +670,7 @@
             <p>متابعة مبيعات نقاط البيع</p>
         </div>
         <div class="header-left-group">
-            <button class="action-btn" onclick="forceAppUpdate()" title="تحديث">🔄</button>
+            <button class="action-btn" onclick="loadPOSData()" title="تحديث">🔄</button>
             <button class="action-btn" onclick="goBack()" title="رجوع">⬅ رجوع</button>
             <a href="index.html" class="action-btn" title="الرئيسية">🏠 الرئيسية</a>
         </div>
@@ -761,16 +728,13 @@
         <div class="hero-amount" id="totalSalesAmount">0.00 ر.س</div>
     </div>
 
-    <!-- مؤشر أداء المبيعات بالساعات مع خاصية التكبير والتصغير السلسة -->
+    <!-- مؤشر أداء المبيعات بالساعات (الشاشة الرئيسية) -->
     <div class="main-chart-card">
         <div class="main-chart-title">
             <span>📈 مقارنة المبيعات بالساعات (9ص - 12م)</span>
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <button class="reset-zoom-btn" onclick="resetChartZoom()" title="إعادة الضبط">🔍 إلغاء التكبير</button>
-                <span id="chartSubLabel" style="font-size: 10px; color: var(--text-muted);">مقارنة بالفترة السابقة</span>
-            </div>
+            <span id="chartSubLabel" style="font-size: 10px; color: var(--text-muted);">مقارنة بالفترة السابقة</span>
         </div>
-        <div class="chart-container-box">
+        <div style="height: 180px; position: relative; width: 100%;">
             <canvas id="mainHourlyChart"></canvas>
         </div>
     </div>
@@ -890,31 +854,6 @@
     document.addEventListener('DOMContentLoaded', () => {
         setPreset('today', document.querySelector('.chip.active'));
     });
-
-    async function forceAppUpdate() {
-        if ('serviceWorker' in navigator) {
-            try {
-                const registrations = await navigator.serviceWorker.getRegistrations();
-                for (let registration of registrations) {
-                    await registration.unregister();
-                }
-            } catch (err) {
-                console.error("خطأ أثناء إلغاء Service Worker:", err);
-            }
-        }
-
-        if ('caches' in window) {
-            try {
-                const keys = await caches.keys();
-                await Promise.all(keys.map(key => caches.delete(key)));
-            } catch (err) {
-                console.error("خطأ أثناء مسح الكاش:", err);
-            }
-        }
-
-        const cleanUrl = window.location.origin + window.location.pathname + '?v=' + new Date().getTime();
-        window.location.href = cleanUrl;
-    }
 
     function goBack() {
         if (window.history.length > 1) {
@@ -1246,30 +1185,29 @@
     }
 
     function renderMainHourlyChart(currentData, prevData) {
-        const labels = ["9ص", "10ص", "11ص", "12ظ", "1م", "2م", "3م", "4م", "5م", "6م", "7م", "8م", "9م", "10م", "11م", "12ل"];
+        const labels = ["9ص", "10ص", "11ص", "12م", "1م", "2م", "3م", "4م", "5م", "6م", "7م", "8م", "9م", "10م", "11م", "12ص"];
 
         let currentHourly = new Array(16).fill(0);
         let prevHourly = new Array(16).fill(0);
 
-        function parseHourIndex(timeStr) {
-            if (!timeStr) return -1;
-            const hour = parseInt(timeStr.split(':')[0], 10);
-            if (hour >= 9 && hour <= 23) {
-                return hour - 9;
-            } else if (hour === 0) {
-                return 15;
-            }
-            return -1;
-        }
-
         currentData.forEach(inv => {
-            const idx = parseHourIndex(inv.posting_time);
-            if (idx !== -1) currentHourly[idx] += parseFloat(inv.grand_total || 0);
+            if (inv.posting_time) {
+                const hour = parseInt(inv.posting_time.split(':')[0], 10);
+                if (hour >= 9 && hour <= 24) {
+                    const idx = hour - 9;
+                    if (idx >= 0 && idx < 16) currentHourly[idx] += parseFloat(inv.grand_total || 0);
+                }
+            }
         });
 
         prevData.forEach(inv => {
-            const idx = parseHourIndex(inv.posting_time);
-            if (idx !== -1) prevHourly[idx] += parseFloat(inv.grand_total || 0);
+            if (inv.posting_time) {
+                const hour = parseInt(inv.posting_time.split(':')[0], 10);
+                if (hour >= 9 && hour <= 24) {
+                    const idx = hour - 9;
+                    if (idx >= 0 && idx < 16) prevHourly[idx] += parseFloat(inv.grand_total || 0);
+                }
+            }
         });
 
         if (mainHourlyChartInstance) mainHourlyChartInstance.destroy();
@@ -1286,8 +1224,8 @@
                         borderColor: '#059669',
                         backgroundColor: 'rgba(5, 150, 105, 0.12)',
                         fill: true,
-                        tension: 0.3,
-                        borderWidth: 2,
+                        tension: 0.35,
+                        borderWidth: 2.5,
                         pointBackgroundColor: '#059669',
                         pointRadius: 3
                     },
@@ -1298,7 +1236,7 @@
                         backgroundColor: 'rgba(220, 38, 38, 0.05)',
                         borderDash: [4, 4],
                         fill: false,
-                        tension: 0.3,
+                        tension: 0.35,
                         borderWidth: 2,
                         pointBackgroundColor: '#dc2626',
                         pointRadius: 2
@@ -1308,61 +1246,26 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                layout: {
-                    padding: { left: 0, right: 0, top: 5, bottom: 0 }
-                },
                 plugins: {
                     legend: {
                         display: true,
                         position: 'top',
                         labels: { boxWidth: 10, font: { family: 'Cairo', size: 10 } }
-                    },
-                    zoom: {
-                        pan: {
-                            enabled: true,
-                            mode: 'x',
-                            threshold: 5
-                        },
-                        zoom: {
-                            wheel: { enabled: true, speed: 0.05 },
-                            pinch: { enabled: true },
-                            mode: 'x'
-                        },
-                        limits: {
-                            x: { minRange: 4 }
-                        }
                     }
                 },
                 scales: {
                     y: {
                         beginAtZero: true,
-                        position: 'left',
                         grid: { color: '#f1f5f9' },
                         ticks: { font: { family: 'Cairo', size: 9 } }
                     },
                     x: {
-                        type: 'category',
-                        bounds: 'data',
-                        offset: false,
                         grid: { display: false },
-                        ticks: { 
-                            font: { family: 'Cairo', size: 9, weight: 'bold' },
-                            maxRotation: 0,
-                            autoSkip: false,
-                            callback: function(val, index) {
-                                return index % 2 === 0 ? this.getLabelForValue(val) : '';
-                            }
-                        }
+                        ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } }
                     }
                 }
             }
         });
-    }
-
-    function resetChartZoom() {
-        if (mainHourlyChartInstance) {
-            mainHourlyChartInstance.resetZoom();
-        }
     }
 
     async function openReportModal() {
@@ -1553,10 +1456,26 @@
         }
     }
 
-    function shareEmail() {
-        const subject = `Daily Sales Summary Report ${currentQueryFrom}`;
-        const body = `السلام عليكم ورحمة الله وبركاته،\n\nمرفق ملخص تقرير المبيعات للموسى التجارية للفترة من ${currentQueryFrom} إلى ${currentQueryTo}.\nإجمالي المبيعات: ${document.getElementById('totalSalesAmount').textContent}`;
-        window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    async function shareEmail() {
+        try {
+            // 1. تجهيز وتنزيل ملف PDF تلقائياً لإرفاقه يدوياً
+            const pdf = await generatePDFBlob();
+            const dateText = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} to ${currentQueryTo}`;
+            const fileName = `Daily_Sales_Summary_Report_${currentQueryFrom}.pdf`;
+            pdf.save(fileName);
+
+            // 2. إعداد الحقول المطلوبة للإرسال
+            const to = "mohd@almoosa.com.sa";
+            const cc = "arshad@almoosa.com.sa,kashif@almoosa.com.sa,ibrahim@almoosa.com.sa,lordini.group@outlook.com";
+            const subject = `Daily Report Sales dated ${dateText}`;
+            const body = `Dear all This is Sales for ${dateText}`;
+
+            // 3. فتح تطبيق البريد الإلكتروني مع تعبئة العناوين والموضوع والنص تلقائياً
+            const mailtoUrl = `mailto:${to}?cc=${encodeURIComponent(cc)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoUrl;
+        } catch (err) {
+            console.error("Email Share Error:", err);
+        }
     }
 </script>
 <script>
