@@ -412,7 +412,6 @@
             font-size: 13px;
         }
 
-        /* Modal Styling */
         .report-modal {
             display: none;
             position: fixed;
@@ -527,7 +526,6 @@
             cursor: pointer;
         }
 
-        /* تنسيق التقرير (LTR) */
         #reportPDFContent {
             direction: ltr !important;
             text-align: left;
@@ -772,7 +770,6 @@
         </div>
     </div>
 
-    <!-- مؤشر أداء المبيعات بالساعات (الشاشة الرئيسية) -->
     <div class="main-chart-card">
         <div class="main-chart-title">
             <span>📈 مقارنة المبيعات بالساعات (9ص - 12م)</span>
@@ -810,7 +807,6 @@
             </div>
         </div>
 
-        <!-- التقرير المستهدف -->
         <div id="reportPDFContent">
             <div class="report-header-layout">
                 <div class="report-logo-box">
@@ -881,6 +877,7 @@
 
     let allInvoicesCache = [];
     let previousPeriodInvoicesCache = [];
+    let branchDataSummary = [];
     let availableBranches = new Set();
     
     let currentQueryFrom = '';
@@ -1080,11 +1077,31 @@
 
     async function loadPOSData() {
         const container = document.getElementById('branchesContainer');
-        container.innerHTML = `<div class="status-msg">جاري جلب بيانات المبيعات والتكاليف من بنود الفواتير...</div>`;
+        container.innerHTML = `<div class="status-msg">جاري تحميل البيانات والتكاليف الفعلية...</div>`;
+
+        branchDataSummary = [];
+        allInvoicesCache = [];
 
         try {
-            // 1. جلب رأس الفواتير الأساسية
-            const response = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
+            // استدعاء الـ Server Script عبر طريقة GET الموثوقة مع تمرير المعاملات في الرابط
+            const res = await fetch(`${CONFIG.serverUrl}/api/method/get_branch_sales_cost_summary?from_date=${currentQueryFrom}&to_date=${currentQueryTo}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`,
+                    "X-Frappe-Site-Name": window.location.hostname
+                }
+            });
+
+            if (res.ok) {
+                const jsonRes = await res.json();
+                const fetchedData = jsonRes.message?.data || jsonRes.message || [];
+                if (Array.isArray(fetchedData) && fetchedData.length > 0) {
+                    branchDataSummary = fetchedData;
+                }
+            }
+
+            // جلب الفواتير الأساسية للرسم البياني بالساعات
+            const mainInvoicesRes = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -1102,56 +1119,13 @@
                 })
             });
 
-            if (response.ok) {
-                const resData = await response.json();
+            if (mainInvoicesRes.ok) {
+                const resData = await mainInvoicesRes.json();
                 allInvoicesCache = resData.message || [];
-            } else {
-                allInvoicesCache = [];
             }
 
-            // 2. جلب بنود الفواتير (POS Invoice Item) لحساب التكلفة الفعلية بناءً على سعر التقييم (valuation_rate أو incoming_rate)
-            const itemsResponse = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`
-                },
-                body: JSON.stringify({
-                    doctype: "POS Invoice Item",
-                    fields: ["parent", "qty", "valuation_rate", "incoming_rate"],
-                    filters: [
-                        ["docstatus", "=", 1],
-                        ["posting_date", ">=", currentQueryFrom],
-                        ["posting_date", "<=", currentQueryTo]
-                    ],
-                    limit_page_length: 0
-                })
-            });
-
-            let allInvoiceItems = [];
-            if (itemsResponse.ok) {
-                const itemsData = await itemsResponse.json();
-                allInvoiceItems = itemsData.message || [];
-            }
-
-            // تجميع وتوزيع التكلفة على كل فاتورة بناءً على بنودها
-            let costMap = {};
-            allInvoiceItems.forEach(item => {
-                if (!costMap[item.parent]) {
-                    costMap[item.parent] = 0;
-                }
-                const itemQty = parseFloat(item.qty || 0);
-                const itemCostRate = parseFloat(item.valuation_rate || item.incoming_rate || 0);
-                costMap[item.parent] += (itemQty * itemCostRate);
-            });
-
-            // ربط التكلفة المحسوبة بكل فاتورة في الذاكرة المؤقتة
-            allInvoicesCache.forEach(inv => {
-                inv.calculated_cost = costMap[inv.name] || 0;
-            });
-
-            // 3. جلب الفترة السابقة للمقارنة بالساعات
-            const prevResponse = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
+            // جلب الفترة السابقة للمقارنة بالساعات
+            const prevPeriodResponse = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -1169,17 +1143,13 @@
                 })
             });
 
-            if (prevResponse.ok) {
-                const prevResData = await prevResponse.json();
+            if (prevPeriodResponse.ok) {
+                const prevResData = await prevPeriodResponse.json();
                 previousPeriodInvoicesCache = prevResData.message || [];
-            } else {
-                previousPeriodInvoicesCache = [];
             }
 
         } catch (err) {
             console.warn("API Error:", err);
-            allInvoicesCache = [];
-            previousPeriodInvoicesCache = [];
         }
 
         populateBranchSelect();
@@ -1188,8 +1158,8 @@
 
     function populateBranchSelect() {
         availableBranches.clear();
-        allInvoicesCache.forEach(inv => {
-            if (inv.set_warehouse) availableBranches.add(inv.set_warehouse);
+        branchDataSummary.forEach(row => {
+            if (row.Branch) availableBranches.add(row.Branch);
         });
 
         const select = document.getElementById('branchSelect');
@@ -1215,37 +1185,21 @@
         const container = document.getElementById('branchesContainer');
         container.innerHTML = '';
 
-        let filtered = allInvoicesCache;
-        let filteredPrev = previousPeriodInvoicesCache;
-
+        let filteredRows = branchDataSummary;
         if (selectedBranch !== "ALL") {
-            filtered = allInvoicesCache.filter(inv => inv.set_warehouse === selectedBranch);
-            filteredPrev = previousPeriodInvoicesCache.filter(inv => inv.set_warehouse === selectedBranch);
+            filteredRows = branchDataSummary.filter(row => row.Branch === selectedBranch);
         }
 
         let totalSales = 0;
         let totalCost = 0;
-        let totalInvoices = filtered.length;
+        let totalInvoices = 0;
         let totalQtySum = 0;
-        let branchTotals = {};
 
-        filtered.forEach(inv => {
-            const amount = parseFloat(inv.grand_total || 0);
-            const qty = parseFloat(inv.total_qty || 0);
-            const cost = parseFloat(inv.calculated_cost || 0);
-
-            totalSales += amount;
-            totalQtySum += qty;
-            totalCost += cost;
-            
-            const bName = inv.set_warehouse || 'غير محدد';
-            if (!branchTotals[bName]) {
-                branchTotals[bName] = { amount: 0, cost: 0, count: 0, qty: 0 };
-            }
-            branchTotals[bName].amount += amount;
-            branchTotals[bName].cost += cost;
-            branchTotals[bName].count += 1;
-            branchTotals[bName].qty += qty;
+        filteredRows.forEach(row => {
+            totalSales += parseFloat(row.Total_Sales || 0);
+            totalCost += parseFloat(row.Total_Cost || 0);
+            totalInvoices += parseInt(row.Invoice_Count || 0);
+            totalQtySum += parseFloat(row.Total_Qty || 0);
         });
 
         const totalMargin = totalSales - totalCost;
@@ -1258,26 +1212,27 @@
         document.getElementById('invoiceCountBadge').textContent = `${totalInvoices.toLocaleString('ar-SA')} فاتورة`;
         document.getElementById('totalQtyBadge').textContent = `${totalQtySum.toLocaleString('ar-SA')} قطعة`;
 
-        const sortedBranches = Object.keys(branchTotals).sort((a, b) => branchTotals[b].amount - branchTotals[a].amount);
+        const sortedRows = [...filteredRows].sort((a, b) => parseFloat(b.Total_Sales) - parseFloat(a.Total_Sales));
 
-        if (sortedBranches.length === 0) {
+        if (sortedRows.length === 0) {
             container.innerHTML = `<div class="status-msg">لا توجد مبيعات مسجلة في هذه الفترة</div>`;
         } else {
-            sortedBranches.forEach(bName => {
-                const bData = branchTotals[bName];
-                const bMargin = bData.amount - bData.cost;
-                const bMarginPct = bData.amount > 0 ? (bMargin / bData.amount) * 100 : 0;
+            sortedRows.forEach(row => {
+                const bSales = parseFloat(row.Total_Sales || 0);
+                const bCost = parseFloat(row.Total_Cost || 0);
+                const bMargin = bSales - bCost;
+                const bMarginPct = bSales > 0 ? (bMargin / bSales) * 100 : 0;
 
                 const card = document.createElement('div');
                 card.className = 'branch-card';
                 card.innerHTML = `
                     <div class="branch-info">
-                        <h3>${bName}</h3>
-                        <div class="branch-meta">${bData.count.toLocaleString('ar-SA')} فاتورة | ${bData.qty.toLocaleString('ar-SA')} قطعة</div>
-                        <div class="branch-financials">التكلفة: ${bData.cost.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س</div>
+                        <h3>${row.Branch}</h3>
+                        <div class="branch-meta">${parseInt(row.Invoice_Count).toLocaleString('ar-SA')} فاتورة | ${parseFloat(row.Total_Qty).toLocaleString('ar-SA')} قطعة</div>
+                        <div class="branch-financials">التكلفة: ${bCost.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س</div>
                     </div>
                     <div class="branch-amount">
-                        ${bData.amount.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س
+                        ${bSales.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س
                         <span>الهامش: ${bMargin.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} (${bMarginPct.toFixed(1)}%)</span>
                     </div>
                 `;
@@ -1285,7 +1240,13 @@
             });
         }
 
-        renderMainHourlyChart(filtered, filteredPrev);
+        let filteredHourly = allInvoicesCache;
+        let filteredPrevHourly = previousPeriodInvoicesCache;
+        if (selectedBranch !== "ALL") {
+            filteredHourly = allInvoicesCache.filter(inv => inv.set_warehouse === selectedBranch);
+            filteredPrevHourly = previousPeriodInvoicesCache.filter(inv => inv.set_warehouse === selectedBranch);
+        }
+        renderMainHourlyChart(filteredHourly, filteredPrevHourly);
     }
 
     function renderMainHourlyChart(currentData, prevData) {
@@ -1409,13 +1370,13 @@
     function renderReportTablesAndCharts() {
         let branchSummary = {};
 
-        allInvoicesCache.forEach(inv => {
-            const bCode = getShortBranchCode(inv.set_warehouse);
+        branchDataSummary.forEach(row => {
+            const bCode = getShortBranchCode(row.Branch);
             if (!branchSummary[bCode]) {
                 branchSummary[bCode] = { qty: 0, sales: 0 };
             }
-            branchSummary[bCode].qty += parseFloat(inv.total_qty || 0);
-            branchSummary[bCode].sales += parseFloat(inv.grand_total || 0);
+            branchSummary[bCode].qty += parseFloat(row.Total_Qty || 0);
+            branchSummary[bCode].sales += parseFloat(row.Total_Sales || 0);
         });
 
         let qtyList = Object.keys(branchSummary).map(k => ({ code: k, qty: branchSummary[k].qty }));
@@ -1580,7 +1541,7 @@
     }
 </script>
 <script>
-    document.addEventListener("click", function(e) {
+    document.addEventListener("click", function(e)  {
         var anchor = e.target.closest("a");
         if (anchor && anchor.href) {
             var targetUrl = new URL(anchor.href, window.location.href);
