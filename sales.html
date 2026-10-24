@@ -695,7 +695,7 @@
         /* Dashboard Grid Layout Styles */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: 1fr;
             gap: 20px;
             margin-top: 10px;
         }
@@ -726,6 +726,10 @@
             height: 320px;
             position: relative;
             width: 100%;
+        }
+
+        .pie-chart-container {
+            height: 420px !important;
         }
     </style>
 </head>
@@ -910,9 +914,9 @@
 
 <!-- Multi-Chart Dashboard Modal -->
 <div class="report-modal" id="multiDashboardModal">
-    <div class="report-content" style="max-width: 1150px;">
+    <div class="report-content" style="max-width: 750px;">
         <div class="modal-actions">
-            <h3 style="color: var(--primary); font-size: 16px; font-weight: 700;">📊 لوحة تحليلات ومؤشرات المبيعات (Sales Dashboard)</h3>
+            <h3 style="color: var(--primary); font-size: 15px; font-weight: 700;">📊 لوحة تحليلات ومؤشرات المبيعات (Sales Dashboard)</h3>
             <button class="close-modal" onclick="closeMultiDashboardModal()">✕ إغلاق</button>
         </div>
 
@@ -936,7 +940,7 @@
             <!-- 3. Sales by Region -->
             <div class="dashboard-card">
                 <div class="dashboard-card-title">📍 المبيعات حسب المناطق (Sales by Region)</div>
-                <div class="chart-container-box">
+                <div class="chart-container-box pie-chart-container">
                     <canvas id="regionSalesPieChart"></canvas>
                 </div>
             </div>
@@ -944,7 +948,7 @@
             <!-- 4. Sales by Gender -->
             <div class="dashboard-card">
                 <div class="dashboard-card-title">👥 المبيعات حسب النوع/الفئة (Sales by Gender)</div>
-                <div class="chart-container-box">
+                <div class="chart-container-box pie-chart-container">
                     <canvas id="genderSalesPieChart"></canvas>
                 </div>
             </div>
@@ -952,7 +956,7 @@
             <!-- 5. Sales by Category -->
             <div class="dashboard-card">
                 <div class="dashboard-card-title">🏷️ المبيعات حسب التصنيفات (Sales by Category)</div>
-                <div class="chart-container-box">
+                <div class="chart-container-box pie-chart-container">
                     <canvas id="categorySalesChart"></canvas>
                 </div>
             </div>
@@ -961,7 +965,6 @@
 </div>
 
 <script>
-    // تسجيل إضافة ChartDataLabels عالمياً لتفادي الخطأ البرمجي
     if (typeof ChartDataLabels !== 'undefined') {
         Chart.register(ChartDataLabels);
     }
@@ -1472,7 +1475,7 @@
     }
 
     // ==========================================
-    // Multi-Chart Dashboard Functions (إصلاح الشاشة البيضاء والأبعاد)
+    // Multi-Chart Dashboard Functions
     // ==========================================
     async function openMultiDashboardModal() {
         const modal = document.getElementById('multiDashboardModal');
@@ -1482,7 +1485,6 @@
             await loadPOSData();
         }
 
-        // استخدام delay آمن للتأكد من حساب الـ Modal لرُؤيته وأبعاده
         setTimeout(() => {
             requestAnimationFrame(() => {
                 renderSalesByStoresParetoChart();
@@ -1717,7 +1719,7 @@
         });
     }
 
-    // 3. Chart Region
+    // 3. Chart Region (عرض النسبة + القيمة لجميع المناطق بدون استثناء)
     function renderRegionChart() {
         let regionSalesMap = {
             "عنيزة": 0, "بريدة": 0, "الرس": 0, "حائل": 0,
@@ -1771,33 +1773,33 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                layout: { padding: 25 },
+                layout: { padding: 5 },
                 plugins: {
                     legend: {
-                        position: 'right',
-                        labels: { font: { family: 'Cairo', size: 10, weight: 'bold' } }
+                        position: 'bottom',
+                        labels: { 
+                            boxWidth: 12, 
+                            font: { family: 'Cairo', size: 10, weight: 'bold' },
+                            padding: 12
+                        }
                     },
                     datalabels: {
-                        display: function(context) {
+                        display: true, // تفعيل الظهور لجميع القطاعات
+                        color: '#ffffff',
+                        font: function(context) {
                             var val = context.dataset.data[context.dataIndex];
                             var pct = totalSum > 0 ? (val / totalSum) * 100 : 0;
-                            return pct >= 3;
+                            // تصغير الخط تلقائياً للقطاعات الصغيرة جداً لتتسع بدقة
+                            return {
+                                family: 'Cairo',
+                                weight: 'bold',
+                                size: pct < 8 ? 8 : 10
+                            };
                         },
-                        color: '#ffffff',
-                        font: { family: 'Cairo', weight: 'bold', size: 9 },
-                        anchor: 'end',
-                        align: 'outer',
-                        offset: 8,
-                        backgroundColor: function(context) {
-                            return context.dataset.backgroundColor[context.dataIndex];
-                        },
-                        borderRadius: 6,
-                        borderWidth: 1,
-                        borderColor: '#ffffff',
-                        padding: { top: 2, bottom: 2, left: 4, right: 4 },
                         formatter: function(value) {
-                            var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
-                            return percentage + ' (' + Math.round(value).toLocaleString('en-US') + ')';
+                            var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(0) + '%' : '0%';
+                            var formattedVal = Math.round(value).toLocaleString('en-US');
+                            return percentage + '\n(' + formattedVal + ' ر.س)';
                         },
                         textAlign: 'center'
                     },
@@ -1848,32 +1850,24 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                layout: { padding: 25 },
+                layout: { padding: 5 },
                 plugins: {
                     legend: {
-                        position: 'right',
-                        labels: { font: { family: 'Cairo', size: 10, weight: 'bold' } }
+                        position: 'bottom',
+                        labels: { 
+                            boxWidth: 12, 
+                            font: { family: 'Cairo', size: 11, weight: 'bold' },
+                            padding: 15
+                        }
                     },
                     datalabels: {
-                        display: function(context) {
-                            var val = context.dataset.data[context.dataIndex];
-                            return val > 0;
-                        },
+                        display: true,
                         color: '#ffffff',
-                        font: { family: 'Cairo', weight: 'bold', size: 9 },
-                        anchor: 'end',
-                        align: 'outer',
-                        offset: 8,
-                        backgroundColor: function(context) {
-                            return context.dataset.backgroundColor[context.dataIndex];
-                        },
-                        borderRadius: 6,
-                        borderColor: '#ffffff',
-                        borderWidth: 1,
-                        padding: 4,
+                        font: { family: 'Cairo', weight: 'bold', size: 10 },
                         formatter: function(value) {
                             var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
-                            return percentage + ' (' + Math.round(value).toLocaleString('en-US') + ')';
+                            var formattedVal = Math.round(value).toLocaleString('en-US');
+                            return percentage + '\n(' + formattedVal + ' ر.س)';
                         },
                         textAlign: 'center'
                     },
@@ -1925,32 +1919,24 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                layout: { padding: 25 },
+                layout: { padding: 5 },
                 plugins: {
                     legend: {
-                        position: 'right',
-                        labels: { font: { family: 'Cairo', size: 10, weight: 'bold' } }
+                        position: 'bottom',
+                        labels: { 
+                            boxWidth: 12, 
+                            font: { family: 'Cairo', size: 11, weight: 'bold' },
+                            padding: 15
+                        }
                     },
                     datalabels: {
-                        display: function(context) {
-                            var val = context.dataset.data[context.dataIndex];
-                            return val > 0;
-                        },
+                        display: true,
                         color: '#ffffff',
-                        font: { family: 'Cairo', weight: 'bold', size: 9 },
-                        anchor: 'end',
-                        align: 'outer',
-                        offset: 8,
-                        backgroundColor: function(context) {
-                            return context.dataset.backgroundColor[context.dataIndex];
-                        },
-                        borderRadius: 6,
-                        borderColor: '#ffffff',
-                        borderWidth: 1,
-                        padding: 4,
+                        font: { family: 'Cairo', weight: 'bold', size: 10 },
                         formatter: function(value) {
                             var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
-                            return percentage + ' (' + Math.round(value).toLocaleString('en-US') + ')';
+                            var formattedVal = Math.round(value).toLocaleString('en-US');
+                            return percentage + '\n(' + formattedVal + ' ر.س)';
                         },
                         textAlign: 'center'
                     },
