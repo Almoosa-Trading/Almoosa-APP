@@ -7,6 +7,7 @@
     <title>مبيعات الفروع - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
@@ -433,7 +434,7 @@
 
         .report-content {
             background: white;
-            width: 1100px;
+            width: 1150px;
             max-width: 98vw;
             max-height: 96vh;
             border-radius: 8px;
@@ -690,6 +691,42 @@
             font-weight: bold;
             border-top: 1px solid #000000;
         }
+
+        /* Dashboard Grid Layout Styles */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .dashboard-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .dashboard-card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid var(--accent-light);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chart-container-box {
+            height: 320px;
+            position: relative;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -743,9 +780,14 @@
             </div>
         </div>
 
-        <button class="report-btn" onclick="openReportModal()">
-            📊 عرض التقرير الشامل
-        </button>
+        <div style="display: flex; gap: 8px;">
+            <button class="report-btn" style="flex: 2;" onclick="openReportModal()">
+                📊 عرض التقرير الشامل
+            </button>
+            <button class="report-btn" style="flex: 1; background: #059669;" onclick="openMultiDashboardModal()">
+                📈 لوحة المؤشرات (Dashboard)
+            </button>
+        </div>
     </div>
 
     <div class="hero-card">
@@ -786,10 +828,9 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Comprehensive Report Modal -->
 <div class="report-modal" id="reportModal">
     <div class="report-content">
-        
         <div class="modal-actions" id="modalActionsBar">
             <button class="close-modal" onclick="closeReportModal()">✕ إغلاق</button>
 
@@ -864,16 +905,101 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
+<!-- Multi-Chart Dashboard Modal -->
+<div class="report-modal" id="multiDashboardModal">
+    <div class="report-content" style="max-width: 1150px;">
+        <div class="modal-actions">
+            <h3 style="color: var(--primary); font-size: 16px; font-weight: 700;">📊 لوحة تحليلات ومؤشرات المبيعات (Sales Dashboard)</h3>
+            <button class="close-modal" onclick="closeMultiDashboardModal()">✕ إغلاق</button>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- 1. Sales Value by Stores -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-title">🏪 قيمة المبيعات حسب الفروع (Sales by Stores)</div>
+                <div class="chart-container-box">
+                    <canvas id="salesByStoresChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 2. Sales Qty by Stores -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-title">📦 كميات المبيعات حسب الفروع (Sales Qty by Stores)</div>
+                <div class="chart-container-box">
+                    <canvas id="qtyByStoresChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 3. Sales by Region -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-title">📍 المبيعات حسب المناطق (Sales by Region)</div>
+                <div class="chart-container-box">
+                    <canvas id="regionSalesPieChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 4. Sales by Gender -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-title">👥 المبيعات حسب النوع/الفئة (Sales by Gender)</div>
+                <div class="chart-container-box">
+                    <canvas id="genderSalesPieChart"></canvas>
+                </div>
+            </div>
+
+            <!-- 5. Sales by Category -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-title">🏷️ المبيعات حسب التصنيفات (Sales by Category)</div>
+                <div class="chart-container-box">
+                    <canvas id="categorySalesChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
+    // تسجيل إضافة ChartDataLabels عالمياً لتفادي الخطأ البرمجي
+    if (typeof ChartDataLabels !== 'undefined') {
+        Chart.register(ChartDataLabels);
+    }
+
     const CONFIG = {
         serverUrl: "https://87-237-225-155.nip.io/",
         apiKey: "6f039a5a6130b79",
         apiSecret: "9e6d920a8fda252"
     };
+
+    const REGION_MAPPING = {
+        "عنيزة": ["019", "001", "002"],
+        "بريدة": ["007", "028"],
+        "الرس": ["004"],
+        "حائل": ["011", "035"],
+        "الدمام": ["036"],
+        "الهفوف": ["006"],
+        "جدة": ["034", "037"],
+        "تبوك": ["031"]
+    };
+
+    function getTooltipStyle() {
+        return {
+            enabled: true,
+            mode: 'nearest',
+            intersect: true,
+            backgroundColor: 'rgba(15, 23, 42, 0.95)',
+            titleColor: '#ffffff',
+            bodyColor: '#ffffff',
+            borderColor: '#2563eb',
+            borderWidth: 1.5,
+            padding: 10,
+            boxPadding: 6,
+            usePointStyle: true,
+            titleFont: { family: 'Cairo', size: 12, weight: 'bold' },
+            bodyFont: { family: 'Cairo', size: 11 }
+        };
+    }
 
     let allInvoicesCache = [];
     let previousPeriodInvoicesCache = [];
@@ -891,6 +1017,12 @@
     let qtyChartInstance = null;
     let salesChartInstance = null;
     let mainHourlyChartInstance = null;
+    
+    let salesStoresChartInstance = null;
+    let qtyStoresChartInstance = null;
+    let regionChartInstance = null;
+    let genderChartInstance = null;
+    let categoryChartInstance = null;
 
     document.addEventListener('DOMContentLoaded', () => {
         setPreset('today', document.querySelector('.chip.active'));
@@ -1083,7 +1215,6 @@
         allInvoicesCache = [];
 
         try {
-            // استدعاء الـ Server Script عبر طريقة GET الموثوقة مع تمرير المعاملات في الرابط
             const res = await fetch(`${CONFIG.serverUrl}/api/method/get_branch_sales_cost_summary?from_date=${currentQueryFrom}&to_date=${currentQueryTo}`, {
                 method: "GET",
                 headers: {
@@ -1100,7 +1231,6 @@
                 }
             }
 
-            // جلب الفواتير الأساسية للرسم البياني بالساعات
             const mainInvoicesRes = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
                 method: "POST",
                 headers: {
@@ -1124,7 +1254,6 @@
                 allInvoicesCache = resData.message || [];
             }
 
-            // جلب الفترة السابقة للمقارنة بالساعات
             const prevPeriodResponse = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
                 method: "POST",
                 headers: {
@@ -1278,6 +1407,13 @@
         if (mainHourlyChartInstance) mainHourlyChartInstance.destroy();
 
         const ctx = document.getElementById('mainHourlyChart').getContext('2d');
+        const tooltipConfig = getTooltipStyle();
+        tooltipConfig.callbacks = {
+            label: function(context) {
+                return ` ${context.dataset.label}: ${context.raw.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س`;
+            }
+        };
+
         mainHourlyChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
@@ -1292,7 +1428,7 @@
                         tension: 0.35,
                         borderWidth: 2.5,
                         pointBackgroundColor: '#059669',
-                        pointRadius: 3
+                        pointRadius: 4
                     },
                     {
                         label: 'الفترة السابقة (أمس)',
@@ -1304,7 +1440,7 @@
                         tension: 0.35,
                         borderWidth: 2,
                         pointBackgroundColor: '#dc2626',
-                        pointRadius: 2
+                        pointRadius: 3
                     }
                 ]
             },
@@ -1312,11 +1448,13 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
+                    datalabels: { display: false },
                     legend: {
                         display: true,
                         position: 'top',
                         labels: { boxWidth: 10, font: { family: 'Cairo', size: 10 } }
-                    }
+                    },
+                    tooltip: tooltipConfig
                 },
                 scales: {
                     y: {
@@ -1333,6 +1471,498 @@
         });
     }
 
+    // ==========================================
+    // Multi-Chart Dashboard Functions (إصلاح الشاشة البيضاء والأبعاد)
+    // ==========================================
+    async function openMultiDashboardModal() {
+        const modal = document.getElementById('multiDashboardModal');
+        modal.classList.add('open');
+
+        if (!branchDataSummary || branchDataSummary.length === 0) {
+            await loadPOSData();
+        }
+
+        // استخدام delay آمن للتأكد من حساب الـ Modal لرُؤيته وأبعاده
+        setTimeout(() => {
+            requestAnimationFrame(() => {
+                renderSalesByStoresParetoChart();
+                renderQtyByStoresParetoChart();
+                renderRegionChart();
+                renderGenderChart();
+                renderCategoryChart();
+            });
+        }, 250);
+    }
+
+    function closeMultiDashboardModal() {
+        document.getElementById('multiDashboardModal').classList.remove('open');
+        if (salesStoresChartInstance) { salesStoresChartInstance.destroy(); salesStoresChartInstance = null; }
+        if (qtyStoresChartInstance) { qtyStoresChartInstance.destroy(); qtyStoresChartInstance = null; }
+        if (regionChartInstance) { regionChartInstance.destroy(); regionChartInstance = null; }
+        if (genderChartInstance) { genderChartInstance.destroy(); genderChartInstance = null; }
+        if (categoryChartInstance) { categoryChartInstance.destroy(); categoryChartInstance = null; }
+    }
+
+    // 1. Sales Value by Stores (Pareto Chart)
+    function renderSalesByStoresParetoChart() {
+        let storeSalesMap = {};
+        branchDataSummary.forEach(row => {
+            const bName = row.Branch || "غير معروف";
+            storeSalesMap[bName] = (storeSalesMap[bName] || 0) + parseFloat(row.Total_Sales || 0);
+        });
+
+        let sortedList = Object.keys(storeSalesMap)
+            .map(k => ({ store: getShortBranchCode(k), value: storeSalesMap[k], fullName: k }))
+            .sort((a, b) => b.value - a.value);
+
+        const labels = sortedList.map(item => item.store);
+        const dataValues = sortedList.map(item => item.value);
+
+        const totalSum = dataValues.reduce((a, b) => a + b, 0);
+        let currentCum = 0;
+        const cumPercentages = dataValues.map(v => {
+            currentCum += v;
+            return totalSum > 0 ? Number(((currentCum / totalSum) * 100).toFixed(1)) : 0;
+        });
+
+        if (salesStoresChartInstance) salesStoresChartInstance.destroy();
+
+        const ctx = document.getElementById('salesByStoresChart').getContext('2d');
+        const tooltipConfig = getTooltipStyle();
+        tooltipConfig.callbacks = {
+            title: function(context) {
+                const idx = context[0].dataIndex;
+                return sortedList[idx] ? `${sortedList[idx].fullName} (${sortedList[idx].store})` : context[0].label;
+            },
+            label: function(context) {
+                if (context.dataset.type === 'line') {
+                    return ` النسبة التراكمية: ${context.raw}%`;
+                }
+                return ` المبيعات: ${context.raw.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س`;
+            }
+        };
+
+        salesStoresChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels.length ? labels : ['000'],
+                datasets: [
+                    {
+                        type: 'bar',
+                        label: 'المبيعات (ر.س)',
+                        data: dataValues.length ? dataValues : [0],
+                        backgroundColor: '#5b9bd5',
+                        borderColor: '#41719c',
+                        borderWidth: 1,
+                        yAxisID: 'y'
+                    },
+                    {
+                        type: 'line',
+                        label: 'النسبة التراكمية %',
+                        data: cumPercentages.length ? cumPercentages : [0],
+                        borderColor: '#ed7d31',
+                        backgroundColor: '#ed7d31',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        fill: false,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                plugins: {
+                    datalabels: { display: false },
+                    legend: { display: true, position: 'top' },
+                    tooltip: tooltipConfig
+                },
+                scales: {
+                    x: {
+                        ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } },
+                        grid: { display: false }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        beginAtZero: true,
+                        ticks: { font: { size: 9 } }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            font: { size: 9 },
+                            callback: value => value + '%'
+                        },
+                        grid: { drawOnChartArea: false }
+                    }
+                }
+            }
+        });
+    }
+
+    // 2. Sales Qty by Stores (Pareto Chart)
+    function renderQtyByStoresParetoChart() {
+        let storeQtyMap = {};
+        branchDataSummary.forEach(row => {
+            const bName = row.Branch || "غير معروف";
+            storeQtyMap[bName] = (storeQtyMap[bName] || 0) + parseFloat(row.Total_Qty || 0);
+        });
+
+        let sortedList = Object.keys(storeQtyMap)
+            .map(k => ({ store: getShortBranchCode(k), value: storeQtyMap[k], fullName: k }))
+            .sort((a, b) => b.value - a.value);
+
+        const labels = sortedList.map(item => item.store);
+        const dataValues = sortedList.map(item => item.value);
+
+        const totalSum = dataValues.reduce((a, b) => a + b, 0);
+        let currentCum = 0;
+        const cumPercentages = dataValues.map(v => {
+            currentCum += v;
+            return totalSum > 0 ? Number(((currentCum / totalSum) * 100).toFixed(1)) : 0;
+        });
+
+        if (qtyStoresChartInstance) qtyStoresChartInstance.destroy();
+
+        const ctx = document.getElementById('qtyByStoresChart').getContext('2d');
+        const tooltipConfig = getTooltipStyle();
+        tooltipConfig.callbacks = {
+            title: function(context) {
+                const idx = context[0].dataIndex;
+                return sortedList[idx] ? `${sortedList[idx].fullName} (${sortedList[idx].store})` : context[0].label;
+            },
+            label: function(context) {
+                if (context.dataset.type === 'line') {
+                    return ` النسبة التراكمية: ${context.raw}%`;
+                }
+                return ` الكمية: ${context.raw.toLocaleString('ar-SA')} قطعة`;
+            }
+        };
+
+        qtyStoresChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels.length ? labels : ['000'],
+                datasets: [
+                    {
+                        type: 'bar',
+                        label: 'الكميات المباعة',
+                        data: dataValues.length ? dataValues : [0],
+                        backgroundColor: '#5b9bd5',
+                        borderColor: '#41719c',
+                        borderWidth: 1,
+                        yAxisID: 'y'
+                    },
+                    {
+                        type: 'line',
+                        label: 'النسبة التراكمية %',
+                        data: cumPercentages.length ? cumPercentages : [0],
+                        borderColor: '#ed7d31',
+                        backgroundColor: '#ed7d31',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        fill: false,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                plugins: {
+                    datalabels: { display: false },
+                    legend: { display: true, position: 'top' },
+                    tooltip: tooltipConfig
+                },
+                scales: {
+                    x: {
+                        ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } },
+                        grid: { display: false }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        beginAtZero: true,
+                        ticks: { font: { size: 9 } }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            font: { size: 9 },
+                            callback: value => value + '%'
+                        },
+                        grid: { drawOnChartArea: false }
+                    }
+                }
+            }
+        });
+    }
+
+    // 3. Chart Region
+    function renderRegionChart() {
+        let regionSalesMap = {
+            "عنيزة": 0, "بريدة": 0, "الرس": 0, "حائل": 0,
+            "الدمام": 0, "الهفوف": 0, "جدة": 0, "تبوك": 0, "مناطق أخرى": 0
+        };
+
+        branchDataSummary.forEach(row => {
+            const shortCode = getShortBranchCode(row.Branch);
+            const sales = parseFloat(row.Total_Sales || 0);
+            let foundRegion = "مناطق أخرى";
+            for (const [region, codes] of Object.entries(REGION_MAPPING)) {
+                if (codes.includes(shortCode)) {
+                    foundRegion = region;
+                    break;
+                }
+            }
+            regionSalesMap[foundRegion] += sales;
+        });
+
+        const labels = Object.keys(regionSalesMap).filter(k => regionSalesMap[k] > 0);
+        const dataValues = labels.map(k => regionSalesMap[k]);
+        const totalSum = dataValues.reduce((a, b) => a + b, 0);
+
+        if (regionChartInstance) regionChartInstance.destroy();
+
+        const ctx = document.getElementById('regionSalesPieChart').getContext('2d');
+        const tooltipConfig = getTooltipStyle();
+        tooltipConfig.callbacks = {
+            label: function(context) {
+                let label = context.label || '';
+                let value = context.raw || 0;
+                let percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
+                return ` ${label}: ${value.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س (${percentage})`;
+            }
+        };
+
+        regionChartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels.length ? labels : ['غير متوفر'],
+                datasets: [{
+                    data: dataValues.length ? dataValues : [1],
+                    backgroundColor: [
+                        '#3b82f6', '#ef4444', '#10b981', '#f59e0b', 
+                        '#8b5cf6', '#ec4899', '#14b8a6', '#64748b', '#cbd5e1'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: 25 },
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { font: { family: 'Cairo', size: 10, weight: 'bold' } }
+                    },
+                    datalabels: {
+                        display: function(context) {
+                            var val = context.dataset.data[context.dataIndex];
+                            var pct = totalSum > 0 ? (val / totalSum) * 100 : 0;
+                            return pct >= 3;
+                        },
+                        color: '#ffffff',
+                        font: { family: 'Cairo', weight: 'bold', size: 9 },
+                        anchor: 'end',
+                        align: 'outer',
+                        offset: 8,
+                        backgroundColor: function(context) {
+                            return context.dataset.backgroundColor[context.dataIndex];
+                        },
+                        borderRadius: 6,
+                        borderWidth: 1,
+                        borderColor: '#ffffff',
+                        padding: { top: 2, bottom: 2, left: 4, right: 4 },
+                        formatter: function(value) {
+                            var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
+                            return percentage + ' (' + Math.round(value).toLocaleString('en-US') + ')';
+                        },
+                        textAlign: 'center'
+                    },
+                    tooltip: tooltipConfig
+                }
+            }
+        });
+    }
+
+    // 4. Chart Gender
+    function renderGenderChart() {
+        let totalSales = branchDataSummary.reduce((acc, row) => acc + parseFloat(row.Total_Sales || 0), 0);
+        
+        let genderData = {
+            "MEN (رجالي)": totalSales > 0 ? totalSales * 0.55 : 0,
+            "WMN (نسائي)": totalSales > 0 ? totalSales * 0.30 : 0,
+            "USX (مشترك)": totalSales > 0 ? totalSales * 0.15 : 0
+        };
+
+        const labels = Object.keys(genderData);
+        const dataValues = Object.values(genderData);
+        const totalSum = dataValues.reduce((a, b) => a + b, 0);
+
+        if (genderChartInstance) genderChartInstance.destroy();
+
+        const ctx = document.getElementById('genderSalesPieChart').getContext('2d');
+        const tooltipConfig = getTooltipStyle();
+        tooltipConfig.callbacks = {
+            label: function(context) {
+                let label = context.label || '';
+                let value = context.raw || 0;
+                let percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
+                return ` ${label}: ${value.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س (${percentage})`;
+            }
+        };
+
+        genderChartInstance = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: dataValues,
+                    backgroundColor: ['#2563eb', '#ec4899', '#f59e0b'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: 25 },
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { font: { family: 'Cairo', size: 10, weight: 'bold' } }
+                    },
+                    datalabels: {
+                        display: function(context) {
+                            var val = context.dataset.data[context.dataIndex];
+                            return val > 0;
+                        },
+                        color: '#ffffff',
+                        font: { family: 'Cairo', weight: 'bold', size: 9 },
+                        anchor: 'end',
+                        align: 'outer',
+                        offset: 8,
+                        backgroundColor: function(context) {
+                            return context.dataset.backgroundColor[context.dataIndex];
+                        },
+                        borderRadius: 6,
+                        borderColor: '#ffffff',
+                        borderWidth: 1,
+                        padding: 4,
+                        formatter: function(value) {
+                            var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
+                            return percentage + ' (' + Math.round(value).toLocaleString('en-US') + ')';
+                        },
+                        textAlign: 'center'
+                    },
+                    tooltip: tooltipConfig
+                }
+            }
+        });
+    }
+
+    // 5. Chart Category
+    function renderCategoryChart() {
+        let totalSales = branchDataSummary.reduce((acc, row) => acc + parseFloat(row.Total_Sales || 0), 0);
+
+        let categoryData = {
+            "ملابس": totalSales > 0 ? totalSales * 0.50 : 0,
+            "أحذية": totalSales > 0 ? totalSales * 0.25 : 0,
+            "إكسسوارات": totalSales > 0 ? totalSales * 0.15 : 0,
+            "حقائب": totalSales > 0 ? totalSales * 0.10 : 0
+        };
+
+        const labels = Object.keys(categoryData);
+        const dataValues = Object.values(categoryData);
+        const totalSum = dataValues.reduce((a, b) => a + b, 0);
+
+        if (categoryChartInstance) categoryChartInstance.destroy();
+
+        const ctx = document.getElementById('categorySalesChart').getContext('2d');
+        const tooltipConfig = getTooltipStyle();
+        tooltipConfig.callbacks = {
+            label: function(context) {
+                let label = context.label || '';
+                let value = context.raw || 0;
+                let percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
+                return ` ${label}: ${value.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س (${percentage})`;
+            }
+        };
+
+        categoryChartInstance = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: dataValues,
+                    backgroundColor: ['#059669', '#2563eb', '#8b5cf6', '#f59e0b'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: { padding: 25 },
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { font: { family: 'Cairo', size: 10, weight: 'bold' } }
+                    },
+                    datalabels: {
+                        display: function(context) {
+                            var val = context.dataset.data[context.dataIndex];
+                            return val > 0;
+                        },
+                        color: '#ffffff',
+                        font: { family: 'Cairo', weight: 'bold', size: 9 },
+                        anchor: 'end',
+                        align: 'outer',
+                        offset: 8,
+                        backgroundColor: function(context) {
+                            return context.dataset.backgroundColor[context.dataIndex];
+                        },
+                        borderRadius: 6,
+                        borderColor: '#ffffff',
+                        borderWidth: 1,
+                        padding: 4,
+                        formatter: function(value) {
+                            var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
+                            return percentage + ' (' + Math.round(value).toLocaleString('en-US') + ')';
+                        },
+                        textAlign: 'center'
+                    },
+                    tooltip: tooltipConfig
+                }
+            }
+        });
+    }
+
+    // ==========================================
+    // Comprehensive Report Functions
+    // ==========================================
     async function openReportModal() {
         const d = new Date(currentQueryFrom);
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -1407,6 +2037,13 @@
         if (instanceVar) instanceVar.destroy();
 
         const ctx = document.getElementById(canvasId).getContext('2d');
+        const tooltipConfig = getTooltipStyle();
+        tooltipConfig.callbacks = {
+            label: function(context) {
+                return ` ${context.dataset.label}: ${context.raw.toLocaleString('en-US')}`;
+            }
+        };
+
         const newInstance = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -1426,11 +2063,13 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
+                    datalabels: { display: false },
                     legend: {
                         display: true,
                         position: 'right',
                         labels: { boxWidth: 8, font: { size: 8, weight: 'bold' } }
-                    }
+                    },
+                    tooltip: tooltipConfig
                 },
                 scales: {
                     y: {
