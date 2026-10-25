@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <link rel="manifest" href="./manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مبيعات الموردين - الموسى التجارية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #7c3aed;          
+            --accent-hover: #6d28d9;    
+            --accent-light: #f5f3ff;    
+            --accent-border: #ddd6fe;   
+            --success: #059669;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 16px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding: 20px 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 18px 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .header-title-box h1 {
+            font-size: 16px;
+            color: var(--primary);
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .header-title-box p {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .header-left-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--primary);
+            transition: all 0.2s ease;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 20px -5px rgba(124, 58, 237, 0.3);
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 13px;
+            color: #ede9fe;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            color: #ffffff;
+        }
+
+        .hero-amount {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .filter-panel {
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .controls-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            position: relative;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .control-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .date-toggle-btn {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            height: 38px;
+        }
+
+        .calendar-container {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+            background: var(--bg-card);
+            display: none;
+            position: absolute;
+            top: 65px;
+            right: 0;
+            width: 260px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            z-index: 100;
+        }
+
+        .calendar-container.open {
+            display: block;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .calendar-header button {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 2px 6px;
+            cursor: pointer;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            text-align: center;
+        }
+
+        .calendar-day-name {
+            font-size: 9px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            background: var(--bg-body);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .calendar-day.selected {
+            background: var(--accent);
+            color: white;
+        }
+
+        .calendar-day.in-range {
+            background: #f5f3ff;
+            color: var(--accent);
+        }
+
+        .control-group select {
+            width: 100%;
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            outline: none;
+            background: var(--bg-body);
+            height: 38px;
+        }
+
+        .period-chips {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .chip {
+            background: var(--accent-light);
+            border: 1px solid var(--accent-border);
+            padding: 8px 4px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            color: var(--accent);
+        }
+
+        .chip.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .section-header {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .suppliers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .supplier-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 15px 18px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-right: 4px solid var(--accent);
+        }
+
+        .supplier-info h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .supplier-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .supplier-amount {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--success);
+            text-align: left;
+        }
+
+        .status-msg {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container">
+    <header>
+        <div class="header-title-box">
+            <h1>الموسى التجارية</h1>
+            <p>مبيعات الموردين (Supplier Sales)</p>
+        </div>
+        <div class="header-left-group">
+            <button class="action-btn" onclick="loadSupplierSalesData()" title="تحديث">🔄</button>
+            <a href="sales.html" class="action-btn" title="رجوع">⬅ مبيعات الفروع</a>
+        </div>
+    </header>
+
+    <div class="filter-panel">
+        <div class="period-chips">
+            <div class="chip active" onclick="setPreset('today', this)">اليوم</div>
+            <div class="chip" onclick="setPreset('yesterday', this)">أمس</div>
+            <div class="chip" onclick="setPreset('week', this)">هذا الأسبوع</div>
+            <div class="chip" onclick="setPreset('month', this)">هذا الشهر</div>
+            <div class="chip" onclick="setPreset('year', this)">هذه السنة</div>
+            <div class="chip" onclick="toggleCalendar()">📅 مخصص</div>
+        </div>
+
+        <div class="controls-row">
+            <div class="control-group">
+                <span class="control-label">التاريخ:</span>
+                <div class="date-toggle-btn" onclick="toggleCalendar()">
+                    <span id="dateButtonText">اختر النطاق...</span>
+                    <span>▼</span>
+                </div>
+                
+                <div class="calendar-container" id="calendarContainer">
+                    <div class="calendar-header">
+                        <button onclick="changeMonth(-1)">&#9664;</button>
+                        <span id="calendarTitle">أكتوبر 2026</span>
+                        <button onclick="changeMonth(1)">&#9654;</button>
+                    </div>
+                    <div class="calendar-grid" id="calendarDaysGrid"></div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <span class="control-label">سنة المنتج (Product Year):</span>
+                <select id="productYearSelect" onchange="filterAndRenderData()">
+                    <option value="ALL">جميع السنوات</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="controls-row">
+            <div class="control-group" style="grid-column: span 2;">
+                <span class="control-label">الماركة (Brand):</span>
+                <select id="brandSelect" onchange="filterAndRenderData()">
+                    <option value="ALL">جميع الماركات (All Brands)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-card">
+        <div class="hero-title">
+            <span>إجمالي مبيعات الموردين</span>
+            <span class="hero-badge" id="totalQtyBadge">0 قطعة</span>
+        </div>
+        <div class="hero-amount" id="totalSalesAmount">0.00 ر.س</div>
+    </div>
+
+    <div class="section-header">قائمة الموردين والمبيعات</div>
+    <div class="suppliers-list" id="suppliersContainer">
+        <div class="status-msg">جاري تحميل مبيعات الموردين...</div>
+    </div>
+</div>
+
+<script>
+    const CONFIG = {
+        serverUrl: "https://87-237-225-155.nip.io/",
+        apiKey: "6f039a5a6130b79",
+        apiSecret: "9e6d920a8fda252"
+    };
+
+    let rawSupplierData = [];
+    let currentQueryFrom = '';
+    let currentQueryTo = '';
+    let selectionState = { startDate: null, endDate: null };
+    let viewDate = new Date();
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setPreset('today', document.querySelector('.chip.active'));
+    });
+
+    function toggleCalendar() {
+        document.getElementById('calendarContainer').classList.toggle('open');
+    }
+
+    function changeMonth(dir) {
+        viewDate.setMonth(viewDate.getMonth() + dir);
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        const grid = document.getElementById('calendarDaysGrid');
+        const titleEl = document.getElementById('calendarTitle');
+        grid.innerHTML = '';
+
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
+        const arMonths = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+        titleEl.textContent = `${arMonths[month]} ${year}`;
+
+        const daysShort = ['أحد', 'إثن', 'ثلا', 'أرب', 'خميس', 'جمع', 'سبت'];
+        daysShort.forEach(d => {
+            const div = document.createElement('div');
+            div.className = 'calendar-day-name';
+            div.textContent = d;
+            grid.appendChild(div);
+        });
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+
+        for (let i = 0; i < firstDayIndex; i++) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.className = 'calendar-day empty';
+            grid.appendChild(emptyDiv);
+        }
+
+        for (let day = 1; day <= totalDays; day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            dayDiv.textContent = day;
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            if (selectionState.startDate && dateStr === selectionState.startDate) dayDiv.classList.add('selected');
+            if (selectionState.endDate && dateStr === selectionState.endDate) dayDiv.classList.add('selected');
+            if (selectionState.startDate && selectionState.endDate && dateStr > selectionState.startDate && dateStr < selectionState.endDate) {
+                dayDiv.classList.add('in-range');
+            }
+
+            dayDiv.onclick = () => onCalendarDayClick(dateStr);
+            grid.appendChild(dayDiv);
+        }
+    }
+
+    function onCalendarDayClick(dateStr) {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        if (!selectionState.startDate || (selectionState.startDate && selectionState.endDate)) {
+            selectionState.startDate = dateStr;
+            selectionState.endDate = null;
+            currentQueryFrom = dateStr;
+            currentQueryTo = dateStr;
+        } else {
+            if (dateStr < selectionState.startDate) {
+                selectionState.startDate = dateStr;
+                currentQueryFrom = dateStr;
+                currentQueryTo = dateStr;
+            } else {
+                selectionState.endDate = dateStr;
+                currentQueryTo = dateStr;
+            }
+        }
+        updateDateButtonText();
+        renderCalendar();
+        loadSupplierSalesData();
+        toggleCalendar();
+    }
+
+    function updateDateButtonText() {
+        const btnText = document.getElementById('dateButtonText');
+        if (currentQueryFrom === currentQueryTo) {
+            btnText.textContent = `${currentQueryFrom}`;
+        } else {
+            btnText.textContent = `${currentQueryFrom} إلى ${currentQueryTo}`;
+        }
+    }
+
+    function setPreset(type, element) {
+        if (element) {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        const today = new Date();
+        let start = new Date();
+        let end = new Date();
+
+        if (type === 'today') {
+            start = new Date(today);
+            end = new Date(today);
+        } else if (type === 'yesterday') {
+            start = new Date(today);
+            start.setDate(today.getDate() - 1);
+            end = new Date(start);
+        } else if (type === 'week') {
+            start = new Date(today);
+            start.setDate(today.getDate() - 6);
+            end = new Date(today);
+        } else if (type === 'month') {
+            start = new Date(today.getFullYear(), today.getMonth(), 1);
+            end = new Date(today);
+        } else if (type === 'year') {
+            start = new Date(today.getFullYear(), 0, 1);
+            end = new Date(today);
+        }
+
+        currentQueryFrom = formatDateStr(start);
+        currentQueryTo = formatDateStr(end);
+        selectionState.startDate = currentQueryFrom;
+        selectionState.endDate = currentQueryTo;
+        viewDate = new Date(end);
+
+        updateDateButtonText();
+        renderCalendar();
+        loadSupplierSalesData();
+    }
+
+    function formatDateStr(d) {
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    async function loadSupplierSalesData() {
+        const container = document.getElementById('suppliersContainer');
+        container.innerHTML = `<div class="status-msg">جاري جلب مبيعات الموردين...</div>`;
+        rawSupplierData = [];
+
+        try {
+            const res = await fetch(`${CONFIG.serverUrl}/api/method/get_supplier_sales_summary?from_date=${currentQueryFrom}&to_date=${currentQueryTo}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`,
+                    "X-Frappe-Site-Name": window.location.hostname
+                }
+            });
+
+            if (res.ok) {
+                const jsonRes = await res.json();
+                const fetchedData = jsonRes.message || [];
+                
+                rawSupplierData = fetchedData.map(row => ({
+                    supplier: row.supplier || "مورد غير محدد",
+                    brand: row.brand || "عام",
+                    product_year: row.product_year || "غير محدد",
+                    total_sales: parseFloat(row.total_sales || 0),
+                    total_qty: parseFloat(row.total_qty || 0)
+                }));
+            }
+        } catch (err) {
+            console.error("خطأ في الاتصال بالـ API:", err);
+        }
+
+        populateDropdowns();
+        filterAndRenderData();
+    }
+
+    function populateDropdowns() {
+        const yearsSet = new Set();
+        const brandsSet = new Set();
+
+        rawSupplierData.forEach(row => {
+            const brandName = row.brand || "";
+            const isNonSalable = brandName.toUpperCase().includes("NON SALABLE") || brandName.includes("غير قابلة للبيع");
+
+            if (row.product_year) yearsSet.add(String(row.product_year));
+            if (brandName && !isNonSalable) brandsSet.add(brandName);
+        });
+
+        const yearSelect = document.getElementById('productYearSelect');
+        const currentYear = yearSelect.value;
+        yearSelect.innerHTML = '<option value="ALL">جميع السنوات</option>';
+        Array.from(yearsSet).sort().reverse().forEach(y => {
+            const opt = document.createElement('option');
+            opt.value = y;
+            opt.textContent = y;
+            yearSelect.appendChild(opt);
+        });
+        if (yearsSet.has(currentYear)) yearSelect.value = currentYear;
+
+        const brandSelect = document.getElementById('brandSelect');
+        const currentBrand = brandSelect.value;
+        brandSelect.innerHTML = '<option value="ALL">جميع الماركات (All Brands)</option>';
+        Array.from(brandsSet).sort().forEach(b => {
+            const opt = document.createElement('option');
+            opt.value = b;
+            opt.textContent = b;
+            brandSelect.appendChild(opt);
+        });
+        if (brandsSet.has(currentBrand)) brandSelect.value = currentBrand;
+    }
+
+    function filterAndRenderData() {
+        const selectedYear = document.getElementById('productYearSelect').value;
+        const selectedBrand = document.getElementById('brandSelect').value;
+        const container = document.getElementById('suppliersContainer');
+        container.innerHTML = '';
+
+        let filtered = rawSupplierData.filter(row => {
+            const brandName = row.brand || "";
+            const isNonSalable = brandName.toUpperCase().includes("NON SALABLE") || brandName.includes("غير قابلة للبيع");
+            if (isNonSalable) return false;
+
+            const matchYear = (selectedYear === "ALL" || String(row.product_year) === selectedYear);
+            const matchBrand = (selectedBrand === "ALL" || brandName === selectedBrand);
+            return matchYear && matchBrand;
+        });
+
+        let supplierMap = {};
+        filtered.forEach(row => {
+            const supName = row.supplier;
+            const brandName = row.brand || "";
+
+            if (!supplierMap[supName]) {
+                supplierMap[supName] = { sales: 0, qty: 0, brands: new Set() };
+            }
+            supplierMap[supName].sales += row.total_sales;
+            supplierMap[supName].qty += row.total_qty;
+            if (brandName) supplierMap[supName].brands.add(brandName);
+        });
+
+        let grandSales = 0;
+        let grandQty = 0;
+
+        Object.keys(supplierMap).forEach(s => {
+            grandSales += supplierMap[s].sales;
+            grandQty += supplierMap[s].qty;
+        });
+
+        document.getElementById('totalSalesAmount').textContent = grandSales.toLocaleString('ar-SA', { minimumFractionDigits: 2 }) + ' ر.س';
+        document.getElementById('totalQtyBadge').textContent = `${grandQty.toLocaleString('ar-SA')} قطعة`;
+
+        const sortedSuppliers = Object.keys(supplierMap).sort((a, b) => supplierMap[b].sales - supplierMap[a].sales);
+
+        if (sortedSuppliers.length === 0) {
+            container.innerHTML = `<div class="status-msg">لا توجد مبيعات موردين مسجلة في هذه الفترة/الفلاتر</div>`;
+            return;
+        }
+
+        sortedSuppliers.forEach(sup => {
+            const item = supplierMap[sup];
+            const brandsStr = Array.from(item.brands).join(', ');
+
+            const card = document.createElement('div');
+            card.className = 'supplier-card';
+            card.innerHTML = `
+                <div class="supplier-info" style="max-width: 65%;">
+                    <h3>${sup}</h3>
+                    <div class="supplier-meta">${item.qty.toLocaleString('ar-SA')} قطعة ${brandsStr ? '| ' + brandsStr : ''}</div>
+                </div>
+                <div class="supplier-amount">
+                    ${item.sales.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+</script>
+</body>
+</html>

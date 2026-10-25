@@ -328,6 +328,7 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
+            text-decoration: none;
         }
 
         .main-chart-card {
@@ -792,6 +793,11 @@
                 📈 لوحة المؤشرات (Dashboard)
             </button>
         </div>
+
+        <!-- زر الانتقال لصفحة مبيعات الموردين المستقلة -->
+        <a href="supplier_sales.html" class="report-btn" style="background: #7c3aed; margin-top: 4px;">
+            🏢 مبيعات الموردين (Supplier Sales)
+        </a>
     </div>
 
     <div class="hero-card">
@@ -921,7 +927,6 @@
         </div>
 
         <div class="dashboard-grid">
-            <!-- 1. Sales Value by Stores -->
             <div class="dashboard-card">
                 <div class="dashboard-card-title">🏪 قيمة المبيعات حسب الفروع (Sales by Stores)</div>
                 <div class="chart-container-box">
@@ -929,7 +934,6 @@
                 </div>
             </div>
 
-            <!-- 2. Sales Qty by Stores -->
             <div class="dashboard-card">
                 <div class="dashboard-card-title">📦 كميات المبيعات حسب الفروع (Sales Qty by Stores)</div>
                 <div class="chart-container-box">
@@ -937,7 +941,6 @@
                 </div>
             </div>
 
-            <!-- 3. Sales by Region -->
             <div class="dashboard-card">
                 <div class="dashboard-card-title">📍 المبيعات حسب المناطق (Sales by Region)</div>
                 <div class="chart-container-box pie-chart-container">
@@ -945,7 +948,6 @@
                 </div>
             </div>
 
-            <!-- 4. Sales by Gender -->
             <div class="dashboard-card">
                 <div class="dashboard-card-title">👥 المبيعات حسب النوع/الفئة (Sales by Gender)</div>
                 <div class="chart-container-box pie-chart-container">
@@ -953,7 +955,6 @@
                 </div>
             </div>
 
-            <!-- 5. Sales by Category -->
             <div class="dashboard-card">
                 <div class="dashboard-card-title">🏷️ المبيعات حسب التصنيفات (Sales by Category)</div>
                 <div class="chart-container-box pie-chart-container">
@@ -1474,9 +1475,6 @@
         });
     }
 
-    // ==========================================
-    // Multi-Chart Dashboard Functions
-    // ==========================================
     async function openMultiDashboardModal() {
         const modal = document.getElementById('multiDashboardModal');
         modal.classList.add('open');
@@ -1505,7 +1503,6 @@
         if (categoryChartInstance) { categoryChartInstance.destroy(); categoryChartInstance = null; }
     }
 
-    // 1. Sales Value by Stores (Pareto Chart)
     function renderSalesByStoresParetoChart() {
         let storeSalesMap = {};
         branchDataSummary.forEach(row => {
@@ -1574,37 +1571,22 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                interaction: {
-                    mode: 'nearest',
-                    intersect: true
-                },
+                interaction: { mode: 'nearest', intersect: true },
                 plugins: {
                     datalabels: { display: false },
                     legend: { display: true, position: 'top' },
                     tooltip: tooltipConfig
                 },
                 scales: {
-                    x: {
-                        ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } },
-                        grid: { display: false }
-                    },
-                    y: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        beginAtZero: true,
-                        ticks: { font: { size: 9 } }
-                    },
+                    x: { ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } }, grid: { display: false } },
+                    y: { type: 'linear', display: true, position: 'left', beginAtZero: true, ticks: { font: { size: 9 } } },
                     y1: {
                         type: 'linear',
                         display: true,
                         position: 'right',
                         beginAtZero: true,
                         max: 100,
-                        ticks: {
-                            font: { size: 9 },
-                            callback: value => value + '%'
-                        },
+                        ticks: { font: { size: 9 }, callback: value => value + '%' },
                         grid: { drawOnChartArea: false }
                     }
                 }
@@ -1612,7 +1594,6 @@
         });
     }
 
-    // 2. Sales Qty by Stores (Pareto Chart)
     function renderQtyByStoresParetoChart() {
         let storeQtyMap = {};
         branchDataSummary.forEach(row => {
@@ -1681,37 +1662,22 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                interaction: {
-                    mode: 'nearest',
-                    intersect: true
-                },
+                interaction: { mode: 'nearest', intersect: true },
                 plugins: {
                     datalabels: { display: false },
                     legend: { display: true, position: 'top' },
                     tooltip: tooltipConfig
                 },
                 scales: {
-                    x: {
-                        ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } },
-                        grid: { display: false }
-                    },
-                    y: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        beginAtZero: true,
-                        ticks: { font: { size: 9 } }
-                    },
+                    x: { ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } }, grid: { display: false } },
+                    y: { type: 'linear', display: true, position: 'left', beginAtZero: true, ticks: { font: { size: 9 } } },
                     y1: {
                         type: 'linear',
                         display: true,
                         position: 'right',
                         beginAtZero: true,
                         max: 100,
-                        ticks: {
-                            font: { size: 9 },
-                            callback: value => value + '%'
-                        },
+                        ticks: { font: { size: 9 }, callback: value => value + '%' },
                         grid: { drawOnChartArea: false }
                     }
                 }
@@ -1719,7 +1685,6 @@
         });
     }
 
-    // 3. Chart Region (عرض النسبة + القيمة لجميع المناطق بدون استثناء)
     function renderRegionChart() {
         let regionSalesMap = {
             "عنيزة": 0, "بريدة": 0, "الرس": 0, "حائل": 0,
@@ -1762,10 +1727,7 @@
                 labels: labels.length ? labels : ['غير متوفر'],
                 datasets: [{
                     data: dataValues.length ? dataValues : [1],
-                    backgroundColor: [
-                        '#3b82f6', '#ef4444', '#10b981', '#f59e0b', 
-                        '#8b5cf6', '#ec4899', '#14b8a6', '#64748b', '#cbd5e1'
-                    ],
+                    backgroundColor: ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#64748b', '#cbd5e1'],
                     borderWidth: 2,
                     borderColor: '#ffffff'
                 }]
@@ -1775,26 +1737,14 @@
                 maintainAspectRatio: false,
                 layout: { padding: 5 },
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { 
-                            boxWidth: 12, 
-                            font: { family: 'Cairo', size: 10, weight: 'bold' },
-                            padding: 12
-                        }
-                    },
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Cairo', size: 10, weight: 'bold' }, padding: 12 } },
                     datalabels: {
-                        display: true, // تفعيل الظهور لجميع القطاعات
+                        display: true,
                         color: '#ffffff',
                         font: function(context) {
                             var val = context.dataset.data[context.dataIndex];
                             var pct = totalSum > 0 ? (val / totalSum) * 100 : 0;
-                            // تصغير الخط تلقائياً للقطاعات الصغيرة جداً لتتسع بدقة
-                            return {
-                                family: 'Cairo',
-                                weight: 'bold',
-                                size: pct < 8 ? 8 : 10
-                            };
+                            return { family: 'Cairo', weight: 'bold', size: pct < 8 ? 8 : 10 };
                         },
                         formatter: function(value) {
                             var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(0) + '%' : '0%';
@@ -1809,10 +1759,8 @@
         });
     }
 
-    // 4. Chart Gender
     function renderGenderChart() {
         let totalSales = branchDataSummary.reduce((acc, row) => acc + parseFloat(row.Total_Sales || 0), 0);
-        
         let genderData = {
             "MEN (رجالي)": totalSales > 0 ? totalSales * 0.55 : 0,
             "WMN (نسائي)": totalSales > 0 ? totalSales * 0.30 : 0,
@@ -1852,14 +1800,7 @@
                 maintainAspectRatio: false,
                 layout: { padding: 5 },
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { 
-                            boxWidth: 12, 
-                            font: { family: 'Cairo', size: 11, weight: 'bold' },
-                            padding: 15
-                        }
-                    },
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Cairo', size: 11, weight: 'bold' }, padding: 15 } },
                     datalabels: {
                         display: true,
                         color: '#ffffff',
@@ -1877,10 +1818,8 @@
         });
     }
 
-    // 5. Chart Category
     function renderCategoryChart() {
         let totalSales = branchDataSummary.reduce((acc, row) => acc + parseFloat(row.Total_Sales || 0), 0);
-
         let categoryData = {
             "ملابس": totalSales > 0 ? totalSales * 0.50 : 0,
             "أحذية": totalSales > 0 ? totalSales * 0.25 : 0,
@@ -1921,14 +1860,7 @@
                 maintainAspectRatio: false,
                 layout: { padding: 5 },
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { 
-                            boxWidth: 12, 
-                            font: { family: 'Cairo', size: 11, weight: 'bold' },
-                            padding: 15
-                        }
-                    },
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Cairo', size: 11, weight: 'bold' }, padding: 15 } },
                     datalabels: {
                         display: true,
                         color: '#ffffff',
@@ -1946,9 +1878,6 @@
         });
     }
 
-    // ==========================================
-    // Comprehensive Report Functions
-    // ==========================================
     async function openReportModal() {
         const d = new Date(currentQueryFrom);
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -2050,23 +1979,12 @@
                 maintainAspectRatio: false,
                 plugins: {
                     datalabels: { display: false },
-                    legend: {
-                        display: true,
-                        position: 'right',
-                        labels: { boxWidth: 8, font: { size: 8, weight: 'bold' } }
-                    },
+                    legend: { display: true, position: 'right', labels: { boxWidth: 8, font: { size: 8, weight: 'bold' } } },
                     tooltip: tooltipConfig
                 },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: '#d9d9d9' },
-                        ticks: { font: { size: 9 }, color: '#000' }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { font: { size: 9, weight: 'bold' }, color: '#000' }
-                    }
+                    y: { beginAtZero: true, grid: { color: '#d9d9d9' }, ticks: { font: { size: 9 }, color: '#000' } },
+                    x: { grid: { display: false }, ticks: { font: { size: 9, weight: 'bold' }, color: '#000' } }
                 }
             }
         });
@@ -2076,32 +1994,17 @@
     async function generatePDFBlob() {
         const element = document.getElementById('reportPDFContent');
         const actionsBar = document.getElementById('modalActionsBar');
-        
         actionsBar.style.display = 'none';
 
-        const canvas = await html2canvas(element, {
-            scale: 3.5,
-            useCORS: true,
-            logging: false,
-            backgroundColor: "#ffffff"
-        });
-
+        const canvas = await html2canvas(element, { scale: 3.5, useCORS: true, logging: false, backgroundColor: "#ffffff" });
         actionsBar.style.display = 'flex';
 
         const imgData = canvas.toDataURL('image/jpeg', 0.95);
-
         const { jsPDF } = window.jspdf;
-        
-        const pdf = new jsPDF({
-            orientation: 'landscape',
-            unit: 'mm',
-            format: 'a4',
-            compress: true
-        });
+        const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4', compress: true });
 
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
-
         const imgWidth = pdfWidth - 10;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
@@ -2109,7 +2012,6 @@
         if (yPos < 5) yPos = 5;
 
         pdf.addImage(imgData, 'JPEG', 5, yPos, imgWidth, imgHeight, undefined, 'FAST');
-
         return pdf;
     }
 
@@ -2131,11 +2033,7 @@
             const shareText = `تقرير المبيعات للموسى التجارية للفترة من ${currentQueryFrom} إلى ${currentQueryTo}`;
 
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                    title: 'تقرير المبيعات',
-                    text: shareText,
-                    files: [file]
-                });
+                await navigator.share({ title: 'تقرير المبيعات', text: shareText, files: [file] });
             } else {
                 pdf.save(fileName);
                 const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + '\n(تم تحميل ملف الـ PDF لارفاقه)')}`;
