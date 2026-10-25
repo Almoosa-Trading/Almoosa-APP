@@ -1,16 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlRoot">
 <head>
-
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-
-
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>سجلات المسح | إدارة المستودع الاحترافية</title>
+    <title data-i18n="page_title">سجلات المسح | إدارة المستودع الاحترافية</title>
     <!-- خط Cairo ورسومات FontAwesome -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -52,6 +46,7 @@
             padding: 0;
             font-family: 'Cairo', system-ui, -apple-system, sans-serif;
             -webkit-tap-highlight-color: transparent;
+            font-variant-numeric: lining-nums tabular-nums; /* تثبيت الأرقام بالصيغة الإنجليزية القياسية */
         }
 
         body {
@@ -75,7 +70,6 @@
             gap: 20px;
         }
 
-        /* ===== Header ===== */
         .app-header {
             background: var(--surface-card);
             padding: 16px 20px;
@@ -121,6 +115,7 @@
         .header-actions {
             display: flex;
             gap: 8px;
+            align-items: center;
         }
 
         .btn-icon {
@@ -145,7 +140,26 @@
             border-color: var(--brand-primary);
         }
 
-        /* ===== Stats Banner ===== */
+        .lang-select {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid var(--border-main);
+            padding: 8px 10px;
+            border-radius: var(--radius-md);
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-main);
+            outline: none;
+            height: 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+
+        .lang-select:hover, .lang-select:focus {
+            border-color: var(--brand-primary);
+            background: #ffffff;
+        }
+
         .stats-card {
             background: var(--surface-card);
             border-radius: var(--radius-xl);
@@ -197,7 +211,6 @@
             gap: 8px;
         }
 
-        /* ===== Filter Panel ===== */
         .filter-card {
             background: var(--surface-card);
             border-radius: var(--radius-lg);
@@ -358,7 +371,6 @@
             justify-content: space-between;
         }
 
-        /* ===== List Section ===== */
         .section-header {
             display: flex;
             justify-content: space-between;
@@ -381,7 +393,6 @@
             color: var(--brand-light);
         }
 
-        /* Entry Cards */
         .doc-card {
             background: var(--surface-card);
             border-radius: var(--radius-lg);
@@ -434,7 +445,6 @@
             gap: 6px;
         }
 
-        /* Performance List Item */
         .emp-row {
             display: flex;
             flex-direction: column;
@@ -513,7 +523,6 @@
             transition: width 0.5s ease;
         }
 
-        /* Loading & Empty States */
         .state-container {
             text-align: center;
             padding: 50px 20px;
@@ -542,18 +551,23 @@
 <body>
 
 <div class="dashboard-container">
-    <!-- Header -->
     <header class="app-header">
         <div class="header-brand">
             <div class="brand-icon">
                 <i class="fa-solid fa-chart-line"></i>
             </div>
             <div class="brand-info">
-                <h1>إدارة المستودع</h1>
-                <p>سجلات المسح ومؤشرات الأداء (KPI)</p>
+                <h1 data-i18n="app_header_title">إدارة المستودع</h1>
+                <p data-i18n="app_header_subtitle">سجلات المسح ومؤشرات الأداء (KPI)</p>
             </div>
         </div>
         <div class="header-actions">
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ur">اردو</option>
+            </select>
             <button class="btn-icon" onclick="fetchScanEntries()" title="تحديث البيانات">
                 <i class="fa-solid fa-rotate-right"></i>
             </button>
@@ -563,80 +577,250 @@
         </div>
     </header>
 
-    <!-- Summary Stats Banner -->
     <div class="stats-card">
         <div class="stats-content">
-            <span>إجمالي القطع الممسوحة</span>
+            <span data-i18n="stats_total_scanned">إجمالي القطع الممسوحة</span>
             <h2 id="totalItemsCount">0</h2>
         </div>
         <div class="stats-badge">
             <i class="fa-solid fa-circle-check"></i>
-            <span>معتمدة (Submitted)</span>
+            <span data-i18n="stats_submitted">معتمدة (Submitted)</span>
         </div>
     </div>
 
-    <!-- Filter Control Panel -->
     <div class="filter-card">
-        <!-- ترويسة الفلتر مع زر إلغاء الفلاتر -->
         <div class="filter-section-header">
             <div class="filter-section-title">
                 <i class="fa-solid fa-sliders"></i>
-                <span>تصفية حسب التاريخ والبحث</span>
+                <span data-i18n="filter_section_title">تصفية حسب التاريخ والبحث</span>
             </div>
             <button class="reset-filter-btn" onclick="resetAllFilters()" title="إلغاء وتصفير كل الفلاتر">
-                <i class="fa-solid fa-rotate-left"></i> إلغاء الفلتر
+                <i class="fa-solid fa-rotate-left"></i> <span data-i18n="btn_reset_filter">إلغاء الفلتر</span>
             </button>
         </div>
 
         <div class="preset-grid">
-            <button class="preset-btn" onclick="setDatePreset('today')">اليوم</button>
-            <button class="preset-btn" onclick="setDatePreset('yesterday')">أمس</button>
-            <button class="preset-btn" onclick="setDatePreset('week')">الأسبوع</button>
-            <button class="preset-btn active" id="monthPresetBtn" onclick="setDatePreset('month')">الشهر الحالي</button>
+            <button class="preset-btn" onclick="setDatePreset('today')" data-i18n="preset_today">اليوم</button>
+            <button class="preset-btn" onclick="setDatePreset('yesterday')" data-i18n="preset_yesterday">أمس</button>
+            <button class="preset-btn" onclick="setDatePreset('week')" data-i18n="preset_week">الأسبوع</button>
+            <button class="preset-btn active" id="monthPresetBtn" onclick="setDatePreset('month')" data-i18n="preset_month">الشهر الحالي</button>
         </div>
 
         <div class="custom-range-box">
             <div class="date-input-wrapper">
-                <label>من تاريخ</label>
+                <label data-i18n="label_from_date">من تاريخ</label>
                 <input type="date" id="startDateInput" onchange="handleCustomDateChange()">
             </div>
             <div class="date-input-wrapper">
-                <label>إلى تاريخ</label>
+                <label data-i18n="label_to_date">إلى تاريخ</label>
                 <input type="date" id="endDateInput" onchange="handleCustomDateChange()">
             </div>
         </div>
 
         <div class="active-filter-bar">
-            <span id="filterDescriptionText">نطاق الفلتر: الشهر الحالي</span>
+            <span id="filterDescriptionText" data-i18n="filter_desc_default">نطاق الفلتر: الشهر الحالي</span>
             <i class="fa-solid fa-filter" style="font-size: 11px;"></i>
         </div>
 
         <div class="search-field">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" onkeyup="filterEntries()" oninput="filterEntries()" placeholder="ابحث باسم الموظف...">
+            <input type="text" id="searchInput" onkeyup="filterEntries()" oninput="filterEntries()" data-i18n-placeholder="search_placeholder" placeholder="ابحث باسم الموظف...">
         </div>
     </div>
 
-    <!-- Records Section Header -->
     <div class="section-header">
-        <h3>سجلات اليوم ومؤشر مساهمة الموظف</h3>
-        <span class="doc-badge" id="docCountBadge">0 مستند</span>
+        <h3 data-i18n="records_section_title">سجلات اليوم ومؤشر مساهمة الموظف</h3>
+        <span class="doc-badge" id="docCountBadge">0 Doc</span>
     </div>
 
-    <!-- Dynamic Container -->
     <div id="entriesContainer">
         <div class="state-container">
             <i class="fa-solid fa-circle-notch fa-spin"></i>
-            <p>جاري تحميل البيانات ومؤشرات الأداء...</p>
+            <p data-i18n="status_loading">جاري تحميل البيانات ومؤشرات الأداء...</p>
         </div>
     </div>
 
-    <footer>
+    <footer data-i18n="footer_text">
         نظام إدارة المستودعات الذكي © 2026
     </footer>
 </div>
 
 <script>
+    const translations = {
+        ar: {
+            page_title: "سجلات المسح | إدارة المستودع الاحترافية",
+            app_header_title: "إدارة المستودع",
+            app_header_subtitle: "سجلات المسح ومؤشرات الأداء (KPI)",
+            stats_total_scanned: "إجمالي القطع الممسوحة",
+            stats_submitted: "معتمدة (Submitted)",
+            filter_section_title: "تصفية حسب التاريخ والبحث",
+            btn_reset_filter: "إلغاء الفلتر",
+            preset_today: "اليوم",
+            preset_yesterday: "أمس",
+            preset_week: "الأسبوع",
+            preset_month: "الشهر الحالي",
+            label_from_date: "من تاريخ",
+            label_to_date: "إلى تاريخ",
+            filter_desc_default: "نطاق الفلتر: الشهر الحالي",
+            search_placeholder: "ابحث باسم الموظف...",
+            records_section_title: "سجلات اليوم ومؤشر مساهمة الموظف",
+            status_loading: "جاري تحميل البيانات ومؤشرات الأداء...",
+            footer_text: "نظام إدارة المستودعات الذكي © 2026",
+            kpi_excellent: "أداء ممتاز",
+            kpi_good: "أداء جيد",
+            kpi_low: "أقل من المتوسط",
+            supervisor_label: "المشرف المسئول:",
+            day_total_label: "إجمالي اليوم:",
+            no_date: "بدون تاريخ",
+            unspecified: "غير محدد",
+            unnamed_emp: "غير معرف",
+            no_employee_details: "لا توجد تفاصيل موظفين",
+            no_matching_results: "لا توجد نتائج مطابقة لشروط الفلترة أو البحث",
+            no_submitted_records: "لا توجد سجلات مسح معتمدة (Submitted)",
+            pcs_unit: "Pcs",
+            doc_suffix: "Doc"
+        },
+        en: {
+            page_title: "Scan Records | Professional Warehouse Management",
+            app_header_title: "Warehouse Management",
+            app_header_subtitle: "Scan Records & KPIs",
+            stats_total_scanned: "Total Scanned Items",
+            stats_submitted: "Submitted",
+            filter_section_title: "Filter by Date & Search",
+            btn_reset_filter: "Reset Filter",
+            preset_today: "Today",
+            preset_yesterday: "Yesterday",
+            preset_week: "Week",
+            preset_month: "Current Month",
+            label_from_date: "From Date",
+            label_to_date: "To Date",
+            filter_desc_default: "Filter Range: Current Month",
+            search_placeholder: "Search employee name...",
+            records_section_title: "Daily Records & Employee KPI",
+            status_loading: "Loading data and KPIs...",
+            footer_text: "Smart Warehouse Management System © 2026",
+            kpi_excellent: "Excellent Performance",
+            kpi_good: "Good Performance",
+            kpi_low: "Below Average",
+            supervisor_label: "Supervisor:",
+            day_total_label: "Day Total:",
+            no_date: "No Date",
+            unspecified: "Unspecified",
+            unnamed_emp: "Unnamed",
+            no_employee_details: "No employee details found",
+            no_matching_results: "No matching results found for filter or search",
+            no_submitted_records: "No submitted scan records found",
+            pcs_unit: "Pcs",
+            doc_suffix: "Doc"
+        },
+        hi: {
+            page_title: "स्कैन रिकॉर्ड | पेशेवर वेयरहाउस प्रबंधन",
+            app_header_title: "वेयरहाउस प्रबंधन",
+            app_header_subtitle: "स्कैन रिकॉर्ड और KPI",
+            stats_total_scanned: "कुल स्कैन किए गए आइटम",
+            stats_submitted: "सबमिट किया गया",
+            filter_section_title: "तिथि और खोज द्वारा फ़िल्टर करें",
+            btn_reset_filter: "फ़िल्टर रीसेट करें",
+            preset_today: "आज",
+            preset_yesterday: "कल",
+            preset_week: "सप्ताह",
+            preset_month: "चालू माह",
+            label_from_date: "दिनांक से",
+            label_to_date: "दिनांक तक",
+            filter_desc_default: "फ़िल्टर रेंज: चालू माह",
+            search_placeholder: "कर्मचारी का नाम खोजें...",
+            records_section_title: "दैनिक रिकॉर्ड और कर्मचारी KPI",
+            status_loading: "डेटा और KPI लोड हो रहे हैं...",
+            footer_text: "स्मार्ट वेयरहाउस प्रबंधन प्रणाली © 2026",
+            kpi_excellent: "उत्कृष्ट प्रदर्शन",
+            kpi_good: "अच्छा प्रदर्शन",
+            kpi_low: "औसत से कम",
+            supervisor_label: "पर्यवेक्षक:",
+            day_total_label: "दिन का कुल:",
+            no_date: "कोई तारीख नहीं",
+            unspecified: "निर्दिष्ट नहीं",
+            unnamed_emp: "अज्ञात",
+            no_employee_details: "कोई कर्मचारी विवरण नहीं मिला",
+            no_matching_results: "फ़िल्टर या खोज के लिए कोई परिणाम नहीं मिला",
+            no_submitted_records: "कोई सबमिट किया गया स्कैन रिकॉर्ड नहीं मिला",
+            pcs_unit: "Pcs",
+            doc_suffix: "Doc"
+        },
+        ur: {
+            page_title: "اسکین ریکارڈز | پروفیشنل ویئر ہاؤس مینجমেন্ট",
+            app_header_title: "ویئر ہاؤس مینجمنٹ",
+            app_header_subtitle: "اسکین ریکارڈز اور کے پی آئی",
+            stats_total_scanned: "کل اسکین شدہ اشیاء",
+            stats_submitted: "جمع شدہ (Submitted)",
+            filter_section_title: "تاریخ اور تلاش کے ذریعے فلٹر کریں",
+            btn_reset_filter: "فلٹر ہٹائیں",
+            preset_today: "آج",
+            preset_yesterday: "گزشتہ کل",
+            preset_week: "ہفتہ",
+            preset_month: "موجودہ مہینہ",
+            label_from_date: "تاریخ سے",
+            label_to_date: "تاریخ تک",
+            filter_desc_default: "فلٹر رینج: موجودہ مہینہ",
+            search_placeholder: "ملازم کا نام تلاش کریں...",
+            records_section_title: "روزانہ کے ریکارڈز اور ملازم کا کے پی آئی",
+            status_loading: "ڈیٹا اور کے پی آئی لوڈ ہو رہے ہیں...",
+            footer_text: "اسمارٹ ویئر ہاؤس مینجমেন্ট سسٹم © 2026",
+            kpi_excellent: "بہترین کارکردگی",
+            kpi_good: "اچھی کارکردگی",
+            kpi_low: "اوسط سے کم",
+            supervisor_label: "گرانڈ نگراں / سپروائزر:",
+            day_total_label: "دن کا کل:",
+            no_date: "تاریخ کے بغیر",
+            unspecified: "غیر متعین",
+            unnamed_emp: "نامعلوم",
+            no_employee_details: "ملازم کی کوئی تفصیل نہیں ملی",
+            no_matching_results: "فلٹر یا تلاش کے مطابق کوئی نتیجہ نہیں ملا",
+            no_submitted_records: "کوئی جمع شدہ اسکین ریکارڈ نہیں ملا",
+            pcs_unit: "Pcs",
+            doc_suffix: "Doc"
+        }
+    };
+
+    let currentLang = localStorage.getItem('app_lang') || 'ar';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('app_lang', lang);
+        
+        const root = document.getElementById('htmlRoot');
+        root.setAttribute('lang', lang);
+        
+        if (lang === 'ar' || lang === 'ur') {
+            root.setAttribute('dir', 'rtl');
+        } else {
+            root.setAttribute('dir', 'ltr');
+        }
+        
+        const selectEl = document.getElementById('langSelect');
+        if (selectEl) {
+            selectEl.value = lang;
+        }
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) {
+                el.textContent = translations[lang][key];
+            }
+        });
+
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (translations[lang] && translations[lang][key]) {
+                el.placeholder = translations[lang][key];
+            }
+        });
+    }
+
+    function changeLanguage(selectedLang) {
+        setLanguage(selectedLang);
+        filterEntries();
+    }
+
     const CONFIG = {
         serverUrl: "https://87-237-225-155.nip.io",
         apiKey: "6f039a5a6130b79",
@@ -647,6 +831,7 @@
     let currentFilterMode = 'month';
 
     document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLang);
         fetchScanEntries();
     });
 
@@ -676,20 +861,22 @@
         const today = new Date();
         const displayText = document.getElementById('filterDescriptionText');
 
+        const t = translations[currentLang];
+
         if (mode === 'today') {
             if (event && event.target) event.target.classList.add('active');
-            displayText.textContent = `نطاق الفلتر: اليوم (${formatDateISO(today)})`;
+            displayText.textContent = `${t.filter_desc_default.split(':')[0]}: ${t.preset_today} (${formatDateISO(today)})`;
         } else if (mode === 'yesterday') {
             if (event && event.target) event.target.classList.add('active');
             const yesterday = new Date();
             yesterday.setDate(today.getDate() - 1);
-            displayText.textContent = `نطاق الفلتر: يوم أمس (${formatDateISO(yesterday)})`;
+            displayText.textContent = `${t.filter_desc_default.split(':')[0]}: ${t.preset_yesterday} (${formatDateISO(yesterday)})`;
         } else if (mode === 'week') {
             if (event && event.target) event.target.classList.add('active');
-            displayText.textContent = `نطاق الفلتر: آخر 7 أيام`;
+            displayText.textContent = `${t.filter_desc_default.split(':')[0]}: ${currentLang === 'ar' ? 'آخر 7 أيام' : 'Last 7 Days'}`;
         } else if (mode === 'month') {
             document.getElementById('monthPresetBtn').classList.add('active');
-            displayText.textContent = `نطاق الفلتر: الشهر الحالي`;
+            displayText.textContent = `${t.filter_desc_default.split(':')[0]}: ${t.preset_month}`;
         }
 
         filterEntries();
@@ -704,39 +891,34 @@
             document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
             
             const textDisplay = document.getElementById('filterDescriptionText');
-            if (start && end) textDisplay.textContent = `نطاق مخصص: من ${start} إلى ${end}`;
-            else if (start) textDisplay.textContent = `نطاق مخصص: بدءاً من ${start}`;
-            else if (end) textDisplay.textContent = `نطاق مخصص: حتى ${end}`;
+            if (start && end) textDisplay.textContent = `Range: ${start} to ${end}`;
+            else if (start) textDisplay.textContent = `From: ${start}`;
+            else if (end) textDisplay.textContent = `Until: ${end}`;
             
             filterEntries();
         }
     }
 
     function resetAllFilters() {
-        // 1. تفريغ خانة البحث
         document.getElementById('searchInput').value = '';
-
-        // 2. تفريغ مدخلات التاريخ المخصصة
         document.getElementById('startDateInput').value = '';
         document.getElementById('endDateInput').value = '';
 
-        // 3. إلغاء تفعيل الأزرار السريعة
         document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
 
-        // 4. ضبط النمط لعرض كافة السجلات
         currentFilterMode = 'all';
-        document.getElementById('filterDescriptionText').textContent = 'نطاق الفلتر: جميع السجلات (بدون قيود)';
+        document.getElementById('filterDescriptionText').textContent = currentLang === 'ar' ? 'نطاق الفلتر: جميع السجلات (بدون قيود)' : 'Filter Range: All Records';
 
-        // 5. تطبيق التغييرات
         filterEntries();
     }
 
     async function fetchScanEntries() {
         const container = document.getElementById('entriesContainer');
+        const t = translations[currentLang];
         container.innerHTML = `
             <div class="state-container">
                 <i class="fa-solid fa-circle-notch fa-spin"></i>
-                <p>جاري مزامنة السجلات وحساب الأداء...</p>
+                <p>${t.status_loading}</p>
             </div>`;
 
         try {
@@ -756,7 +938,7 @@
                 container.innerHTML = `
                     <div class="state-container">
                         <i class="fa-solid fa-folder-open"></i>
-                        <p>لا توجد سجلات مسح معتمدة (Submitted)</p>
+                        <p>${t.no_submitted_records}</p>
                     </div>`;
                 return;
             }
@@ -789,14 +971,17 @@
         const container = document.getElementById('entriesContainer');
         container.innerHTML = '';
 
+        const t = translations[currentLang];
         let totalScannedAll = 0;
-        document.getElementById('docCountBadge').textContent = `${docs.length} مستند`;
+        
+        // تثبيت الأرقام باللغة الإنجليزية باستخدام en-US
+        document.getElementById('docCountBadge').textContent = `${docs.length.toLocaleString('en-US')} ${t.doc_suffix}`;
 
         if (docs.length === 0) {
             container.innerHTML = `
                 <div class="state-container">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <p>لا توجد نتائج مطابقة لشروط الفلترة أو البحث</p>
+                    <p>${t.no_matching_results}</p>
                 </div>`;
             document.getElementById('totalItemsCount').textContent = '0';
             return;
@@ -804,8 +989,8 @@
 
         docs.forEach(doc => {
             const rawDate = extractDocDate(doc);
-            const docDate = rawDate || 'بدون تاريخ';
-            const supervisor = (doc.supervisor !== undefined && doc.supervisor !== null) ? doc.supervisor : 'غير محدد';
+            const docDate = rawDate || t.no_date;
+            const supervisor = (doc.supervisor !== undefined && doc.supervisor !== null) ? doc.supervisor : t.unspecified;
             const scans = doc.employee_scans || [];
 
             let dayTotal = 0;
@@ -816,7 +1001,7 @@
             let rowsHtml = '';
 
             scans.forEach(row => {
-                const empName = row.employee_name || row.employee || 'غير معرف';
+                const empName = row.employee_name || row.employee || t.unnamed_emp;
                 
                 if (searchQuery) {
                     const matchName = empName.toLowerCase().includes(searchQuery);
@@ -830,13 +1015,13 @@
                 let kpiBadge = '';
                 let barColor = '';
                 if (itemsCount >= avgItems * 1.15) {
-                    kpiBadge = `<span class="kpi-pill kpi-high"><i class="fa-solid fa-arrow-up"></i> أداء ممتاز</span>`;
+                    kpiBadge = `<span class="kpi-pill kpi-high"><i class="fa-solid fa-arrow-up"></i> ${t.kpi_excellent}</span>`;
                     barColor = 'var(--success)';
                 } else if (itemsCount >= avgItems * 0.85) {
-                    kpiBadge = `<span class="kpi-pill kpi-mid"><i class="fa-solid fa-minus"></i> أداء جيد</span>`;
+                    kpiBadge = `<span class="kpi-pill kpi-mid"><i class="fa-solid fa-minus"></i> ${t.kpi_good}</span>`;
                     barColor = 'var(--warning)';
                 } else {
-                    kpiBadge = `<span class="kpi-pill kpi-low"><i class="fa-solid fa-arrow-down"></i> أقل من المتوسط</span>`;
+                    kpiBadge = `<span class="kpi-pill kpi-low"><i class="fa-solid fa-arrow-down"></i> ${t.kpi_low}</span>`;
                     barColor = 'var(--danger)';
                 }
 
@@ -849,7 +1034,7 @@
                             </div>
                             <div class="emp-stats-right">
                                 ${kpiBadge}
-                                <span class="count-badge">${itemsCount} قطعة (${sharePercent}%)</span>
+                                <span class="count-badge">${itemsCount.toLocaleString('en-US')} ${t.pcs_unit} (${sharePercent.toLocaleString('en-US')}%)</span>
                             </div>
                         </div>
                         <div class="kpi-bar-wrapper">
@@ -869,20 +1054,21 @@
                         <i class="fa-solid fa-calendar-day"></i>
                         <span>${docDate}</span>
                     </div>
-                    <div class="day-total-tag">إجمالي اليوم: ${dayTotal.toLocaleString('ar-SA')} قطعة</div>
+                    <div class="day-total-tag">${t.day_total_label} ${dayTotal.toLocaleString('en-US')} ${t.pcs_unit}</div>
                 </div>
                 <div class="supervisor-tag">
                     <i class="fa-solid fa-user-tie"></i>
-                    <span>المشرف المسئول: ${supervisor}</span>
+                    <span>${t.supervisor_label} ${supervisor}</span>
                 </div>
                 <div>
-                    ${rowsHtml || '<div style="text-align:center; color: var(--text-muted); font-size: 12px; padding: 10px;">لا توجد تفاصيل موظفين</div>'}
+                    ${rowsHtml || `<div style="text-align:center; color: var(--text-muted); font-size: 12px; padding: 10px;">${t.no_employee_details}</div>`}
                 </div>
             `;
             container.appendChild(card);
         });
 
-        document.getElementById('totalItemsCount').textContent = totalScannedAll.toLocaleString('ar-SA');
+        // تثبيت الأرقام باللغة الإنجليزية في العداد الرئيسي
+        document.getElementById('totalItemsCount').textContent = totalScannedAll.toLocaleString('en-US');
     }
 
     function filterEntries() {
@@ -900,7 +1086,7 @@
             let dateMatch = true;
 
             if (currentFilterMode === 'all') {
-                dateMatch = true; // إلغاء قيد التاريخ لعرض الجميع
+                dateMatch = true;
             } else if (currentFilterMode === 'today') {
                 dateMatch = (docDate === todayISO);
             } else if (currentFilterMode === 'yesterday') {
@@ -932,7 +1118,6 @@
             return dateMatch && searchMatch;
         });
 
-        // ترتيب النتائج تصاعدياً بناءً على التاريخ (من الأقدم إلى الأحدث)
         filtered.sort((a, b) => {
             const dateA = new Date(extractDocDate(a) || '1970-01-01');
             const dateB = new Date(extractDocDate(b) || '1970-01-01');
@@ -944,12 +1129,10 @@
 </script>
 
 <script>
-    // التأكد من إبقاء التنقل كاملاً داخل الـ PWA Standalone Mode
     document.addEventListener("click", function(e) {
         var anchor = e.target.closest("a");
         if (anchor && anchor.href) {
             var targetUrl = new URL(anchor.href, window.location.href);
-            // إذا كان الرابط تابعاً لنفس الموقع ولم يُفتح في تبويب جديد
             if (targetUrl.origin === window.location.origin && anchor.target !== "_blank") {
                 e.preventDefault();
                 window.location.assign(anchor.href);
@@ -957,50 +1140,5 @@
         }
     }, true);
 </script>
-
-
-
-
-
-<!-- زر تحديث التطبيق إلى أحدث نسخة -->
-<script>
-    // 1. دالة التحديث الشاملة عند الضغط على زر التحديث أو استدعائها
-    async function forceAppUpdate() {
-        if ('serviceWorker' in navigator) {
-            try {
-                // إلغاء تسجيل جميع الـ Service Workers المسجلة
-                const registrations = await navigator.serviceWorker.getRegistrations();
-                for (let registration of registrations) {
-                    await registration.unregister();
-                }
-            } catch (err) {
-                console.error("خطأ أثناء إلغاء Service Worker:", err);
-            }
-        }
-
-        // مسح جميع أنواع Cache المخزنة في المتصفح
-        if ('caches' in window) {
-            try {
-                const keys = await caches.keys();
-                await Promise.all(keys.map(key => caches.delete(key)));
-            } catch (err) {
-                console.error("خطأ أثناء مسح الكاش:", err);
-            }
-        }
-
-        // إعادة تحميل الصفحة القسرية مع إضافة وقت للتأكد من عدم جلب التخزين القديم
-        const cleanUrl = window.location.origin + window.location.pathname + '?v=' + new Date().getTime();
-        window.location.href = cleanUrl;
-    }
-
-    // 2. تحديث زر التحديث 🔄 في أعلى الصفحة ليدعو دالة التحديث
-    document.addEventListener('DOMContentLoaded', () => {
-        const updateBtn = document.querySelector('.header-left-group .action-btn[title="تحديث"]');
-        if (updateBtn) {
-            updateBtn.setAttribute('onclick', 'forceAppUpdate()');
-        }
-    });
-</script>
-
 </body>
 </html>

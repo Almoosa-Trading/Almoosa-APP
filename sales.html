@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlRoot">
 <head>
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مبيعات الفروع - الموسى التجارية</title>
+    <title data-i18n="page_title">مبيعات الفروع - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
@@ -33,6 +33,7 @@
             padding: 0;
             font-family: 'Cairo', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            font-variant-numeric: lining-nums tabular-nums; /* تثبيت الأرقام بالصيغة القياسية الإنجليزية */
         }
 
         body {
@@ -99,6 +100,25 @@
             background: var(--accent-light);
             border-color: var(--accent-border);
             color: var(--accent);
+        }
+
+        .lang-select {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid var(--border);
+            padding: 7px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--primary);
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.25s ease;
+        }
+
+        .lang-select:hover, .lang-select:focus {
+            border-color: var(--accent);
+            background: #ffffff;
         }
 
         .hero-card {
@@ -461,7 +481,6 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
-            direction: rtl;
         }
 
         .close-modal {
@@ -693,7 +712,6 @@
             border-top: 1px solid #000000;
         }
 
-        /* Dashboard Grid Layout Styles */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -739,31 +757,37 @@
 <div class="mobile-container">
     <header>
         <div class="header-title-box">
-            <h1>الموسى التجارية</h1>
-            <p>متابعة مبيعات نقاط البيع</p>
+            <h1 data-i18n="header_title">الموسى التجارية</h1>
+            <p data-i18n="header_subtitle">متابعة مبيعات نقاط البيع</p>
         </div>
         <div class="header-left-group">
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ur">اردو</option>
+            </select>
             <button class="action-btn" onclick="loadPOSData()" title="تحديث">🔄</button>
-            <button class="action-btn" onclick="goBack()" title="رجوع">⬅ رجوع</button>
-            <a href="index.html" class="action-btn" title="الرئيسية">🏠 الرئيسية</a>
+            <button class="action-btn" onclick="goBack()" title="رجوع" data-i18n="btn_back">⬅ رجوع</button>
+            <a href="index.html" class="action-btn" title="الرئيسية" data-i18n="btn_home">🏠 الرئيسية</a>
         </div>
     </header>
 
     <div class="filter-panel">
         <div class="period-chips">
-            <div class="chip active" onclick="setPreset('today', this)">اليوم</div>
-            <div class="chip" onclick="setPreset('yesterday', this)">أمس</div>
-            <div class="chip" onclick="setPreset('week', this)">هذا الأسبوع</div>
-            <div class="chip" onclick="setPreset('month', this)">هذا الشهر</div>
-            <div class="chip" onclick="setPreset('year', this)">هذه السنة</div>
-            <div class="chip" onclick="toggleCalendar()">📅 مخصص</div>
+            <div class="chip active" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
+            <div class="chip" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
+            <div class="chip" onclick="setPreset('week', this)" data-i18n="chip_week">هذا الأسبوع</div>
+            <div class="chip" onclick="setPreset('month', this)" data-i18n="chip_month">هذا الشهر</div>
+            <div class="chip" onclick="setPreset('year', this)" data-i18n="chip_year">هذه السنة</div>
+            <div class="chip" onclick="toggleCalendar()" data-i18n="chip_custom">📅 مخصص</div>
         </div>
 
         <div class="controls-row">
             <div class="control-group">
-                <span class="control-label">التاريخ:</span>
+                <span class="control-label" data-i18n="label_date">التاريخ:</span>
                 <div class="date-toggle-btn" onclick="toggleCalendar()">
-                    <span id="dateButtonText">اختر النطاق...</span>
+                    <span id="dateButtonText" data-i18n="btn_choose_range">اختر النطاق...</span>
                     <span>▼</span>
                 </div>
                 
@@ -778,63 +802,62 @@
             </div>
 
             <div class="control-group">
-                <span class="control-label">الفرع:</span>
+                <span class="control-label" data-i18n="label_branch">الفرع:</span>
                 <select id="branchSelect" onchange="processAndRenderData()">
-                    <option value="ALL">جميع الفروع</option>
+                    <option value="ALL" data-i18n="opt_all_branches">جميع الفروع</option>
                 </select>
             </div>
         </div>
 
         <div style="display: flex; gap: 8px;">
-            <button class="report-btn" style="flex: 2;" onclick="openReportModal()">
+            <button class="report-btn" style="flex: 2;" onclick="openReportModal()" data-i18n="btn_comprehensive_report">
                 📊 عرض التقرير الشامل
             </button>
-            <button class="report-btn" style="flex: 1; background: #059669;" onclick="openMultiDashboardModal()">
-                📈 لوحة المؤشرات (Dashboard)
+            <button class="report-btn" style="flex: 1; background: #059669;" onclick="openMultiDashboardModal()" data-i18n="btn_dashboard">
+                📈 لوحة المؤشرات
             </button>
         </div>
 
-        <!-- زر الانتقال لصفحة مبيعات الموردين المستقلة -->
-        <a href="supplier_sales.html" class="report-btn" style="background: #7c3aed; margin-top: 4px;">
+        <a href="supplier_sales.html" class="report-btn" style="background: #7c3aed; margin-top: 4px;" data-i18n="btn_supplier_sales">
             🏢 مبيعات الموردين (Supplier Sales)
         </a>
     </div>
 
     <div class="hero-card">
         <div class="hero-title">
-            <span id="periodLabel">إجمالي المبيعات</span>
+            <span id="periodLabel" data-i18n="hero_total_sales">إجمالي المبيعات</span>
             <div class="hero-badges-group">
-                <span class="hero-badge" id="invoiceCountBadge">0 فاتورة</span>
-                <span class="hero-badge" id="totalQtyBadge">0 قطعة</span>
+                <span class="hero-badge" id="invoiceCountBadge">0 invoices</span>
+                <span class="hero-badge" id="totalQtyBadge">0 pcs</span>
             </div>
         </div>
-        <div class="hero-amount" id="totalSalesAmount">0.00 ر.س</div>
+        <div class="hero-amount" id="totalSalesAmount">0.00 SAR</div>
         
         <div class="hero-grid-stats">
             <div class="hero-sub-stat">
-                <label>إجمالي التكلفة (Cost):</label>
-                <span id="totalCostAmount">0.00 ر.س</span>
+                <label data-i18n="hero_cost">إجمالي التكلفة (Cost):</label>
+                <span id="totalCostAmount">0.00 SAR</span>
             </div>
             <div class="hero-sub-stat">
-                <label>هامش الربح (Margin):</label>
-                <span id="totalMarginAmount">0.00 ر.س (0%)</span>
+                <label data-i18n="hero_margin">هامش الربح (Margin):</label>
+                <span id="totalMarginAmount">0.00 SAR (0%)</span>
             </div>
         </div>
     </div>
 
     <div class="main-chart-card">
         <div class="main-chart-title">
-            <span>📈 مقارنة المبيعات بالساعات (9ص - 12م)</span>
-            <span id="chartSubLabel" style="font-size: 10px; color: var(--text-muted);">مقارنة بالفترة السابقة</span>
+            <span data-i18n="chart_hourly_title">📈 مقارنة المبيعات بالساعات (9ص - 12م)</span>
+            <span id="chartSubLabel" style="font-size: 10px; color: var(--text-muted);" data-i18n="chart_sub_label">مقارنة بالفترة السابقة</span>
         </div>
         <div style="height: 180px; position: relative; width: 100%;">
             <canvas id="mainHourlyChart"></canvas>
         </div>
     </div>
 
-    <div class="section-header">المبيعات حسب الفروع / نقاط البيع</div>
+    <div class="section-header" data-i18n="section_branches_sales">المبيعات حسب الفروع / نقاط البيع</div>
     <div class="branches-list" id="branchesContainer">
-        <div class="status-msg">جاري تحميل البيانات...</div>
+        <div class="status-msg" data-i18n="status_loading">جاري تحميل البيانات...</div>
     </div>
 </div>
 
@@ -842,18 +865,18 @@
 <div class="report-modal" id="reportModal">
     <div class="report-content">
         <div class="modal-actions" id="modalActionsBar">
-            <button class="close-modal" onclick="closeReportModal()">✕ إغلاق</button>
+            <button class="close-modal" onclick="closeReportModal()" data-i18n="btn_close">✕ إغلاق</button>
 
             <div class="share-dropdown-wrapper">
                 <button class="share-main-btn" id="shareMainBtn" onclick="toggleShareMenu()">
-                    <span>مشاركة التقرير</span>
+                    <span data-i18n="btn_share_report">مشاركة التقرير</span>
                     <span>▾</span>
                 </button>
 
                 <div class="share-menu" id="shareMenu">
-                    <button class="share-item" onclick="shareWhatsApp()">💬 إرسال عبر WhatsApp</button>
-                    <button class="share-item" onclick="shareEmail()">✉️ إرسال عبر البريد الإلكتروني</button>
-                    <button class="share-item" onclick="downloadPDF()">📄 تحميل التقرير (PDF)</button>
+                    <button class="share-item" onclick="shareWhatsApp()" data-i18n="share_whatsapp">💬 إرسال عبر WhatsApp</button>
+                    <button class="share-item" onclick="shareEmail()" data-i18n="share_email">✉️ إرسال عبر البريد الإلكتروني</button>
+                    <button class="share-item" onclick="downloadPDF()" data-i18n="share_pdf">📄 تحميل التقرير (PDF)</button>
                 </div>
             </div>
         </div>
@@ -862,15 +885,15 @@
             <div class="report-header-layout">
                 <div class="report-logo-box">
                     <div class="logo-text">
-                        <span style="color:#6b21a8; font-size: 16px;"></span> الموسى التجارية
+                        <span style="color:#6b21a8; font-size: 16px;"></span> <span data-i18n="pdf_brand_title">الموسى التجارية</span>
                     </div>
                     <div class="logo-sub">almoosa trading</div>
                 </div>
-                <div class="report-title-text">
+                <div class="report-title-text" data-i18n="pdf_main_title">
                     Daily Sales Summary Report with Chart
                 </div>
                 <div class="report-meta-box">
-                    <span>Data range</span>
+                    <span data-i18n="pdf_data_range">Data range</span>
                     <span id="reportDateRange">Sunday, October 4, 2026</span>
                 </div>
             </div>
@@ -881,7 +904,7 @@
                         <table class="excel-table" id="qtyTable"></table>
                     </div>
                     <div class="chart-wrapper-box">
-                        <div class="chart-inner-title">TOTAL SOLD QTY of ALL SHOP</div>
+                        <div class="chart-inner-title" data-i18n="pdf_total_qty_chart">TOTAL SOLD QTY of ALL SHOP</div>
                         <div style="height: 140px; position: relative; width: 100%;">
                             <canvas id="qtyChart"></canvas>
                         </div>
@@ -889,7 +912,7 @@
                 </div>
                 <div class="report-right-column">
                     <div class="grand-total-side-box">
-                        <div class="grand-total-header">Grand Total Sold Qty</div>
+                        <div class="grand-total-header" data-i18n="pdf_grand_qty_header">Grand Total Sold Qty</div>
                         <div class="grand-total-value" id="grandTotalQty">0</div>
                     </div>
                 </div>
@@ -901,7 +924,7 @@
                         <table class="excel-table" id="salesTable"></table>
                     </div>
                     <div class="chart-wrapper-box">
-                        <div class="chart-inner-title">TOTAL SALES of ALL SHOP</div>
+                        <div class="chart-inner-title" data-i18n="pdf_total_sales_chart">TOTAL SALES of ALL SHOP</div>
                         <div style="height: 140px; position: relative; width: 100%;">
                             <canvas id="salesChart"></canvas>
                         </div>
@@ -909,7 +932,7 @@
                 </div>
                 <div class="report-right-column">
                     <div class="grand-total-side-box">
-                        <div class="grand-total-header">Grand Total Sales</div>
+                        <div class="grand-total-header" data-i18n="pdf_grand_sales_header">Grand Total Sales</div>
                         <div class="grand-total-value" id="grandTotalSalesVal">0</div>
                     </div>
                 </div>
@@ -922,41 +945,41 @@
 <div class="report-modal" id="multiDashboardModal">
     <div class="report-content" style="max-width: 750px;">
         <div class="modal-actions">
-            <h3 style="color: var(--primary); font-size: 15px; font-weight: 700;">📊 لوحة تحليلات ومؤشرات المبيعات (Sales Dashboard)</h3>
-            <button class="close-modal" onclick="closeMultiDashboardModal()">✕ إغلاق</button>
+            <h3 style="color: var(--primary); font-size: 15px; font-weight: 700;" data-i18n="modal_sales_dashboard">📊 لوحة تحليلات ومؤشرات المبيعات (Sales Dashboard)</h3>
+            <button class="close-modal" onclick="closeMultiDashboardModal()" data-i18n="btn_close">✕ إغلاق</button>
         </div>
 
         <div class="dashboard-grid">
             <div class="dashboard-card">
-                <div class="dashboard-card-title">🏪 قيمة المبيعات حسب الفروع (Sales by Stores)</div>
+                <div class="dashboard-card-title" data-i18n="dash_card_sales_store">🏪 قيمة المبيعات حسب الفروع (Sales by Stores)</div>
                 <div class="chart-container-box">
                     <canvas id="salesByStoresChart"></canvas>
                 </div>
             </div>
 
             <div class="dashboard-card">
-                <div class="dashboard-card-title">📦 كميات المبيعات حسب الفروع (Sales Qty by Stores)</div>
+                <div class="dashboard-card-title" data-i18n="dash_card_qty_store">📦 كميات المبيعات حسب الفروع (Sales Qty by Stores)</div>
                 <div class="chart-container-box">
                     <canvas id="qtyByStoresChart"></canvas>
                 </div>
             </div>
 
             <div class="dashboard-card">
-                <div class="dashboard-card-title">📍 المبيعات حسب المناطق (Sales by Region)</div>
+                <div class="dashboard-card-title" data-i18n="dash_card_region">📍 المبيعات حسب المناطق (Sales by Region)</div>
                 <div class="chart-container-box pie-chart-container">
                     <canvas id="regionSalesPieChart"></canvas>
                 </div>
             </div>
 
             <div class="dashboard-card">
-                <div class="dashboard-card-title">👥 المبيعات حسب النوع/الفئة (Sales by Gender)</div>
+                <div class="dashboard-card-title" data-i18n="dash_card_gender">👥 المبيعات حسب النوع/الفئة (Sales by Gender)</div>
                 <div class="chart-container-box pie-chart-container">
                     <canvas id="genderSalesPieChart"></canvas>
                 </div>
             </div>
 
             <div class="dashboard-card">
-                <div class="dashboard-card-title">🏷️ المبيعات حسب التصنيفات (Sales by Category)</div>
+                <div class="dashboard-card-title" data-i18n="dash_card_category">🏷️ المبيعات حسب التصنيفات (Sales by Category)</div>
                 <div class="chart-container-box pie-chart-container">
                     <canvas id="categorySalesChart"></canvas>
                 </div>
@@ -966,6 +989,222 @@
 </div>
 
 <script>
+    const translations = {
+        ar: {
+            page_title: "مبيعات الفروع - الموسى التجارية",
+            header_title: "الموسى التجارية",
+            header_subtitle: "متابعة مبيعات نقاط البيع",
+            btn_back: "⬅ رجوع",
+            btn_home: "🏠 الرئيسية",
+            chip_today: "اليوم",
+            chip_yesterday: "أمس",
+            chip_week: "هذا الأسبوع",
+            chip_month: "هذا الشهر",
+            chip_year: "هذه السنة",
+            chip_custom: "📅 مخصص",
+            label_date: "التاريخ:",
+            btn_choose_range: "اختر النطاق...",
+            label_branch: "الفرع:",
+            opt_all_branches: "جميع الفروع",
+            btn_comprehensive_report: "📊 عرض التقرير الشامل",
+            btn_dashboard: "📈 لوحة المؤشرات",
+            btn_supplier_sales: "🏢 مبيعات الموردين (Supplier Sales)",
+            hero_total_sales: "إجمالي المبيعات",
+            hero_cost: "إجمالي التكلفة (Cost):",
+            hero_margin: "هامش الربح (Margin):",
+            chart_hourly_title: "📈 مقارنة المبيعات بالساعات (9ص - 12م)",
+            chart_sub_label: "مقارنة بالفترة السابقة",
+            section_branches_sales: "المبيعات حسب الفروع / نقاط البيع",
+            status_loading: "جاري تحميل البيانات...",
+            btn_close: "✕ إغلاق",
+            btn_share_report: "مشاركة التقرير",
+            share_whatsapp: "💬 إرسال عبر WhatsApp",
+            share_email: "✉️ إرسال عبر البريد الإلكتروني",
+            share_pdf: "📄 تحميل التقرير (PDF)",
+            pdf_brand_title: "الموسى التجارية",
+            pdf_main_title: "Daily Sales Summary Report with Chart",
+            pdf_data_range: "Data range",
+            pdf_total_qty_chart: "TOTAL SOLD QTY of ALL SHOP",
+            pdf_grand_qty_header: "Grand Total Sold Qty",
+            pdf_total_sales_chart: "TOTAL SALES of ALL SHOP",
+            pdf_grand_sales_header: "Grand Total Sales",
+            modal_sales_dashboard: "📊 لوحة تحليلات ومؤشرات المبيعات (Sales Dashboard)",
+            dash_card_sales_store: "🏪 قيمة المبيعات حسب الفروع (Sales by Stores)",
+            dash_card_qty_store: "📦 كميات المبيعات حسب الفروع (Sales Qty by Stores)",
+            dash_card_region: "📍 المبيعات حسب المناطق (Sales by Region)",
+            dash_card_gender: "👥 المبيعات حسب النوع/الفئة (Sales by Gender)",
+            dash_card_category: "🏷️ المبيعات حسب التصنيفات (Sales by Category)"
+        },
+        en: {
+            page_title: "Branch Sales - Almoosa Trading",
+            header_title: "Almoosa Trading",
+            header_subtitle: "POS Sales Monitoring",
+            btn_back: "⬅ Back",
+            btn_home: "🏠 Home",
+            chip_today: "Today",
+            chip_yesterday: "Yesterday",
+            chip_week: "This Week",
+            chip_month: "This Month",
+            chip_year: "This Year",
+            chip_custom: "📅 Custom",
+            label_date: "Date:",
+            btn_choose_range: "Select range...",
+            label_branch: "Branch:",
+            opt_all_branches: "All Branches",
+            btn_comprehensive_report: "📊 Comprehensive Report",
+            btn_dashboard: "📈 Dashboard",
+            btn_supplier_sales: "🏢 Supplier Sales",
+            hero_total_sales: "Total Sales",
+            hero_cost: "Total Cost:",
+            hero_margin: "Profit Margin:",
+            chart_hourly_title: "📈 Hourly Sales Comparison (9AM - 12AM)",
+            chart_sub_label: "Compared to previous period",
+            section_branches_sales: "Sales by Branches / POS",
+            status_loading: "Loading data...",
+            btn_close: "✕ Close",
+            btn_share_report: "Share Report",
+            share_whatsapp: "💬 Send via WhatsApp",
+            share_email: "✉️ Send via Email",
+            share_pdf: "📄 Download Report (PDF)",
+            pdf_brand_title: "Almoosa Trading",
+            pdf_main_title: "Daily Sales Summary Report with Chart",
+            pdf_data_range: "Data range",
+            pdf_total_qty_chart: "TOTAL SOLD QTY of ALL SHOP",
+            pdf_grand_qty_header: "Grand Total Sold Qty",
+            pdf_total_sales_chart: "TOTAL SALES of ALL SHOP",
+            pdf_grand_sales_header: "Grand Total Sales",
+            modal_sales_dashboard: "📊 Sales Analytics & KPIs Dashboard",
+            dash_card_sales_store: "🏪 Sales Value by Stores",
+            dash_card_qty_store: "📦 Sales Qty by Stores",
+            dash_card_region: "📍 Sales by Region",
+            dash_card_gender: "👥 Sales by Gender/Category",
+            dash_card_category: "🏷️ Sales by Categories"
+        },
+        hi: {
+            page_title: "शाखा बिक्री - अलमूसा ट्रेडिंग",
+            header_title: "अलमूसा ट्रेडिंग",
+            header_subtitle: "POS बिक्री निगरानी",
+            btn_back: "⬅ पीछे",
+            btn_home: "🏠 होम",
+            chip_today: "आज",
+            chip_yesterday: "कल",
+            chip_week: "इस सप्ताह",
+            chip_month: "इस महीने",
+            chip_year: "इस वर्ष",
+            chip_custom: "📅 कस्टम",
+            label_date: "दिनांक:",
+            btn_choose_range: "रेंज चुनें...",
+            label_branch: "शाखा:",
+            opt_all_branches: "सभी शाखाएं",
+            btn_comprehensive_report: "📊 व्यापक रिपोर्ट",
+            btn_dashboard: "📈 डैशबोर्ड",
+            btn_supplier_sales: "🏢 आपूर्तिकर्ता बिक्री",
+            hero_total_sales: "कुल बिक्री",
+            hero_cost: "कुल लागत (Cost):",
+            hero_margin: "लाभ मार्जिन (Margin):",
+            chart_hourly_title: "📈 प्रति घंटा बिक्री तुलना (9AM - 12AM)",
+            chart_sub_label: "पिछली अवधि की तुलना में",
+            section_branches_sales: "शाखाओं / POS द्वारा बिक्री",
+            status_loading: "डेटा लोड हो रहा है...",
+            btn_close: "✕ बंद करें",
+            btn_share_report: "रिपोर्ट साझा करें",
+            share_whatsapp: "💬 व्हाट्सएप के माध्यम से भेजें",
+            share_email: "✉️ ईमेल के माध्यम से भेजें",
+            share_pdf: "📄 रिपोर्ट डाउनलोड करें (PDF)",
+            pdf_brand_title: "Almoosa Trading",
+            pdf_main_title: "Daily Sales Summary Report with Chart",
+            pdf_data_range: "Data range",
+            pdf_total_qty_chart: "TOTAL SOLD QTY of ALL SHOP",
+            pdf_grand_qty_header: "Grand Total Sold Qty",
+            pdf_total_sales_chart: "TOTAL SALES of ALL SHOP",
+            pdf_grand_sales_header: "Grand Total Sales",
+            modal_sales_dashboard: "📊 बिक्री विश्लेषण और KPI डैशबोर्ड",
+            dash_card_sales_store: "🏪 स्टोर के अनुसार बिक्री मूल्य",
+            dash_card_qty_store: "📦 स्टोर के अनुसार बिक्री मात्रा",
+            dash_card_region: "📍 क्षेत्र के अनुसार बिक्री",
+            dash_card_gender: "👥 लिंग/श्रेणी के अनुसार बिक्री",
+            dash_card_category: "🏷️ श्रेणियों के अनुसार बिक्री"
+        },
+        ur: {
+            page_title: "برانچ سیلز - الموسی ٹریڈنگ",
+            header_title: "الموسی ٹریڈنگ",
+            header_subtitle: "POS سیلز مانیٹرنگ",
+            btn_back: "⬅ واپس",
+            btn_home: "🏠 ہوم",
+            chip_today: "آج",
+            chip_yesterday: "گزشتہ کل",
+            chip_week: "اس ہفتے",
+            chip_month: "اس ماہ",
+            chip_year: "اس سال",
+            chip_custom: "📅 کسٹم",
+            label_date: "تاریخ:",
+            btn_choose_range: "رینج منتخب کریں...",
+            label_branch: "برانچ:",
+            opt_all_branches: "تمام برانچز",
+            btn_comprehensive_report: "📊 جامع رپورٹ",
+            btn_dashboard: "📈 ڈیش بورڈ",
+            btn_supplier_sales: "🏢 سپلائر سیلز",
+            hero_total_sales: "کل فروخت",
+            hero_cost: "کل لاگت (Cost):",
+            hero_margin: "منافع کا مارجن (Margin):",
+            chart_hourly_title: "📈 فی گھنٹہ فروخت کا موازنہ (9AM - 12AM)",
+            chart_sub_label: "پچھلی مدت کے مقابلے میں",
+            section_branches_sales: "برانچز / POS کے لحاظ سے فروخت",
+            status_loading: "ڈیٹا لوڈ ہو رہا ہے...",
+            btn_close: "✕ بند کریں",
+            btn_share_report: "رپورٹ شیئر کریں",
+            share_whatsapp: "💬 واٹس ایپ کے ذریعے بھیجیں",
+            share_email: "✉️ ای میل کے ذریعے بھیجیں",
+            share_pdf: "📄 رپورٹ ڈاؤن لوڈ کریں (PDF)",
+            pdf_brand_title: "الموسی ٹریڈنگ",
+            pdf_main_title: "Daily Sales Summary Report with Chart",
+            pdf_data_range: "Data range",
+            pdf_total_qty_chart: "TOTAL SOLD QTY of ALL SHOP",
+            pdf_grand_qty_header: "Grand Total Sold Qty",
+            pdf_total_sales_chart: "TOTAL SALES of ALL SHOP",
+            pdf_grand_sales_header: "Grand Total Sales",
+            modal_sales_dashboard: "📊 سیلز اینالیٹکس اور کے پی آئی ڈیش بورڈ",
+            dash_card_sales_store: "🏪 اسٹورز کے لحاظ سے سیلز ویلیو",
+            dash_card_qty_store: "📦 اسٹورز کے لحاظ سے سیلز کی مقدار",
+            dash_card_region: "📍 خطے کے لحاظ سے فروخت",
+            dash_card_gender: "👥 جنس / زمرہ کے لحاظ سے فروخت",
+            dash_card_category: "🏷️ کیٹیگریز کے لحاظ سے فروخت"
+        }
+    };
+
+    let currentLang = localStorage.getItem('app_lang') || 'ar';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('app_lang', lang);
+        
+        const root = document.getElementById('htmlRoot');
+        root.setAttribute('lang', lang);
+        
+        if (lang === 'ar' || lang === 'ur') {
+            root.setAttribute('dir', 'rtl');
+        } else {
+            root.setAttribute('dir', 'ltr');
+        }
+        
+        const selectEl = document.getElementById('langSelect');
+        if (selectEl) {
+            selectEl.value = lang;
+        }
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) {
+                el.textContent = translations[lang][key];
+            }
+        });
+    }
+
+    function changeLanguage(selectedLang) {
+        setLanguage(selectedLang);
+        loadPOSData();
+    }
+
     if (typeof ChartDataLabels !== 'undefined') {
         Chart.register(ChartDataLabels);
     }
@@ -1029,6 +1268,7 @@
     let categoryChartInstance = null;
 
     document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLang);
         setPreset('today', document.querySelector('.chip.active'));
     });
 
@@ -1213,7 +1453,7 @@
 
     async function loadPOSData() {
         const container = document.getElementById('branchesContainer');
-        container.innerHTML = `<div class="status-msg">جاري تحميل البيانات والتكاليف الفعلية...</div>`;
+        container.innerHTML = `<div class="status-msg">${translations[currentLang].status_loading}</div>`;
 
         branchDataSummary = [];
         allInvoicesCache = [];
@@ -1297,7 +1537,8 @@
 
         const select = document.getElementById('branchSelect');
         const currentVal = select.value;
-        select.innerHTML = '<option value="ALL">جميع الفروع</option>';
+        const allBranchesText = translations[currentLang].opt_all_branches || "جميع الفروع";
+        select.innerHTML = `<option value="ALL">${allBranchesText}</option>`;
 
         availableBranches.forEach(b => {
             const opt = document.createElement('option');
@@ -1338,17 +1579,20 @@
         const totalMargin = totalSales - totalCost;
         const totalMarginPercentage = totalSales > 0 ? (totalMargin / totalSales) * 100 : 0;
 
-        document.getElementById('totalSalesAmount').textContent = totalSales.toLocaleString('ar-SA', { minimumFractionDigits: 2 }) + ' ر.س';
-        document.getElementById('totalCostAmount').textContent = totalCost.toLocaleString('ar-SA', { minimumFractionDigits: 2 }) + ' ر.س';
-        document.getElementById('totalMarginAmount').textContent = `${totalMargin.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س (${totalMarginPercentage.toFixed(1)}%)`;
+        // تثبيت الأرقام باللغة الإنجليزية باستخدام en-US
+        document.getElementById('totalSalesAmount').textContent = totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+        document.getElementById('totalCostAmount').textContent = totalCost.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+        document.getElementById('totalMarginAmount').textContent = `${totalMargin.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (${totalMarginPercentage.toFixed(1)}%)`;
 
-        document.getElementById('invoiceCountBadge').textContent = `${totalInvoices.toLocaleString('ar-SA')} فاتورة`;
-        document.getElementById('totalQtyBadge').textContent = `${totalQtySum.toLocaleString('ar-SA')} قطعة`;
+        const invText = currentLang === 'ar' ? 'فواتير' : (currentLang === 'ur' ? 'انواٸس' : 'Invoices');
+        const qtyText = currentLang === 'ar' ? 'قطعة' : (currentLang === 'ur' ? 'پیس' : 'Pcs');
+        document.getElementById('invoiceCountBadge').textContent = `${totalInvoices.toLocaleString('en-US')} ${invText}`;
+        document.getElementById('totalQtyBadge').textContent = `${totalQtySum.toLocaleString('en-US')} ${qtyText}`;
 
         const sortedRows = [...filteredRows].sort((a, b) => parseFloat(b.Total_Sales) - parseFloat(a.Total_Sales));
 
         if (sortedRows.length === 0) {
-            container.innerHTML = `<div class="status-msg">لا توجد مبيعات مسجلة في هذه الفترة</div>`;
+            container.innerHTML = `<div class="status-msg">${currentLang === 'ar' ? 'لا توجد مبيعات مسجلة في هذه الفترة' : 'No sales recorded in this period'}</div>`;
         } else {
             sortedRows.forEach(row => {
                 const bSales = parseFloat(row.Total_Sales || 0);
@@ -1361,12 +1605,12 @@
                 card.innerHTML = `
                     <div class="branch-info">
                         <h3>${row.Branch}</h3>
-                        <div class="branch-meta">${parseInt(row.Invoice_Count).toLocaleString('ar-SA')} فاتورة | ${parseFloat(row.Total_Qty).toLocaleString('ar-SA')} قطعة</div>
-                        <div class="branch-financials">التكلفة: ${bCost.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س</div>
+                        <div class="branch-meta">${parseInt(row.Invoice_Count).toLocaleString('en-US')} ${invText} | ${parseFloat(row.Total_Qty).toLocaleString('en-US')} ${qtyText}</div>
+                        <div class="branch-financials">${currentLang === 'ar' ? 'التكلفة:' : 'Cost:'} ${bCost.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</div>
                     </div>
                     <div class="branch-amount">
-                        ${bSales.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س
-                        <span>الهامش: ${bMargin.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} (${bMarginPct.toFixed(1)}%)</span>
+                        ${bSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR
+                        <span>${currentLang === 'ar' ? 'الهامش:' : 'Margin:'} ${bMargin.toLocaleString('en-US', { minimumFractionDigits: 2 })} (${bMarginPct.toFixed(1)}%)</span>
                     </div>
                 `;
                 container.appendChild(card);
@@ -1383,7 +1627,7 @@
     }
 
     function renderMainHourlyChart(currentData, prevData) {
-        const labels = ["9ص", "10ص", "11ص", "12م", "1م", "2م", "3م", "4م", "5م", "6م", "7م", "8م", "9م", "10م", "11م", "12ص"];
+        const labels = ["9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM", "5 PM", "6 PM", "7 PM", "8 PM", "9 PM", "10 PM", "11 PM", "12 AM"];
 
         let currentHourly = new Array(16).fill(0);
         let prevHourly = new Array(16).fill(0);
@@ -1414,7 +1658,7 @@
         const tooltipConfig = getTooltipStyle();
         tooltipConfig.callbacks = {
             label: function(context) {
-                return ` ${context.dataset.label}: ${context.raw.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س`;
+                return ` ${context.dataset.label}: ${context.raw.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR`;
             }
         };
 
@@ -1424,7 +1668,7 @@
                 labels: labels,
                 datasets: [
                     {
-                        label: 'الفترة المحددة (اليوم)',
+                        label: currentLang === 'ar' ? 'الفترة المحددة (اليوم)' : 'Selected Period (Today)',
                         data: currentHourly,
                         borderColor: '#059669',
                         backgroundColor: 'rgba(5, 150, 105, 0.12)',
@@ -1435,7 +1679,7 @@
                         pointRadius: 4
                     },
                     {
-                        label: 'الفترة السابقة (أمس)',
+                        label: currentLang === 'ar' ? 'الفترة السابقة (أمس)' : 'Previous Period (Yesterday)',
                         data: prevHourly,
                         borderColor: '#dc2626',
                         backgroundColor: 'rgba(220, 38, 38, 0.05)',
@@ -1464,7 +1708,7 @@
                     y: {
                         beginAtZero: true,
                         grid: { color: '#f1f5f9' },
-                        ticks: { font: { family: 'Cairo', size: 9 } }
+                        ticks: { font: { family: 'Cairo', size: 9 }, callback: val => val.toLocaleString('en-US') }
                     },
                     x: {
                         grid: { display: false },
@@ -1535,9 +1779,9 @@
             },
             label: function(context) {
                 if (context.dataset.type === 'line') {
-                    return ` النسبة التراكمية: ${context.raw}%`;
+                    return ` Cumulative %: ${context.raw.toLocaleString('en-US')}%`;
                 }
-                return ` المبيعات: ${context.raw.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س`;
+                return ` Sales: ${context.raw.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR`;
             }
         };
 
@@ -1548,7 +1792,7 @@
                 datasets: [
                     {
                         type: 'bar',
-                        label: 'المبيعات (ر.س)',
+                        label: 'Sales (SAR)',
                         data: dataValues.length ? dataValues : [0],
                         backgroundColor: '#5b9bd5',
                         borderColor: '#41719c',
@@ -1557,7 +1801,7 @@
                     },
                     {
                         type: 'line',
-                        label: 'النسبة التراكمية %',
+                        label: 'Cumulative %',
                         data: cumPercentages.length ? cumPercentages : [0],
                         borderColor: '#ed7d31',
                         backgroundColor: '#ed7d31',
@@ -1579,14 +1823,14 @@
                 },
                 scales: {
                     x: { ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } }, grid: { display: false } },
-                    y: { type: 'linear', display: true, position: 'left', beginAtZero: true, ticks: { font: { size: 9 } } },
+                    y: { type: 'linear', display: true, position: 'left', beginAtZero: true, ticks: { font: { size: 9 }, callback: val => val.toLocaleString('en-US') } },
                     y1: {
                         type: 'linear',
                         display: true,
                         position: 'right',
                         beginAtZero: true,
                         max: 100,
-                        ticks: { font: { size: 9 }, callback: value => value + '%' },
+                        ticks: { font: { size: 9 }, callback: value => value.toLocaleString('en-US') + '%' },
                         grid: { drawOnChartArea: false }
                     }
                 }
@@ -1626,9 +1870,9 @@
             },
             label: function(context) {
                 if (context.dataset.type === 'line') {
-                    return ` النسبة التراكمية: ${context.raw}%`;
+                    return ` Cumulative %: ${context.raw.toLocaleString('en-US')}%`;
                 }
-                return ` الكمية: ${context.raw.toLocaleString('ar-SA')} قطعة`;
+                return ` Qty: ${context.raw.toLocaleString('en-US')} Pcs`;
             }
         };
 
@@ -1639,7 +1883,7 @@
                 datasets: [
                     {
                         type: 'bar',
-                        label: 'الكميات المباعة',
+                        label: 'Sold Qty',
                         data: dataValues.length ? dataValues : [0],
                         backgroundColor: '#5b9bd5',
                         borderColor: '#41719c',
@@ -1648,7 +1892,7 @@
                     },
                     {
                         type: 'line',
-                        label: 'النسبة التراكمية %',
+                        label: 'Cumulative %',
                         data: cumPercentages.length ? cumPercentages : [0],
                         borderColor: '#ed7d31',
                         backgroundColor: '#ed7d31',
@@ -1670,14 +1914,14 @@
                 },
                 scales: {
                     x: { ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } }, grid: { display: false } },
-                    y: { type: 'linear', display: true, position: 'left', beginAtZero: true, ticks: { font: { size: 9 } } },
+                    y: { type: 'linear', display: true, position: 'left', beginAtZero: true, ticks: { font: { size: 9 }, callback: val => val.toLocaleString('en-US') } },
                     y1: {
                         type: 'linear',
                         display: true,
                         position: 'right',
                         beginAtZero: true,
                         max: 100,
-                        ticks: { font: { size: 9 }, callback: value => value + '%' },
+                        ticks: { font: { size: 9 }, callback: value => value.toLocaleString('en-US') + '%' },
                         grid: { drawOnChartArea: false }
                     }
                 }
@@ -1717,14 +1961,14 @@
                 let label = context.label || '';
                 let value = context.raw || 0;
                 let percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
-                return ` ${label}: ${value.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س (${percentage})`;
+                return ` ${label}: ${value.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (${percentage})`;
             }
         };
 
         regionChartInstance = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: labels.length ? labels : ['غير متوفر'],
+                labels: labels.length ? labels : ['N/A'],
                 datasets: [{
                     data: dataValues.length ? dataValues : [1],
                     backgroundColor: ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#64748b', '#cbd5e1'],
@@ -1741,15 +1985,10 @@
                     datalabels: {
                         display: true,
                         color: '#ffffff',
-                        font: function(context) {
-                            var val = context.dataset.data[context.dataIndex];
-                            var pct = totalSum > 0 ? (val / totalSum) * 100 : 0;
-                            return { family: 'Cairo', weight: 'bold', size: pct < 8 ? 8 : 10 };
-                        },
                         formatter: function(value) {
-                            var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(0) + '%' : '0%';
+                            var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
                             var formattedVal = Math.round(value).toLocaleString('en-US');
-                            return percentage + '\n(' + formattedVal + ' ر.س)';
+                            return percentage + '\n(' + formattedVal + ')';
                         },
                         textAlign: 'center'
                     },
@@ -1780,7 +2019,7 @@
                 let label = context.label || '';
                 let value = context.raw || 0;
                 let percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
-                return ` ${label}: ${value.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س (${percentage})`;
+                return ` ${label}: ${value.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (${percentage})`;
             }
         };
 
@@ -1804,11 +2043,10 @@
                     datalabels: {
                         display: true,
                         color: '#ffffff',
-                        font: { family: 'Cairo', weight: 'bold', size: 10 },
                         formatter: function(value) {
                             var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
                             var formattedVal = Math.round(value).toLocaleString('en-US');
-                            return percentage + '\n(' + formattedVal + ' ر.س)';
+                            return percentage + '\n(' + formattedVal + ')';
                         },
                         textAlign: 'center'
                     },
@@ -1821,10 +2059,10 @@
     function renderCategoryChart() {
         let totalSales = branchDataSummary.reduce((acc, row) => acc + parseFloat(row.Total_Sales || 0), 0);
         let categoryData = {
-            "ملابس": totalSales > 0 ? totalSales * 0.50 : 0,
-            "أحذية": totalSales > 0 ? totalSales * 0.25 : 0,
-            "إكسسوارات": totalSales > 0 ? totalSales * 0.15 : 0,
-            "حقائب": totalSales > 0 ? totalSales * 0.10 : 0
+            "Apparel": totalSales > 0 ? totalSales * 0.50 : 0,
+            "Footwear": totalSales > 0 ? totalSales * 0.25 : 0,
+            "Accessories": totalSales > 0 ? totalSales * 0.15 : 0,
+            "Bags": totalSales > 0 ? totalSales * 0.10 : 0
         };
 
         const labels = Object.keys(categoryData);
@@ -1840,7 +2078,7 @@
                 let label = context.label || '';
                 let value = context.raw || 0;
                 let percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
-                return ` ${label}: ${value.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س (${percentage})`;
+                return ` ${label}: ${value.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (${percentage})`;
             }
         };
 
@@ -1864,11 +2102,10 @@
                     datalabels: {
                         display: true,
                         color: '#ffffff',
-                        font: { family: 'Cairo', weight: 'bold', size: 10 },
                         formatter: function(value) {
                             var percentage = totalSum > 0 ? ((value / totalSum) * 100).toFixed(1) + '%' : '0%';
                             var formattedVal = Math.round(value).toLocaleString('en-US');
-                            return percentage + '\n(' + formattedVal + ' ر.س)';
+                            return percentage + '\n(' + formattedVal + ')';
                         },
                         textAlign: 'center'
                     },
@@ -1885,27 +2122,11 @@
 
         renderReportTablesAndCharts();
         document.getElementById('reportModal').classList.add('open');
-
-        try {
-            if (screen.orientation && screen.orientation.lock) {
-                await screen.orientation.lock('landscape');
-            }
-        } catch (e) {
-            console.log("تغيير اتجاه الشاشة غير مدعوم:", e);
-        }
     }
 
     async function closeReportModal() {
         document.getElementById('reportModal').classList.remove('open');
         document.getElementById('shareMenu').classList.remove('show');
-
-        try {
-            if (screen.orientation && screen.orientation.unlock) {
-                screen.orientation.unlock();
-            }
-        } catch (e) {
-            console.log("إلغاء قفل الشاشة غير مدعوم:", e);
-        }
     }
 
     function toggleShareMenu() {
@@ -1983,7 +2204,7 @@
                     tooltip: tooltipConfig
                 },
                 scales: {
-                    y: { beginAtZero: true, grid: { color: '#d9d9d9' }, ticks: { font: { size: 9 }, color: '#000' } },
+                    y: { beginAtZero: true, grid: { color: '#d9d9d9' }, ticks: { font: { size: 9 }, color: '#000', callback: val => val.toLocaleString('en-US') } },
                     x: { grid: { display: false }, ticks: { font: { size: 9, weight: 'bold' }, color: '#000' } }
                 }
             }
@@ -2064,7 +2285,7 @@
     }
 </script>
 <script>
-    document.addEventListener("click", function(e)  {
+    document.addEventListener("click", function(e) {
         var anchor = e.target.closest("a");
         if (anchor && anchor.href) {
             var targetUrl = new URL(anchor.href, window.location.href);

@@ -1,26 +1,17 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlRoot">
 <head>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-
-
-
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- دعم تشغيل التطبيق بملء الشاشة على الآيفون -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="الموسى التجارية">
 
-    <!-- أيقونة التطبيق عند الحفظ على الشاشة الرئيسية (Home Screen Icons) -->
     <link rel="apple-touch-icon" sizes="180x180" href="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM">
     <link rel="icon" type="image/png" sizes="32x32" href="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM">
-    <link rel="shortcut icon" href="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM">
 
-    <title>لوحة التحكم الاحترافية - الموسى التجارية</title>
+    <title data-i18n="main_title">لوحة التحكم الاحترافية - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -30,7 +21,7 @@
             --accent-hover: #1d4ed8;    
             --accent-light: #eff6ff;    
             --accent-border: #bfdbfe;   
-            --bg-body: #f8fafc;        /* خلفية بيضاء / فاتحة متطابقة مع المبيعات */
+            --bg-body: #f8fafc;
             --bg-card: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
@@ -45,6 +36,7 @@
             padding: 0;
             font-family: 'Cairo', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            font-variant-numeric: lining-nums tabular-nums; /* تثبيت عرض الأرقام بشكل قياسي */
         }
 
         body {
@@ -61,7 +53,6 @@
             max-width: 480px;
         }
 
-        /* رأس الصفحة (الهيدر) */
         header {
             display: flex;
             justify-content: space-between;
@@ -84,7 +75,31 @@
             width: auto;
             object-fit: contain;
             border-radius: 8px;
-            background: transparent;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lang-select {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid var(--border);
+            padding: 6px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--primary);
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.25s ease;
+        }
+
+        .lang-select:hover, .lang-select:focus {
+            border-color: var(--accent);
+            background: #ffffff;
         }
 
         .welcome-box {
@@ -104,7 +119,6 @@
             margin-top: 1px;
         }
 
-        /* شبكة الأيقونات */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -134,11 +148,6 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
         }
 
-        .menu-item:not(.disabled):active {
-            transform: scale(0.97);
-        }
-
-        /* الأيقونة العائمة */
         .icon-box {
             width: 60px;
             height: 60px;
@@ -149,11 +158,6 @@
             font-size: 26px;
             margin-bottom: 12px;
             box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s ease;
-        }
-
-        .menu-item:not(.disabled):hover .icon-box {
-            transform: scale(1.05);
         }
 
         .menu-title {
@@ -169,8 +173,8 @@
             line-height: 1.3;
         }
 
-        /* تدرجات ألوان الأيقونات الطبيعية */
         .ic-sales { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #ffffff; }
+        .ic-purchase-analytics { background: linear-gradient(135deg, #059669, #047857); color: #ffffff; }
         .ic-warehouse { background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; }
         .ic-stock { background: linear-gradient(135deg, #22c55e, #15803d); color: #ffffff; }
         .ic-purchase { background: linear-gradient(135deg, #f97316, #c2410c); color: #ffffff; }
@@ -180,13 +184,11 @@
         .ic-water { background: linear-gradient(135deg, #06b6d4, #0e7490); color: #ffffff; }
         .ic-electricity { background: linear-gradient(135deg, #eab308, #a16207); color: #ffffff; }
 
-        /* العناصر غير المتاحة (منع النقر مع الحفاظ على الألوان الطبيعية) */
         .menu-item.disabled {
             cursor: not-allowed;
             pointer-events: none;
         }
 
-        /* بادج برتقالي مميز وجذاب */
         .badge-orange {
             position: absolute;
             top: 8px;
@@ -201,14 +203,8 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            box-shadow: 0 2px 4px rgba(234, 88, 12, 0.08);
         }
 
-        .badge-orange i {
-            font-size: 8px;
-        }
-
-        /* التذييل */
         footer {
             text-align: center;
             margin-top: 30px;
@@ -220,169 +216,246 @@
 <body>
 
 <div class="dashboard-container">
-    <!-- الهيدر الأبيض مع اللوجو -->
     <header>
         <div class="logo-container">
-            <img src="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM" alt="الموسى التجارية" class="brand-logo" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'42\' height=\'42\'><rect width=\'42\' height=\'42\' fill=\'%23f1f5f9\'/><text x=\'50%\' y=\'50%\' font-size=\'9\' fill=\'%2364748b\' dominant-baseline=\'middle\' text-anchor=\'middle\'>LOGO</text></svg>';">
+            <img src="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM" alt="الموسى التجارية" class="brand-logo">
         </div>
-        <div class="welcome-box">
-            <h1>لوحة التحكم</h1>
-            <p>النظام الإداري الموحد</p>
+        <div class="header-controls">
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ur">اردو</option>
+            </select>
+
+            <div class="welcome-box">
+                <h1 data-i18n="dash_header">لوحة التحكم</h1>
+                <p data-i18n="dash_subheader">النظام الإداري الموحد</p>
+            </div>
         </div>
     </header>
 
-    <!-- الأقسام والأيقونات -->
     <div class="menu-grid">
-        
-        <!-- المبيعات (متاح) -->
         <a href="sales.html" class="menu-item">
-            <div class="icon-box ic-sales">
-                <i class="fa-solid fa-chart-line"></i>
-            </div>
-            <div class="menu-title">المبيعات</div>
-            <div class="menu-desc">الفواتير والتقارير</div>
+            <div class="icon-box ic-sales"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="menu-title" data-i18n="menu_sales">المبيعات</div>
+            <div class="menu-desc" data-i18n="desc_sales">الفواتير والتقارير</div>
         </a>
 
-        <!-- إدارة المستودع (متاح) -->
+        <a href="purchases-analytics.html" class="menu-item">
+            <div class="icon-box ic-purchase-analytics"><i class="fa-solid fa-chart-pie"></i></div>
+            <div class="menu-title" data-i18n="menu_purchases_analysis">تحليل المشتريات</div>
+            <div class="menu-desc" data-i18n="desc_purchases_analysis">مؤشرات وتقارير الشراء</div>
+        </a>
+
         <a href="warehouse.html" class="menu-item">
-            <div class="icon-box ic-warehouse">
-                <i class="fa-solid fa-warehouse"></i>
-            </div>
-            <div class="menu-title">إدارة المستودع</div>
-            <div class="menu-desc">إدارة المساحات والمرافق</div>
+            <div class="icon-box ic-warehouse"><i class="fa-solid fa-warehouse"></i></div>
+            <div class="menu-title" data-i18n="menu_warehouse">إدارة المستودع</div>
+            <div class="menu-desc" data-i18n="desc_warehouse">إدارة المساحات والمرافق</div>
         </a>
 
-        <!-- المخزون -->
         <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> جاري الإنشاء</span>
-            <div class="icon-box ic-stock">
-                <i class="fa-solid fa-boxes-stacked"></i>
-            </div>
-            <div class="menu-title">المخزون</div>
-            <div class="menu-desc">الأصناف والأرصدة</div>
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-stock"><i class="fa-solid fa-boxes-stacked"></i></div>
+            <div class="menu-title" data-i18n="menu_stock">المخزون</div>
+            <div class="menu-desc" data-i18n="desc_stock">الأصناف والأرصدة</div>
         </div>
 
-        <!-- المشتريات -->
         <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> جاري الإنشاء</span>
-            <div class="icon-box ic-purchase">
-                <i class="fa-solid fa-cart-shopping"></i>
-            </div>
-            <div class="menu-title">المشتريات</div>
-            <div class="menu-desc">أوامر الشراء والموردين</div>
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-purchase"><i class="fa-solid fa-cart-shopping"></i></div>
+            <div class="menu-title" data-i18n="menu_purchases">المشتريات</div>
+            <div class="menu-desc" data-i18n="desc_purchases">أوامر الشراء والموردين</div>
         </div>
 
-        <!-- التحويلات -->
         <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> جاري الإنشاء</span>
-            <div class="icon-box ic-transfer">
-                <i class="fa-solid fa-right-left"></i>
-            </div>
-            <div class="menu-title">التحويلات</div>
-            <div class="menu-desc">النقل بين الفروع</div>
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-transfer"><i class="fa-solid fa-right-left"></i></div>
+            <div class="menu-title" data-i18n="menu_transfers">التحويلات</div>
+            <div class="menu-desc" data-i18n="desc_transfers">النقل بين الفروع</div>
         </div>
 
-        <!-- الاستلامات -->
         <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> جاري الإنشاء</span>
-            <div class="icon-box ic-receive">
-                <i class="fa-solid fa-box-open"></i>
-            </div>
-            <div class="menu-title">الاستلامات</div>
-            <div class="menu-desc">استلام البضائع والواردات</div>
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-receive"><i class="fa-solid fa-box-open"></i></div>
+            <div class="menu-title" data-i18n="menu_receipts">الاستلامات</div>
+            <div class="menu-desc" data-i18n="desc_receipts">استلام البضائع والواردات</div>
         </div>
 
-        <!-- عقود الإيجار -->
         <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> جاري الإنشاء</span>
-            <div class="icon-box ic-contract">
-                <i class="fa-solid fa-file-contract"></i>
-            </div>
-            <div class="menu-title">عقود الإيجار</div>
-            <div class="menu-desc">متابعة وتجديد العقود</div>
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-contract"><i class="fa-solid fa-file-contract"></i></div>
+            <div class="menu-title" data-i18n="menu_contracts">عقود الإيجار</div>
+            <div class="menu-desc" data-i18n="desc_contracts">متابعة وتجديد العقود</div>
         </div>
 
-        <!-- فواتير المياه -->
         <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> جاري الإنشاء</span>
-            <div class="icon-box ic-water">
-                <i class="fa-solid fa-droplet"></i>
-            </div>
-            <div class="menu-title">فواتير المياه</div>
-            <div class="menu-desc">الاستهلاك والمدفوعات</div>
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-water"><i class="fa-solid fa-droplet"></i></div>
+            <div class="menu-title" data-i18n="menu_water">فواتير المياه</div>
+            <div class="menu-desc" data-i18n="desc_water">الاستهلاك والمدفوعات</div>
         </div>
 
-        <!-- فواتير الكهرباء -->
         <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> جاري الإنشاء</span>
-            <div class="icon-box ic-electricity">
-                <i class="fa-solid fa-bolt"></i>
-            </div>
-            <div class="menu-title">فواتير الكهرباء</div>
-            <div class="menu-desc">العدادات والسدادات</div>
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-electricity"><i class="fa-solid fa-bolt"></i></div>
+            <div class="menu-title" data-i18n="menu_electricity">فواتير الكهرباء</div>
+            <div class="menu-desc" data-i18n="desc_electricity">العدادات والسدادات</div>
         </div>
-
     </div>
 
-    <footer>
+    <footer data-i18n="footer_text">
         نظام الموسى التجارية الاحترافي © 2026
     </footer>
 </div>
+
 <script>
-    // التأكد من إبقاء التنقل كاملاً داخل الـ PWA Standalone Mode
-    document.addEventListener("click", function(e) {
-        var anchor = e.target.closest("a");
-        if (anchor && anchor.href) {
-            var targetUrl = new URL(anchor.href, window.location.href);
-            // إذا كان الرابط تابعاً لنفس الموقع ولم يُفتح في تبويب جديد
-            if (targetUrl.origin === window.location.origin && anchor.target !== "_blank") {
-                e.preventDefault();
-                window.location.assign(anchor.href);
-            }
+    const translations = {
+        ar: {
+            main_title: "لوحة التحكم الاحترافية - الموسى التجارية",
+            dash_header: "لوحة التحكم",
+            dash_subheader: "النظام الإداري الموحد",
+            menu_sales: "المبيعات",
+            desc_sales: "الفواتير والتقارير",
+            menu_purchases_analysis: "تحليل المشتريات",
+            desc_purchases_analysis: "مؤشرات وتقارير الشراء",
+            menu_warehouse: "إدارة المستودع",
+            desc_warehouse: "إدارة المساحات والمرافق",
+            menu_stock: "المخزون",
+            desc_stock: "الأصناف والأرصدة",
+            menu_purchases: "المشتريات",
+            desc_purchases: "أوامر الشراء والموردين",
+            menu_transfers: "التحويلات",
+            desc_transfers: "النقل بين الفروع",
+            menu_receipts: "الاستلامات",
+            desc_receipts: "استلام البضائع والواردات",
+            menu_contracts: "عقود الإيجار",
+            desc_contracts: "متابعة وتجديد العقود",
+            menu_water: "فواتير المياه",
+            desc_water: "الاستهلاك والمدفوعات",
+            menu_electricity: "فواتير الكهرباء",
+            desc_electricity: "العدادات والسدادات",
+            under_construction: "جاري الإنشاء",
+            footer_text: "نظام الموسى التجارية الاحترافي © 2026"
+        },
+        en: {
+            main_title: "Professional Dashboard - Almoosa Trading",
+            dash_header: "Dashboard",
+            dash_subheader: "Unified Admin System",
+            menu_sales: "Sales",
+            desc_sales: "Invoices & Reports",
+            menu_purchases_analysis: "Purchase Analysis",
+            desc_purchases_analysis: "KPIs & Purchase Reports",
+            menu_warehouse: "Warehouse",
+            desc_warehouse: "Space & Facilities",
+            menu_stock: "Inventory",
+            desc_stock: "Items & Balances",
+            menu_purchases: "Purchases",
+            desc_purchases: "Orders & Suppliers",
+            menu_transfers: "Transfers",
+            desc_transfers: "Inter-branch Transfers",
+            menu_receipts: "Receipts",
+            desc_receipts: "Goods & Imports",
+            menu_contracts: "Lease Contracts",
+            desc_contracts: "Tracking & Renewal",
+            menu_water: "Water Bills",
+            desc_water: "Consumption & Bills",
+            menu_electricity: "Electricity Bills",
+            desc_electricity: "Meters & Payments",
+            under_construction: "Under Construction",
+            footer_text: "Almoosa Trading Professional System © 2026"
+        },
+        hi: {
+            main_title: "पेशेवर डैशबोर्ड - अलमूसा ट्रेडिंग",
+            dash_header: "डैशबोर्ड",
+            dash_subheader: "एकीकृत प्रशासनिक प्रणाली",
+            menu_sales: "बिक्री",
+            desc_sales: "चालान और रिपोर्ट",
+            menu_purchases_analysis: "खरीद विश्लेषण",
+            desc_purchases_analysis: "KPIs और खरीद रिपोर्ट",
+            menu_warehouse: "गोडाउन (वेयरहाउस)",
+            desc_warehouse: "स्थान और सुविधाएं",
+            menu_stock: "इन्वेंटरी (स्टॉक)",
+            desc_stock: "आइटम और शेष राशि",
+            menu_purchases: "खरीद (परचेज)",
+            desc_purchases: "ऑर्डर और आपूर्तिकर्ता",
+            menu_transfers: "स्थानांतरण (ट्रांसफर)",
+            desc_transfers: "शाखाओं के बीच ट्रांसफर",
+            menu_receipts: "रसीदें (प्राप्तियां)",
+            desc_receipts: "माल और आयात",
+            menu_contracts: "लीज अनुबंध",
+            desc_contracts: "ट्रैकिंग और नवीनीकरण",
+            menu_water: "पानी के बिल",
+            desc_water: "खपत और भुगतान",
+            menu_electricity: "बिजली के बिल",
+            desc_electricity: "मीटर और भुगतान",
+            under_construction: "निर्माणधीन",
+            footer_text: "अलमूसा ट्रेडिंग प्रोफेशनल सिस्टम © 2026"
+        },
+        ur: {
+            main_title: "پروفیشنل ڈیش بورڈ - الموسی ٹریڈنگ",
+            dash_header: "ڈیش بورڈ",
+            dash_subheader: "متحدہ انتظامی نظام",
+            menu_sales: "فروخت (سیلز)",
+            desc_sales: "انوائسز اور رپورٹس",
+            menu_purchases_analysis: "خریداری کا تجزیہ",
+            desc_purchases_analysis: "کیو پی آئیز اور پرچیز رپورٹس",
+            menu_warehouse: "گودام (ویئر ہاؤس)",
+            desc_warehouse: "جگہ اور سہولیات کا انتظام",
+            menu_stock: "اسٹاک",
+            desc_stock: "آئٹمز اور بیلنس",
+            menu_purchases: "خریداری (پرچیز)",
+            desc_purchases: "آرڈرز اور سپلائرز",
+            menu_transfers: "منتقلی (ٹرانسفرز)",
+            desc_transfers: "برانچز کے درمیان منتقلی",
+            menu_receipts: "وصولیاں (رسیٹس)",
+            desc_receipts: "سامان اور درآمدات کی وصولی",
+            menu_contracts: "کرایہ کے معاہدے",
+            desc_contracts: "معاہدوں کی نگرانی اور تجدید",
+            menu_water: "پانی کے بل",
+            desc_water: "استعمال اور ادائیگی",
+            menu_electricity: "بجلی کے بل",
+            desc_electricity: "میٹرز اور ادائگیاں",
+            under_construction: "زیر تعمیر",
+            footer_text: "الموسی ٹریڈنگ پروفیشنل سسٹم © 2026"
         }
-    }, true);
-</script>
+    };
 
+    let currentLang = localStorage.getItem('app_lang') || 'ar';
 
-<!-- زر تحديث التطبيق إلى أحدث نسخة -->
-<script>
-    // 1. دالة التحديث الشاملة عند الضغط على زر التحديث أو استدعائها
-    async function forceAppUpdate() {
-        if ('serviceWorker' in navigator) {
-            try {
-                // إلغاء تسجيل جميع الـ Service Workers المسجلة
-                const registrations = await navigator.serviceWorker.getRegistrations();
-                for (let registration of registrations) {
-                    await registration.unregister();
-                }
-            } catch (err) {
-                console.error("خطأ أثناء إلغاء Service Worker:", err);
-            }
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('app_lang', lang);
+        
+        const root = document.getElementById('htmlRoot');
+        root.setAttribute('lang', lang);
+        
+        if (lang === 'ar' || lang === 'ur') {
+            root.setAttribute('dir', 'rtl');
+        } else {
+            root.setAttribute('dir', 'ltr');
+        }
+        
+        const selectEl = document.getElementById('langSelect');
+        if (selectEl) {
+            selectEl.value = lang;
         }
 
-        // مسح جميع أنواع Cache المخزنة في المتصفح
-        if ('caches' in window) {
-            try {
-                const keys = await caches.keys();
-                await Promise.all(keys.map(key => caches.delete(key)));
-            } catch (err) {
-                console.error("خطأ أثناء مسح الكاش:", err);
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) {
+                el.textContent = translations[lang][key];
             }
-        }
-
-        // إعادة تحميل الصفحة القسرية مع إضافة وقت للتأكد من عدم جلب التخزين القديم
-        const cleanUrl = window.location.origin + window.location.pathname + '?v=' + new Date().getTime();
-        window.location.href = cleanUrl;
+        });
     }
 
-    // 2. تحديث زر التحديث 🔄 في أعلى الصفحة ليدعو دالة التحديث
+    function changeLanguage(selectedLang) {
+        setLanguage(selectedLang);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-        const updateBtn = document.querySelector('.header-left-group .action-btn[title="تحديث"]');
-        if (updateBtn) {
-            updateBtn.setAttribute('onclick', 'forceAppUpdate()');
-        }
+        setLanguage(currentLang);
     });
 </script>
-
 </body>
 </html>

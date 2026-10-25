@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlRoot">
 <head>
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مبيعات الموردين - الموسى التجارية</title>
+    <title data-i18n="page_title">مبيعات الموردين - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -28,6 +28,7 @@
             padding: 0;
             font-family: 'Cairo', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            font-variant-numeric: lining-nums tabular-nums;
         }
 
         body {
@@ -70,6 +71,7 @@
         .header-left-group {
             display: flex;
             gap: 6px;
+            align-items: center;
         }
 
         .action-btn {
@@ -83,13 +85,34 @@
             text-decoration: none;
             font-weight: 700;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .action-btn:active {
             transform: scale(0.95);
         }
 
-        /* Filter Panel */
+        .lang-select {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--primary);
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.25s ease;
+        }
+
+        .lang-select:hover, .lang-select:focus {
+            border-color: var(--accent);
+            background: #ffffff;
+        }
+
         .filter-panel {
             background: var(--bg-card);
             padding: 16px;
@@ -164,7 +187,7 @@
             box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
         }
 
-        /* Calendar Dropdown */
+        /* تعديل حاوية التقويم لتظهر بوضوح فوق العناصر */
         .calendar-container {
             border: 1px solid var(--border);
             border-radius: 14px;
@@ -175,18 +198,18 @@
             top: 65px;
             right: 0;
             width: 100%;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            z-index: 100;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
+            z-index: 1000;
         }
         .calendar-container.open { display: block; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; font-weight: 800; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; font-weight: 800; color: var(--primary); }
         .calendar-header button { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; cursor: pointer; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
         .calendar-day-name { font-size: 10px; color: var(--text-muted); font-weight: 700; }
         .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: #f8fafc; border-radius: 6px; cursor: pointer; }
         .calendar-day.selected { background: var(--accent); color: white; }
+        .calendar-day.in-range { background: #e0e7ff; color: var(--accent); }
 
-        /* Report Section (Displays Automatically) */
         .report-section {
             background: var(--bg-card);
             border-radius: var(--radius);
@@ -206,7 +229,6 @@
             gap: 6px;
         }
 
-        /* Modern Dashboard Visual Cards */
         .kpi-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -230,7 +252,6 @@
         .kpi-label { font-size: 10px; font-weight: 700; opacity: 0.9; }
         .kpi-value { font-size: 16px; font-weight: 800; }
 
-        /* Modern List & Progress Bars */
         .analytics-container {
             display: flex;
             flex-direction: column;
@@ -292,31 +313,36 @@
 <div class="main-container">
     <header>
         <div class="header-title-box">
-            <h1>الموسى التجارية</h1>
-            <p>إدارة مبيعات الموردين</p>
+            <h1 data-i18n="header_title">الموسى التجارية</h1>
+            <p data-i18n="header_subtitle">إدارة مبيعات الموردين</p>
         </div>
         <div class="header-left-group">
-            <button class="action-btn" onclick="loadSupplierSalesData()">🔄 تحديث</button>
-            <a href="sales.html" class="action-btn">⬅ رجوع</a>
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ur">اردو</option>
+            </select>
+            <button class="action-btn" onclick="loadSupplierSalesData()" data-i18n="btn_refresh">🔄 تحديث</button>
+            <a href="sales.html" class="action-btn" data-i18n="btn_back">⬅ رجوع</a>
         </div>
     </header>
 
-    <!-- الفلاتر -->
     <div class="filter-panel">
         <div class="period-chips">
-            <div class="chip active" onclick="setPreset('today', this)">اليوم</div>
-            <div class="chip" onclick="setPreset('yesterday', this)">أمس</div>
-            <div class="chip" onclick="setPreset('week', this)">الأسبوع</div>
-            <div class="chip" onclick="setPreset('month', this)">الشهر</div>
-            <div class="chip" onclick="setPreset('year', this)">السنة</div>
-            <div class="chip" onclick="toggleCalendar()">📅 مخصص</div>
+            <div class="chip active" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
+            <div class="chip" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
+            <div class="chip" onclick="setPreset('week', this)" data-i18n="chip_week">الأسبوع</div>
+            <div class="chip" onclick="setPreset('month', this)" data-i18n="chip_month">الشهر</div>
+            <div class="chip" onclick="setPreset('year', this)" data-i18n="chip_year">السنة</div>
+            <div class="chip" onclick="toggleCalendar()" data-i18n="chip_custom">📅 مخصص</div>
         </div>
 
         <div class="controls-row">
             <div class="control-group">
-                <span class="control-label">النطاق الزمني:</span>
+                <span class="control-label" data-i18n="label_time_range">النطاق الزمني:</span>
                 <div class="date-toggle-btn" onclick="toggleCalendar()">
-                    <span id="dateButtonText">اختر النطاق...</span>
+                    <span id="dateButtonText" data-i18n="btn_choose_range">اختر النطاق...</span>
                     <span>▼</span>
                 </div>
                 
@@ -331,42 +357,173 @@
             </div>
 
             <div class="control-group">
-                <span class="control-label">سنة المنتج (Product Year):</span>
+                <span class="control-label" data-i18n="label_product_year">سنة المنتج (Product Year):</span>
                 <select id="productYearSelect" onchange="renderReports()">
-                    <option value="ALL">جميع السنوات</option>
+                    <option value="ALL" data-i18n="opt_all_years">جميع السنوات</option>
                 </select>
             </div>
 
             <div class="control-group">
-                <span class="control-label">الماركة (Brand Filter):</span>
+                <span class="control-label" data-i18n="label_brand">الماركة (Brand Filter):</span>
                 <select id="brandSelect" onchange="renderReports()">
-                    <option value="ALL">جميع الماركات (All Brands)</option>
+                    <option value="ALL" data-i18n="opt_all_brands">جميع الماركات (All Brands)</option>
                 </select>
             </div>
         </div>
     </div>
 
-    <!-- لوحة التقرير والتحليلات الرسمية (تظهر مباشرة أسفل الفلاتر) -->
     <div class="report-section">
         <div class="kpi-row">
             <div class="kpi-card sales">
-                <span class="kpi-label">إجمالي المبيعات</span>
-                <span class="kpi-value" id="kpiTotalSales">0.00 ر.س</span>
+                <span class="kpi-label" data-i18n="kpi_total_sales">إجمالي المبيعات</span>
+                <span class="kpi-value" id="kpiTotalSales">0.00 SAR</span>
             </div>
             <div class="kpi-card qty">
-                <span class="kpi-label">إجمالي القطع المباعة</span>
-                <span class="kpi-value" id="kpiTotalQty">0 قطعة</span>
+                <span class="kpi-label" data-i18n="kpi_total_qty">إجمالي القطع المباعة</span>
+                <span class="kpi-value" id="kpiTotalQty">0 Pcs</span>
             </div>
         </div>
 
-        <div class="section-title">📊 تقرير مبيعات الموردين (Supplier Sales Summary)</div>
+        <div class="section-title" data-i18n="section_supplier_summary">📊 تقرير مبيعات الموردين (Supplier Sales Summary)</div>
         <div class="analytics-container" id="analyticsContainer">
-            <div class="status-msg">جاري تحضير البيانات...</div>
+            <div class="status-msg" data-i18n="status_loading">جاري تحضير البيانات...</div>
         </div>
     </div>
 </div>
 
 <script>
+    const translations = {
+        ar: {
+            page_title: "مبيعات الموردين - الموسى التجارية",
+            header_title: "الموسى التجارية",
+            header_subtitle: "إدارة مبيعات الموردين",
+            btn_refresh: "🔄 تحديث",
+            btn_back: "⬅ رجوع",
+            chip_today: "اليوم",
+            chip_yesterday: "أمس",
+            chip_week: "الأسبوع",
+            chip_month: "الشهر",
+            chip_year: "السنة",
+            chip_custom: "📅 مخصص",
+            label_time_range: "النطاق الزمني:",
+            btn_choose_range: "اختر النطاق...",
+            label_product_year: "سنة المنتج (Product Year):",
+            opt_all_years: "جميع السنوات",
+            label_brand: "الماركة (Brand Filter):",
+            opt_all_brands: "جميع الماركات (All Brands)",
+            kpi_total_sales: "إجمالي المبيعات",
+            kpi_total_qty: "إجمالي القطع المباعة",
+            section_supplier_summary: "📊 تقرير مبيعات الموردين (Supplier Sales Summary)",
+            status_loading: "جاري تحضير البيانات...",
+            status_no_data: "لا توجد مبيعات مسجلة في هذه الفترة"
+        },
+        en: {
+            page_title: "Supplier Sales - Almoosa Trading",
+            header_title: "Almoosa Trading",
+            header_subtitle: "Supplier Sales Management",
+            btn_refresh: "🔄 Refresh",
+            btn_back: "⬅ Back",
+            chip_today: "Today",
+            chip_yesterday: "Yesterday",
+            chip_week: "Week",
+            chip_month: "Month",
+            chip_year: "Year",
+            chip_custom: "📅 Custom",
+            label_time_range: "Time Range:",
+            btn_choose_range: "Select range...",
+            label_product_year: "Product Year:",
+            opt_all_years: "All Years",
+            label_brand: "Brand Filter:",
+            opt_all_brands: "All Brands",
+            kpi_total_sales: "Total Sales",
+            kpi_total_qty: "Total Sold Qty",
+            section_supplier_summary: "📊 Supplier Sales Summary",
+            status_loading: "Preparing data...",
+            status_no_data: "No sales recorded in this period"
+        },
+        hi: {
+            page_title: "आपूर्तिकर्ता बिक्री - अलमूसा ट्रेडिंग",
+            header_title: "अलमूसा ट्रेडिंग",
+            header_subtitle: "आपूर्तिकर्ता बिक्री प्रबंधन",
+            btn_refresh: "🔄 ताज़ा करें",
+            btn_back: "⬅ पीछे",
+            chip_today: "आज",
+            chip_yesterday: "कल",
+            chip_week: "सप्ताह",
+            chip_month: "महीना",
+            chip_year: "वर्ष",
+            chip_custom: "📅 कस्टम",
+            label_time_range: "समय सीमा:",
+            btn_choose_range: "रेंज चुनें...",
+            label_product_year: "उत्पाद वर्ष (Product Year):",
+            opt_all_years: "सभी वर्ष",
+            label_brand: "ब्रांड फ़िल्टर (Brand Filter):",
+            opt_all_brands: "सभी ब्रांड (All Brands)",
+            kpi_total_sales: "कुल बिक्री",
+            kpi_total_qty: "कुल बेची गई मात्रा",
+            section_supplier_summary: "📊 आपूर्तिकर्ता बिक्री सारांश (Supplier Sales Summary)",
+            status_loading: "डेटा तैयार किया जा रहा है...",
+            status_no_data: "इस अवधि में कोई बिक्री दर्ज नहीं की गई"
+        },
+        ur: {
+            page_title: "سپلائر سیلز - الموسی ٹریڈنگ",
+            header_title: "الموسی ٹریڈنگ",
+            header_subtitle: "سپلائر سیلز مینجمنٹ",
+            btn_refresh: "🔄 تازہ کریں",
+            btn_back: "⬅ واپس",
+            chip_today: "آج",
+            chip_yesterday: "گزشتہ کل",
+            chip_week: "ہفتہ",
+            chip_month: "مہینہ",
+            chip_year: "سال",
+            chip_custom: "📅 کسٹم",
+            label_time_range: "وقت کا دائرہ:",
+            btn_choose_range: "رینج منتخب کریں...",
+            label_product_year: "پروڈکٹ کا سال (Product Year):",
+            opt_all_years: "تمام سال",
+            label_brand: "برانڈ فلٹر (Brand Filter):",
+            opt_all_brands: "تمام برانڈز (All Brands)",
+            kpi_total_sales: "کل فروخت",
+            kpi_total_qty: "کل فروخت شدہ مقدار",
+            section_supplier_summary: "📊 سپلائر سیلز سمری (Supplier Sales Summary)",
+            status_loading: "ڈیٹا تیار کیا جا رہا ہے...",
+            status_no_data: "اس مدت میں کوئی فروخت درج نہیں ہے"
+        }
+    };
+
+    let currentLang = localStorage.getItem('app_lang') || 'ar';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('app_lang', lang);
+        
+        const root = document.getElementById('htmlRoot');
+        root.setAttribute('lang', lang);
+        
+        if (lang === 'ar' || lang === 'ur') {
+            root.setAttribute('dir', 'rtl');
+        } else {
+            root.setAttribute('dir', 'ltr');
+        }
+        
+        const selectEl = document.getElementById('langSelect');
+        if (selectEl) {
+            selectEl.value = lang;
+        }
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) {
+                el.textContent = translations[lang][key];
+            }
+        });
+    }
+
+    function changeLanguage(selectedLang) {
+        setLanguage(selectedLang);
+        loadSupplierSalesData();
+    }
+
     const CONFIG = {
         serverUrl: "https://87-237-225-155.nip.io/",
         apiKey: "6f039a5a6130b79",
@@ -380,11 +537,99 @@
     let viewDate = new Date();
 
     document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLang);
         setPreset('today', document.querySelector('.chip.active'));
+        renderCalendar();
     });
 
     function toggleCalendar() {
         document.getElementById('calendarContainer').classList.toggle('open');
+    }
+
+    function changeMonth(direction) {
+        viewDate.setMonth(viewDate.getMonth() + direction);
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        const grid = document.getElementById('calendarDaysGrid');
+        const titleEl = document.getElementById('calendarTitle');
+        if (!grid || !titleEl) return;
+        grid.innerHTML = '';
+
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
+
+        const arMonths = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+        titleEl.textContent = `${arMonths[month]} ${year}`;
+
+        const daysShort = ['أحد', 'إثن', 'ثلا', 'أرب', 'خميس', 'جمع', 'سبت'];
+        daysShort.forEach(d => {
+            const div = document.createElement('div');
+            div.className = 'calendar-day-name';
+            div.textContent = d;
+            grid.appendChild(div);
+        });
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+
+        for (let i = 0; i < firstDayIndex; i++) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.className = 'calendar-day empty';
+            grid.appendChild(emptyDiv);
+        }
+
+        for (let day = 1; day <= totalDays; day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            dayDiv.textContent = day;
+
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            if (selectionState.startDate && dateStr === selectionState.startDate) dayDiv.classList.add('selected');
+            if (selectionState.endDate && dateStr === selectionState.endDate) dayDiv.classList.add('selected');
+            if (selectionState.startDate && selectionState.endDate && dateStr > selectionState.startDate && dateStr < selectionState.endDate) {
+                dayDiv.classList.add('in-range');
+            }
+
+            dayDiv.onclick = () => onCalendarDayClick(dateStr);
+            grid.appendChild(dayDiv);
+        }
+    }
+
+    function onCalendarDayClick(dateStr) {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        if (!selectionState.startDate || (selectionState.startDate && selectionState.endDate)) {
+            selectionState.startDate = dateStr;
+            selectionState.endDate = null;
+            currentQueryFrom = dateStr;
+            currentQueryTo = dateStr;
+        } else {
+            if (dateStr < selectionState.startDate) {
+                selectionState.startDate = dateStr;
+                currentQueryFrom = dateStr;
+                currentQueryTo = dateStr;
+            } else {
+                selectionState.endDate = dateStr;
+                currentQueryTo = dateStr;
+            }
+        }
+
+        updateDateButtonText();
+        renderCalendar();
+        loadSupplierSalesData();
+        toggleCalendar();
+    }
+
+    function updateDateButtonText() {
+        const btnText = document.getElementById('dateButtonText');
+        if (!btnText) return;
+        if (!selectionState.endDate || currentQueryFrom === currentQueryTo) {
+            btnText.textContent = `${currentQueryFrom}`;
+        } else {
+            btnText.textContent = `${currentQueryFrom} إلى ${currentQueryTo}`;
+        }
     }
 
     function setPreset(type, element) {
@@ -405,7 +650,12 @@
 
         currentQueryFrom = formatDateStr(start);
         currentQueryTo = formatDateStr(end);
-        document.getElementById('dateButtonText').textContent = currentQueryFrom;
+        selectionState.startDate = currentQueryFrom;
+        selectionState.endDate = currentQueryTo;
+        viewDate = new Date(end);
+
+        updateDateButtonText();
+        renderCalendar();
         loadSupplierSalesData();
     }
 
@@ -415,7 +665,7 @@
 
     async function loadSupplierSalesData() {
         const analyticsContainer = document.getElementById('analyticsContainer');
-        analyticsContainer.innerHTML = `<div class="status-msg">جاري تحميل البيانات...</div>`;
+        analyticsContainer.innerHTML = `<div class="status-msg">${translations[currentLang].status_loading}</div>`;
         rawSupplierData = [];
 
         try {
@@ -429,12 +679,14 @@
 
             if (res.ok) {
                 const jsonRes = await res.json();
-                rawSupplierData = (jsonRes.message || []).map(row => ({
-                    supplier: row.supplier || "مورد غير محدد",
-                    brand: row.brand || "عام",
-                    product_year: row.product_year || "غير محدد",
-                    total_sales: parseFloat(row.total_sales || 0),
-                    total_qty: parseFloat(row.total_qty || 0)
+                const fetchedRows = jsonRes.message?.data || jsonRes.message || [];
+                
+                rawSupplierData = fetchedRows.map(row => ({
+                    supplier: row.supplier || row.vendor_name || row.Supplier || (currentLang === 'ar' ? "مورد غير محدد" : "Unspecified Supplier"),
+                    brand: row.brand || row.Brand || (currentLang === 'ar' ? "عام" : "General"),
+                    product_year: row.product_year || row.Product_Year || (currentLang === 'ar' ? "غير محدد" : "N/A"),
+                    total_sales: parseFloat(row.total_sales || row.Total_Sales || 0),
+                    total_qty: parseFloat(row.total_qty || row.Total_Qty || 0)
                 }));
             }
         } catch (err) {
@@ -450,20 +702,28 @@
         const brandsSet = new Set();
 
         rawSupplierData.forEach(row => {
-            const brandName = row.brand || "";
+            const brandName = String(row.brand || "");
+            const supName = String(row.supplier || "");
+            
+            const isNonSalable = brandName.toUpperCase().includes("NON SALABLE") || 
+                                 supName.toUpperCase().includes("NON SALABLE") || 
+                                 brandName.includes("غير قابلة للبيع");
+
             if (row.product_year) yearsSet.add(String(row.product_year));
-            if (brandName && !brandName.toUpperCase().includes("NON SALABLE")) brandsSet.add(brandName);
+            if (brandName && !isNonSalable) brandsSet.add(brandName);
         });
 
         const yearSelect = document.getElementById('productYearSelect');
         const currentYear = yearSelect.value;
-        yearSelect.innerHTML = '<option value="ALL">جميع السنوات</option>';
+        const allYearsText = currentLang === 'ar' ? "جميع السنوات" : (currentLang === 'ur' ? "تمام سال" : "All Years");
+        yearSelect.innerHTML = `<option value="ALL">${allYearsText}</option>`;
         Array.from(yearsSet).sort().reverse().forEach(y => yearSelect.innerHTML += `<option value="${y}">${y}</option>`);
         if (yearsSet.has(currentYear)) yearSelect.value = currentYear;
 
         const brandSelect = document.getElementById('brandSelect');
         const currentBrand = brandSelect.value;
-        brandSelect.innerHTML = '<option value="ALL">جميع الماركات (All Brands)</option>';
+        const allBrandsText = currentLang === 'ar' ? "جميع الماركات (All Brands)" : (currentLang === 'ur' ? "تمام برانڈز" : "All Brands");
+        brandSelect.innerHTML = `<option value="ALL">${allBrandsText}</option>`;
         Array.from(brandsSet).sort().forEach(b => brandSelect.innerHTML += `<option value="${b}">${b}</option>`);
         if (brandsSet.has(currentBrand)) brandSelect.value = currentBrand;
     }
@@ -473,8 +733,15 @@
         const selectedBrand = document.getElementById('brandSelect').value;
 
         let filtered = rawSupplierData.filter(row => {
-            const brandName = row.brand || "";
-            if (brandName.toUpperCase().includes("NON SALABLE")) return false;
+            const brandName = String(row.brand || "");
+            const supName = String(row.supplier || "");
+            
+            const isNonSalable = brandName.toUpperCase().includes("NON SALABLE") || 
+                                 supName.toUpperCase().includes("NON SALABLE") || 
+                                 brandName.includes("غير قابلة للبيع");
+
+            if (isNonSalable) return false;
+
             const matchYear = (selectedYear === "ALL" || String(row.product_year) === selectedYear);
             const matchBrand = (selectedBrand === "ALL" || brandName === selectedBrand);
             return matchYear && matchBrand;
@@ -491,8 +758,8 @@
         let grandSales = 0, grandQty = 0;
         Object.values(supplierMap).forEach(i => { grandSales += i.sales; grandQty += i.qty; });
 
-        document.getElementById('kpiTotalSales').textContent = grandSales.toLocaleString('ar-SA', { minimumFractionDigits: 2 }) + ' ر.س';
-        document.getElementById('kpiTotalQty').textContent = grandQty.toLocaleString('ar-SA') + ' قطعة';
+        document.getElementById('kpiTotalSales').textContent = grandSales.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+        document.getElementById('kpiTotalQty').textContent = grandQty.toLocaleString('en-US') + ' Pcs';
 
         const sortedBySales = Object.keys(supplierMap).sort((a, b) => supplierMap[b].sales - supplierMap[a].sales);
         const maxSales = Math.max(...Object.values(supplierMap).map(i => i.sales), 1);
@@ -501,7 +768,7 @@
         analyticsContainer.innerHTML = '';
 
         if (sortedBySales.length === 0) {
-            analyticsContainer.innerHTML = `<div class="status-msg">لا توجد مبيعات مسجلة في هذه الفترة</div>`;
+            analyticsContainer.innerHTML = `<div class="status-msg">${translations[currentLang].status_no_data}</div>`;
             return;
         }
 
@@ -512,7 +779,7 @@
                 <div class="analytics-item">
                     <div class="analytics-info">
                         <span>${sup}</span>
-                        <span class="analytics-numbers">${item.sales.toLocaleString('ar-SA', { minimumFractionDigits: 2 })} ر.س (${item.qty.toLocaleString('ar-SA')} قطعة)</span>
+                        <span class="analytics-numbers">${item.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (${item.qty.toLocaleString('en-US')} Pcs)</span>
                     </div>
                     <div class="progress-track">
                         <div class="progress-fill" style="width: ${pct}%;"></div>
