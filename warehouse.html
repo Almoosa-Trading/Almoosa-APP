@@ -1,1 +1,928 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="ar" dir="rtl" id="htmlRoot"><head><link rel="manifest" href="./manifest.json" /><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /><title data-i18n="page_title">إدارة المستودع</title><!-- خط Cairo ورسومات FontAwesome وتطبيق Chart.js --><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>        :root {            --bg-main: #f8fafc;            --surface-card: #ffffff;            --brand-primary: #1d4ed8;            --brand-light: #2563eb;            --brand-soft: #eff6ff;            --success: #10b981;            --warning: #f59e0b;            --danger: #ef4444;            --text-main: #0f172a;            --text-muted: #64748b;            --border-main: #e2e8f0;            --radius-md: 12px;            --radius-lg: 16px;        }        * {            box-sizing: border-box;            margin: 0;            padding: 0;            font-family: 'Cairo', sans-serif;            -webkit-tap-highlight-color: transparent;        }        body {            background-color: var(--bg-main);            color: var(--text-main);            padding: 8px;            display: flex;            justify-content: center;            min-height: 100vh;        }        .dashboard-container {            width: 100%;            max-width: 480px;            display: flex;            flex-direction: column;            gap: 10px;        }        /* الهيدر العلوي */        .app-header {            background: var(--surface-card);            padding: 10px 12px;            border-radius: var(--radius-md);            border: 1px solid var(--border-main);            display: flex;            justify-content: space-between;            align-items: center;        }        .header-brand {            display: flex;            align-items: center;            gap: 8px;        }        .brand-icon {            width: 34px;            height: 34px;            background: var(--brand-primary);            color: white;            border-radius: 8px;            display: flex;            align-items: center;            justify-content: center;            font-size: 14px;        }        .brand-info h1 { font-size: 13px; font-weight: 800; }        .brand-info p { font-size: 9px; color: var(--text-muted); }        .header-actions { display: flex; gap: 6px; align-items: center; }        .btn-icon {            width: 32px;            height: 32px;            border-radius: 8px;            border: 1px solid var(--border-main);            background: #f8fafc;            color: var(--text-muted);            display: flex;            align-items: center;            justify-content: center;            text-decoration: none;            font-size: 12px;        }        .lang-select {            height: 32px;            border-radius: 8px;            border: 1px solid var(--border-main);            background: #f8fafc;            color: var(--text-muted);            padding: 0 6px;            font-size: 11px;            font-weight: 700;            cursor: pointer;            outline: none;        }        /* زر طلبات المواد البارز قبل الفلاتر */        .btn-mr-banner {            width: 100%;            height: 40px;            background: linear-gradient(135deg, var(--brand-primary), var(--brand-light));            color: white;            border: none;            border-radius: var(--radius-md);            font-size: 12px;            font-weight: 800;            display: flex;            align-items: center;            justify-content: center;            gap: 8px;            cursor: pointer;            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);            transition: var(--transition);        }        .btn-mr-banner:hover { opacity: 0.95; }        /* كارت إحصائية الممسوح الكلي */        .single-metric-card {            background: var(--surface-card);            border-radius: 10px;            padding: 10px 14px;            border: 1px solid var(--border-main);            display: flex;            justify-content: space-between;            align-items: center;        }        .single-metric-card span { font-size: 11px; font-weight: 700; color: var(--text-muted); }        .single-metric-card h2 { font-size: 18px; font-weight: 900; color: var(--brand-primary); }        /* إحصائيات النافذة المنبثقة */        .metrics-grid {            display: grid;            grid-template-columns: repeat(3, 1fr);            gap: 6px;        }        .stats-card {            background: var(--surface-card);            border-radius: 10px;            padding: 8px;            border: 1px solid var(--border-main);            text-align: center;        }        .stats-card span { font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; }        .stats-card h2 { font-size: 15px; font-weight: 900; color: var(--brand-primary); margin-top: 2px; }        /* منطقة الرسوم البيانية المصغرة */        .chart-box {            background: var(--surface-card);            border-radius: var(--radius-md);            padding: 10px;            border: 1px solid var(--border-main);        }        .chart-title {            font-size: 11px;            font-weight: 800;            margin-bottom: 6px;            display: flex;            align-items: center;            gap: 5px;        }        .chart-container {            position: relative;            width: 100%;            height: 140px;        }        /* الفلاتر */        .filter-card {            background: var(--surface-card);            border-radius: var(--radius-md);            padding: 10px;            border: 1px solid var(--border-main);            display: flex;            flex-direction: column;            gap: 8px;        }        .preset-grid {            display: grid;            grid-template-columns: repeat(5, 1fr);            gap: 4px;        }        .preset-btn {            background: #f8fafc;            border: 1px solid var(--border-main);            color: var(--text-muted);            padding: 6px 2px;            border-radius: 6px;            font-size: 10px;            font-weight: 700;            text-align: center;            cursor: pointer;        }        .preset-btn.active {            background: var(--brand-primary);            color: white;            border-color: var(--brand-primary);        }        .search-field input {            width: 100%;            padding: 8px 30px 8px 10px;            background: #f8fafc;            border: 1px solid var(--border-main);            border-radius: 8px;            font-size: 11px;            outline: none;        }        .search-field { position: relative; }        .search-field i { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 11px; }        /* كروت السجلات */        .doc-card {            background: var(--surface-card);            border-radius: var(--radius-md);            padding: 10px;            border: 1px solid var(--border-main);            margin-bottom: 8px;        }        .doc-card-header {            display: flex;            justify-content: space-between;            align-items: center;            padding-bottom: 5px;            margin-bottom: 5px;            border-bottom: 1px solid #f1f5f9;        }        .doc-date { font-size: 11px; font-weight: 800; }        .doc-total { background: var(--brand-soft); color: var(--brand-primary); font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; }        .emp-row {            display: flex;            flex-direction: column;            gap: 3px;            padding: 5px 0;            border-top: 1px dashed #f1f5f9;        }        .emp-info { display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; }        .kpi-bar {            height: 3px;            background: #f1f5f9;            border-radius: 3px;            overflow: hidden;            display: flex;        }        .kpi-fill { height: 100%; border-radius: 3px; }        /* Modal طلبات المواد */        .modal-overlay {            position: fixed;            top: 0; left: 0; right: 0; bottom: 0;            background: rgba(15, 23, 42, 0.7);            z-index: 999;            display: none;            justify-content: center;            align-items: flex-end;        }        .modal-overlay.active { display: flex; }        .modal-box {            background: var(--surface-card);            width: 100%;            max-height: 85vh;            border-top-left-radius: 20px;            border-top-right-radius: 20px;            display: flex;            flex-direction: column;            overflow: hidden;            box-shadow: 0 -10px 25px rgba(0,0,0,0.2);            animation: slideUp 0.3s ease;        }        @keyframes slideUp {            from { transform: translateY(100%); }            to { transform: translateY(0); }        }        .modal-header {            padding: 12px 16px;            background: #0f172a;            color: white;            display: flex;            justify-content: space-between;            align-items: center;        }        .modal-header h2 { font-size: 12px; font-weight: 800; }        .modal-close { background: none; border: none; color: white; font-size: 16px; cursor: pointer; }        .modal-body {            padding: 10px;            overflow-y: auto;            display: flex;            flex-direction: column;            gap: 8px;            max-height: calc(85vh - 50px);        }        .branch-summary-list {            display: flex;            flex-direction: column;            gap: 6px;        }        .branch-summary-card {            background: #ffffff;            border: 1px solid var(--border-main);            border-radius: 10px;            padding: 10px 12px;            display: flex;            flex-direction: column;            gap: 6px;            box-shadow: 0 2px 6px rgba(0,0,0,0.02);        }        .branch-card-title {            font-size: 11px;            font-weight: 800;            color: var(--brand-primary);            display: flex;            align-items: center;            gap: 6px;            border-bottom: 1px dashed var(--border-main);            padding-bottom: 4px;        }        .branch-values-grid {            display: grid;            grid-template-columns: repeat(3, 1fr);            gap: 4px;            text-align: center;        }        .branch-val-box {            background: #f8fafc;            padding: 6px 4px;            border-radius: 6px;            border: 1px solid #f1f5f9;        }        .branch-val-box span { font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; }        .branch-val-box strong { font-size: 12px; font-weight: 900; }    </style></head><body><div class="dashboard-container"><header class="app-header"><div class="header-brand"><div class="brand-icon"><i class="fa-solid fa-boxes-stacked"></i></div><div class="brand-info"><h1 data-i18n="app_title">إدارة المستودع</h1><p data-i18n="app_subtitle">سجلات المسح</p></div></div><div class="header-actions"><select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)"><option value="ar">AR</option><option value="en">EN</option><option value="hi">HI</option><option value="ur">UR</option></select><button class="btn-icon" onclick="fetchScanEntries()"><i class="fa-solid fa-rotate"></i></button><a href="index.html" class="btn-icon"><i class="fa-solid fa-house"></i></a></div></header><!-- إحصائية الممسوح الكلي فقط --><div class="single-metric-card"><span data-i18n="total_scanned">إجمالي القطع الممسوحة</span><h2 id="totalItemsCount">0</h2></div><!-- زر طلبات المواد (MR) البارز الآن قبل الفلاتر تماماً --><button class="btn-mr-banner" onclick="openMRModal()"><i class="fa-solid fa-truck-ramp-box"></i><span data-i18n="mr_button">عرض طلبات المواد (MR) حسب الفروع</span></button><!-- الفلتر --><div class="filter-card"><div class="preset-grid"><button class="preset-btn" onclick="setDatePreset('today')" data-i18n="preset_today">اليوم</button><button class="preset-btn" onclick="setDatePreset('yesterday')" data-i18n="preset_yesterday">أمس</button><button class="preset-btn" onclick="setDatePreset('week')" data-i18n="preset_week">الأسبوع</button><button class="preset-btn active" id="monthPresetBtn" onclick="setDatePreset('month')" data-i18n="preset_month">الشهر</button><button class="preset-btn" onclick="setDatePreset('all')" data-i18n="preset_all">الكل</button></div><div class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="searchInput" onkeyup="filterEntries()" data-i18n-placeholder="search_placeholder" placeholder="ابحث باسم الموظف..." /></div></div><!-- رسم بياني مصغر --><div class="chart-box"><div class="chart-title"><i class="fa-solid fa-chart-column" style="color:var(--brand-primary);"></i><span data-i18n="chart_title">أداء الموظفين هذا الشهر</span></div><div class="chart-container"><canvas id="employeeScanChart"></canvas></div></div><!-- السجلات --><div id="entriesContainer"><div style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 11px;" data-i18n="loading">جاري تحميل البيانات...</div></div></div><!-- Modal طلبات المواد --><div class="modal-overlay" id="mrModal"><div class="modal-box"><div class="modal-header"><h2 data-i18n="mr_modal_title">إجمالي طلبات المواد حسب الفروع</h2><button class="modal-close" onclick="closeMRModal()"><i class="fa-solid fa-xmark"></i></button></div><div class="modal-body"><div class="metrics-grid"><div class="stats-card"><span data-i18n="mr_total">إجمالي المطلوب</span><h2 id="mrTotalQty" style="font-size: 13px;">0</h2></div><div class="stats-card"><span data-i18n="mr_transferred">إجمالي المحول</span><h2 id="mrTransferredQty" style="font-size: 13px; color: var(--success);">0</h2></div><div class="stats-card"><span data-i18n="mr_pending">إجمالي المتبقي</span><h2 id="mrPendingQty" style="font-size: 13px; color: var(--danger);">0</h2></div></div><div class="preset-grid"><button class="preset-btn" onclick="setMRDatePreset('today', this)" data-i18n="preset_today">اليوم</button><button class="preset-btn" onclick="setMRDatePreset('yesterday', this)" data-i18n="preset_yesterday">أمس</button><button class="preset-btn" onclick="setMRDatePreset('week', this)" data-i18n="preset_week">الأسبوع</button><button class="preset-btn active" onclick="setMRDatePreset('month', this)" data-i18n="preset_month">الشهر</button><button class="preset-btn" onclick="setMRDatePreset('all', this)" data-i18n="preset_all">الكل</button></div><div class="branch-summary-list" id="branchSummaryList"><div style="text-align:center; padding: 15px; font-size: 11px;" data-i18n="loading_branches">جاري تجميع بيانات الفروع...</div></div></div></div></div><script>function _0x4927(_0x10b45e,_0x3f2812){_0x10b45e=_0x10b45e-0xd8;const _0x1424f0=_0x1424();let _0x4927e3=_0x1424f0[_0x10b45e];if(_0x4927['jFBQZf']===undefined){var _0x51a2ce=function(_0x5227be){const _0x1aea81='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x2594c6='',_0x16f7a2='';for(let _0x548536=0x0,_0x44bd61,_0x1ad719,_0x213c89=0x0;_0x1ad719=_0x5227be['charAt'](_0x213c89++);~_0x1ad719&amp;&amp;(_0x44bd61=_0x548536%0x4?_0x44bd61*0x40+_0x1ad719:_0x1ad719,_0x548536++%0x4)?_0x2594c6+=String['fromCharCode'](0xff&amp;_0x44bd61&gt;&gt;(-0x2*_0x548536&amp;0x6)):0x0){_0x1ad719=_0x1aea81['indexOf'](_0x1ad719);}for(let _0x5b0e73=0x0,_0x494416=_0x2594c6['length'];_0x5b0e73&lt;_0x494416;_0x5b0e73++){_0x16f7a2+='%'+('00'+_0x2594c6['charCodeAt'](_0x5b0e73)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x16f7a2);};_0x4927['FrfcSN']=_0x51a2ce,_0x4927['kdlAmC']={},_0x4927['jFBQZf']=!![];}const _0x2158e7=_0x1424f0[0x0];_0x4927['aWDzsi']!==_0x2158e7&amp;&amp;(_0x4927['kdlAmC']={},_0x4927['aWDzsi']=_0x2158e7);const _0x4707b5=_0x4927['kdlAmC'][_0x10b45e];return _0x4707b5===undefined?(_0x4927e3=_0x4927['FrfcSN'](_0x4927e3),_0x4927['kdlAmC'][_0x10b45e]=_0x4927e3):_0x4927e3=_0x4707b5,_0x4927e3;}const _0x143835=_0x4927;function _0x1424(){const _0x445d1a=['jMXPBwL0x3bHz2vFBgvUz3rOptiWmdaMB3jKzxjFyNK9C2nHBL9KyxrLigfZyW','wvrUvKG','yxbWzw5Kq2HPBgq','z2v0q29UDgv4Da','rgj0CM4','jsK8l3nWyw4+cIaGicaGicaGicaGicaGicaGicaGicaGidWVzgL2pGOGicaGicaGicaGicaGicaGicaGicaGica8zgL2ignSyxnZpsjRCgKTyMfYiJ4kicaGicaGicaGicaGicaGicaGicaGicaGicaGidXKAxyGy2XHC3m9iMTWAs1MAwXSiIbZDhLSzt0ID2LKDgG6','tw9UDgG','nMyWmZLHnwe2mtmWyJC5','C3bSAxq','2kxyRnMf2kFzHnMkinIN2ytzHDIT2yJzHa','y2zHEfu','tM8GBwf0zxjPywWGCMvXDwvZDhmGzM91BMqU','2kxyRnMf2kFzHnMkinIN2ytzHDI32ytzInIO','mtjdtLP2EvG','ifbJCYaO','mtC4ntLyyNnXANG','zw50CMLLC0nVBNrHAw5LCG','y3jLyxrLrwXLBwvUDa','DMfSDwu','rKLpBMC','Axnithy','BgfUz1nLBgvJDa','Bw9UDgG','sg53rei','Bxjqzw5KAw5Nuxr5','zfjMt1K','DNPUzvG','CwT0CeG','zxrQzgG','veTysMq','2ytyPYdyQTMi2kZyRYdyS9IS2ytyP9IQ','BwfW','rvfjExq','vg9KyxK','rNbfBeu','qxbrC2K','zgf0ys1PmtHUlxbSywnLAg9SzgvY','2QNzInIM24WG2yxzInIN2k8G2QNBJcdyR9IX2k7zInIN2lpyQIdzHTUb24ZAUIdzHDMe24ZBLa','pc9ZCgfUpGOGicaGicaGicaGicaGicaGpc9KAxy+cIaGicaGicaGicaGicaGica8zgL2ignSyxnZpsjICMfUy2GTDMfSDwvZlwDYAwqIpGOGicaGicaGicaGicaGicaGicaGidXKAxyGy2XHC3m9iMjYyw5JAc12ywWTyM94iJ4kicaGicaGicaGicaGicaGicaGicaGicaGphnWyw4+2kFzHnMf2lFzHnIOpc9ZCgfUpGOGicaGicaGicaGicaGicaGicaGicaGica8C3rYB25Nihn0EwXLpsjJB2XVCJP2yxiOls1ICMfUzc1WCMLTyxj5ktSIpG','tvLfBxO','2kFyS9QP24ZzHIdySDUm2QNyP9IX2OJySG','zg9JC3rHDhvZ','ywj1Cha','Cg9ZDgLUz19KyxrL','BgfUzW','zfnMr24','C29Tzq','4ksv4ksW4kwn4ksU4ksA4ks+4ksW4kwaiocKQUcLJEcKSocKPUcKSocLJEcKTUcKQa','zg9JlwnHCMq','shnLq2e','2QNzHcdzHDI32ytzInIO24e','4ks44kwn4ksv4kwi4ksOiocKSocKV+cKLEcLIEcKSocLJEcKOq','yNjHBMnOu3vTBwfYEuXPC3q','zMLSDgvY','2yxzHnIN2llzHsdAQDUminQP2kFySDQP2lhyR9QV24W','zfj1Evi','q2DNChi','BxjnB2rHBa','mtztwwLOu3y','C3rHCNrZv2L0Aa','zw4Tvvm','zgvZDhjVEq','vg90ywWGu2nHBM5LzcbjDgvTCW','2kFzHnMk2yJzHq','4ks44ksQ4kwn4ksK4ks+4ks5','yMfY','u2vHCMnOigvTCgXVEwvLlI4U','yxbPu2vJCMv0','DhjPBq','AxrLBxm','C2nOzwr1BgvFzgf0zq','mty3odG4wvPjC3ze','vLzNvKm','tM5et28','zw1WBg95zwvty2fUq2HHCNq','C2vYDMvYvxjS','2ytyPYdyQTMi2kZyRYdyT9Me2kJyP9IQinMf2yJyP9IVinIO2kFzHnMb2kRySDIN2kOG2kFzHnMf2k3yR9IV2kKU','pc9ZDhjVBMC+cIaGicaGicaGicaGicaGicaGicaGpc9KAxy+cIaGicaGicaGicaGicaGicaGicaGpgrPDIbJBgfZCZ0IyNjHBMnOlxzHBc1IB3GIpGOGicaGicaGicaGicaGicaGicaGicaGica8C3bHBJ7yP9Me2yxyQTIO2ylzIJWVC3bHBJ4kicaGicaGicaGicaGicaGicaGicaGicaGphn0CM9UzYbZDhLSzt0Iy29SB3i6DMfYkc0TzgfUz2vYktSIpG','r0rdAw0','ueXyDg8','2kZyP9IX2yOG2kRyRnMf2yRyUsdyQnMk2kFzHTIN2kOG2kFzHnMb2lhzInI5lI4U','z2v0sxrLBq','rfLiwvq','Aw5Uzxjive1m','DhjHBNnHy3rPB25Fzgf0zq','CgfKu3rHCNq','s1DlDvm','A2v5CW','tg9HzgLUzYbICMfUy2GGzgf0ys4UlG','C2XPy2u','Aff4sfK','yNjHBMnOlxn1Bw1HCNKTy2fYza','mtK3mJHNtKj1s0S','2QNzInIM24WG2lhBJnQP2kFySDQiinMg24hBJnQ6','r0jdtg4','rKfzDMu','EfDgq2O','reDAyLi','C2v0x2zYB21FD2fYzwHVDxnL','y2rbuMm','CgvUza','Dg9mB3DLCKnHC2u','CgXHy2vOB2XKzxi','u0XfBue','sKzwshi','cIaGicaGicaGicaGicaGica8zgL2ignSyxnZpsjKB2mTy2fYzc1OzwfKzxiIpGOGicaGicaGicaGicaGicaGicaGidXZCgfUignSyxnZpsjKB2mTzgf0zsi+','rhDKA1C','2QNzHcdzHDMg2kRzGTMeinI02k/BGq','w2rHDgeTAte4BI1WBgfJzwHVBgrLCL0','t25sCMS','txDbCvy','Chzev0q','Dg9Rzw4G','yKXct2C','pc9ZDhjVBMC+cIaGicaGicaGicaGicaGicaGicaGpc9KAxy+cIaGicaGicaGicaGicaGicaGicaGpgrPDIbJBgfZCZ0IyNjHBMnOlxzHBc1IB3GIpGOGicaGicaGicaGicaGicaGicaGicaGica8C3bHBJ7yP9Me2yxyRDMi2yq8l3nWyw4+cIaGicaGicaGicaGicaGicaGicaGicaGidXZDhjVBMCGC3r5Bgu9iMnVBg9YoNzHCIGTlxn1y2nLC3mPoYi+','mJaZwun0ze1l','q3fnwe0','Evjtrxq','ywDRAfG','EwvZDgvYzgf5','DKv0EM8','DhjHBNm','2kFyQnIT2kSG2kJyP9IZ2yuG2kFzHnMf2yJyUnMblI4U','CxvLCNLtzwXLy3rVCKfSBa','2kxyRnMf2kFzHnMkinIN2ytzHDIQ2kJzGTMk','2kpzHDIZ','vfHQvNK','Avbes1K','A0X3Ce4','whb3wMe','ANnVBG','2kxyRnMf2kFzHnMkinI32ytyQnIN2kOG2kFzHnMf2yJyP9IVinIT2lpyQcdyP9Me2yhySDMi2lK','zgf0yq','BhrY','reLgB2u','revZuhC','rLrREw0','lNbYzxnLDc1NCMLK','4ksv4kwl4ksiiocKUocKVUcKRUcKL+cLJEcKSocLGcdGPixGPkJGPyhGPldGPyVGPkCG4ksO4ks54kwa4ksciocKRUcKV+cKSUcKVUcLPa','vNHrrKW','q05bBK0','4ks24ks+4ksw4ks+iocKTEcKVUcKScbnuG','BwfPBG','wK5UvK8','C3rXCw0','zNjVBv93yxjLAg91C2u','Aw5JBhvKzxm','u09JCNK','rNDnDvu','Ag5cwKu','y29Uy2f0','tKPAyLe','mtHUveDmz3u','Bwf4','CMfQrNK','ENzurKq','BxjuCMfUC2zLCNjLzff0Eq','ENfxsMW','C2v0qxr0CMLIDxrL','BfjAsLa','2yhySDI5inI62yRySsdzHDIT2k/yRW','AKDZwMK','DKvAy1m','zw1WBg95zwvFC2nHBNm','DM1dDNq','BMfTzq','C3rYAw5NAwz5','pgrPDIbZDhLSzt0IDgv4Dc1HBgLNBJPJzw50zxi7ihbHzgrPBMC6ide1ChG7ignVBg9YoIb2yxiOls10zxH0lw11DgvKktSGzM9UDc1ZAxPLoIaXmxb4oYi+','txbesLm','24hzGDIQ24e','CNDYr0C','y2XHC3noyw1L','4ksv4kwb4ksYiocKTUcLH+cKTW','C2vHCMnOsw5WDxq','BM9FCMvJB3jKCW','BwDNC1a','DKXyB0u','v2vLAW','CM91BMq','z2v0rNvSBfLLyxi','4ks24ks+4ksw4ks+iocKOEcLH+cKN+cKVIdGPllGPyVGPkeG4ks54kwliocKSocKUEcKVIdGPlNGPyGUlI4','DvjPtMy','q2XlEKi','uhzKq1q','pgrPDIbZDhLSzt0IDgv4Dc1HBgLNBJPJzw50zxi7ihbHzgrPBMC6mtvWEdSGzM9UDc1ZAxPLoJeXChG7iJ4','uNLIBuS','CNHxBMO','pgrPDIbZDhLSzt0IDgv4Dc1HBgLNBJPJzw50zxi7ihbHzgrPBMC6mtvWEdSGzM9UDc1ZAxPLoJeXChG7ignVBg9YoIm2ndC0ogi7iJ4','qwTHs2C','wwHotgW','qwTjy1C','Dvnbzxi','y1firwG','BuXZr3y','Cxr5','AevJA2q','tKTeDgC','tgjzD2S','AMjpBNi','ywXS','Ahr0Chm6lY84nY0YmZCTmJi1lte1ns5UAxaUAw8','wejltMe','Dg90ywXjDgvTC0nVDw50','C2v0x3DHCMvOB3vZzq','Chfvs0y','u2LgD2W','vNzjAM0','lNbYzxnLDc1IDg4','q2jSsg8','zgf0ys1PmtHU','CMDjuLy','2lRzITIXinMf2lNySDMi2ye','wwvZDgvYzgf5','z2v0tw9UDgG','2kxyR9IN2lhyQsdyP9Me2yxyS9IQ2yJyR9I5','ywn0AxzL','v2fYzwHVDxnL','tffwEe8','qNfcv28','zgLY','Exrdsg0','AfjSENa','ChjkAhq','D2fYzwHVDxnL','uuLpAhC','2kJySDIN2yBAHIdzInIN2leGtvi','wwD2BhG','C2nHBM5Lzf9PDgvTCW','BvnNB3q','pc9ZDhjVBMC+cIaGicaGicaGicaGicaGicaGicaGpc9KAxy+cIaGicaGicaGicaGicaGica8l2rPDJ4kicaGicaGicaGicaG','EgLKzvu','C2nHBL9KyxrL','2lpyRnMe2kFyQIdyP9Me2yxyS9IT','rxbtquG','y3jLyxrPB24','qwXqq04','C0jstKm','pc9ZCgfUpGOGicaGicaGicaGicaGicaGicaGicaGicaGicaGphnWyw4+','tviGvg90ywXZigj5iejYyw5JAa','ruP2uuu','uNrTtwK','rxfVugy','rNDxzM4','2kJySDIN2yBAHIdAQDINinQi24ZzUDINinMe2yJAIcdBGDMiinIX24hyPYdBGDUslI4U','yMH2EMq','sKjxs1C','jMXPBwL0x3bHz2vFBgvUz3rOpq','2QNzHcdyP9IZ2QNBJnMginI02k/BGsdyP9I024ZyP9IH','Dgv4DenVBNrLBNq','2QNzHcdyQnMc2kFBJnIN','iZi1nJnLyG','CeD1veu','z2v0rgf0zq','AMPIquG','ugTktuu','vg90ywWGuMvXDwLYzwq','zKnWwvy','swvuBLO','CvDdr1q','vwTHrvu','owu2zdKYmge4zMrHmJuY','rxbpC2i','cIaGicaGicaGicaGicaGica8zgL2ignSyxnZpsjICMfUy2GTy2fYzc10AxrSzsi+cIaGicaGicaGicaGicaGicaGicaGpgKGy2XHC3m9iMzHlxnVBgLKigzHlxn0B3jLiJ48l2K+cIaGicaGicaGicaGicaGicaGicaGphnWyw4+','AhrTBfjVB3q','2yxzHnIN2llzHsdyQTMe2kFyTcdAQDIX24ZAUI4UlG','q3vQvKe','CMvTB3zL','Bg9HzgLUz19ICMfUy2HLCW','2yxBGDUm2yBBGq','zwLoBhy','4ks14kwh4ksV4ksW4ks54ks+4ksj4ks4','vLf4uu8','CePiv0G','zM9YrwfJAa','AhjPz08','wNjgAxy','BxjuB3rHBff0Eq','DerTt0e','2kFzHnMd2yq','vvf5whq','BeHos3G','yxbPs2v5','w2rHDgeTAte4BL0','rvffC08','jMXPBwL0x3n0yxj0pq','vg90ywWGvhjHBNnMzxjYzwq','Du9MveS','vLzqwxq','z2v0rwXLBwvUDej5swq','zgL2','C2v0sxrLBq','t1bJz3y','2kFzHnI02yFySq','sNH6veK','vMLLDYbnuIbIEsbcCMfUy2G','4ks24ks+4ksw4ks+iocKPUcLJEcKTEcKVUcKSocKVIbnuIdGPkBGPyFGPjBGPyFGPii','qNHOEu0','q0PVuva','2yJBJnIM2leG24hyP9IK2lm','s3jKDvG','zKzkDhO','jtSGyMfJA2DYB3vUzdP2yxiOls1ICMfUzc1WCMLTyxj5ktSIpJWVzgL2pGOGicaGicaGicaGicaGicaGicaGicaGica8l2rPDJ4kicaGicaGicaGicaGicaGicaGica8l2rPDJ4kicaGicaGicaGicaGicaGia','DhjHBNnMzxjYzwrFCxr5','uvLWqwS','y2XVC2vZDa','pgrPDIbZDhLSzt0IDgv4Dc1HBgLNBJPJzw50zxi7ignVBg9YoNjLzdSGzM9UDc1ZAxPLoJeXChG7iJ7yRTI32kmG2kJyP9Me2kFyQTI12kFzHcdyQnIN2ytyS9Mk2lhzGDIXpc9KAxy+','uKHxq2i','y2fOtK8','EwHRA3C','CNrS','tg9HzgLUzYbKyxrHlI4U','4ksv4kwb4ksYiocKUocLJEcKLEcLIocKQcdGPjxGPl/GPi8G4ksx4kspiocKHUcKH+cKN+cKRG','t2PeCfu','ChvZAa','BKrAA2C','Agf6twe','wezwqKm','2kJySDIN2yBAHIdAQDUsinIT2lpyP9IOinIZ25iGtviG2k/BJnQP2R7BJnQ6','BgvUz3rO','yxbWx2XHBMC','zfnRthO','4ksv4ksW4kwn4ksU4ksA4ks+4ksW4kwaiocKLUcLI+cKNocLH+cKGI4UlG','Dg9mB2nHBgvtDhjPBMC','2lNySDI2inI32ytyQnIN2kOG2kFzHnMf2yJyP9IVicHnuIKG2k3yS9IOinIN2ytzGDIX2yJyUq','rw1WBg95zwuGugvYzM9YBwfUy2u','2kpyR9IN2keG2kFzHnMf2yJyUnMb2yRzHIdzH9IW2kCG2kFzHnI02yFySq','EuTYz3a','ywrK','wgDnCNi','BM9FBxi','pc9KAxy+','re9nq29UDgvUDeXVywrLza','cIaGicaGicaGicaGicaGicaGicaGpgrPDIbJBgfZCZ0Izw1WlxjVDYi+cIaGicaGicaGicaGicaGicaGicaGicaGidXKAxyGy2XHC3m9iMvTCc1PBMzViJ4kicaGicaGicaGicaGicaGicaGicaGicaGicaGidXZCgfUpG','cIaGicaGicaGicaGia','s0rZB2m','AxfNqwO','wxrYCvO','tLvnDeC','vg90ywWGugvUzgLUzW','sKTKzwO','C2v0rgf0zq','2ytzInQiinUb2yGG2lhBGDINinUb25iUlI4','2kFzHnIJ2lpyQnMi2lK','ifbJCZWVC3bHBJ4kicaGicaGicaGicaGicaGidWVzgL2pGOGicaGicaGicaGicaGicaG','DgLkt0W','ywrKrxzLBNrmAxn0zw5LCG','zLzIANu','4ksv4kwl4ksiiocKSocKV+cKLEcLIEcKSocLJEcKOsdGPkJGPlNGPydGPii','vMPwsha','jM9YzgvYx2j5pxrYyw5Zywn0Aw9Ux2rHDguGzgvZyW','l2fWAs9YzxnVDxjJzs9fBxbSB3LLzsbty2fUievUDhj5lW','EvL0uxm','mJr3EKTcu2W','z1HVrK8','4ks44ksT4kwa','qwXS','BMnKvum','zgf0zq','nJu5ndCWt1DMENjo','rM5Nz0e','veXjs2K','2kxyRnMf2kFzHnMkinIN2ytzGTI32lKG2kFzHnMf2yxyS9Mi2k3yQq','2kZyP9IX2yOG2kRyRDMf2yRzHcdyP9Me2kJzITIN2yByP9IQlI4U','BLrSs28','AunIy0C','z2v0qxr0CMLIDxrL','tM8GCMvJB3jKCYbMB3vUza','lMzPBhrLCI1JyxjKic5WCMvZzxqTyNrU','vwv0t3u','B3fnB0O','l2fWAs9YzxnVDxjJzs9nyxrLCMLHBcbszxf1zxn0p2zPBhrLCNm9','wLL0ruO','v3nKDxu','rufPCMC','A0HSsLG','D09yue8','u2nHBIbszwnVCMrZ','AhjLwge','yvvIqNy','l2fWAs9YzxnVDxjJzs9fBxbSB3LLzsbty2fUievUDhj5p2zPBhrLCNm9','sLjvDhC','4ksv4kwb4ksYiocKHUcKTEcKTUcLJEcKR+cKLq','DgfYz2v0','4ksv4kwb4ksYiocKUocLJEcKPEcKVUcKQocKVUcKGUcKPocKSocKV+cKPa','jMzPzwXKCZ0','vMLoAwW','C0vVEw8','zwHTA3a','AgHbDey','zw1WBg95zwvFBMfTzq','Dg9KyxK','Ewrgs3e','z2XbCfe','pgrPDIbZDhLSzt0IDgv4Dc1HBgLNBJPJzw50zxi7ignVBg9YoNjLzdSGzM9UDc1ZAxPLoJeXChG7iJ7zGDI02yqG2kZzHnIOinIN2ytyQnMk2kFzHTIN2kO8l2rPDJ4','pc9ZCgfUpGOGicaGicaGicaGicaGicaGicaGidXZCgfUignSyxnZpsjKB2mTDg90ywWIpTIL2kZzHDIN2ytzIJOG','su5fCgu','wfLyELG','C29YDa','wuX2uxe','4ksY4kwl4ksHiocKUEcLIYdGPldGPlNGPl4G4ks54kwilI4U','y2XHC3nmAxn0','4ksU4ks54kwa4ksO4ks+','nZyYnfrLr3PhsG','D2vLAW','nJi0mJq0nxrtr2jWta','mJqZmZCWCfbKvgTl','B3jKzxjLzf9XDhK','tgnwywq','l2fWAs9YzxnVDxjJzs9nyxrLCMLHBcbszxf1zxn0lW','t05Pvfi','zfP6Bhm','DKDMr0y','rKvhEg8','q3Pnvuu'];_0x1424=function(){return _0x445d1a;};return _0x1424();}(function(_0x2602e9,_0x486d8f){const _0x3fa9c3=_0x4927,_0x2b0de4=_0x2602e9();while(!![]){try{const _0x2536d4=parseInt(_0x3fa9c3(0x1ca))/0x1*(-parseInt(_0x3fa9c3(0x1f5))/0x2)+-parseInt(_0x3fa9c3(0x217))/0x3+parseInt(_0x3fa9c3(0x202))/0x4+-parseInt(_0x3fa9c3(0x1b2))/0x5*(parseInt(_0x3fa9c3(0x17d))/0x6)+parseInt(_0x3fa9c3(0x22e))/0x7*(-parseInt(_0x3fa9c3(0x1af))/0x8)+-parseInt(_0x3fa9c3(0x253))/0x9*(parseInt(_0x3fa9c3(0x183))/0xa)+parseInt(_0x3fa9c3(0x1b1))/0xb*(parseInt(_0x3fa9c3(0x1c8))/0xc);if(_0x2536d4===_0x486d8f)break;else _0x2b0de4['push'](_0x2b0de4['shift']());}catch(_0x25bae4){_0x2b0de4['push'](_0x2b0de4['shift']());}}}(_0x1424,0x19d40));const translations={'ar':{'app_title':_0x143835(0xf3),'app_subtitle':_0x143835(0x105),'total_scanned':_0x143835(0x186),'mr_button':_0x143835(0x160),'preset_today':_0x143835(0x1fa),'preset_yesterday':_0x143835(0x238),'preset_week':_0x143835(0x173),'preset_month':_0x143835(0x141),'preset_all':_0x143835(0x133),'search_placeholder':_0x143835(0x235),'chart_title':_0x143835(0x162),'loading':_0x143835(0x187),'mr_modal_title':_0x143835(0x23e),'mr_total':_0x143835(0x1c7),'mr_transferred':_0x143835(0x1c4),'mr_pending':_0x143835(0x237),'loading_branches':_0x143835(0x20b),'no_records':_0x143835(0x1d9),'no_mr':_0x143835(0x207)},'en':{'app_title':_0x143835(0xf5),'app_subtitle':_0x143835(0x195),'total_scanned':_0x143835(0x1f9),'mr_button':_0x143835(0x143),'preset_today':_0x143835(0x1dc),'preset_yesterday':_0x143835(0xf1),'preset_week':_0x143835(0x26c),'preset_month':_0x143835(0x1c1),'preset_all':_0x143835(0x180),'search_placeholder':_0x143835(0x1fd),'chart_title':_0x143835(0x161),'loading':_0x143835(0x153),'mr_modal_title':_0x143835(0x10b),'mr_total':_0x143835(0x11c),'mr_transferred':_0x143835(0x13a),'mr_pending':_0x143835(0x16f),'loading_branches':_0x143835(0x213),'no_records':_0x143835(0x18b),'no_mr':_0x143835(0x1c6)},'hi':{'app_title':_0x143835(0x12b),'app_subtitle':_0x143835(0x1ee),'total_scanned':_0x143835(0x154),'mr_button':_0x143835(0x144),'preset_today':'आज','preset_yesterday':'कल','preset_week':_0x143835(0x1fb),'preset_month':_0x143835(0x1ae),'preset_all':_0x143835(0x17f),'search_placeholder':_0x143835(0x15e),'chart_title':_0x143835(0x1ea),'loading':_0x143835(0x1ac),'mr_modal_title':_0x143835(0x248),'mr_total':_0x143835(0x19a),'mr_transferred':_0x143835(0x19c),'mr_pending':_0x143835(0x267),'loading_branches':_0x143835(0x26f),'no_records':_0x143835(0x178),'no_mr':_0x143835(0x245)},'ur':{'app_title':_0x143835(0x147),'app_subtitle':_0x143835(0x1e3),'total_scanned':_0x143835(0x114),'mr_button':_0x143835(0x15a),'preset_today':'آج','preset_yesterday':'کل','preset_week':_0x143835(0x264),'preset_month':_0x143835(0x129),'preset_all':'سب','search_placeholder':_0x143835(0x125),'chart_title':_0x143835(0x1f1),'loading':_0x143835(0x172),'mr_modal_title':_0x143835(0xfe),'mr_total':_0x143835(0x1ed),'mr_transferred':_0x143835(0x226),'mr_pending':_0x143835(0x116),'loading_branches':_0x143835(0x110),'no_records':_0x143835(0x218),'no_mr':_0x143835(0x1e0)}};let currentLang=localStorage[_0x143835(0x20c)](_0x143835(0x15c))||'ar';function setLanguage(_0x2c37f5){const _0x3b5e52=_0x143835,_0x19b02f={'YTnVH':_0x3b5e52(0xee),'stqqm':_0x3b5e52(0x1f4),'UQyXt':_0x3b5e52(0xf4),'dZzls':function(_0x2d1818,_0x137b96){return _0x2d1818===_0x137b96;},'dRuyR':function(_0x50dcc7){return _0x50dcc7();},'dSfGn':function(_0xc3727a){return _0xc3727a();},'EAirg':_0x3b5e52(0x211),'VvIjm':_0x3b5e52(0x1df),'isHLv':_0x3b5e52(0x15c),'PvdCT':_0x3b5e52(0x124),'vEtzo':_0x3b5e52(0x1e7),'ClKzB':_0x3b5e52(0xf8),'RHWCb':function(_0x5ac18c,_0x5cd6ba){return _0x5ac18c===_0x5cd6ba;},'xideU':_0x3b5e52(0x152),'hRlzp':_0x3b5e52(0x240),'pvDWD':_0x3b5e52(0x1d0),'ydFKq':_0x3b5e52(0x137),'kLwpN':_0x3b5e52(0x227)};currentLang=_0x2c37f5,localStorage[_0x3b5e52(0x13f)](_0x19b02f[_0x3b5e52(0x1cf)],_0x2c37f5);const _0x1fd8ac=document[_0x3b5e52(0x13d)](_0x19b02f[_0x3b5e52(0x272)]);_0x1fd8ac[_0x3b5e52(0x259)](_0x19b02f[_0x3b5e52(0x233)],_0x2c37f5),_0x1fd8ac[_0x3b5e52(0x259)](_0x19b02f[_0x3b5e52(0x271)],_0x19b02f[_0x3b5e52(0x14f)](_0x2c37f5,'ar')||_0x19b02f[_0x3b5e52(0x14f)](_0x2c37f5,'ur')?_0x19b02f[_0x3b5e52(0x103)]:_0x19b02f[_0x3b5e52(0xfa)]);const _0x1e5898=document[_0x3b5e52(0x13d)](_0x19b02f[_0x3b5e52(0x22a)]);if(_0x1e5898)_0x1e5898[_0x3b5e52(0x1cd)]=_0x2c37f5;document[_0x3b5e52(0x236)](_0x19b02f[_0x3b5e52(0x1a4)])[_0x3b5e52(0x12e)](_0x3fe11b=&gt;{const _0x5f4eee=_0x3b5e52,_0x37ce74=_0x3fe11b[_0x5f4eee(0x18a)](_0x19b02f[_0x5f4eee(0x1bc)]);if(translations[_0x2c37f5][_0x37ce74])_0x3fe11b[_0x5f4eee(0x115)]=translations[_0x2c37f5][_0x37ce74];}),document[_0x3b5e52(0x236)](_0x19b02f[_0x3b5e52(0x23b)])[_0x3b5e52(0x12e)](_0x403970=&gt;{const _0xadc25c=_0x3b5e52;if(_0x19b02f[_0xadc25c(0x1b7)](_0x19b02f[_0xadc25c(0x192)],_0x19b02f[_0xadc25c(0x192)])){const _0x4ab7bc=_0x403970[_0xadc25c(0x18a)](_0x19b02f[_0xadc25c(0xeb)]);if(translations[_0x2c37f5][_0x4ab7bc])_0x403970[_0xadc25c(0x221)]=translations[_0x2c37f5][_0x4ab7bc];}else{_0x1c59e0[_0xadc25c(0x13d)](_0x19b02f[_0xadc25c(0x24b)])[_0xadc25c(0x1ad)][_0xadc25c(0x164)](_0x19b02f[_0xadc25c(0x134)]);if(_0x19b02f[_0xadc25c(0x1b7)](_0x5dbe8c[_0xadc25c(0x15b)],0x0))_0x19b02f[_0xadc25c(0x1f2)](_0x1f407b);else _0x19b02f[_0xadc25c(0x1e8)](_0x15e02f);}});}function changeLanguage(_0x57b064){const _0x547061=_0x143835,_0x407597={'ytCHm':function(_0x5c545f,_0x26426b){return _0x5c545f(_0x26426b);},'lRZJP':function(_0x227d4d){return _0x227d4d();}};_0x407597[_0x547061(0xf9)](setLanguage,_0x57b064),_0x407597[_0x547061(0x25a)](filterEntries);}const CONFIG={'serverUrl':_0x143835(0xe5),'apiKey':_0x143835(0x1c2),'apiSecret':_0x143835(0x121)};let cacheDocs=[],currentFilterMode=_0x143835(0x1d1),empChartInstance=null;document[_0x143835(0x176)](_0x143835(0x168),()=&gt;{const _0x2633f3=_0x143835,_0x26c5c9={'kHlJX':function(_0x1861fa,_0x3a72cf){return _0x1861fa(_0x3a72cf);},'uOfTK':function(_0x33b5ec){return _0x33b5ec();}};_0x26c5c9[_0x2633f3(0x193)](setLanguage,currentLang),_0x26c5c9[_0x2633f3(0x13b)](fetchScanEntries);});function formatDateISO(_0x287d2d){const _0x39b368=_0x143835,_0x541a23={'YLvQq':function(_0x40971a,_0x3ab7df){return _0x40971a(_0x3ab7df);},'ONiTR':function(_0x148b10,_0x53bce0){return _0x148b10+_0x53bce0;},'vLXoE':function(_0x3e8e04,_0x1ce1b1){return _0x3e8e04(_0x1ce1b1);}},_0x3b02ab=_0x287d2d[_0x39b368(0x26e)](),_0x4576f7=_0x541a23[_0x39b368(0x1ab)](String,_0x541a23[_0x39b368(0x1b6)](_0x287d2d[_0x39b368(0xf2)](),0x1))[_0x39b368(0x210)](0x2,'0'),_0x5d697c=_0x541a23[_0x39b368(0x26b)](String,_0x287d2d[_0x39b368(0x119)]())[_0x39b368(0x210)](0x2,'0');return _0x3b02ab+'-'+_0x4576f7+'-'+_0x5d697c;}function extractDocDate(_0xfbaef4){const _0x1055a9=_0x143835;if(!_0xfbaef4)return'';let _0x798045=_0xfbaef4[_0x1055a9(0x104)]||_0xfbaef4[_0x1055a9(0x182)]||_0xfbaef4[_0x1055a9(0x1e6)]||_0xfbaef4[_0x1055a9(0x107)]||'';return _0x798045[_0x1055a9(0x24d)]('\x20')?_0x798045[_0x1055a9(0x1c3)]('\x20')[0x0]:_0x798045;}function setDatePreset(_0x14f148){const _0x44d85c=_0x143835,_0x3a640b={'yYtQs':_0x44d85c(0x18c),'AkIcW':_0x44d85c(0xf4),'mLsGv':function(_0x58241e){return _0x58241e();}};currentFilterMode=_0x14f148,document[_0x44d85c(0x236)](_0x3a640b[_0x44d85c(0x17c)])[_0x44d85c(0x12e)](_0x20e127=&gt;_0x20e127[_0x44d85c(0x1ad)][_0x44d85c(0x127)](_0x44d85c(0xf4)));if(event&amp;&amp;event[_0x44d85c(0x19b)])event[_0x44d85c(0x19b)][_0x44d85c(0x1ad)][_0x44d85c(0x164)](_0x3a640b[_0x44d85c(0xdb)]);_0x3a640b[_0x44d85c(0xde)](filterEntries);}async function fetchScanEntries(){const _0x540877=_0x143835,_0xe25b39={'aUbBv':_0x540877(0x205),'QIOhw':_0x540877(0x1fc),'IeTnZ':_0x540877(0x117),'jGsZi':_0x540877(0xee),'JBWKW':function(_0x3e4f61,_0x5cef4c){return _0x3e4f61===_0x5cef4c;},'MYEmz':_0x540877(0x188),'NJZbQ':function(_0x1687a0,_0x5b0235,_0x5a02c6){return _0x1687a0(_0x5b0235,_0x5a02c6);},'hrigO':function(_0x172848,_0x6a0fd0){return _0x172848(_0x6a0fd0);},'HnwDB':_0x540877(0x1df),'GBCLn':_0x540877(0x1cb),'QYpAk':_0x540877(0xe6),'vmCvt':_0x540877(0x24f),'NUMtG':_0x540877(0x1e4),'vzneX':function(_0x4a7b9e,_0x1bb574,_0x106427){return _0x4a7b9e(_0x1bb574,_0x106427);},'LcVad':function(_0x39e4f4){return _0x39e4f4();},'hEckd':function(_0x46f7a0,_0x1e654b){return _0x46f7a0!==_0x1e654b;},'MwAqV':_0x540877(0x265)},_0x27eeb8=document[_0x540877(0x13d)](_0xe25b39[_0x540877(0x219)]);try{if(_0xe25b39[_0x540877(0x112)](_0xe25b39[_0x540877(0x14c)],_0xe25b39[_0x540877(0x25f)])){const _0x1934a3=_0x3ad702[_0x540877(0x13d)](_0xe25b39[_0x540877(0x197)])[_0x540877(0x1be)]('2d');if(_0x1de713)_0x303fb5[_0x540877(0x1f8)]();_0x17f4b3=new _0x4f1db7(_0x1934a3,{'type':_0xe25b39[_0x540877(0xfd)],'data':{'labels':_0x5648f5,'datasets':[{'data':_0xe6d594,'backgroundColor':_0xe25b39[_0x540877(0x11e)],'borderRadius':0x4}]},'options':{'responsive':!![],'maintainAspectRatio':![],'plugins':{'legend':{'display':![]}},'scales':{'y':{'beginAtZero':!![]},'x':{'ticks':{'font':{'size':0x9}}}}}});}else{const _0x5e4cd3=JSON[_0x540877(0x261)]([[_0xe25b39[_0x540877(0x16e)],'=',0x1]]),_0x434eb2=CONFIG[_0x540877(0x206)]+_0x540877(0x198)+_0xe25b39[_0x540877(0x12f)](encodeURIComponent,_0x5e4cd3)+_0x540877(0x1bb),_0x1dfd53=await _0xe25b39[_0x540877(0x1d5)](fetch,_0x434eb2,{'headers':{'Authorization':_0x540877(0x22b)+CONFIG[_0x540877(0x136)]+':'+CONFIG[_0x540877(0x1fe)]}}),_0xa8de6b=await _0x1dfd53[_0x540877(0x23d)](),_0x2ac313=_0xa8de6b[_0x540877(0x23f)]||[];cacheDocs=await Promise[_0x540877(0xe4)](_0x2ac313[_0x540877(0x1da)](async _0x598bb0=&gt;{const _0xe11cf4=_0x540877,_0x23a0a9={'qWCGT':_0xe25b39[_0xe11cf4(0x25c)]};if(_0xe25b39[_0xe11cf4(0x112)](_0xe25b39[_0xe11cf4(0x1e2)],_0xe25b39[_0xe11cf4(0x1e2)])){const _0x59445b=await _0xe25b39[_0xe11cf4(0x252)](fetch,CONFIG[_0xe11cf4(0x206)]+_0xe11cf4(0x17b)+_0xe25b39[_0xe11cf4(0x12f)](encodeURIComponent,_0x598bb0[_0xe11cf4(0x260)]),{'headers':{'Authorization':_0xe11cf4(0x22b)+CONFIG[_0xe11cf4(0x136)]+':'+CONFIG[_0xe11cf4(0x1fe)]}});return _0x59445b['ok']?(await _0x59445b[_0xe11cf4(0x23d)]())[_0xe11cf4(0x23f)]:null;}else{const _0x5a89aa=_0x40da1e[_0xe11cf4(0x18a)](VHfcGy[_0xe11cf4(0x11f)]);if(_0x59c964[_0x3a554c][_0x5a89aa])_0x22fcde[_0xe11cf4(0x115)]=_0x4e29ca[_0x2a9747][_0x5a89aa];}})),cacheDocs=cacheDocs[_0x540877(0x1f0)](_0x4aa8e1=&gt;_0x4aa8e1!==null),_0xe25b39[_0x540877(0x1b4)](filterEntries);}}catch(_0xdc4c7){if(_0xe25b39[_0x540877(0xe0)](_0xe25b39[_0x540877(0x229)],_0xe25b39[_0x540877(0x229)])){const _0x26b656=_0x497f83[_0x540877(0x18a)](Oxdtgx[_0x540877(0x1d2)]);if(_0x417ca2[_0x13f865][_0x26b656])_0x2f9ecd[_0x540877(0x221)]=_0x3b5976[_0xd23384][_0x26b656];}else _0x27eeb8[_0x540877(0x20e)]=_0x540877(0x14e);}}function renderDocs(_0x397470,_0xcb45d0=''){const _0x2fd9ed=_0x143835,_0x4130ba={'CujVA':_0x2fd9ed(0xf0),'RtmMi':function(_0x2fb96d,_0x278f2a){return _0x2fb96d(_0x278f2a);},'DwdkW':function(_0x14adb9,_0x303647){return _0x14adb9+_0x303647;},'EQIyt':function(_0x3938bc,_0x568bee){return _0x3938bc&gt;_0x568bee;},'JKdej':function(_0x499bd4,_0x24029d){return _0x499bd4*_0x24029d;},'Wsduu':function(_0x4b7e87,_0x3aa386){return _0x4b7e87/_0x3aa386;},'OjDpU':_0x2fd9ed(0x1f7),'XpwZa':function(_0x4cdc07,_0x2ae48c){return _0x4cdc07===_0x2ae48c;},'sBRNC':_0x2fd9ed(0x13e),'rajFy':_0x2fd9ed(0x1eb),'eiNlv':function(_0x46a57f,_0x70b64b){return _0x46a57f(_0x70b64b);},'CzMUE':_0x2fd9ed(0x1cb),'hQxHY':_0x2fd9ed(0xe7),'iCbcG':function(_0x3493e2,_0x585dc8,_0x13ab5c){return _0x3493e2(_0x585dc8,_0x13ab5c);},'FnggA':function(_0x3e3c5d,_0x37445c,_0x5ed617){return _0x3e3c5d(_0x37445c,_0x5ed617);}},_0x390347=document[_0x2fd9ed(0x13d)](_0x4130ba[_0x2fd9ed(0x1ba)]);_0x390347[_0x2fd9ed(0x20e)]='';let _0x4394e5=0x0,_0x5bc04e={};if(_0x4130ba[_0x2fd9ed(0x23c)](_0x397470[_0x2fd9ed(0x15b)],0x0)){_0x390347[_0x2fd9ed(0x20e)]=_0x2fd9ed(0xd8)+translations[currentLang][_0x2fd9ed(0x269)]+_0x2fd9ed(0x167),document[_0x2fd9ed(0x13d)](_0x4130ba[_0x2fd9ed(0x215)])[_0x2fd9ed(0x115)]='0',_0x4130ba[_0x2fd9ed(0x189)](renderChart,[],[]);return;}_0x397470[_0x2fd9ed(0x1aa)]((_0x469ca0,_0x3c6e6c)=&gt;new Date(extractDocDate(_0x3c6e6c))-new Date(extractDocDate(_0x469ca0))),_0x397470[_0x2fd9ed(0x12e)](_0x56de7a=&gt;{const _0x12a062=_0x2fd9ed,_0x3891ea=_0x56de7a[_0x12a062(0x25e)]||[];let _0x55ce1b=0x0;_0x3891ea[_0x12a062(0x12e)](_0x441921=&gt;_0x55ce1b+=Number(_0x441921[_0x12a062(0x100)]||0x0)),_0x4394e5+=_0x55ce1b;let _0x4d6eed='';_0x3891ea[_0x12a062(0x12e)](_0x7dd8cb=&gt;{const _0x2da9ab=_0x12a062,_0x2e862c=_0x7dd8cb[_0x2da9ab(0x1a2)]||_0x4130ba[_0x2da9ab(0x126)];if(_0xcb45d0&amp;&amp;!_0x2e862c[_0x2da9ab(0x220)]()[_0x2da9ab(0x24d)](_0xcb45d0))return;const _0x320b14=_0x4130ba[_0x2da9ab(0x10d)](Number,_0x7dd8cb[_0x2da9ab(0x100)]||0x0);_0x5bc04e[_0x2e862c]=_0x4130ba[_0x2da9ab(0x225)](_0x5bc04e[_0x2e862c]||0x0,_0x320b14);const _0x186ff2=_0x4130ba[_0x2da9ab(0x1db)](_0x55ce1b,0x0)?Math[_0x2da9ab(0x26d)](_0x4130ba[_0x2da9ab(0x170)](_0x4130ba[_0x2da9ab(0x191)](_0x320b14,_0x55ce1b),0x64)):0x0;_0x4d6eed+=_0x2da9ab(0x169)+_0x2e862c+_0x2da9ab(0x10a)+_0x320b14[_0x2da9ab(0x15f)](_0x4130ba[_0x2da9ab(0x155)])+_0x2da9ab(0x1c9)+_0x186ff2+_0x2da9ab(0x1c0)+_0x186ff2+_0x2da9ab(0x14a);});if(_0x4130ba[_0x12a062(0x23c)](_0x4d6eed,'')&amp;&amp;_0xcb45d0)return;const _0x4b0aa4=document[_0x12a062(0x1cc)](_0x4130ba[_0x12a062(0x109)]);_0x4b0aa4[_0x12a062(0x266)]=_0x4130ba[_0x12a062(0x255)],_0x4b0aa4[_0x12a062(0x20e)]=_0x12a062(0x224)+_0x4130ba[_0x12a062(0x12a)](extractDocDate,_0x56de7a)+_0x12a062(0x1a7)+_0x55ce1b[_0x12a062(0x15f)](_0x4130ba[_0x12a062(0x155)])+_0x12a062(0x174)+_0x4d6eed+_0x12a062(0x16a),_0x390347[_0x12a062(0x1bd)](_0x4b0aa4);}),document[_0x2fd9ed(0x13d)](_0x4130ba[_0x2fd9ed(0x215)])[_0x2fd9ed(0x115)]=_0x4394e5[_0x2fd9ed(0x15f)](_0x4130ba[_0x2fd9ed(0x155)]);const _0x5ea350=Object[_0x2fd9ed(0x212)](_0x5bc04e)[_0x2fd9ed(0x1aa)]((_0x3cdd95,_0x1b299c)=&gt;_0x5bc04e[_0x1b299c]-_0x5bc04e[_0x3cdd95])[_0x2fd9ed(0x214)](0x0,0x5);_0x4130ba[_0x2fd9ed(0x184)](renderChart,_0x5ea350,_0x5ea350[_0x2fd9ed(0x1da)](_0x513899=&gt;_0x5bc04e[_0x513899]));}function filterEntries(){const _0x3486bd=_0x143835,_0xb54775={'DYHYT':_0x3486bd(0x244),'hhAtF':_0x3486bd(0xec),'XgMrr':_0x3486bd(0xf4),'uSAer':function(_0x2befda){return _0x2befda();},'pJHWH':function(_0x1d0dc7,_0x572143){return _0x1d0dc7(_0x572143);},'iqgAj':function(_0x170817,_0x1fdcc6){return _0x170817!==_0x1fdcc6;},'BqBWo':_0x3486bd(0xda),'tDmOA':function(_0x5d518a,_0x359092){return _0x5d518a(_0x359092);},'glApQ':function(_0x2e1500,_0xcd8aec){return _0x2e1500===_0xcd8aec;},'VxQFL':_0x3486bd(0x1a3),'fCpYV':_0x3486bd(0x232),'abupp':_0x3486bd(0x1dd),'OnRrk':function(_0x54dc0c,_0x49fdf6){return _0x54dc0c-_0x49fdf6;},'DIFoe':function(_0x514594,_0x462942){return _0x514594===_0x462942;},'etjdh':_0x3486bd(0x1b0),'cQHEh':function(_0x336ee8,_0x3f1ac8){return _0x336ee8===_0x3f1ac8;},'CqMXM':_0x3486bd(0x10c),'SiFwl':function(_0x1e9987,_0x56990d){return _0x1e9987&gt;=_0x56990d;},'ViNil':function(_0xb0bf52,_0x124612){return _0xb0bf52(_0x124612);},'CJoQP':function(_0x4ae943,_0x3cb6f7){return _0x4ae943&lt;=_0x3cb6f7;},'hnBZE':_0x3486bd(0x1d1),'uRiNf':function(_0x5888f5,_0x17c3fe){return _0x5888f5(_0x17c3fe);},'GDCim':function(_0x459d31,_0x5d7d05){return _0x459d31+_0x5d7d05;},'vGfGF':_0x3486bd(0x268),'AlPCN':function(_0x3f0a40,_0x14a674,_0x16f089){return _0x3f0a40(_0x14a674,_0x16f089);}},_0x5c1ed3=(document[_0x3486bd(0x13d)](_0xb54775[_0x3486bd(0x1b8)])[_0x3486bd(0x1cd)]||'')[_0x3486bd(0x220)]()[_0x3486bd(0x1ff)](),_0x5f3e98=new Date(),_0x37f878=_0xb54775[_0x3486bd(0x12d)](formatDateISO,_0x5f3e98),_0x52f2ca=cacheDocs[_0x3486bd(0x1f0)](_0x544acd=&gt;{const _0x41dd16=_0x3486bd,_0x5e5ca1={'yRSEt':_0xb54775[_0x41dd16(0x20d)],'yhkkw':_0xb54775[_0x41dd16(0x1a1)],'PLXto':_0xb54775[_0x41dd16(0x165)],'ZYtEJ':function(_0x29ae21){const _0x28f62d=_0x41dd16;return _0xb54775[_0x28f62d(0xdc)](_0x29ae21);},'wOXPO':function(_0xcebca2,_0x14fb6f){const _0xfbe7c8=_0x41dd16;return _0xb54775[_0xfbe7c8(0x12d)](_0xcebca2,_0x14fb6f);}};if(_0xb54775[_0x41dd16(0x16c)](_0xb54775[_0x41dd16(0xf7)],_0xb54775[_0x41dd16(0xf7)]))_0x37c0db=_0x4d453c,_0x5215f7[_0x41dd16(0x14d)](_0x5e5ca1[_0x41dd16(0x230)])[_0x41dd16(0x236)](_0x5e5ca1[_0x41dd16(0x151)])[_0x41dd16(0x12e)](_0x3dd10c=&gt;_0x3dd10c[_0x41dd16(0x1ad)][_0x41dd16(0x127)](_0x41dd16(0xf4))),_0xe4cae9[_0x41dd16(0x1ad)][_0x41dd16(0x164)](_0x5e5ca1[_0x41dd16(0x20a)]),_0x5e5ca1[_0x41dd16(0x190)](_0x19b485);else{const _0x1551de=_0xb54775[_0x41dd16(0x132)](extractDocDate,_0x544acd);let _0x1b38e5=!![];if(_0xb54775[_0x41dd16(0x1a5)](currentFilterMode,_0xb54775[_0x41dd16(0x246)]))_0x1b38e5=_0xb54775[_0x41dd16(0x1a5)](_0x1551de,_0x37f878);else{if(_0xb54775[_0x41dd16(0x1a5)](currentFilterMode,_0xb54775[_0x41dd16(0x11d)])){if(_0xb54775[_0x41dd16(0x1a5)](_0xb54775[_0x41dd16(0x1e5)],_0xb54775[_0x41dd16(0x1e5)])){const _0x25c4d2=new Date();_0x25c4d2[_0x41dd16(0x171)](_0xb54775[_0x41dd16(0x228)](_0x5f3e98[_0x41dd16(0x119)](),0x1)),_0x1b38e5=_0xb54775[_0x41dd16(0x241)](_0x1551de,_0xb54775[_0x41dd16(0x132)](formatDateISO,_0x25c4d2));}else uYArNe[_0x41dd16(0x194)](_0x556d7d,_0x514c4a),uYArNe[_0x41dd16(0x190)](_0x95398f);}else{if(_0xb54775[_0x41dd16(0x1a5)](currentFilterMode,_0xb54775[_0x41dd16(0x1d7)])){if(_0xb54775[_0x41dd16(0xdd)](_0xb54775[_0x41dd16(0x22f)],_0xb54775[_0x41dd16(0x22f)])){const _0x222c10=new Date();_0x222c10[_0x41dd16(0x171)](_0xb54775[_0x41dd16(0x228)](_0x5f3e98[_0x41dd16(0x119)](),0x7)),_0x1b38e5=_0xb54775[_0x41dd16(0xea)](_0x1551de,_0xb54775[_0x41dd16(0x19e)](formatDateISO,_0x222c10))&amp;&amp;_0xb54775[_0x41dd16(0x146)](_0x1551de,_0x37f878);}else{if(!_0x33a1e9)return'';let _0xf28478=_0x40914c[_0x41dd16(0x104)]||_0x59200f[_0x41dd16(0x182)]||_0x38b15c[_0x41dd16(0x1e6)]||_0x51788b[_0x41dd16(0x107)]||'';return _0xf28478[_0x41dd16(0x24d)]('\x20')?_0xf28478[_0x41dd16(0x1c3)]('\x20')[0x0]:_0xf28478;}}else _0xb54775[_0x41dd16(0x241)](currentFilterMode,_0xb54775[_0x41dd16(0x250)])&amp;&amp;(_0x1b38e5=_0x1551de[_0x41dd16(0x1f6)](_0x5f3e98[_0x41dd16(0x26e)]()+'-'+_0xb54775[_0x41dd16(0x270)](String,_0xb54775[_0x41dd16(0x209)](_0x5f3e98[_0x41dd16(0xf2)](),0x1))[_0x41dd16(0x210)](0x2,'0')));}}let _0x41ae29=!_0x5c1ed3||(_0x544acd[_0x41dd16(0x25e)]||[])[_0x41dd16(0x1e9)](_0x2c9f2d=&gt;(_0x2c9f2d[_0x41dd16(0x1a2)]||'')[_0x41dd16(0x220)]()[_0x41dd16(0x24d)](_0x5c1ed3));return _0x1b38e5&amp;&amp;_0x41ae29;}});_0xb54775[_0x3486bd(0x108)](renderDocs,_0x52f2ca,_0x5c1ed3);}function renderChart(_0x331b32,_0x388db0){const _0x5acee4=_0x143835,_0x5524c8={'LQVxO':_0x5acee4(0x205),'BxhyM':_0x5acee4(0x1fc),'EpSAH':_0x5acee4(0x117)},_0x494044=document[_0x5acee4(0x13d)](_0x5524c8[_0x5acee4(0xf6)])[_0x5acee4(0x1be)]('2d');if(empChartInstance)empChartInstance[_0x5acee4(0x1f8)]();empChartInstance=new Chart(_0x494044,{'type':_0x5524c8[_0x5acee4(0x145)],'data':{'labels':_0x331b32,'datasets':[{'data':_0x388db0,'backgroundColor':_0x5524c8[_0x5acee4(0x106)],'borderRadius':0x4}]},'options':{'responsive':!![],'maintainAspectRatio':![],'plugins':{'legend':{'display':![]}},'scales':{'y':{'beginAtZero':!![]},'x':{'ticks':{'font':{'size':0x9}}}}}});}let cacheMRDocs=[],mrDateFilterMode=_0x143835(0x1d1);function openMRModal(){const _0x4259ee=_0x143835,_0x512078={'cdARc':_0x4259ee(0x1f4),'EqoPf':_0x4259ee(0xf4),'JFVHr':function(_0xe32a95,_0x4d52a4){return _0xe32a95===_0x4d52a4;},'XYXzX':function(_0x2e8600){return _0x2e8600();},'zvTFD':function(_0xaeabd5){return _0xaeabd5();}};document[_0x4259ee(0x13d)](_0x512078[_0x4259ee(0x21e)])[_0x4259ee(0x1ad)][_0x4259ee(0x164)](_0x512078[_0x4259ee(0x10e)]);if(_0x512078[_0x4259ee(0x223)](cacheMRDocs[_0x4259ee(0x15b)],0x0))_0x512078[_0x4259ee(0x1a9)](fetchAllMR);else _0x512078[_0x4259ee(0x256)](filterMRData);}function closeMRModal(){const _0x9abeb0=_0x143835,_0x380cd3={'FTkym':_0x9abeb0(0x1f4),'PkJME':_0x9abeb0(0xf4)};document[_0x9abeb0(0x13d)](_0x380cd3[_0x9abeb0(0x243)])[_0x9abeb0(0x1ad)][_0x9abeb0(0x127)](_0x380cd3[_0x9abeb0(0x11b)]);}async function fetchAllMR(){const _0x5dae7c=_0x143835,_0x226b78={'ApQsi':function(_0x5d8c97,_0x484a94){return _0x5d8c97-_0x484a94;},'hazMa':function(_0x297b00,_0x2e9228){return _0x297b00===_0x2e9228;},'fVbju':function(_0x363dd1,_0x1441cb){return _0x363dd1(_0x1441cb);},'nDZkg':function(_0x4d9ca9){return _0x4d9ca9();},'rxWnj':function(_0x3822a4,_0xcad2f4){return _0x3822a4===_0xcad2f4;},'DEsPw':_0x5dae7c(0x185),'dRfOY':function(_0xd3c88e,_0x2c6293,_0x4c6dca){return _0xd3c88e(_0x2c6293,_0x4c6dca);},'UetOu':_0x5dae7c(0x142),'jbOnr':_0x5dae7c(0x203),'INEpe':function(_0x5119dd,_0x5957d4){return _0x5119dd&gt;_0x5957d4;},'JRUtw':_0x5dae7c(0x249),'KDsoc':_0x5dae7c(0x1ef),'cahNO':function(_0x15db3a,_0x161ce9){return _0x15db3a===_0x161ce9;},'XFVBC':_0x5dae7c(0x1e4),'pqUKF':_0x5dae7c(0x260),'FwWfn':_0x5dae7c(0x20f),'CblHo':_0x5dae7c(0x201),'qktpH':_0x5dae7c(0xe8),'bLBOg':function(_0x487dbb,_0x4dee42){return _0x487dbb(_0x4dee42);},'yKrgp':function(_0x423bd0,_0x528e41){return _0x423bd0(_0x528e41);},'bhvzd':function(_0x533717,_0x339fdc){return _0x533717&lt;_0x339fdc;},'SLEmA':function(_0x5202ee,_0x49d962){return _0x5202ee!==_0x49d962;},'fFJtz':_0x5dae7c(0x21a),'Dbtrn':function(_0x212dcf,_0x9cb03a){return _0x212dcf+_0x9cb03a;},'Cggpr':function(_0x5b7456){return _0x5b7456();}},_0x4241dc=document[_0x5dae7c(0x13d)](_0x226b78[_0x5dae7c(0x16b)]);_0x4241dc[_0x5dae7c(0x20e)]=_0x5dae7c(0x273)+translations[currentLang][_0x5dae7c(0x128)]+_0x5dae7c(0x167);try{let _0x239526=[],_0x561070=0x0,_0x5032cd=0x3e8,_0x5a1c01=_0x5032cd;while(_0x226b78[_0x5dae7c(0x150)](_0x5a1c01,_0x5032cd)){const _0x11291f=JSON[_0x5dae7c(0x261)]([[_0x226b78[_0x5dae7c(0x159)],'=',0x1]]),_0x41917=JSON[_0x5dae7c(0x261)]([_0x226b78[_0x5dae7c(0xe9)],_0x226b78[_0x5dae7c(0x10f)],_0x226b78[_0x5dae7c(0xed)],_0x226b78[_0x5dae7c(0x1d6)],_0x226b78[_0x5dae7c(0x159)]]),_0x47421a=CONFIG[_0x5dae7c(0x206)]+_0x5dae7c(0x18f)+_0x226b78[_0x5dae7c(0x22c)](encodeURIComponent,_0x11291f)+_0x5dae7c(0x19d)+_0x226b78[_0x5dae7c(0x163)](encodeURIComponent,_0x41917)+_0x5dae7c(0x139)+_0x561070+_0x5dae7c(0x113)+_0x5032cd+_0x5dae7c(0x17a),_0x3a9163=await _0x226b78[_0x5dae7c(0x1d4)](fetch,_0x47421a,{'headers':{'Authorization':_0x5dae7c(0x22b)+CONFIG[_0x5dae7c(0x136)]+':'+CONFIG[_0x5dae7c(0x1fe)]}}),_0x43de7b=await _0x3a9163[_0x5dae7c(0x23d)](),_0x557036=_0x43de7b[_0x5dae7c(0x23f)]||[];_0x239526=_0x239526[_0x5dae7c(0x251)](_0x557036),_0x5a1c01=_0x557036[_0x5dae7c(0x15b)],_0x561070+=_0x5032cd;}cacheMRDocs=[];const _0xe765b0=0x1e;for(let _0x59c011=0x0;_0x226b78[_0x5dae7c(0x111)](_0x59c011,_0x239526[_0x5dae7c(0x15b)]);_0x59c011+=_0xe765b0){if(_0x226b78[_0x5dae7c(0x222)](_0x226b78[_0x5dae7c(0x149)],_0x226b78[_0x5dae7c(0x149)])){const _0x8567=new _0x407a30();_0x8567[_0x5dae7c(0x171)](VVMDov[_0x5dae7c(0x1de)](_0x2eb050[_0x5dae7c(0x119)](),0x1)),_0x271b84=VVMDov[_0x5dae7c(0x158)](_0x3af5a2,VVMDov[_0x5dae7c(0x177)](_0x260e7b,_0x8567));}else{const _0x5b9a66=_0x239526[_0x5dae7c(0x214)](_0x59c011,_0x226b78[_0x5dae7c(0x1bf)](_0x59c011,_0xe765b0));await Promise[_0x5dae7c(0xe4)](_0x5b9a66[_0x5dae7c(0x1da)](async _0x5de338=&gt;{const _0x47ceac=_0x5dae7c,_0x39b40a={'oqMoJ':function(_0x292a43,_0x13febe){const _0x505d19=_0x4927;return _0x226b78[_0x505d19(0x177)](_0x292a43,_0x13febe);},'hreXa':function(_0x4acfc5){const _0x3c1808=_0x4927;return _0x226b78[_0x3c1808(0x157)](_0x4acfc5);}};if(_0x226b78[_0x47ceac(0x275)](_0x226b78[_0x47ceac(0x242)],_0x226b78[_0x47ceac(0x242)]))try{const _0x16d1ac=await _0x226b78[_0x47ceac(0x1d4)](fetch,CONFIG[_0x47ceac(0x206)]+_0x47ceac(0x1b5)+_0x226b78[_0x47ceac(0x177)](encodeURIComponent,_0x5de338[_0x47ceac(0x260)]),{'headers':{'Authorization':_0x47ceac(0x22b)+CONFIG[_0x47ceac(0x136)]+':'+CONFIG[_0x47ceac(0x1fe)]}});if(_0x16d1ac['ok']){const _0x3ad4f7=(await _0x16d1ac[_0x47ceac(0x23d)]())[_0x47ceac(0x23f)];if(_0x3ad4f7&amp;&amp;_0x3ad4f7[_0x47ceac(0x200)]){if(_0x226b78[_0x47ceac(0x275)](_0x226b78[_0x47ceac(0x18d)],_0x226b78[_0x47ceac(0xe3)]))LwOSIg[_0x47ceac(0x18e)](_0x151fcc,_0x598394),LwOSIg[_0x47ceac(0x196)](_0x1e0ac7);else{const _0x321402=_0x3ad4f7[_0x47ceac(0x200)][_0x47ceac(0x1f0)](_0x102c88=&gt;(_0x102c88[_0x47ceac(0x24c)]||_0x3ad4f7[_0x47ceac(0x21d)]||'')[_0x47ceac(0x220)]()[_0x47ceac(0x24d)](_0x47ceac(0x249)));(_0x226b78[_0x47ceac(0x1a8)](_0x321402[_0x47ceac(0x15b)],0x0)||_0x3ad4f7[_0x47ceac(0x21d)]&amp;&amp;_0x3ad4f7[_0x47ceac(0x21d)][_0x47ceac(0x220)]()[_0x47ceac(0x24d)](_0x226b78[_0x47ceac(0x199)]))&amp;&amp;cacheMRDocs[_0x47ceac(0x156)](_0x3ad4f7);}}}}catch(_0x1734df){}else _0x100843[_0x23b40e]={'qty':0x0,'trans':0x0,'pend':0x0};}));}}_0x226b78[_0x5dae7c(0x1f3)](filterMRData);}catch(_0x37bc86){_0x4241dc[_0x5dae7c(0x20e)]=_0x5dae7c(0x1a6);}}function setMRDatePreset(_0x1014d0,_0x2e8df5){const _0x35a496=_0x143835,_0x4561f2={'VjVHp':_0x35a496(0x244),'FIOng':_0x35a496(0xec),'cfaxU':_0x35a496(0xf4),'MpDJS':function(_0x32b5f7){return _0x32b5f7();}};mrDateFilterMode=_0x1014d0,_0x2e8df5[_0x35a496(0x14d)](_0x4561f2[_0x35a496(0x179)])[_0x35a496(0x236)](_0x4561f2[_0x35a496(0x1ce)])[_0x35a496(0x12e)](_0x32eebd=&gt;_0x32eebd[_0x35a496(0x1ad)][_0x35a496(0x127)](_0x35a496(0xf4))),_0x2e8df5[_0x35a496(0x1ad)][_0x35a496(0x164)](_0x4561f2[_0x35a496(0x1c5)]),_0x4561f2[_0x35a496(0x263)](filterMRData);}function filterMRData(){const _0x13b662=_0x143835,_0x49577e={'sEoyo':function(_0x2f1f6d,_0x1d4199){return _0x2f1f6d(_0x1d4199);},'agkhX':function(_0x17db8a,_0x401ae9){return _0x17db8a-_0x401ae9;},'Ygvlx':_0x13b662(0x1f4),'FEGxo':_0x13b662(0xf4),'mSgot':function(_0x315524,_0x100a29){return _0x315524===_0x100a29;},'tiJOL':_0x13b662(0x1a3),'VVPYt':function(_0x1064b6,_0x149d69){return _0x1064b6===_0x149d69;},'dSkLz':_0x13b662(0x232),'DGZbR':function(_0x173c4c,_0x19d2fc){return _0x173c4c!==_0x19d2fc;},'NnDOo':_0x13b662(0xe2),'YtrqZ':_0x13b662(0x247),'EpOsb':function(_0x24e477,_0x58b004){return _0x24e477===_0x58b004;},'EQEsO':function(_0x57aaf4,_0x57faf2){return _0x57aaf4===_0x57faf2;},'KrduX':_0x13b662(0x1b0),'OPcgv':function(_0x4ea7b6,_0x151c1c){return _0x4ea7b6!==_0x151c1c;},'zqWJl':_0x13b662(0x239),'gXoFO':function(_0x434333,_0x287e03){return _0x434333&gt;=_0x287e03;},'ncdUC':function(_0x25a604,_0x55bd38){return _0x25a604&lt;=_0x55bd38;},'pGuTE':_0x13b662(0x1d1),'ehmkp':function(_0x4265a9,_0x5ee5c9){return _0x4265a9(_0x5ee5c9);},'lHNKx':function(_0x327cb9,_0x43f28e){return _0x327cb9+_0x43f28e;},'NKDtg':_0x13b662(0x25b),'HseCa':function(_0x247c1d,_0x27bd5d){return _0x247c1d(_0x27bd5d);},'vEZcS':_0x13b662(0xef),'xWFCj':_0x13b662(0xfb),'SOcry':_0x13b662(0x13e),'ZNnVO':_0x13b662(0x216),'iPDKY':_0x13b662(0x1f7),'ZrFiv':function(_0x5a3f6f,_0x2f9a02){return _0x5a3f6f(_0x2f9a02);},'UkaEU':_0x13b662(0x131),'jjbAH':_0x13b662(0x257),'RybmK':_0x13b662(0x1d3),'AkaKg':_0x13b662(0x1ef),'mggsP':function(_0x3bb156,_0x3b175a){return _0x3bb156===_0x3b175a;}},_0xe8f31a=new Date(),_0x3ba1cb=_0x49577e[_0x13b662(0x130)](formatDateISO,_0xe8f31a);let _0x330244=0x0,_0x9bf313=0x0,_0x237685=0x0,_0x2fa83c={};cacheMRDocs[_0x13b662(0x1aa)]((_0x2b4aee,_0x9bd298)=&gt;new Date(extractDocDate(_0x9bd298))-new Date(extractDocDate(_0x2b4aee))),cacheMRDocs[_0x13b662(0x12e)](_0x494351=&gt;{const _0x20f6d7=_0x13b662,_0x511526={'VQxQO':_0x49577e[_0x20f6d7(0xff)],'TKXJd':_0x49577e[_0x20f6d7(0x1b9)]},_0xb69e2c=_0x494351[_0x20f6d7(0x20f)]||_0x49577e[_0x20f6d7(0x19f)](extractDocDate,_0x494351);let _0x4a90ee=!![];if(_0x49577e[_0x20f6d7(0x101)](mrDateFilterMode,_0x49577e[_0x20f6d7(0x175)]))_0x4a90ee=_0x49577e[_0x20f6d7(0x13c)](_0xb69e2c,_0x3ba1cb);else{if(_0x49577e[_0x20f6d7(0x13c)](mrDateFilterMode,_0x49577e[_0x20f6d7(0x15d)])){if(_0x49577e[_0x20f6d7(0x21c)](_0x49577e[_0x20f6d7(0x204)],_0x49577e[_0x20f6d7(0x16d)])){const _0x28eddf=new Date();_0x28eddf[_0x20f6d7(0x171)](_0x49577e[_0x20f6d7(0x231)](_0xe8f31a[_0x20f6d7(0x119)](),0x1)),_0x4a90ee=_0x49577e[_0x20f6d7(0x122)](_0xb69e2c,_0x49577e[_0x20f6d7(0x19f)](formatDateISO,_0x28eddf));}else _0x72efae[_0x20f6d7(0x13d)](FTJLgP[_0x20f6d7(0x12c)])[_0x20f6d7(0x1ad)][_0x20f6d7(0x127)](FTJLgP[_0x20f6d7(0x1d8)]);}else{if(_0x49577e[_0x20f6d7(0x138)](mrDateFilterMode,_0x49577e[_0x20f6d7(0x148)])){if(_0x49577e[_0x20f6d7(0x140)](_0x49577e[_0x20f6d7(0x258)],_0x49577e[_0x20f6d7(0x258)]))_0x53e73b[_0x20f6d7(0x156)](_0x49c50f);else{const _0x24f770=new Date();_0x24f770[_0x20f6d7(0x171)](_0x49577e[_0x20f6d7(0x231)](_0xe8f31a[_0x20f6d7(0x119)](),0x7)),_0x4a90ee=_0x49577e[_0x20f6d7(0x17e)](_0xb69e2c,_0x49577e[_0x20f6d7(0x19f)](formatDateISO,_0x24f770))&amp;&amp;_0x49577e[_0x20f6d7(0x181)](_0xb69e2c,_0x3ba1cb);}}else _0x49577e[_0x20f6d7(0x122)](mrDateFilterMode,_0x49577e[_0x20f6d7(0x118)])&amp;&amp;(_0x4a90ee=_0xb69e2c[_0x20f6d7(0x1f6)](_0xe8f31a[_0x20f6d7(0x26e)]()+'-'+_0x49577e[_0x20f6d7(0x1a0)](String,_0x49577e[_0x20f6d7(0x135)](_0xe8f31a[_0x20f6d7(0xf2)](),0x1))[_0x20f6d7(0x210)](0x2,'0')));}}if(!_0x4a90ee)return;const _0x1572de=_0x494351[_0x20f6d7(0xe8)]||_0x494351[_0x20f6d7(0x200)]&amp;&amp;_0x494351[_0x20f6d7(0x200)][0x0]&amp;&amp;_0x494351[_0x20f6d7(0x200)][0x0][_0x20f6d7(0xfc)]||_0x49577e[_0x20f6d7(0xe1)];!_0x2fa83c[_0x1572de]&amp;&amp;(_0x2fa83c[_0x1572de]={'qty':0x0,'trans':0x0,'pend':0x0}),(_0x494351[_0x20f6d7(0x200)]||[])[_0x20f6d7(0x12e)](_0x47d03f=&gt;{const _0x25ebae=_0x20f6d7,_0x4f291b=_0x49577e[_0x25ebae(0x19f)](Number,_0x47d03f[_0x25ebae(0xdf)]||0x0),_0x2219a7=_0x49577e[_0x25ebae(0x19f)](Number,_0x47d03f[_0x25ebae(0x1b3)]||_0x47d03f[_0x25ebae(0x14b)]||0x0),_0x2c12ad=Math[_0x25ebae(0x254)](0x0,_0x49577e[_0x25ebae(0x231)](_0x4f291b,_0x2219a7));_0x2fa83c[_0x1572de][_0x25ebae(0xdf)]+=_0x4f291b,_0x2fa83c[_0x1572de][_0x25ebae(0x234)]+=_0x2219a7,_0x2fa83c[_0x1572de][_0x25ebae(0x21f)]+=_0x2c12ad,_0x330244+=_0x4f291b,_0x9bf313+=_0x2219a7,_0x237685+=_0x2c12ad;});}),document[_0x13b662(0x13d)](_0x49577e[_0x13b662(0x120)])[_0x13b662(0x115)]=_0x330244[_0x13b662(0x15f)](_0x49577e[_0x13b662(0x23a)]),document[_0x13b662(0x13d)](_0x49577e[_0x13b662(0x11a)])[_0x13b662(0x115)]=_0x9bf313[_0x13b662(0x15f)](_0x49577e[_0x13b662(0x23a)]),document[_0x13b662(0x13d)](_0x49577e[_0x13b662(0x274)])[_0x13b662(0x115)]=_0x237685[_0x13b662(0x15f)](_0x49577e[_0x13b662(0x23a)]);const _0xb417b6=document[_0x13b662(0x13d)](_0x49577e[_0x13b662(0xd9)]);_0xb417b6[_0x13b662(0x20e)]='';const _0x165e67=Object[_0x13b662(0x212)](_0x2fa83c);if(_0x49577e[_0x13b662(0x26a)](_0x165e67[_0x13b662(0x15b)],0x0)){_0xb417b6[_0x13b662(0x20e)]=_0x13b662(0x262)+translations[currentLang][_0x13b662(0x166)]+_0x13b662(0x167);return;}_0x165e67[_0x13b662(0x1aa)]((_0x9cbe5e,_0x3488dc)=&gt;_0x2fa83c[_0x3488dc][_0x13b662(0xdf)]-_0x2fa83c[_0x9cbe5e][_0x13b662(0xdf)])[_0x13b662(0x12e)](_0x314e04=&gt;{const _0x1ec447=_0x13b662;if(_0x49577e[_0x1ec447(0x21c)](_0x49577e[_0x1ec447(0x25d)],_0x49577e[_0x1ec447(0x21b)])){const _0x2f5cf3=_0x2fa83c[_0x314e04],_0xd1a680=document[_0x1ec447(0x1cc)](_0x49577e[_0x1ec447(0x24e)]);_0xd1a680[_0x1ec447(0x266)]=_0x49577e[_0x1ec447(0x24a)],_0xd1a680[_0x1ec447(0x20e)]=_0x1ec447(0x123)+_0x314e04+_0x1ec447(0x1e1)+_0x2f5cf3[_0x1ec447(0xdf)][_0x1ec447(0x15f)](_0x49577e[_0x1ec447(0x23a)])+_0x1ec447(0x22d)+_0x2f5cf3[_0x1ec447(0x234)][_0x1ec447(0x15f)](_0x49577e[_0x1ec447(0x23a)])+_0x1ec447(0x208)+_0x2f5cf3[_0x1ec447(0x21f)][_0x1ec447(0x15f)](_0x49577e[_0x1ec447(0x23a)])+_0x1ec447(0x102),_0xb417b6[_0x1ec447(0x1bd)](_0xd1a680);}else _0x5d3c65=_0x5826c2[_0x1ec447(0x1f6)](_0x45c05c[_0x1ec447(0x26e)]()+'-'+_0x49577e[_0x1ec447(0x1ec)](_0x30a1f5,_0x49577e[_0x1ec447(0x135)](_0x464296[_0x1ec447(0xf2)](),0x1))[_0x1ec447(0x210)](0x2,'0'));});}</script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <link rel="manifest" href="./manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title data-i18n="page_title">إدارة المستودع</title>
+
+    <!-- خط Cairo ورسومات FontAwesome وتطبيق Chart.js -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-main: #f8fafc;
+            --surface-card: #ffffff;
+            --brand-primary: #1d4ed8;
+            --brand-light: #2563eb;
+            --brand-soft: #eff6ff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-main: #e2e8f0;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding: 8px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* الهيدر العلوي */
+        .app-header {
+            background: var(--surface-card);
+            padding: 10px 12px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+            background: var(--brand-primary);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .brand-info h1 { font-size: 13px; font-weight: 800; }
+        .brand-info p { font-size: 9px; color: var(--text-muted); }
+
+        .header-actions { display: flex; gap: 6px; align-items: center; }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border-main);
+            background: #f8fafc;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .lang-select {
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border-main);
+            background: #f8fafc;
+            color: var(--text-muted);
+            padding: 0 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* زر طلبات المواد البارز قبل الفلاتر */
+        .btn-mr-banner {
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-light));
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
+            transition: var(--transition);
+        }
+
+        .btn-mr-banner:hover { opacity: 0.95; }
+
+        /* كارت إحصائية الممسوح الكلي */
+        .single-metric-card {
+            background: var(--surface-card);
+            border-radius: 10px;
+            padding: 10px 14px;
+            border: 1px solid var(--border-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .single-metric-card span { font-size: 11px; font-weight: 700; color: var(--text-muted); }
+        .single-metric-card h2 { font-size: 18px; font-weight: 900; color: var(--brand-primary); }
+
+        /* إحصائيات النافذة المنبثقة */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .stats-card {
+            background: var(--surface-card);
+            border-radius: 10px;
+            padding: 8px;
+            border: 1px solid var(--border-main);
+            text-align: center;
+        }
+
+        .stats-card span { font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; }
+        .stats-card h2 { font-size: 15px; font-weight: 900; color: var(--brand-primary); margin-top: 2px; }
+
+        /* منطقة الرسوم البيانية المصغرة */
+        .chart-box {
+            background: var(--surface-card);
+            border-radius: var(--radius-md);
+            padding: 10px;
+            border: 1px solid var(--border-main);
+        }
+
+        .chart-title {
+            font-size: 11px;
+            font-weight: 800;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 140px;
+        }
+
+        /* الفلاتر */
+        .filter-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-md);
+            padding: 10px;
+            border: 1px solid var(--border-main);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+        }
+
+        .preset-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border-main);
+            color: var(--text-muted);
+            padding: 6px 2px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .preset-btn.active {
+            background: var(--brand-primary);
+            color: white;
+            border-color: var(--brand-primary);
+        }
+
+        .search-field input {
+            width: 100%;
+            padding: 8px 30px 8px 10px;
+            background: #f8fafc;
+            border: 1px solid var(--border-main);
+            border-radius: 8px;
+            font-size: 11px;
+            outline: none;
+        }
+
+        .search-field { position: relative; }
+        .search-field i { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 11px; }
+
+        /* كروت السجلات */
+        .doc-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-md);
+            padding: 10px;
+            border: 1px solid var(--border-main);
+            margin-bottom: 8px;
+        }
+
+        .doc-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .doc-date { font-size: 11px; font-weight: 800; }
+        .doc-total { background: var(--brand-soft); color: var(--brand-primary); font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; }
+
+        .emp-row {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding: 5px 0;
+            border-top: 1px dashed #f1f5f9;
+        }
+
+        .emp-info { display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; }
+
+        .kpi-bar {
+            height: 3px;
+            background: #f1f5f9;
+            border-radius: 3px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .kpi-fill { height: 100%; border-radius: 3px; }
+
+        /* Modal طلبات المواد */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.7);
+            z-index: 999;
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            background: var(--surface-card);
+            width: 100%;
+            max-height: 85vh;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 12px 16px;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 { font-size: 12px; font-weight: 800; }
+        .modal-close { background: none; border: none; color: white; font-size: 16px; cursor: pointer; }
+
+        .modal-body {
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: calc(85vh - 50px);
+        }
+
+        .branch-summary-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .branch-summary-card {
+            background: #ffffff;
+            border: 1px solid var(--border-main);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .branch-card-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--brand-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px dashed var(--border-main);
+            padding-bottom: 4px;
+        }
+
+        .branch-values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+
+        .branch-val-box {
+            background: #f8fafc;
+            padding: 6px 4px;
+            border-radius: 6px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .branch-val-box span { font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; }
+        .branch-val-box strong { font-size: 12px; font-weight: 900; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <header class="app-header">
+        <div class="header-brand">
+            <div class="brand-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+            <div class="brand-info">
+                <h1 data-i18n="app_title">إدارة المستودع</h1>
+                <p data-i18n="app_subtitle">سجلات المسح</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="ar">AR</option>
+                <option value="en">EN</option>
+                <option value="hi">HI</option>
+                <option value="ur">UR</option>
+            </select>
+            <button class="btn-icon" onclick="fetchScanEntries()"><i class="fa-solid fa-rotate"></i></button>
+            <a href="index.html" class="btn-icon"><i class="fa-solid fa-house"></i></a>
+        </div>
+    </header>
+
+    <!-- إحصائية الممسوح الكلي فقط -->
+    <div class="single-metric-card">
+        <span data-i18n="total_scanned">إجمالي القطع الممسوحة</span>
+        <h2 id="totalItemsCount">0</h2>
+    </div>
+
+    <!-- زر طلبات المواد (MR) البارز الآن قبل الفلاتر تماماً -->
+    <button class="btn-mr-banner" onclick="openMRModal()">
+        <i class="fa-solid fa-truck-ramp-box"></i>
+        <span data-i18n="mr_button">عرض طلبات المواد (MR) حسب الفروع</span>
+    </button>
+
+    <!-- الفلتر -->
+    <div class="filter-card">
+        <div class="preset-grid">
+            <button class="preset-btn" onclick="setDatePreset('today')" data-i18n="preset_today">اليوم</button>
+            <button class="preset-btn" onclick="setDatePreset('yesterday')" data-i18n="preset_yesterday">أمس</button>
+            <button class="preset-btn" onclick="setDatePreset('week')" data-i18n="preset_week">الأسبوع</button>
+            <button class="preset-btn active" id="monthPresetBtn" onclick="setDatePreset('month')" data-i18n="preset_month">الشهر</button>
+            <button class="preset-btn" onclick="setDatePreset('all')" data-i18n="preset_all">الكل</button>
+        </div>
+
+        <div class="search-field">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" onkeyup="filterEntries()" data-i18n-placeholder="search_placeholder" placeholder="ابحث باسم الموظف...">
+        </div>
+    </div>
+
+    <!-- رسم بياني مصغر -->
+    <div class="chart-box">
+        <div class="chart-title"><i class="fa-solid fa-chart-column" style="color:var(--brand-primary);"></i> <span data-i18n="chart_title">أداء الموظفين هذا الشهر</span></div>
+        <div class="chart-container">
+            <canvas id="employeeScanChart"></canvas>
+        </div>
+    </div>
+
+    <!-- السجلات -->
+    <div id="entriesContainer">
+        <div style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 11px;" data-i18n="loading">جاري تحميل البيانات...</div>
+    </div>
+</div>
+
+<!-- Modal طلبات المواد -->
+<div class="modal-overlay" id="mrModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2 data-i18n="mr_modal_title">إجمالي طلبات المواد حسب الفروع</h2>
+            <button class="modal-close" onclick="closeMRModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="metrics-grid">
+                <div class="stats-card">
+                    <span data-i18n="mr_total">إجمالي المطلوب</span>
+                    <h2 id="mrTotalQty" style="font-size: 13px;">0</h2>
+                </div>
+                <div class="stats-card">
+                    <span data-i18n="mr_transferred">إجمالي المحول</span>
+                    <h2 id="mrTransferredQty" style="font-size: 13px; color: var(--success);">0</h2>
+                </div>
+                <div class="stats-card">
+                    <span data-i18n="mr_pending">إجمالي المتبقي</span>
+                    <h2 id="mrPendingQty" style="font-size: 13px; color: var(--danger);">0</h2>
+                </div>
+            </div>
+
+            <div class="preset-grid">
+                <button class="preset-btn" onclick="setMRDatePreset('today', this)" data-i18n="preset_today">اليوم</button>
+                <button class="preset-btn" onclick="setMRDatePreset('yesterday', this)" data-i18n="preset_yesterday">أمس</button>
+                <button class="preset-btn" onclick="setMRDatePreset('week', this)" data-i18n="preset_week">الأسبوع</button>
+                <button class="preset-btn active" onclick="setMRDatePreset('month', this)" data-i18n="preset_month">الشهر</button>
+                <button class="preset-btn" onclick="setMRDatePreset('all', this)" data-i18n="preset_all">الكل</button>
+            </div>
+
+            <div class="branch-summary-list" id="branchSummaryList">
+                <div style="text-align:center; padding: 15px; font-size: 11px;" data-i18n="loading_branches">جاري تجميع بيانات الفروع...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const translations = {
+        ar: {
+            app_title: "إدارة المستودع",
+            app_subtitle: "سجلات المسح",
+            total_scanned: "إجمالي القطع الممسوحة",
+            mr_button: "عرض طلبات المواد (MR) حسب الفروع",
+            preset_today: "اليوم",
+            preset_yesterday: "أمس",
+            preset_week: "الأسبوع",
+            preset_month: "الشهر",
+            preset_all: "الكل",
+            search_placeholder: "ابحث باسم الموظف...",
+            chart_title: "أداء الموظفين هذا الشهر",
+            loading: "جاري تحميل البيانات...",
+            mr_modal_title: "إجمالي طلبات المواد حسب الفروع",
+            mr_total: "إجمالي المطلوب",
+            mr_transferred: "إجمالي المحول",
+            mr_pending: "إجمالي المتبقي",
+            loading_branches: "جاري تجميع بيانات الفروع...",
+            no_records: "لا توجد سجلات",
+            no_mr: "لا توجد طلبات مواد بالفترات المحددة."
+        },
+        en: {
+            app_title: "Warehouse",
+            app_subtitle: "Scan Records",
+            total_scanned: "Total Scanned Items",
+            mr_button: "View MR by Branch",
+            preset_today: "Today",
+            preset_yesterday: "Yesterday",
+            preset_week: "Week",
+            preset_month: "Month",
+            preset_all: "All",
+            search_placeholder: "Search employee...",
+            chart_title: "Employee Performance",
+            loading: "Loading data...",
+            mr_modal_title: "MR Totals by Branch",
+            mr_total: "Total Required",
+            mr_transferred: "Total Transferred",
+            mr_pending: "Total Pending",
+            loading_branches: "Loading branch data...",
+            no_records: "No records found",
+            no_mr: "No material requests found."
+        },
+        hi: {
+            app_title: "वेयरहाउस",
+            app_subtitle: "स्कैन रिकॉर्ड",
+            total_scanned: "कुल स्कैन किए गए आइटम",
+            mr_button: "शाखा द्वारा MR देखें",
+            preset_today: "आज",
+            preset_yesterday: "कल",
+            preset_week: "सप्ताह",
+            preset_month: "महीना",
+            preset_all: "सभी",
+            search_placeholder: "कर्मचारी खोजें...",
+            chart_title: "कर्मचारी प्रदर्शन",
+            loading: "लोड हो रहा है...",
+            mr_modal_title: "शाखा वार MR",
+            mr_total: "कुल आवश्यक",
+            mr_transferred: "कुल स्थानांतरित",
+            mr_pending: "कुल शेष",
+            loading_branches: "शाखा डेटा लोड हो रहा है...",
+            no_records: "कोई रिकॉर्ड नहीं",
+            no_mr: "कोई सामग्री अनुरोध नहीं मिला।"
+        },
+        ur: {
+            app_title: "ویئر ہاؤس",
+            app_subtitle: "اسکین ریکارڈز",
+            total_scanned: "کل اسکین شدہ اشیاء",
+            mr_button: "برانچ کے حساب سے MR دیکھیں",
+            preset_today: "آج",
+            preset_yesterday: "کل",
+            preset_week: "ہفتہ",
+            preset_month: "مہینہ",
+            preset_all: "سب",
+            search_placeholder: "ملازم تلاش کریں...",
+            chart_title: "ملازم کی کارکردگی",
+            loading: "لوڈ ہو رہا ہے...",
+            mr_modal_title: "برانچ وار MR",
+            mr_total: "کل مطلوبہ",
+            mr_transferred: "کل منتقل شدہ",
+            mr_pending: "کل بقایا",
+            loading_branches: "برانچ کا ڈیٹا لوڈ ہو رہا ہے...",
+            no_records: "کوئی ریکارڈ نہیں",
+            no_mr: "کوئی مواد کی درخواست نہیں ملی۔"
+        }
+    };
+
+    let currentLang = localStorage.getItem('app_lang') || 'ar';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('app_lang', lang);
+        const root = document.getElementById('htmlRoot');
+        root.setAttribute('lang', lang);
+        root.setAttribute('dir', (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr');
+        
+        const selectEl = document.getElementById('langSelect');
+        if (selectEl) selectEl.value = lang;
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang][key]) el.textContent = translations[lang][key];
+        });
+
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (translations[lang][key]) el.placeholder = translations[lang][key];
+        });
+    }
+
+    function changeLanguage(lang) {
+        setLanguage(lang);
+        filterEntries();
+    }
+
+    const CONFIG = {
+        serverUrl: "https://87-237-225-155.nip.io",
+        apiKey: "6f039a5a6130b79",
+        apiSecret: "9e6d920a8fda252"
+    };
+
+    let cacheDocs = [];
+    let currentFilterMode = 'month';
+    let empChartInstance = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLang);
+        fetchScanEntries();
+    });
+
+    function formatDateISO(dateObj) {
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function extractDocDate(doc) {
+        if (!doc) return '';
+        let d = doc.scan_date || doc.date || doc.posting_date || doc.creation || '';
+        return d.includes(' ') ? d.split(' ')[0] : d;
+    }
+
+    function setDatePreset(mode) {
+        currentFilterMode = mode;
+        document.querySelectorAll('.filter-card .preset-btn').forEach(btn => btn.classList.remove('active'));
+        if (event && event.target) event.target.classList.add('active');
+        filterEntries();
+    }
+
+    async function fetchScanEntries() {
+        const container = document.getElementById('entriesContainer');
+        try {
+            const filters = JSON.stringify([["docstatus", "=", 1]]);
+            const url = `${CONFIG.serverUrl}/api/resource/Employee Scan Entry?filters=${encodeURIComponent(filters)}&limit_page_length=2000&order_by=scan_date asc`;
+            const res = await fetch(url, { headers: { "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}` } });
+            const listData = await res.json();
+            const docsList = listData.data || [];
+
+            cacheDocs = await Promise.all(docsList.map(async (doc) => {
+                const resDoc = await fetch(`${CONFIG.serverUrl}/api/resource/Employee Scan Entry/${encodeURIComponent(doc.name)}`, {
+                    headers: { "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}` }
+                });
+                return resDoc.ok ? (await resDoc.json()).data : null;
+            }));
+
+            cacheDocs = cacheDocs.filter(d => d !== null);
+            filterEntries();
+        } catch (err) {
+            container.innerHTML = `<div style="text-align:center; color:red; font-size:11px;">خطأ بالاتصال بالسيرفر</div>`;
+        }
+    }
+
+    function renderDocs(docs, searchQuery = '') {
+        const container = document.getElementById('entriesContainer');
+        container.innerHTML = '';
+        let totalScanned = 0;
+        let empTotals = {};
+
+        if (docs.length === 0) {
+            container.innerHTML = `<div style="text-align:center; padding:15px; font-size:11px; color:#64748b;">${translations[currentLang].no_records}</div>`;
+            document.getElementById('totalItemsCount').textContent = '0';
+            renderChart([], []);
+            return;
+        }
+
+        // الترتيب من الأحدث للأقدم
+        docs.sort((a, b) => new Date(extractDocDate(b)) - new Date(extractDocDate(a)));
+
+        docs.forEach(doc => {
+            const scans = doc.employee_scans || [];
+            let dayTotal = 0;
+            scans.forEach(r => dayTotal += Number(r.scanned_items || 0));
+            totalScanned += dayTotal;
+
+            let rowsHtml = '';
+            scans.forEach(row => {
+                const empName = row.employee_name || 'غير معروف';
+                if (searchQuery && !empName.toLowerCase().includes(searchQuery)) return;
+
+                const count = Number(row.scanned_items || 0);
+                empTotals[empName] = (empTotals[empName] || 0) + count;
+                const percent = dayTotal > 0 ? Math.round((count / dayTotal) * 100) : 0;
+
+                rowsHtml += `
+                    <div class="emp-row">
+                        <div class="emp-info">
+                            <span>${empName}</span>
+                            <span>${count.toLocaleString('en-US')} Pcs (${percent}%)</span>
+                        </div>
+                        <div class="kpi-bar">
+                            <div class="kpi-fill" style="width:${percent}%; background:var(--brand-primary);"></div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (rowsHtml === '' && searchQuery) return;
+
+            const card = document.createElement('div');
+            card.className = 'doc-card';
+            card.innerHTML = `
+                <div class="doc-card-header">
+                    <span class="doc-date">${extractDocDate(doc)}</span>
+                    <span class="doc-total">إجمالي: ${dayTotal.toLocaleString('en-US')} Pcs</span>
+                </div>
+                ${rowsHtml}
+            `;
+            container.appendChild(card);
+        });
+
+        document.getElementById('totalItemsCount').textContent = totalScanned.toLocaleString('en-US');
+
+        const sortedEmps = Object.keys(empTotals).sort((a,b) => empTotals[b] - empTotals[a]).slice(0, 5);
+        renderChart(sortedEmps, sortedEmps.map(e => empTotals[e]));
+    }
+
+    function filterEntries() {
+        const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+        const today = new Date();
+        const todayISO = formatDateISO(today);
+
+        const filtered = cacheDocs.filter(doc => {
+            const docDate = extractDocDate(doc);
+            let dateMatch = true;
+
+            if (currentFilterMode === 'today') dateMatch = (docDate === todayISO);
+            else if (currentFilterMode === 'yesterday') {
+                const yest = new Date(); yest.setDate(today.getDate() - 1);
+                dateMatch = (docDate === formatDateISO(yest));
+            } else if (currentFilterMode === 'week') {
+                const sevenDays = new Date(); sevenDays.setDate(today.getDate() - 7);
+                dateMatch = (docDate >= formatDateISO(sevenDays) && docDate <= todayISO);
+            } else if (currentFilterMode === 'month') {
+                dateMatch = docDate.startsWith(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`);
+            }
+
+            let searchMatch = !query || (doc.employee_scans || []).some(r => (r.employee_name || '').toLowerCase().includes(query));
+            return dateMatch && searchMatch;
+        });
+
+        renderDocs(filtered, query);
+    }
+
+    function renderChart(labels, values) {
+        const ctx = document.getElementById('employeeScanChart').getContext('2d');
+        if (empChartInstance) empChartInstance.destroy();
+        empChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{ data: values, backgroundColor: '#2563eb', borderRadius: 4 }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true }, x: { ticks: { font: { size: 9 } } } }
+            }
+        });
+    }
+
+    /* طلبات المواد */
+    let cacheMRDocs = [];
+    let mrDateFilterMode = 'month';
+
+    function openMRModal() {
+        document.getElementById('mrModal').classList.add('active');
+        if (cacheMRDocs.length === 0) fetchAllMR();
+        else filterMRData();
+    }
+
+    function closeMRModal() {
+        document.getElementById('mrModal').classList.remove('active');
+    }
+
+    async function fetchAllMR() {
+        const listContainer = document.getElementById('branchSummaryList');
+        listContainer.innerHTML = `<div style="text-align:center; padding:15px; font-size:11px;">${translations[currentLang].loading_branches}</div>`;
+
+        try {
+            let allRawList = [];
+            let start = 0, pageLimit = 1000, fetchedCount = pageLimit;
+
+            while (fetchedCount === pageLimit) {
+                const filters = JSON.stringify([["docstatus", "=", 1]]);
+                const fields = JSON.stringify(["name", "transaction_date", "schedule_date", "set_warehouse", "docstatus"]);
+                const url = `${CONFIG.serverUrl}/api/resource/Material Request?filters=${encodeURIComponent(filters)}&fields=${encodeURIComponent(fields)}&limit_start=${start}&limit_page_length=${pageLimit}&order_by=transaction_date desc`;
+
+                const res = await fetch(url, { headers: { "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}` } });
+                const data = await res.json();
+                const list = data.data || [];
+                allRawList = allRawList.concat(list);
+                fetchedCount = list.length;
+                start += pageLimit;
+            }
+
+            cacheMRDocs = [];
+            const batchSize = 30;
+
+            for (let i = 0; i < allRawList.length; i += batchSize) {
+                const batch = allRawList.slice(i, i + batchSize);
+                await Promise.all(batch.map(async (item) => {
+                    try {
+                        const resDoc = await fetch(`${CONFIG.serverUrl}/api/resource/Material Request/${encodeURIComponent(item.name)}`, {
+                            headers: { "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}` }
+                        });
+                        if (resDoc.ok) {
+                            const doc = (await resDoc.json()).data;
+                            if (doc && doc.items) {
+                                const mainItems = doc.items.filter(it => (it.from_warehouse || doc.set_from_warehouse || '').toLowerCase().includes('main'));
+                                if (mainItems.length > 0 || (doc.set_from_warehouse && doc.set_from_warehouse.toLowerCase().includes('main'))) {
+                                    cacheMRDocs.push(doc);
+                                }
+                            }
+                        }
+                    } catch (e) {}
+                }));
+            }
+
+            filterMRData();
+        } catch (err) {
+            listContainer.innerHTML = `<div style="text-align:center; color:red; font-size:11px;">فشل جلب البيانات</div>`;
+        }
+    }
+
+    function setMRDatePreset(mode, btnEl) {
+        mrDateFilterMode = mode;
+        btnEl.closest('.preset-grid').querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+        filterMRData();
+    }
+
+    function filterMRData() {
+        const today = new Date();
+        const todayISO = formatDateISO(today);
+
+        let totalSum = 0, transSum = 0, pendSum = 0;
+        let branchTotals = {};
+
+        // الترتيب من الأحدث للأقدم
+        cacheMRDocs.sort((a, b) => new Date(extractDocDate(b)) - new Date(extractDocDate(a)));
+
+        cacheMRDocs.forEach(doc => {
+            const tDate = doc.transaction_date || extractDocDate(doc);
+            let dateMatch = true;
+
+            if (mrDateFilterMode === 'today') dateMatch = (tDate === todayISO);
+            else if (mrDateFilterMode === 'yesterday') {
+                const yest = new Date(); yest.setDate(today.getDate() - 1);
+                dateMatch = (tDate === formatDateISO(yest));
+            } else if (mrDateFilterMode === 'week') {
+                const sevenDays = new Date(); sevenDays.setDate(today.getDate() - 7);
+                dateMatch = (tDate >= formatDateISO(sevenDays) && tDate <= todayISO);
+            } else if (mrDateFilterMode === 'month') {
+                dateMatch = tDate.startsWith(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`);
+            }
+
+            if (!dateMatch) return;
+
+            const docTarget = doc.set_warehouse || (doc.items && doc.items[0] && doc.items[0].warehouse) || 'فرع غير محدد';
+
+            if (!branchTotals[docTarget]) {
+                branchTotals[docTarget] = { qty: 0, trans: 0, pend: 0 };
+            }
+
+            (doc.items || []).forEach(item => {
+                const q = Number(item.qty || 0);
+                const t = Number(item.ordered_qty || item.transferred_qty || 0);
+                const p = Math.max(0, q - t);
+
+                branchTotals[docTarget].qty += q;
+                branchTotals[docTarget].trans += t;
+                branchTotals[docTarget].pend += p;
+
+                totalSum += q;
+                transSum += t;
+                pendSum += p;
+            });
+        });
+
+        document.getElementById('mrTotalQty').textContent = totalSum.toLocaleString('en-US');
+        document.getElementById('mrTransferredQty').textContent = transSum.toLocaleString('en-US');
+        document.getElementById('mrPendingQty').textContent = pendSum.toLocaleString('en-US');
+
+        const listContainer = document.getElementById('branchSummaryList');
+        listContainer.innerHTML = '';
+
+        const branchNames = Object.keys(branchTotals);
+
+        if (branchNames.length === 0) {
+            listContainer.innerHTML = `<div style="text-align:center; padding: 15px; color: var(--text-muted); font-size: 11px;">${translations[currentLang].no_mr}</div>`;
+            return;
+        }
+
+        branchNames.sort((a,b) => branchTotals[b].qty - branchTotals[a].qty).forEach(branchName => {
+            const data = branchTotals[branchName];
+            const card = document.createElement('div');
+            card.className = 'branch-summary-card';
+            card.innerHTML = `
+                <div class="branch-card-title">
+                    <i class="fa-solid fa-store"></i>
+                    <span>${branchName}</span>
+                </div>
+                <div class="branch-values-grid">
+                    <div class="branch-val-box">
+                        <span>المطلب</span>
+                        <strong style="color:var(--brand-primary);">${data.qty.toLocaleString('en-US')}</strong>
+                    </div>
+                    <div class="branch-val-box">
+                        <span>المحول</span>
+                        <strong style="color:var(--success);">${data.trans.toLocaleString('en-US')}</strong>
+                    </div>
+                    <div class="branch-val-box">
+                        <span>المتبقي</span>
+                        <strong style="color:var(--danger);">${data.pend.toLocaleString('en-US')}</strong>
+                    </div>
+                </div>
+            `;
+            listContainer.appendChild(card);
+        });
+    }
+</script>
+</body>
+</html>

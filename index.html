@@ -1,1 +1,461 @@
-<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="ar" dir="rtl" id="htmlRoot"><head><link rel="manifest" href="./manifest.json" /><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /><meta name="apple-mobile-web-app-title" content="الموسى التجارية" /><link rel="apple-touch-icon" sizes="180x180" href="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&amp;v=beta&amp;t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM" /><link rel="icon" type="image/png" sizes="32x32" href="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&amp;v=beta&amp;t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM" /><title data-i18n="main_title">لوحة التحكم الاحترافية - الموسى التجارية</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&amp;display=swap" rel="stylesheet" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" /><style>        :root {            --primary: #0f172a;            --accent: #2563eb;                      --accent-hover: #1d4ed8;                --accent-light: #eff6ff;                --accent-border: #bfdbfe;               --bg-body: #f8fafc;            --bg-card: #ffffff;            --text-main: #1e293b;            --text-muted: #64748b;            --border: #e2e8f0;            --radius: 16px;            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);        }        * {            box-sizing: border-box;            margin: 0;            padding: 0;            font-family: 'Cairo', sans-serif;            -webkit-tap-highlight-color: transparent;            font-variant-numeric: lining-nums tabular-nums; /* تثبيت عرض الأرقام بشكل قياسي */        }        body {            background-color: var(--bg-body);            color: var(--text-main);            padding: 20px 15px;            display: flex;            justify-content: center;            min-height: 100vh;        }        .dashboard-container {            width: 100%;            max-width: 480px;        }        header {            display: flex;            justify-content: space-between;            align-items: center;            margin-bottom: 25px;            background: var(--bg-card);            padding: 15px 18px;            border-radius: 14px;            box-shadow: var(--shadow);            border: 1px solid var(--border);        }        .logo-container {            display: flex;            align-items: center;        }        .brand-logo {            height: 42px;            width: auto;            object-fit: contain;            border-radius: 8px;        }        .header-controls {            display: flex;            align-items: center;            gap: 8px;        }        .lang-select {            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);            border: 1px solid var(--border);            padding: 6px 10px;            border-radius: 10px;            font-size: 11px;            font-weight: 700;            cursor: pointer;            color: var(--primary);            outline: none;            box-shadow: 0 2px 4px rgba(0,0,0,0.02);            transition: all 0.25s ease;        }        .lang-select:hover, .lang-select:focus {            border-color: var(--accent);            background: #ffffff;        }        .welcome-box {            text-align: left;        }        .welcome-box h1 {            font-size: 15px;            font-weight: 700;            color: var(--primary);            line-height: 1.2;        }        .welcome-box p {            font-size: 10px;            color: var(--text-muted);            margin-top: 1px;        }        .menu-grid {            display: grid;            grid-template-columns: repeat(2, 1fr);            gap: 15px;        }        .menu-item {            background: var(--bg-card);            border: 1px solid var(--border);            border-radius: var(--radius);            padding: 22px 15px 18px 15px;            display: flex;            flex-direction: column;            align-items: center;            text-align: center;            cursor: pointer;            text-decoration: none;            box-shadow: var(--shadow);            transition: all 0.25s ease;            position: relative;            overflow: hidden;        }        .menu-item:not(.disabled):hover {            transform: translateY(-3px);            border-color: var(--accent-border);            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);        }        .icon-box {            width: 60px;            height: 60px;            border-radius: 18px;            display: flex;            align-items: center;            justify-content: center;            font-size: 26px;            margin-bottom: 12px;            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);        }        .menu-title {            font-size: 13px;            font-weight: 700;            color: var(--primary);            margin-bottom: 3px;        }        .menu-desc {            font-size: 10px;            color: var(--text-muted);            line-height: 1.3;        }        .ic-sales { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #ffffff; }        .ic-purchase-analytics { background: linear-gradient(135deg, #059669, #047857); color: #ffffff; }        .ic-warehouse { background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; }        .ic-stock { background: linear-gradient(135deg, #22c55e, #15803d); color: #ffffff; }        .ic-purchase { background: linear-gradient(135deg, #f97316, #c2410c); color: #ffffff; }        .ic-transfer { background: linear-gradient(135deg, #a855f7, #7e22ce); color: #ffffff; }        .ic-receive { background: linear-gradient(135deg, #ec4899, #be185d); color: #ffffff; }        .ic-contract { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #ffffff; }        .ic-water { background: linear-gradient(135deg, #06b6d4, #0e7490); color: #ffffff; }        .ic-electricity { background: linear-gradient(135deg, #eab308, #a16207); color: #ffffff; }        .menu-item.disabled {            cursor: not-allowed;            pointer-events: none;        }        .badge-orange {            position: absolute;            top: 8px;            right: 8px;            background: #fff7ed;            color: #ea580c;            border: 1px solid #ffedd5;            font-size: 9px;            font-weight: 800;            padding: 3px 7px;            border-radius: 6px;            display: flex;            align-items: center;            gap: 4px;        }        footer {            text-align: center;            margin-top: 30px;            font-size: 11px;            color: var(--text-muted);        }    </style></head><body><div class="dashboard-container"><header><div class="logo-container"><img src="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&amp;v=beta&amp;t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM" alt="الموسى التجارية" class="brand-logo" /></div><div class="header-controls"><select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)"><option value="ar">العربية</option><option value="en">English</option><option value="hi">हिन्दी</option><option value="ur">اردو</option></select><div class="welcome-box"><h1 data-i18n="dash_header">لوحة التحكم</h1><p data-i18n="dash_subheader">النظام الإداري الموحد</p></div></div></header><div class="menu-grid"><a href="sales.html" class="menu-item"><div class="icon-box ic-sales"><i class="fa-solid fa-chart-line"></i></div><div class="menu-title" data-i18n="menu_sales">المبيعات</div><div class="menu-desc" data-i18n="desc_sales">الفواتير والتقارير</div></a><a href="purchases-analytics.html" class="menu-item"><div class="icon-box ic-purchase-analytics"><i class="fa-solid fa-chart-pie"></i></div><div class="menu-title" data-i18n="menu_purchases_analysis">تحليل المشتريات</div><div class="menu-desc" data-i18n="desc_purchases_analysis">مؤشرات وتقارير الشراء</div></a><a href="warehouse.html" class="menu-item"><div class="icon-box ic-warehouse"><i class="fa-solid fa-warehouse"></i></div><div class="menu-title" data-i18n="menu_warehouse">إدارة المستودع</div><div class="menu-desc" data-i18n="desc_warehouse">إدارة المساحات والمرافق</div></a><div class="menu-item disabled"><span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i><span data-i18n="under_construction">جاري الإنشاء</span></span><div class="icon-box ic-stock"><i class="fa-solid fa-boxes-stacked"></i></div><div class="menu-title" data-i18n="menu_stock">المخزون</div><div class="menu-desc" data-i18n="desc_stock">الأصناف والأرصدة</div></div><div class="menu-item disabled"><span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i><span data-i18n="under_construction">جاري الإنشاء</span></span><div class="icon-box ic-purchase"><i class="fa-solid fa-cart-shopping"></i></div><div class="menu-title" data-i18n="menu_purchases">المشتريات</div><div class="menu-desc" data-i18n="desc_purchases">أوامر الشراء والموردين</div></div><div class="menu-item disabled"><span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i><span data-i18n="under_construction">جاري الإنشاء</span></span><div class="icon-box ic-transfer"><i class="fa-solid fa-right-left"></i></div><div class="menu-title" data-i18n="menu_transfers">التحويلات</div><div class="menu-desc" data-i18n="desc_transfers">النقل بين الفروع</div></div><div class="menu-item disabled"><span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i><span data-i18n="under_construction">جاري الإنشاء</span></span><div class="icon-box ic-receive"><i class="fa-solid fa-box-open"></i></div><div class="menu-title" data-i18n="menu_receipts">الاستلامات</div><div class="menu-desc" data-i18n="desc_receipts">استلام البضائع والواردات</div></div><div class="menu-item disabled"><span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i><span data-i18n="under_construction">جاري الإنشاء</span></span><div class="icon-box ic-contract"><i class="fa-solid fa-file-contract"></i></div><div class="menu-title" data-i18n="menu_contracts">عقود الإيجار</div><div class="menu-desc" data-i18n="desc_contracts">متابعة وتجديد العقود</div></div><div class="menu-item disabled"><span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i><span data-i18n="under_construction">جاري الإنشاء</span></span><div class="icon-box ic-water"><i class="fa-solid fa-droplet"></i></div><div class="menu-title" data-i18n="menu_water">فواتير المياه</div><div class="menu-desc" data-i18n="desc_water">الاستهلاك والمدفوعات</div></div><div class="menu-item disabled"><span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i><span data-i18n="under_construction">جاري الإنشاء</span></span><div class="icon-box ic-electricity"><i class="fa-solid fa-bolt"></i></div><div class="menu-title" data-i18n="menu_electricity">فواتير الكهرباء</div><div class="menu-desc" data-i18n="desc_electricity">العدادات والسدادات</div></div></div><footer data-i18n="footer_text">        نظام الموسى التجارية الاحترافي © 2026    </footer></div><script>const _0x48c326=_0x56f7;(function(_0x538d96,_0x5a3cfb){const _0x3d7dc9=_0x56f7,_0x4c5888=_0x538d96();while(!![]){try{const _0x4b8e60=-parseInt(_0x3d7dc9(0x166))/0x1+parseInt(_0x3d7dc9(0x1a4))/0x2+parseInt(_0x3d7dc9(0x192))/0x3+-parseInt(_0x3d7dc9(0x14c))/0x4+-parseInt(_0x3d7dc9(0x190))/0x5+parseInt(_0x3d7dc9(0x15e))/0x6+parseInt(_0x3d7dc9(0x17e))/0x7*(parseInt(_0x3d7dc9(0x1db))/0x8);if(_0x4b8e60===_0x5a3cfb)break;else _0x4c5888['push'](_0x4c5888['shift']());}catch(_0x142ffa){_0x4c5888['push'](_0x4c5888['shift']());}}}(_0x146f,0xbf31b));const translations={'ar':{'main_title':_0x48c326(0x187),'dash_header':_0x48c326(0x1ae),'dash_subheader':_0x48c326(0x14d),'menu_sales':_0x48c326(0x184),'desc_sales':_0x48c326(0x1d1),'menu_purchases_analysis':_0x48c326(0x1b2),'desc_purchases_analysis':_0x48c326(0x179),'menu_warehouse':_0x48c326(0x1a2),'desc_warehouse':_0x48c326(0x1cf),'menu_stock':_0x48c326(0x1ca),'desc_stock':_0x48c326(0x1af),'menu_purchases':_0x48c326(0x1a0),'desc_purchases':_0x48c326(0x1c3),'menu_transfers':_0x48c326(0x1d5),'desc_transfers':_0x48c326(0x1c1),'menu_receipts':_0x48c326(0x1a7),'desc_receipts':_0x48c326(0x1c8),'menu_contracts':_0x48c326(0x168),'desc_contracts':_0x48c326(0x17d),'menu_water':_0x48c326(0x1b6),'desc_water':_0x48c326(0x155),'menu_electricity':_0x48c326(0x15b),'desc_electricity':_0x48c326(0x1d8),'under_construction':_0x48c326(0x19e),'footer_text':_0x48c326(0x1b0)},'en':{'main_title':_0x48c326(0x16c),'dash_header':_0x48c326(0x18e),'dash_subheader':_0x48c326(0x1c5),'menu_sales':_0x48c326(0x199),'desc_sales':_0x48c326(0x17b),'menu_purchases_analysis':_0x48c326(0x1bd),'desc_purchases_analysis':_0x48c326(0x16b),'menu_warehouse':_0x48c326(0x15d),'desc_warehouse':_0x48c326(0x1d6),'menu_stock':_0x48c326(0x14e),'desc_stock':_0x48c326(0x15f),'menu_purchases':_0x48c326(0x182),'desc_purchases':_0x48c326(0x19d),'menu_transfers':_0x48c326(0x1a9),'desc_transfers':_0x48c326(0x18a),'menu_receipts':_0x48c326(0x1cc),'desc_receipts':_0x48c326(0x1b8),'menu_contracts':_0x48c326(0x18b),'desc_contracts':_0x48c326(0x1a3),'menu_water':_0x48c326(0x1bb),'desc_water':_0x48c326(0x157),'menu_electricity':_0x48c326(0x1c9),'desc_electricity':_0x48c326(0x176),'under_construction':_0x48c326(0x196),'footer_text':_0x48c326(0x1ad)},'hi':{'main_title':_0x48c326(0x1a8),'dash_header':_0x48c326(0x1ac),'dash_subheader':_0x48c326(0x154),'menu_sales':_0x48c326(0x1be),'desc_sales':_0x48c326(0x1ce),'menu_purchases_analysis':_0x48c326(0x1da),'desc_purchases_analysis':_0x48c326(0x1d7),'menu_warehouse':_0x48c326(0x1b5),'desc_warehouse':_0x48c326(0x171),'menu_stock':_0x48c326(0x191),'desc_stock':_0x48c326(0x175),'menu_purchases':_0x48c326(0x1b9),'desc_purchases':_0x48c326(0x1c0),'menu_transfers':_0x48c326(0x1b7),'desc_transfers':_0x48c326(0x189),'menu_receipts':_0x48c326(0x177),'desc_receipts':_0x48c326(0x18c),'menu_contracts':_0x48c326(0x1a5),'desc_contracts':_0x48c326(0x1ab),'menu_water':_0x48c326(0x14a),'desc_water':_0x48c326(0x1d3),'menu_electricity':_0x48c326(0x185),'desc_electricity':_0x48c326(0x1d0),'under_construction':_0x48c326(0x1a1),'footer_text':_0x48c326(0x158)},'ur':{'main_title':_0x48c326(0x162),'dash_header':_0x48c326(0x178),'dash_subheader':_0x48c326(0x19a),'menu_sales':_0x48c326(0x1d2),'desc_sales':_0x48c326(0x1bc),'menu_purchases_analysis':_0x48c326(0x195),'desc_purchases_analysis':_0x48c326(0x167),'menu_warehouse':_0x48c326(0x19b),'desc_warehouse':_0x48c326(0x151),'menu_stock':_0x48c326(0x1cb),'desc_stock':_0x48c326(0x153),'menu_purchases':_0x48c326(0x1d4),'desc_purchases':_0x48c326(0x193),'menu_transfers':_0x48c326(0x161),'desc_transfers':_0x48c326(0x1d9),'menu_receipts':_0x48c326(0x14b),'desc_receipts':_0x48c326(0x18d),'menu_contracts':_0x48c326(0x1c7),'desc_contracts':_0x48c326(0x19f),'menu_water':_0x48c326(0x156),'desc_water':_0x48c326(0x1a6),'menu_electricity':_0x48c326(0x164),'desc_electricity':_0x48c326(0x150),'under_construction':_0x48c326(0x16a),'footer_text':_0x48c326(0x198)}};let currentLang=localStorage[_0x48c326(0x1cd)](_0x48c326(0x160))||'ar';function _0x56f7(_0x16207b,_0x1f0af7){_0x16207b=_0x16207b-0x14a;const _0x146fb4=_0x146f();let _0x56f73d=_0x146fb4[_0x16207b];if(_0x56f7['iKCqZa']===undefined){var _0x34847f=function(_0x3561dd){const _0x480e30='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x1be03a='',_0x571d2d='';for(let _0xd90bc7=0x0,_0x11a659,_0x28d4d2,_0x108471=0x0;_0x28d4d2=_0x3561dd['charAt'](_0x108471++);~_0x28d4d2&amp;&amp;(_0x11a659=_0xd90bc7%0x4?_0x11a659*0x40+_0x28d4d2:_0x28d4d2,_0xd90bc7++%0x4)?_0x1be03a+=String['fromCharCode'](0xff&amp;_0x11a659&gt;&gt;(-0x2*_0xd90bc7&amp;0x6)):0x0){_0x28d4d2=_0x480e30['indexOf'](_0x28d4d2);}for(let _0x115ba7=0x0,_0x2455a2=_0x1be03a['length'];_0x115ba7&lt;_0x2455a2;_0x115ba7++){_0x571d2d+='%'+('00'+_0x1be03a['charCodeAt'](_0x115ba7)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x571d2d);};_0x56f7['xMtzmX']=_0x34847f,_0x56f7['FJeYaX']={},_0x56f7['iKCqZa']=!![];}const _0x2660c0=_0x146fb4[0x0];_0x56f7['QiBJmS']!==_0x2660c0&amp;&amp;(_0x56f7['FJeYaX']={},_0x56f7['QiBJmS']=_0x2660c0);const _0x199028=_0x56f7['FJeYaX'][_0x16207b];return _0x199028===undefined?(_0x56f73d=_0x56f7['xMtzmX'](_0x56f73d),_0x56f7['FJeYaX'][_0x16207b]=_0x56f73d):_0x56f73d=_0x199028,_0x56f73d;}function setLanguage(_0x243a18){const _0x2875ff=_0x48c326,_0x66a76e={'OgwkU':function(_0x43cacc,_0x1c6630){return _0x43cacc(_0x1c6630);},'oklwK':_0x2875ff(0x169),'xSgoR':function(_0x5b3c78,_0x158e10){return _0x5b3c78===_0x158e10;},'JbdJY':_0x2875ff(0x1c4),'RfJgV':_0x2875ff(0x197),'uLCZI':_0x2875ff(0x160),'OLZHh':_0x2875ff(0x1b1),'mOSEK':_0x2875ff(0x194),'tbwED':function(_0x2a7997,_0x583897){return _0x2a7997===_0x583897;},'xaePw':function(_0x5e0bbb,_0x162b27){return _0x5e0bbb===_0x162b27;},'HaGNz':_0x2875ff(0x188),'CvNEa':_0x2875ff(0x19c),'WntYI':_0x2875ff(0x15c),'Hnemw':_0x2875ff(0x181),'xCAXS':_0x2875ff(0x1aa)};currentLang=_0x243a18,localStorage[_0x2875ff(0x17c)](_0x66a76e[_0x2875ff(0x1b4)],_0x243a18);const _0x372ba2=document[_0x2875ff(0x1bf)](_0x66a76e[_0x2875ff(0x152)]);_0x372ba2[_0x2875ff(0x1ba)](_0x66a76e[_0x2875ff(0x1b3)],_0x243a18);_0x66a76e[_0x2875ff(0x17a)](_0x243a18,'ar')||_0x66a76e[_0x2875ff(0x173)](_0x243a18,'ur')?_0x372ba2[_0x2875ff(0x1ba)](_0x66a76e[_0x2875ff(0x183)],_0x66a76e[_0x2875ff(0x14f)]):_0x372ba2[_0x2875ff(0x1ba)](_0x66a76e[_0x2875ff(0x183)],_0x66a76e[_0x2875ff(0x163)]);const _0x3e5fed=document[_0x2875ff(0x1bf)](_0x66a76e[_0x2875ff(0x16e)]);_0x3e5fed&amp;&amp;(_0x3e5fed[_0x2875ff(0x172)]=_0x243a18),document[_0x2875ff(0x174)](_0x66a76e[_0x2875ff(0x170)])[_0x2875ff(0x17f)](_0x2648c5=&gt;{const _0x51f8c4=_0x2875ff,_0x5c358e=_0x2648c5[_0x51f8c4(0x1c6)](_0x66a76e[_0x51f8c4(0x18f)]);translations[_0x243a18]&amp;&amp;translations[_0x243a18][_0x5c358e]&amp;&amp;(_0x66a76e[_0x51f8c4(0x16d)](_0x66a76e[_0x51f8c4(0x165)],_0x66a76e[_0x51f8c4(0x15a)])?_0x66a76e[_0x51f8c4(0x186)](_0x6012e7,_0x24848f):_0x2648c5[_0x51f8c4(0x1c2)]=translations[_0x243a18][_0x5c358e]);});}function _0x146f(){const _0x5cca57=['2yhzInIN2kRzITIXinIN2ytzHDMk2kFzHW','4ks44kwn4ksL4ks+4ksO4ks+4ksc4ksK4ksW4ksJicJGPj/GPy3GPldGPl7GPilGPlJGPkVGPlaP','r29VzhmGjIbjBxbVCNrZ','4ksw4ksW4kwa4ksMicJGPkRGPldGPjRGPyFGPjWP','C2v0qxr0CMLIDxrL','v2f0zxiGqMLSBhm','2kFzHTMi2kFyPTIZ2liG2kFzInIXinIX2B7zInIX2BNySW','uhvYy2HHC2uGqw5HBhLZAxm','4ksS4ks/4ksv4kwn4ksW4kwa','z2v0rwXLBwvUDej5swq','4ksr4ksW4kwn4ksH4ksWiocKLocKScdGPiBGPkRGPylGPldGPy3GPktGPl/GPjxGPldGPy3GPktGPl4','2kFzHnMg2ylzHcdyQnMk2yyG2kFzHnMb2lhzInI5','Dgv4DenVBNrLBNq','2kpzInIN2yxySsdyP9Me2ltySDIN2keG2yJyP9Me2yxzInIX2k/zITMg','zg1WtwS','vw5PzMLLzcbbzg1PBIbtExn0zw0','z2v0qxr0CMLIDxrL','2QNySDIN24ZBGsdAQDUsinMf2lNyP9Ub2k/BKG','2kFyS9IQ2ytyP9MfinIN2ytyQnI22kFyPTI5inMi2kFzHnMi2kFySDIV2kFyQG','rwXLy3rYAwnPDhKGqMLSBhm','2kFzHnMf2k7ySTMi2yy','2kFyS9M52kFAQq','uMvJzwLWDhm','z2v0sxrLBq','4ksA4ks+4ksY4ks+4ksOiocKLocKScdGPldGPl/GPkRGPyVGPldGPy3GPj8','2kxyR9IN2lhyQsdyP9Me2yxyS9IN2k3yP9IQinMi2kFzHnMf2lhyP9Mb2yi','4ksU4kwa4ksF4ksWiocKLocKScdGPk3GPyhGPjFGPktGPl7GPkG','2kFzHnMb2yJyP9IQ2yRySsdzInIN2ytyQTMc2kFySDMk2le','2yhySDMi2k7yQIaO2lpBJnMe2liP','4ksw4ksQ4ksKiocKLocKScdGPk3GPyhGPjFGPktGPl7GPkG','2k7ySDUm2k/yP9IX24WGknM+2lhAHTUm2liP','2kFzHnIQ2k3zInMk2ytyP9IQ','u3bHy2uGjIbgywnPBgL0AwvZ','s1bjCYdGPjtGPlaG4ksw4ksW4kwa4ksMiocKSocKV+cKQUcLI+cKSocLJEcKNW','2kFzHnI52k/yP9IV2kFyQIdzInIN2ytyS9IV2kFyR9IN2kO','2kJySDIN2yBAHTIYinQP25iG2k/ySDMf24ZyP9MginMf2yByQTMc2ytBJa','4ksw4ksW4kwa4ksMiocKTEcKV+cKTUcLJEcKSUcLH+cKT+cKOW','nZm3nJGWve52r2rg','z255C2W','4ksQ4ks+4ksO4kwaiocKLEcLHYdGPkZGPl/GPli','2yJyTDMi2ytBJnIN2ROGknIX2lpBJnM52lmP','ndmXmdu2nhDiD0nLCq','2kFzHnMg2lJyP9MfinIN2ytyPDIV2kFySDMkinIN2ytzHDMi2k3yRW','sw52zw50B3j5','q3zorwe','2yxBJnM52lhySIdyP9Mi2leG2kFyR9IN2kBAR9Um2kFAUG','2kZAR9UbinIN2yJySsdyS9Ub2yJzHnUm2kFyQIdAQDINinIN2yByQTI42kFzHq','t0XAsgG','2klyPTM52yxySIdyP9Mi2leG2kJBJnMe2yBySW','4ksp4ksv4kwa4ksv4kwd4ksKiocKQUcLJEcKSocKTUcKVUcKUocKQocKV+cKLsdGPkRGPy3GPldGPkpGPl7GPllGPya','2kFzHnIN2lpyQTMh2ytyP9MdinMi2kFzHnMf2k/zGDMi2lNyP9IQ','2B7yP9Mg24WG2QNBKIdyQnMe','q29UC3vTChrPB24GjIbcAwXSCW','4ksf4ksY4ksU4kwc4ks44ks+iocKN+cLJEcKSocLH+cKOEcKV+cKGUcKLYdGPkRGPy3GPldGPyVGPkVGPyFGPlBGPkJGPliG4ks44ks/4ks44kwn4ksF4ksUimkPidiWmJy','re9nq29UDgvUDeXVywrLza','uMzkz1y','2yhzInIN2kRzITIXinIN2ytzG9Mh2lhyQnIN2ke','BhrY','v2fYzwHVDxnL','nZy2mZi2mfHwsMLlCW','sxrLBxmGjIbcywXHBMnLCW','yxbWx2XHBMC','2yxzHTIQ2ylzHnUmicJzUDIX2kFzHTIZ2yhySDIYkq','2B7ySDMi2yhBJnI02yBzHcdAInUm2lqG2kJzInIX2OGGlsdyP9Me2yxzInIZ24WG2BNySDUm2OJzHTQV','v250wuK','2kJyRnMe24WG2QNBKIdyQnMe','sMjKsLK','mtaZmtGYnuThsg9vBG','2QNBJnMiinM+24WG2klyPTUm2liG2kFzInIXinM+2lhAHTUm2liG2lhzVTMi2lhzUDIZ','2lNzGTMi2k8G2kFzHnIL2yRyRnIN2le','zgf0ys1PmtHU','2llBJnIXinIQ2lNzHDUm2le','s1bjCYaMifb1CMnOyxnLifjLCg9YDhm','uhjVzMvZC2LVBMfSierHC2HIB2fYzcaTiefSBw9VC2eGvhjHzgLUzW','EfnNB1i','sg5LBxC','ug5ltLe','Eenbwfm','4ks44kwn4ksL4ks+4ksOiocKLocKScdGPlJGPyhGPlxGPl/GPkFGPl7GPi/GPii','DMfSDwu','EgfLuhC','CxvLCNLtzwXLy3rVCKfSBa','4ksg4ksh4ksF4ksUiocKLocKScdGPlBGPyFGPlCG4ksW4ks+4ks24ks/','twv0zxjZicyGugf5BwvUDhm','4ksW4ks44kwa4ksM4kwh4kscicJGPkRGPy3GPldGPl7GPkRGPy3GPktGPl/GPk/GPl7GPiiP','2OJBJnI0inIO2yJySDQi','2yxyPnI02lhyP9IQinMi2kRzGTIN2lhzITIXinIN2ytyTnIX2kFyOq','Dgj3ruq','sw52B2LJzxmGjIbszxbVCNrZ','C2v0sxrLBq','2yxyQTIN2kJyUDIPinMi2kRyRnIV2yRyRYdyP9Me2lNzGTMi2k8','mtmZrxfbs1Dl','zM9YrwfJAa','ywrKrxzLBNrmAxn0zw5LCG','BgfUz1nLBgvJDa','uhvYy2HHC2vZ','sgfhtNO','2kFzHnMf2kJzITI52kFyQG','4ksS4ks/4ksC4ksY4kwaiocKLEcLHYdGPkZGPl/GPli','t2D3A1u','2ytzInIT2kKG2kFzHnIQ2k3zG9MfinIN2ytyP9IT2kRySDIN2yhzITIPic0G2kFzHnMf2yJyS9MjinIN2ytyQTIS2kFySDMk2kK','zgLY','4ks24ks+4ksw4ks+4kst4ksciocKLEcLHYdGPkZGPydGPjOG4ksF4kwn4ksW4ks+4ksc4ks44ksR4ksW','sw50zxiTyNjHBMnOifrYyw5ZzMvYCW','tgvHC2uGq29UDhjHy3rZ','4ksU4ks+4ksYiocKLocKScdGPiBGPk/GPl7GPkq','2lpyP9Mf2kFzHIdyP9Mi2leG2k/ySDII2yxyR9IN2kOG2QNBJcdzInI12yJzHnUm','rgfZAgjVyxjK','B2TSD0S','nZa1mJG0mezlvgXWqW','4ksh4ksO4kwn4ks14kwh4ksc4ksF4ksW4kwaicJGPlJGPy3GPj/GPyNGPjuP','mJa3mdiXqMDRsenQ','2klySDQi2lhySIdyP9Mi2leG2lpzVTMe2kFyPTIX2li','BgfUzW','2k7ySDUm2k/yP9IX24WG2QNyPYdyQTIS2llBJnUb','vw5KzxiGq29UC3rYDwn0Aw9U','z2XOqve','2kFzHnMf2yJyS9UminM52lhBJnQi2yBARYdzVTIX2yJzGDUm2ltzHTMeinIZ2lpzUDMfimkPidiWmJy','u2fSzxm','2yxyQTIT2k/BGsdyP9Mg2kRyUnIN2yxBJcdzHTI42kFzHq','2Q/zInIV2kFzHsaO2yJBJnIM2leG24hyP9IK2lmP','CNrS','t3jKzxjZicyGu3vWCgXPzxjZ','2kZyP9IX2yOG2kFzHnIL2yByTnIN2ke','2yxyUDIN24hyR9Mi2ROG2QNBJcdzHTQV2lhyP9Mg24WG2kFzInIXinIQ2kZyR9Um2k8','2kFzHnMf2ltyQTIX2yRyP9IQ','4ksO4ks/4ksW4kwn4ksU4ks+4ksJ4ksN4kwa4ksO','2kxyR9IN2lhyQsdyP9Me2yxyS9IQ2yJyR9I5','vhjHy2TPBMCGjIbszw5LD2fS','mJqWotKXnMrrwhntza','4ksY4kwa4ksCiocKHEcKQocLGEcKRocKGUcKPW','2kFyS9IQ2lNzHDIN2yqG2kFzInIXinIN2k/yP9IM24ZAR9Um','2kFzHnIN2lpyQTMe2kFzHDIN2kO','4ksQ4kwh4ks24kwh4ks14ksWiocKOEcLIocKTUcKRocLI+cKSocLJEcKOsaTiocKHEcKSUcKRUcLGUcKUocKVIdGPj/GPy3GPldGPyFGPkhGPl/GPilGPjC','vhjHBNnMzxjZ','w2rHDgeTAte4BL0','4ksF4kwn4ksW4kwi4ksv4ks/4ksc4ksxiocKLocKScdGPkJGPlxGPydGPkJGPydGPjxGPldGPkm','4ksH4kwi4ks24ksS4kwl4ksW4kwn4ksH','qwXTB29ZysbuCMfKAw5NifbYB2zLC3nPB25HBcbtExn0zw0GWQKGmJaYnG','2ytzInIT2kKG2kFzHnIQ2k3zG9Mf','2kFzHnIJ2lxzHTIN2yeG2yJyP9Me2kpySDI12k/yQq','2yByUnIN2yuG2kFzHnMf2yJyS9MjinIN2ytyQTIS2kFySDMk2kKG2kFzHnIN2k3yQTIX2kFzGDMkimkPidiWmJy','AhrTBfjVB3q','2kRyRDMe2yRzHcdyP9Me2yxyTnIQ2lhzITIN2kO','Bu9truS','DuXdwKK','4ksx4kwl4ksH4ks+4ksj4ksOicJGPlxGPyFGPk/GPldGPlNGPl7GPiNGPlGP'];_0x146f=function(){return _0x5cca57;};return _0x146f();}function changeLanguage(_0x4bf17c){const _0x3039a7=_0x48c326,_0x3d4c76={'PnKNQ':function(_0x3defa7,_0x13fc54){return _0x3defa7(_0x13fc54);}};_0x3d4c76[_0x3039a7(0x16f)](setLanguage,_0x4bf17c);}document[_0x48c326(0x180)](_0x48c326(0x159),()=&gt;{const _0x158ba0=_0x48c326,_0xcfa322={'gnysl':function(_0x2d27b0,_0x42b98a){return _0x2d27b0(_0x42b98a);}};_0xcfa322[_0x158ba0(0x1dc)](setLanguage,currentLang);});</script></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <link rel="manifest" href="./manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="الموسى التجارية">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM">
+
+    <title data-i18n="main_title">لوحة التحكم الاحترافية - الموسى التجارية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;          
+            --accent-hover: #1d4ed8;    
+            --accent-light: #eff6ff;    
+            --accent-border: #bfdbfe;   
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 16px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            font-variant-numeric: lining-nums tabular-nums; /* تثبيت عرض الأرقام بشكل قياسي */
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding: 20px 15px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            width: 100%;
+            max-width: 480px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: var(--bg-card);
+            padding: 15px 18px;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand-logo {
+            height: 42px;
+            width: auto;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lang-select {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid var(--border);
+            padding: 6px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--primary);
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.25s ease;
+        }
+
+        .lang-select:hover, .lang-select:focus {
+            border-color: var(--accent);
+            background: #ffffff;
+        }
+
+        .welcome-box {
+            text-align: left;
+        }
+
+        .welcome-box h1 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
+        }
+
+        .welcome-box p {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .menu-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px 15px 18px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: var(--shadow);
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item:not(.disabled):hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-border);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+        }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 3px;
+        }
+
+        .menu-desc {
+            font-size: 10px;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .ic-sales { background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: #ffffff; }
+        .ic-purchase-analytics { background: linear-gradient(135deg, #059669, #047857); color: #ffffff; }
+        .ic-warehouse { background: linear-gradient(135deg, #0284c7, #0369a1); color: #ffffff; }
+        .ic-stock { background: linear-gradient(135deg, #22c55e, #15803d); color: #ffffff; }
+        .ic-purchase { background: linear-gradient(135deg, #f97316, #c2410c); color: #ffffff; }
+        .ic-transfer { background: linear-gradient(135deg, #a855f7, #7e22ce); color: #ffffff; }
+        .ic-receive { background: linear-gradient(135deg, #ec4899, #be185d); color: #ffffff; }
+        .ic-contract { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #ffffff; }
+        .ic-water { background: linear-gradient(135deg, #06b6d4, #0e7490); color: #ffffff; }
+        .ic-electricity { background: linear-gradient(135deg, #eab308, #a16207); color: #ffffff; }
+
+        .menu-item.disabled {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .badge-orange {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #fff7ed;
+            color: #ea580c;
+            border: 1px solid #ffedd5;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 3px 7px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <header>
+        <div class="logo-container">
+            <img src="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM" alt="الموسى التجارية" class="brand-logo">
+        </div>
+        <div class="header-controls">
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ur">اردو</option>
+            </select>
+
+            <div class="welcome-box">
+                <h1 data-i18n="dash_header">لوحة التحكم</h1>
+                <p data-i18n="dash_subheader">النظام الإداري الموحد</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="menu-grid">
+        <a href="sales.html" class="menu-item">
+            <div class="icon-box ic-sales"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="menu-title" data-i18n="menu_sales">المبيعات</div>
+            <div class="menu-desc" data-i18n="desc_sales">الفواتير والتقارير</div>
+        </a>
+
+        <a href="purchases-analytics.html" class="menu-item">
+            <div class="icon-box ic-purchase-analytics"><i class="fa-solid fa-chart-pie"></i></div>
+            <div class="menu-title" data-i18n="menu_purchases_analysis">تحليل المشتريات</div>
+            <div class="menu-desc" data-i18n="desc_purchases_analysis">مؤشرات وتقارير الشراء</div>
+        </a>
+
+        <a href="warehouse.html" class="menu-item">
+            <div class="icon-box ic-warehouse"><i class="fa-solid fa-warehouse"></i></div>
+            <div class="menu-title" data-i18n="menu_warehouse">إدارة المستودع</div>
+            <div class="menu-desc" data-i18n="desc_warehouse">إدارة المساحات والمرافق</div>
+        </a>
+
+        <div class="menu-item disabled">
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-stock"><i class="fa-solid fa-boxes-stacked"></i></div>
+            <div class="menu-title" data-i18n="menu_stock">المخزون</div>
+            <div class="menu-desc" data-i18n="desc_stock">الأصناف والأرصدة</div>
+        </div>
+
+        <div class="menu-item disabled">
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-purchase"><i class="fa-solid fa-cart-shopping"></i></div>
+            <div class="menu-title" data-i18n="menu_purchases">المشتريات</div>
+            <div class="menu-desc" data-i18n="desc_purchases">أوامر الشراء والموردين</div>
+        </div>
+
+        <div class="menu-item disabled">
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-transfer"><i class="fa-solid fa-right-left"></i></div>
+            <div class="menu-title" data-i18n="menu_transfers">التحويلات</div>
+            <div class="menu-desc" data-i18n="desc_transfers">النقل بين الفروع</div>
+        </div>
+
+        <div class="menu-item disabled">
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-receive"><i class="fa-solid fa-box-open"></i></div>
+            <div class="menu-title" data-i18n="menu_receipts">الاستلامات</div>
+            <div class="menu-desc" data-i18n="desc_receipts">استلام البضائع والواردات</div>
+        </div>
+
+        <div class="menu-item disabled">
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-contract"><i class="fa-solid fa-file-contract"></i></div>
+            <div class="menu-title" data-i18n="menu_contracts">عقود الإيجار</div>
+            <div class="menu-desc" data-i18n="desc_contracts">متابعة وتجديد العقود</div>
+        </div>
+
+        <div class="menu-item disabled">
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-water"><i class="fa-solid fa-droplet"></i></div>
+            <div class="menu-title" data-i18n="menu_water">فواتير المياه</div>
+            <div class="menu-desc" data-i18n="desc_water">الاستهلاك والمدفوعات</div>
+        </div>
+
+        <div class="menu-item disabled">
+            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
+            <div class="icon-box ic-electricity"><i class="fa-solid fa-bolt"></i></div>
+            <div class="menu-title" data-i18n="menu_electricity">فواتير الكهرباء</div>
+            <div class="menu-desc" data-i18n="desc_electricity">العدادات والسدادات</div>
+        </div>
+    </div>
+
+    <footer data-i18n="footer_text">
+        نظام الموسى التجارية الاحترافي © 2026
+    </footer>
+</div>
+
+<script>
+    const translations = {
+        ar: {
+            main_title: "لوحة التحكم الاحترافية - الموسى التجارية",
+            dash_header: "لوحة التحكم",
+            dash_subheader: "النظام الإداري الموحد",
+            menu_sales: "المبيعات",
+            desc_sales: "الفواتير والتقارير",
+            menu_purchases_analysis: "تحليل المشتريات",
+            desc_purchases_analysis: "مؤشرات وتقارير الشراء",
+            menu_warehouse: "إدارة المستودع",
+            desc_warehouse: "إدارة المساحات والمرافق",
+            menu_stock: "المخزون",
+            desc_stock: "الأصناف والأرصدة",
+            menu_purchases: "المشتريات",
+            desc_purchases: "أوامر الشراء والموردين",
+            menu_transfers: "التحويلات",
+            desc_transfers: "النقل بين الفروع",
+            menu_receipts: "الاستلامات",
+            desc_receipts: "استلام البضائع والواردات",
+            menu_contracts: "عقود الإيجار",
+            desc_contracts: "متابعة وتجديد العقود",
+            menu_water: "فواتير المياه",
+            desc_water: "الاستهلاك والمدفوعات",
+            menu_electricity: "فواتير الكهرباء",
+            desc_electricity: "العدادات والسدادات",
+            under_construction: "جاري الإنشاء",
+            footer_text: "نظام الموسى التجارية الاحترافي © 2026"
+        },
+        en: {
+            main_title: "Professional Dashboard - Almoosa Trading",
+            dash_header: "Dashboard",
+            dash_subheader: "Unified Admin System",
+            menu_sales: "Sales",
+            desc_sales: "Invoices & Reports",
+            menu_purchases_analysis: "Purchase Analysis",
+            desc_purchases_analysis: "KPIs & Purchase Reports",
+            menu_warehouse: "Warehouse",
+            desc_warehouse: "Space & Facilities",
+            menu_stock: "Inventory",
+            desc_stock: "Items & Balances",
+            menu_purchases: "Purchases",
+            desc_purchases: "Orders & Suppliers",
+            menu_transfers: "Transfers",
+            desc_transfers: "Inter-branch Transfers",
+            menu_receipts: "Receipts",
+            desc_receipts: "Goods & Imports",
+            menu_contracts: "Lease Contracts",
+            desc_contracts: "Tracking & Renewal",
+            menu_water: "Water Bills",
+            desc_water: "Consumption & Bills",
+            menu_electricity: "Electricity Bills",
+            desc_electricity: "Meters & Payments",
+            under_construction: "Under Construction",
+            footer_text: "Almoosa Trading Professional System © 2026"
+        },
+        hi: {
+            main_title: "पेशेवर डैशबोर्ड - अलमूसा ट्रेडिंग",
+            dash_header: "डैशबोर्ड",
+            dash_subheader: "एकीकृत प्रशासनिक प्रणाली",
+            menu_sales: "बिक्री",
+            desc_sales: "चालान और रिपोर्ट",
+            menu_purchases_analysis: "खरीद विश्लेषण",
+            desc_purchases_analysis: "KPIs और खरीद रिपोर्ट",
+            menu_warehouse: "गोडाउन (वेयरहाउस)",
+            desc_warehouse: "स्थान और सुविधाएं",
+            menu_stock: "इन्वेंटरी (स्टॉक)",
+            desc_stock: "आइटम और शेष राशि",
+            menu_purchases: "खरीद (परचेज)",
+            desc_purchases: "ऑर्डर और आपूर्तिकर्ता",
+            menu_transfers: "स्थानांतरण (ट्रांसफर)",
+            desc_transfers: "शाखाओं के बीच ट्रांसफर",
+            menu_receipts: "रसीदें (प्राप्तियां)",
+            desc_receipts: "माल और आयात",
+            menu_contracts: "लीज अनुबंध",
+            desc_contracts: "ट्रैकिंग और नवीनीकरण",
+            menu_water: "पानी के बिल",
+            desc_water: "खपत और भुगतान",
+            menu_electricity: "बिजली के बिल",
+            desc_electricity: "मीटर और भुगतान",
+            under_construction: "निर्माणधीन",
+            footer_text: "अलमूसा ट्रेडिंग प्रोफेशनल सिस्टम © 2026"
+        },
+        ur: {
+            main_title: "پروفیشنل ڈیش بورڈ - الموسی ٹریڈنگ",
+            dash_header: "ڈیش بورڈ",
+            dash_subheader: "متحدہ انتظامی نظام",
+            menu_sales: "فروخت (سیلز)",
+            desc_sales: "انوائسز اور رپورٹس",
+            menu_purchases_analysis: "خریداری کا تجزیہ",
+            desc_purchases_analysis: "کیو پی آئیز اور پرچیز رپورٹس",
+            menu_warehouse: "گودام (ویئر ہاؤس)",
+            desc_warehouse: "جگہ اور سہولیات کا انتظام",
+            menu_stock: "اسٹاک",
+            desc_stock: "آئٹمز اور بیلنس",
+            menu_purchases: "خریداری (پرچیز)",
+            desc_purchases: "آرڈرز اور سپلائرز",
+            menu_transfers: "منتقلی (ٹرانسفرز)",
+            desc_transfers: "برانچز کے درمیان منتقلی",
+            menu_receipts: "وصولیاں (رسیٹس)",
+            desc_receipts: "سامان اور درآمدات کی وصولی",
+            menu_contracts: "کرایہ کے معاہدے",
+            desc_contracts: "معاہدوں کی نگرانی اور تجدید",
+            menu_water: "پانی کے بل",
+            desc_water: "استعمال اور ادائیگی",
+            menu_electricity: "بجلی کے بل",
+            desc_electricity: "میٹرز اور ادائگیاں",
+            under_construction: "زیر تعمیر",
+            footer_text: "الموسی ٹریڈنگ پروفیشنل سسٹم © 2026"
+        }
+    };
+
+    let currentLang = localStorage.getItem('app_lang') || 'ar';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('app_lang', lang);
+        
+        const root = document.getElementById('htmlRoot');
+        root.setAttribute('lang', lang);
+        
+        if (lang === 'ar' || lang === 'ur') {
+            root.setAttribute('dir', 'rtl');
+        } else {
+            root.setAttribute('dir', 'ltr');
+        }
+        
+        const selectEl = document.getElementById('langSelect');
+        if (selectEl) {
+            selectEl.value = lang;
+        }
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) {
+                el.textContent = translations[lang][key];
+            }
+        });
+    }
+
+    function changeLanguage(selectedLang) {
+        setLanguage(selectedLang);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLang);
+    });
+</script>
+</body>
+</html>
