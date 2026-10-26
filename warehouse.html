@@ -4,7 +4,7 @@
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>إدارة المستودع</title>
+    <title data-i18n="page_title">إدارة المستودع</title>
 
     <!-- خط Cairo ورسومات FontAwesome وتطبيق Chart.js -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -85,7 +85,7 @@
         .brand-info h1 { font-size: 13px; font-weight: 800; }
         .brand-info p { font-size: 9px; color: var(--text-muted); }
 
-        .header-actions { display: flex; gap: 6px; }
+        .header-actions { display: flex; gap: 6px; align-items: center; }
 
         .btn-icon {
             width: 32px;
@@ -101,22 +101,55 @@
             font-size: 12px;
         }
 
-        .btn-action-primary {
+        .lang-select {
             height: 32px;
-            padding: 0 10px;
             border-radius: 8px;
-            background: var(--brand-primary);
-            color: white;
-            border: none;
-            font-size: 10px;
+            border: 1px solid var(--border-main);
+            background: #f8fafc;
+            color: var(--text-muted);
+            padding: 0 6px;
+            font-size: 11px;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 5px;
             cursor: pointer;
+            outline: none;
         }
 
-        /* كروت الإحصائيات المصغرة */
+        /* زر طلبات المواد البارز قبل الفلاتر */
+        .btn-mr-banner {
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-light));
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
+            transition: var(--transition);
+        }
+
+        .btn-mr-banner:hover { opacity: 0.95; }
+
+        /* كارت إحصائية الممسوح الكلي */
+        .single-metric-card {
+            background: var(--surface-card);
+            border-radius: 10px;
+            padding: 10px 14px;
+            border: 1px solid var(--border-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .single-metric-card span { font-size: 11px; font-weight: 700; color: var(--text-muted); }
+        .single-metric-card h2 { font-size: 18px; font-weight: 900; color: var(--brand-primary); }
+
+        /* إحصائيات النافذة المنبثقة */
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -246,7 +279,7 @@
 
         .kpi-fill { height: 100%; border-radius: 3px; }
 
-        /* Modal طلبات المواد المحسن خصيصاً للجوال */
+        /* Modal طلبات المواد */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -298,7 +331,6 @@
             max-height: calc(85vh - 50px);
         }
 
-        /* كروت ملخص الفروع فقط */
         .branch-summary-list {
             display: flex;
             flex-direction: column;
@@ -352,107 +384,218 @@
         <div class="header-brand">
             <div class="brand-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
             <div class="brand-info">
-                <h1>إدارة المستودع</h1>
-                <p>سجلات المسح وطلبات المواد</p>
+                <h1 data-i18n="app_title">إدارة المستودع</h1>
+                <p data-i18n="app_subtitle">سجلات المسح</p>
             </div>
         </div>
         <div class="header-actions">
-            <button class="btn-action-primary" onclick="openMRModal()">
-                <i class="fa-solid fa-truck-ramp-box"></i>
-                <span>طلبات (MR)</span>
-            </button>
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="ar">AR</option>
+                <option value="en">EN</option>
+                <option value="hi">HI</option>
+                <option value="ur">UR</option>
+            </select>
             <button class="btn-icon" onclick="fetchScanEntries()"><i class="fa-solid fa-rotate"></i></button>
             <a href="index.html" class="btn-icon"><i class="fa-solid fa-house"></i></a>
         </div>
     </header>
 
-    <!-- إحصائيات سريعة -->
-    <div class="metrics-grid">
-        <div class="stats-card">
-            <span>الممسوح</span>
-            <h2 id="totalItemsCount">0</h2>
+    <!-- إحصائية الممسوح الكلي فقط -->
+    <div class="single-metric-card">
+        <span data-i18n="total_scanned">إجمالي القطع الممسوحة</span>
+        <h2 id="totalItemsCount">0</h2>
+    </div>
+
+    <!-- زر طلبات المواد (MR) البارز الآن قبل الفلاتر تماماً -->
+    <button class="btn-mr-banner" onclick="openMRModal()">
+        <i class="fa-solid fa-truck-ramp-box"></i>
+        <span data-i18n="mr_button">عرض طلبات المواد (MR) حسب الفروع</span>
+    </button>
+
+    <!-- الفلتر -->
+    <div class="filter-card">
+        <div class="preset-grid">
+            <button class="preset-btn" onclick="setDatePreset('today')" data-i18n="preset_today">اليوم</button>
+            <button class="preset-btn" onclick="setDatePreset('yesterday')" data-i18n="preset_yesterday">أمس</button>
+            <button class="preset-btn" onclick="setDatePreset('week')" data-i18n="preset_week">الأسبوع</button>
+            <button class="preset-btn active" id="monthPresetBtn" onclick="setDatePreset('month')" data-i18n="preset_month">الشهر</button>
+            <button class="preset-btn" onclick="setDatePreset('all')" data-i18n="preset_all">الكل</button>
         </div>
-        <div class="stats-card">
-            <span>السجلات</span>
-            <h2 id="totalDocCount">0</h2>
-        </div>
-        <div class="stats-card">
-            <span>الإنجاز</span>
-            <h2 style="color: var(--success);">100%</h2>
+
+        <div class="search-field">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" onkeyup="filterEntries()" data-i18n-placeholder="search_placeholder" placeholder="ابحث باسم الموظف...">
         </div>
     </div>
 
     <!-- رسم بياني مصغر -->
     <div class="chart-box">
-        <div class="chart-title"><i class="fa-solid fa-chart-column" style="color:var(--brand-primary);"></i> أداء الموظفين هذا الشهر</div>
+        <div class="chart-title"><i class="fa-solid fa-chart-column" style="color:var(--brand-primary);"></i> <span data-i18n="chart_title">أداء الموظفين هذا الشهر</span></div>
         <div class="chart-container">
             <canvas id="employeeScanChart"></canvas>
         </div>
     </div>
 
-    <!-- الفلتر -->
-    <div class="filter-card">
-        <div class="preset-grid">
-            <button class="preset-btn" onclick="setDatePreset('today')">اليوم</button>
-            <button class="preset-btn" onclick="setDatePreset('yesterday')">أمس</button>
-            <button class="preset-btn" onclick="setDatePreset('week')">الأسبوع</button>
-            <button class="preset-btn active" id="monthPresetBtn" onclick="setDatePreset('month')">الشهر</button>
-            <button class="preset-btn" onclick="setDatePreset('all')">الكل</button>
-        </div>
-
-        <div class="search-field">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" onkeyup="filterEntries()" placeholder="ابحث باسم الموظف...">
-        </div>
-    </div>
-
     <!-- السجلات -->
     <div id="entriesContainer">
-        <div style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 11px;">جاري تحميل البيانات...</div>
+        <div style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 11px;" data-i18n="loading">جاري تحميل البيانات...</div>
     </div>
 </div>
 
-<!-- Modal طلبات المواد (عرض الفروع والإجمالي فقط) -->
+<!-- Modal طلبات المواد -->
 <div class="modal-overlay" id="mrModal">
     <div class="modal-box">
         <div class="modal-header">
-            <h2>إجمالي طلبات المواد حسب الفروع</h2>
+            <h2 data-i18n="mr_modal_title">إجمالي طلبات المواد حسب الفروع</h2>
             <button class="modal-close" onclick="closeMRModal()"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="modal-body">
-            <!-- الإجماليات الكلية العلوية -->
             <div class="metrics-grid">
                 <div class="stats-card">
-                    <span>إجمالي المطلوب</span>
+                    <span data-i18n="mr_total">إجمالي المطلوب</span>
                     <h2 id="mrTotalQty" style="font-size: 13px;">0</h2>
                 </div>
                 <div class="stats-card">
-                    <span>إجمالي المحول</span>
+                    <span data-i18n="mr_transferred">إجمالي المحول</span>
                     <h2 id="mrTransferredQty" style="font-size: 13px; color: var(--success);">0</h2>
                 </div>
                 <div class="stats-card">
-                    <span>إجمالي المتبقي</span>
+                    <span data-i18n="mr_pending">إجمالي المتبقي</span>
                     <h2 id="mrPendingQty" style="font-size: 13px; color: var(--danger);">0</h2>
                 </div>
             </div>
 
             <div class="preset-grid">
-                <button class="preset-btn" onclick="setMRDatePreset('today', this)">اليوم</button>
-                <button class="preset-btn" onclick="setMRDatePreset('yesterday', this)">أمس</button>
-                <button class="preset-btn" onclick="setMRDatePreset('week', this)">الأسبوع</button>
-                <button class="preset-btn active" onclick="setMRDatePreset('month', this)">الشهر</button>
-                <button class="preset-btn" onclick="setMRDatePreset('all', this)">الكل</button>
+                <button class="preset-btn" onclick="setMRDatePreset('today', this)" data-i18n="preset_today">اليوم</button>
+                <button class="preset-btn" onclick="setMRDatePreset('yesterday', this)" data-i18n="preset_yesterday">أمس</button>
+                <button class="preset-btn" onclick="setMRDatePreset('week', this)" data-i18n="preset_week">الأسبوع</button>
+                <button class="preset-btn active" onclick="setMRDatePreset('month', this)" data-i18n="preset_month">الشهر</button>
+                <button class="preset-btn" onclick="setMRDatePreset('all', this)" data-i18n="preset_all">الكل</button>
             </div>
 
-            <!-- ملخص الفروع المجمعة فقط بدون تفاصيل طلبات منفردة -->
             <div class="branch-summary-list" id="branchSummaryList">
-                <div style="text-align:center; padding: 15px; font-size: 11px;">جاري تجميع بيانات الفروع...</div>
+                <div style="text-align:center; padding: 15px; font-size: 11px;" data-i18n="loading_branches">جاري تجميع بيانات الفروع...</div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    const translations = {
+        ar: {
+            app_title: "إدارة المستودع",
+            app_subtitle: "سجلات المسح",
+            total_scanned: "إجمالي القطع الممسوحة",
+            mr_button: "عرض طلبات المواد (MR) حسب الفروع",
+            preset_today: "اليوم",
+            preset_yesterday: "أمس",
+            preset_week: "الأسبوع",
+            preset_month: "الشهر",
+            preset_all: "الكل",
+            search_placeholder: "ابحث باسم الموظف...",
+            chart_title: "أداء الموظفين هذا الشهر",
+            loading: "جاري تحميل البيانات...",
+            mr_modal_title: "إجمالي طلبات المواد حسب الفروع",
+            mr_total: "إجمالي المطلوب",
+            mr_transferred: "إجمالي المحول",
+            mr_pending: "إجمالي المتبقي",
+            loading_branches: "جاري تجميع بيانات الفروع...",
+            no_records: "لا توجد سجلات",
+            no_mr: "لا توجد طلبات مواد بالفترات المحددة."
+        },
+        en: {
+            app_title: "Warehouse",
+            app_subtitle: "Scan Records",
+            total_scanned: "Total Scanned Items",
+            mr_button: "View MR by Branch",
+            preset_today: "Today",
+            preset_yesterday: "Yesterday",
+            preset_week: "Week",
+            preset_month: "Month",
+            preset_all: "All",
+            search_placeholder: "Search employee...",
+            chart_title: "Employee Performance",
+            loading: "Loading data...",
+            mr_modal_title: "MR Totals by Branch",
+            mr_total: "Total Required",
+            mr_transferred: "Total Transferred",
+            mr_pending: "Total Pending",
+            loading_branches: "Loading branch data...",
+            no_records: "No records found",
+            no_mr: "No material requests found."
+        },
+        hi: {
+            app_title: "वेयरहाउस",
+            app_subtitle: "स्कैन रिकॉर्ड",
+            total_scanned: "कुल स्कैन किए गए आइटम",
+            mr_button: "शाखा द्वारा MR देखें",
+            preset_today: "आज",
+            preset_yesterday: "कल",
+            preset_week: "सप्ताह",
+            preset_month: "महीना",
+            preset_all: "सभी",
+            search_placeholder: "कर्मचारी खोजें...",
+            chart_title: "कर्मचारी प्रदर्शन",
+            loading: "लोड हो रहा है...",
+            mr_modal_title: "शाखा वार MR",
+            mr_total: "कुल आवश्यक",
+            mr_transferred: "कुल स्थानांतरित",
+            mr_pending: "कुल शेष",
+            loading_branches: "शाखा डेटा लोड हो रहा है...",
+            no_records: "कोई रिकॉर्ड नहीं",
+            no_mr: "कोई सामग्री अनुरोध नहीं मिला।"
+        },
+        ur: {
+            app_title: "ویئر ہاؤس",
+            app_subtitle: "اسکین ریکارڈز",
+            total_scanned: "کل اسکین شدہ اشیاء",
+            mr_button: "برانچ کے حساب سے MR دیکھیں",
+            preset_today: "آج",
+            preset_yesterday: "کل",
+            preset_week: "ہفتہ",
+            preset_month: "مہینہ",
+            preset_all: "سب",
+            search_placeholder: "ملازم تلاش کریں...",
+            chart_title: "ملازم کی کارکردگی",
+            loading: "لوڈ ہو رہا ہے...",
+            mr_modal_title: "برانچ وار MR",
+            mr_total: "کل مطلوبہ",
+            mr_transferred: "کل منتقل شدہ",
+            mr_pending: "کل بقایا",
+            loading_branches: "برانچ کا ڈیٹا لوڈ ہو رہا ہے...",
+            no_records: "کوئی ریکارڈ نہیں",
+            no_mr: "کوئی مواد کی درخواست نہیں ملی۔"
+        }
+    };
+
+    let currentLang = localStorage.getItem('app_lang') || 'ar';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('app_lang', lang);
+        const root = document.getElementById('htmlRoot');
+        root.setAttribute('lang', lang);
+        root.setAttribute('dir', (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr');
+        
+        const selectEl = document.getElementById('langSelect');
+        if (selectEl) selectEl.value = lang;
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang][key]) el.textContent = translations[lang][key];
+        });
+
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (translations[lang][key]) el.placeholder = translations[lang][key];
+        });
+    }
+
+    function changeLanguage(lang) {
+        setLanguage(lang);
+        filterEntries();
+    }
+
     const CONFIG = {
         serverUrl: "https://87-237-225-155.nip.io",
         apiKey: "6f039a5a6130b79",
@@ -464,6 +607,7 @@
     let empChartInstance = null;
 
     document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLang);
         fetchScanEntries();
     });
 
@@ -516,14 +660,15 @@
         let totalScanned = 0;
         let empTotals = {};
 
-        document.getElementById('totalDocCount').textContent = docs.length;
-
         if (docs.length === 0) {
-            container.innerHTML = `<div style="text-align:center; padding:15px; font-size:11px; color:#64748b;">لا توجد سجلات</div>`;
+            container.innerHTML = `<div style="text-align:center; padding:15px; font-size:11px; color:#64748b;">${translations[currentLang].no_records}</div>`;
             document.getElementById('totalItemsCount').textContent = '0';
             renderChart([], []);
             return;
         }
+
+        // الترتيب من الأحدث للأقدم
+        docs.sort((a, b) => new Date(extractDocDate(b)) - new Date(extractDocDate(a)));
 
         docs.forEach(doc => {
             const scans = doc.employee_scans || [];
@@ -618,7 +763,7 @@
         });
     }
 
-    /* طلبات المواد - التجميع بالفروع فقط */
+    /* طلبات المواد */
     let cacheMRDocs = [];
     let mrDateFilterMode = 'month';
 
@@ -634,7 +779,7 @@
 
     async function fetchAllMR() {
         const listContainer = document.getElementById('branchSummaryList');
-        listContainer.innerHTML = `<div style="text-align:center; padding:15px; font-size:11px;">جاري تحميل بيانات الفروع...</div>`;
+        listContainer.innerHTML = `<div style="text-align:center; padding:15px; font-size:11px;">${translations[currentLang].loading_branches}</div>`;
 
         try {
             let allRawList = [];
@@ -696,6 +841,9 @@
         let totalSum = 0, transSum = 0, pendSum = 0;
         let branchTotals = {};
 
+        // الترتيب من الأحدث للأقدم
+        cacheMRDocs.sort((a, b) => new Date(extractDocDate(b)) - new Date(extractDocDate(a)));
+
         cacheMRDocs.forEach(doc => {
             const tDate = doc.transaction_date || extractDocDate(doc);
             let dateMatch = true;
@@ -734,19 +882,17 @@
             });
         });
 
-        // تحديث أرقام الملخص في الأعلى
         document.getElementById('mrTotalQty').textContent = totalSum.toLocaleString('en-US');
         document.getElementById('mrTransferredQty').textContent = transSum.toLocaleString('en-US');
         document.getElementById('mrPendingQty').textContent = pendSum.toLocaleString('en-US');
 
-        // بناء كروت الفروع
         const listContainer = document.getElementById('branchSummaryList');
         listContainer.innerHTML = '';
 
         const branchNames = Object.keys(branchTotals);
 
         if (branchNames.length === 0) {
-            listContainer.innerHTML = `<div style="text-align:center; padding: 15px; color: var(--text-muted); font-size: 11px;">لا توجد طلبات مواد بالفترات المحددة.</div>`;
+            listContainer.innerHTML = `<div style="text-align:center; padding: 15px; color: var(--text-muted); font-size: 11px;">${translations[currentLang].no_mr}</div>`;
             return;
         }
 
