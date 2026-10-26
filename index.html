@@ -8,8 +8,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="الموسى التجارية">
 
+    <!-- أيقونة الـ Web App والـ Favicon الخارجية بالصورة الجديدة -->
     <link rel="apple-touch-icon" sizes="180x180" href="https://github.com/Almoosa-Trading/Almoosa-APP/blob/main/Almoosa%20LOGO.png?raw=true">
     <link rel="icon" type="image/png" sizes="32x32" href="https://github.com/Almoosa-Trading/Almoosa-APP/blob/main/Almoosa%20LOGO.png?raw=true">
+    <link rel="shortcut icon" href="https://github.com/Almoosa-Trading/Almoosa-APP/blob/main/Almoosa%20LOGO.png?raw=true">
 
     <title data-i18n="main_title">لوحة التحكم الاحترافية - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -102,7 +104,6 @@
             background: #ffffff;
         }
 
-        /* تنسيق زر التحميل/التحديث الجديد */
         .update-btn {
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             border: 1px solid var(--border);
@@ -246,10 +247,9 @@
 <div class="dashboard-container">
     <header>
         <div class="logo-container">
-            <img src="https://media.licdn.com/dms/image/v2/C4E0BAQEHjHeP0fMdtQ/company-logo_200_200/company-logo_200_200/0/1676382299436/__1_logo?e=2147483647&v=beta&t=5Cn2d1oQM1nRj-8tWtzIzuImvCD2JyHuZw9YHE3fCqM" alt="الموسى التجارية" class="brand-logo">
+            <img src="https://github.com/Almoosa-Trading/Almoosa-APP/blob/main/Almoosa%20LOGO.png?raw=true" alt="الموسى التجارية" class="brand-logo">
         </div>
         <div class="header-controls">
-            <!-- زر التحديثات الجديد -->
             <button class="update-btn" onclick="checkForUpdates(this)" title="تحميل التحديثات الأخيرة">
                 <i class="fa-solid fa-rotate"></i>
             </button>
@@ -486,12 +486,10 @@
         setLanguage(selectedLang);
     }
 
-    // دالة التحقق من التحديثات وجلب الكود الأخير مع تأثير الدوران للزر
     function checkForUpdates(btn) {
         const icon = btn.querySelector('i');
         icon.classList.add('fa-spin');
         
-        // محاولة إلغاء الكاش وإعادة تحميل الصفحة لأحدث نسخة من الخادم
         setTimeout(() => {
             if (navigator.serviceWorker && navigator.serviceWorker.controller) {
                 navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
