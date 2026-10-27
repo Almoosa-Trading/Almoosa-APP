@@ -1,19 +1,19 @@
 {
-  "name": "الموسى التجارية",
-  "short_name": "الموسى",
+  "name": "Almoosa Trading",
+  "short_name": "Almoosa Trading",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f8fafc",
+  "background_color": "#0f172a",
   "theme_color": "#0f172a",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://github.com/Almoosa-Trading/Almoosa-APP/blob/main/Almoosa%20App.png?raw=true",
+      "src": "https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "https://github.com/Almoosa-Trading/Almoosa-APP/blob/main/Almoosa%20App.png?raw=true",
+      "src": "https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png",
       "sizes": "512x512",
       "type": "image/png"
     }
