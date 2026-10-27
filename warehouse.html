@@ -4,124 +4,151 @@
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title data-i18n="page_title">إدارة المستودع</title>
-
-    <!-- خط Cairo ورسومات FontAwesome وتطبيق Chart.js -->
+    <title data-i18n="page_title">إدارة المستودع - الموسى التجارية</title>
+    
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        /* الألوان والمتغيرات للوضع النهاري والليلي */
         :root {
-            --bg-main: #f8fafc;
-            --surface-card: #ffffff;
-            --brand-primary: #1d4ed8;
-            --brand-light: #2563eb;
-            --brand-soft: #eff6ff;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --border-main: #e2e8f0;
-            --radius-md: 12px;
-            --radius-lg: 16px;
+            --border: #e2e8f0;
+            --accent: #2563eb;
+            --accent-light: #eff6ff;
+            --primary: #0f172a;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --radius: 14px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Cairo', sans-serif;
-            -webkit-tap-highlight-color: transparent;
+        [data-theme="dark"] {
+            --bg-body: #090d16;
+            --bg-card: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #1f2937;
+            --accent: #3b82f6;
+            --accent-light: #1e3a8a;
+            --primary: #1e293b;
         }
 
         body {
-            background-color: var(--bg-main);
+            background-color: var(--bg-body);
             color: var(--text-main);
-            padding: 8px;
+            font-family: 'Cairo', sans-serif;
+            padding: 10px;
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
         }
 
-        .dashboard-container {
+        .mobile-container {
             width: 100%;
             max-width: 480px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            margin: 0 auto;
         }
 
-        /* الهيدر العلوي */
-        .app-header {
-            background: var(--surface-card);
-            padding: 10px 12px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-main);
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 14px 16px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .header-title-box h1 {
+            font-size: 15px;
+            color: var(--text-main);
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .header-title-box p {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .header-left-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn, .lang-select {
+            height: 32px;
+            padding: 0 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            outline: none;
+        }
+
+        .hero-metric-card {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .header-brand {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .brand-icon {
-            width: 34px;
-            height: 34px;
-            background: var(--brand-primary);
-            color: white;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-        }
-
-        .brand-info h1 { font-size: 13px; font-weight: 800; }
-        .brand-info p { font-size: 9px; color: var(--text-muted); }
-
-        .header-actions { display: flex; gap: 6px; align-items: center; }
-
-        .btn-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: 1px solid var(--border-main);
-            background: #f8fafc;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 12px;
-        }
-
-        .lang-select {
-            height: 32px;
-            border-radius: 8px;
-            border: 1px solid var(--border-main);
-            background: #f8fafc;
-            color: var(--text-muted);
-            padding: 0 6px;
+        .hero-metric-info span {
             font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            outline: none;
+            color: #dbeafe;
+            font-weight: 600;
+            display: block;
         }
 
-        /* زر طلبات المواد البارز قبل الفلاتر */
+        .hero-metric-info h2 {
+            font-size: 24px;
+            font-weight: 900;
+            margin-top: 4px;
+            color: #ffffff;
+        }
+
+        .hero-metric-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
         .btn-mr-banner {
             width: 100%;
-            height: 40px;
-            background: linear-gradient(135deg, var(--brand-primary), var(--brand-light));
+            height: 44px;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: white;
             border: none;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius);
             font-size: 12px;
             font-weight: 800;
             display: flex;
@@ -129,179 +156,187 @@
             justify-content: center;
             gap: 8px;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(29, 78, 216, 0.25);
-            transition: var(--transition);
+            box-shadow: 0 6px 15px rgba(5, 150, 105, 0.25);
+            margin-bottom: 12px;
         }
 
-        .btn-mr-banner:hover { opacity: 0.95; }
-
-        /* كارت إحصائية الممسوح الكلي */
-        .single-metric-card {
-            background: var(--surface-card);
-            border-radius: 10px;
-            padding: 10px 14px;
-            border: 1px solid var(--border-main);
+        .filter-panel {
+            background: var(--bg-card);
+            padding: 12px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 12px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
+            border: 1px solid var(--border);
         }
 
-        .single-metric-card span { font-size: 11px; font-weight: 700; color: var(--text-muted); }
-        .single-metric-card h2 { font-size: 18px; font-weight: 900; color: var(--brand-primary); }
-
-        /* إحصائيات النافذة المنبثقة */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
+        .period-chips {
+            display: flex;
+            width: 100%;
+            gap: 4px;
         }
 
-        .stats-card {
-            background: var(--surface-card);
-            border-radius: 10px;
-            padding: 8px;
-            border: 1px solid var(--border-main);
+        .chip {
+            flex: 1;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            padding: 8px 0;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
             text-align: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
         }
 
-        .stats-card span { font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; }
-        .stats-card h2 { font-size: 15px; font-weight: 900; color: var(--brand-primary); margin-top: 2px; }
+        .chip.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
 
-        /* منطقة الرسوم البيانية المصغرة */
+        .search-field {
+            position: relative;
+        }
+
+        .search-field input {
+            width: 100%;
+            padding: 9px 35px 9px 12px;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 11px;
+            outline: none;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .search-field i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
         .chart-box {
-            background: var(--surface-card);
-            border-radius: var(--radius-md);
-            padding: 10px;
-            border: 1px solid var(--border-main);
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
         }
 
         .chart-title {
             font-size: 11px;
             font-weight: 800;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
+            color: var(--text-main);
         }
 
         .chart-container {
             position: relative;
             width: 100%;
-            height: 140px;
+            height: 150px;
         }
 
-        /* الفلاتر */
-        .filter-card {
-            background: var(--surface-card);
-            border-radius: var(--radius-md);
-            padding: 10px;
-            border: 1px solid var(--border-main);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .preset-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 4px;
-        }
-
-        .preset-btn {
-            background: #f8fafc;
-            border: 1px solid var(--border-main);
-            color: var(--text-muted);
-            padding: 6px 2px;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 700;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .preset-btn.active {
-            background: var(--brand-primary);
-            color: white;
-            border-color: var(--brand-primary);
-        }
-
-        .search-field input {
-            width: 100%;
-            padding: 8px 30px 8px 10px;
-            background: #f8fafc;
-            border: 1px solid var(--border-main);
-            border-radius: 8px;
-            font-size: 11px;
-            outline: none;
-        }
-
-        .search-field { position: relative; }
-        .search-field i { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 11px; }
-
-        /* كروت السجلات */
         .doc-card {
-            background: var(--surface-card);
-            border-radius: var(--radius-md);
-            padding: 10px;
-            border: 1px solid var(--border-main);
-            margin-bottom: 8px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 10px;
+            border-right: 4px solid var(--accent);
         }
 
         .doc-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 5px;
-            margin-bottom: 5px;
-            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 6px;
+            margin-bottom: 6px;
+            border-bottom: 1px solid var(--border);
         }
 
-        .doc-date { font-size: 11px; font-weight: 800; }
-        .doc-total { background: var(--brand-soft); color: var(--brand-primary); font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; }
+        .doc-date {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .doc-total {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
 
         .emp-row {
             display: flex;
             flex-direction: column;
             gap: 3px;
             padding: 5px 0;
-            border-top: 1px dashed #f1f5f9;
+            border-top: 1px dashed var(--border);
         }
 
-        .emp-info { display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; }
+        .emp-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
 
         .kpi-bar {
-            height: 3px;
-            background: #f1f5f9;
-            border-radius: 3px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 4px;
             overflow: hidden;
             display: flex;
         }
 
-        .kpi-fill { height: 100%; border-radius: 3px; }
+        .kpi-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
 
         /* Modal طلبات المواد */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.7);
-            z-index: 999;
+            background: rgba(15, 23, 42, 0.75);
+            z-index: 1000;
             display: none;
             justify-content: center;
             align-items: flex-end;
         }
 
-        .modal-overlay.active { display: flex; }
+        .modal-overlay.active {
+            display: flex;
+        }
 
         .modal-box {
-            background: var(--surface-card);
+            background: var(--bg-card);
             width: 100%;
+            max-width: 480px;
             max-height: 85vh;
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.3);
             animation: slideUp 0.3s ease;
         }
 
@@ -312,50 +347,79 @@
 
         .modal-header {
             padding: 12px 16px;
-            background: #0f172a;
+            background: var(--primary);
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .modal-header h2 { font-size: 12px; font-weight: 800; }
-        .modal-close { background: none; border: none; color: white; font-size: 16px; cursor: pointer; }
+        .modal-header h2 {
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
         .modal-body {
-            padding: 10px;
+            padding: 12px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            max-height: calc(85vh - 50px);
+            gap: 10px;
         }
 
-        .branch-summary-list {
-            display: flex;
-            flex-direction: column;
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 6px;
+        }
+
+        .stats-card {
+            background: var(--bg-body);
+            border-radius: 8px;
+            padding: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stats-card span {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        .stats-card h2 {
+            font-size: 13px;
+            font-weight: 900;
+            margin-top: 2px;
         }
 
         .branch-summary-card {
-            background: #ffffff;
-            border: 1px solid var(--border-main);
+            background: var(--bg-body);
+            border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 10px 12px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             gap: 6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
 
         .branch-card-title {
             font-size: 11px;
             font-weight: 800;
-            color: var(--brand-primary);
+            color: var(--text-main);
             display: flex;
             align-items: center;
             gap: 6px;
-            border-bottom: 1px dashed var(--border-main);
+            border-bottom: 1px dashed var(--border);
             padding-bottom: 4px;
         }
 
@@ -367,59 +431,75 @@
         }
 
         .branch-val-box {
-            background: #f8fafc;
+            background: var(--bg-card);
             padding: 6px 4px;
             border-radius: 6px;
-            border: 1px solid #f1f5f9;
+            border: 1px solid var(--border);
         }
 
-        .branch-val-box span { font-size: 9px; font-weight: 700; color: var(--text-muted); display: block; }
-        .branch-val-box strong { font-size: 12px; font-weight: 900; }
+        .branch-val-box span {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        .branch-val-box strong {
+            font-size: 11px;
+            font-weight: 900;
+        }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
-<div class="dashboard-container">
-    <header class="app-header">
-        <div class="header-brand">
-            <div class="brand-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
-            <div class="brand-info">
-                <h1 data-i18n="app_title">إدارة المستودع</h1>
-                <p data-i18n="app_subtitle">سجلات المسح</p>
-            </div>
+<div class="mobile-container">
+    <!-- الهيدر العلوي -->
+    <header>
+        <div class="header-title-box">
+            <h1 data-i18n="app_title">إدارة المستودع</h1>
+            <p data-i18n="app_subtitle">سجلات المسح</p>
         </div>
-        <div class="header-actions">
+        <div class="header-left-group">
+            <!-- زر الوضع الليلي -->
+            <button class="action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
             <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
                 <option value="ar">AR</option>
                 <option value="en">EN</option>
                 <option value="hi">HI</option>
                 <option value="ur">UR</option>
             </select>
-            <button class="btn-icon" onclick="fetchScanEntries()"><i class="fa-solid fa-rotate"></i></button>
-            <a href="index.html" class="btn-icon"><i class="fa-solid fa-house"></i></a>
+            <button class="action-btn" onclick="fetchScanEntries()" title="تحديث">🔄</button>
+            <a href="index.html" class="action-btn" title="الرئيسية">🏠</a>
         </div>
     </header>
 
-    <!-- إحصائية الممسوح الكلي فقط -->
-    <div class="single-metric-card">
-        <span data-i18n="total_scanned">إجمالي القطع الممسوحة</span>
-        <h2 id="totalItemsCount">0</h2>
+    <!-- إحصائية الممسوح الكلي -->
+    <div class="hero-metric-card">
+        <div class="hero-metric-info">
+            <span data-i18n="total_scanned">إجمالي القطع الممسوحة</span>
+            <h2 id="totalItemsCount">0</h2>
+        </div>
+        <div class="hero-metric-icon">
+            <i class="fa-solid fa-boxes-stacked"></i>
+        </div>
     </div>
 
-    <!-- زر طلبات المواد (MR) البارز الآن قبل الفلاتر تماماً -->
+    <!-- زر طلبات المواد (MR) البارز -->
     <button class="btn-mr-banner" onclick="openMRModal()">
         <i class="fa-solid fa-truck-ramp-box"></i>
         <span data-i18n="mr_button">عرض طلبات المواد (MR) حسب الفروع</span>
     </button>
 
-    <!-- الفلتر -->
-    <div class="filter-card">
-        <div class="preset-grid">
-            <button class="preset-btn" onclick="setDatePreset('today')" data-i18n="preset_today">اليوم</button>
-            <button class="preset-btn" onclick="setDatePreset('yesterday')" data-i18n="preset_yesterday">أمس</button>
-            <button class="preset-btn" onclick="setDatePreset('week')" data-i18n="preset_week">الأسبوع</button>
-            <button class="preset-btn active" id="monthPresetBtn" onclick="setDatePreset('month')" data-i18n="preset_month">الشهر</button>
-            <button class="preset-btn" onclick="setDatePreset('all')" data-i18n="preset_all">الكل</button>
+    <!-- الفلتر والبحث -->
+    <div class="filter-panel">
+        <div class="period-chips">
+            <button class="chip" onclick="setDatePreset('today')" data-i18n="preset_today">اليوم</button>
+            <button class="chip" onclick="setDatePreset('yesterday')" data-i18n="preset_yesterday">أمس</button>
+            <button class="chip" onclick="setDatePreset('week')" data-i18n="preset_week">الأسبوع</button>
+            <button class="chip active" id="monthPresetBtn" onclick="setDatePreset('month')" data-i18n="preset_month">الشهر</button>
+            <button class="chip" onclick="setDatePreset('all')" data-i18n="preset_all">الكل</button>
         </div>
 
         <div class="search-field">
@@ -428,9 +508,12 @@
         </div>
     </div>
 
-    <!-- رسم بياني مصغر -->
+    <!-- الرسم البياني للأداء -->
     <div class="chart-box">
-        <div class="chart-title"><i class="fa-solid fa-chart-column" style="color:var(--brand-primary);"></i> <span data-i18n="chart_title">أداء الموظفين هذا الشهر</span></div>
+        <div class="chart-title">
+            <i class="fa-solid fa-chart-column" style="color:var(--accent);"></i> 
+            <span data-i18n="chart_title">أداء الموظفين هذا الشهر</span>
+        </div>
         <div class="chart-container">
             <canvas id="employeeScanChart"></canvas>
         </div>
@@ -438,7 +521,7 @@
 
     <!-- السجلات -->
     <div id="entriesContainer">
-        <div style="text-align:center; padding: 20px; color: var(--text-muted); font-size: 11px;" data-i18n="loading">جاري تحميل البيانات...</div>
+        <div style="text-align:center; padding: 25px; color: var(--text-muted); font-size: 11px; font-weight: 700;" data-i18n="loading">جاري تحميل البيانات...</div>
     </div>
 </div>
 
@@ -452,37 +535,39 @@
         <div class="modal-body">
             <div class="metrics-grid">
                 <div class="stats-card">
-                    <span data-i18n="mr_total">إجمالي المطلوب</span>
-                    <h2 id="mrTotalQty" style="font-size: 13px;">0</h2>
+                    <span data-i18n="card_required">المطلوب</span>
+                    <h2 id="mrTotalQty" style="color:var(--danger);">0</h2>
                 </div>
                 <div class="stats-card">
-                    <span data-i18n="mr_transferred">إجمالي المحول</span>
-                    <h2 id="mrTransferredQty" style="font-size: 13px; color: var(--success);">0</h2>
+                    <span data-i18n="card_transferred">المحول</span>
+                    <h2 id="mrTransferredQty" style="color:var(--success);">0</h2>
                 </div>
                 <div class="stats-card">
-                    <span data-i18n="mr_pending">إجمالي المتبقي</span>
-                    <h2 id="mrPendingQty" style="font-size: 13px; color: var(--danger);">0</h2>
+                    <span data-i18n="card_pending">المتبقي</span>
+                    <h2 id="mrPendingQty" style="color:var(--warning);">0</h2>
                 </div>
             </div>
 
-            <div class="preset-grid">
-                <button class="preset-btn" onclick="setMRDatePreset('today', this)" data-i18n="preset_today">اليوم</button>
-                <button class="preset-btn" onclick="setMRDatePreset('yesterday', this)" data-i18n="preset_yesterday">أمس</button>
-                <button class="preset-btn" onclick="setMRDatePreset('week', this)" data-i18n="preset_week">الأسبوع</button>
-                <button class="preset-btn active" onclick="setMRDatePreset('month', this)" data-i18n="preset_month">الشهر</button>
-                <button class="preset-btn" onclick="setMRDatePreset('all', this)" data-i18n="preset_all">الكل</button>
+            <div class="period-chips">
+                <button class="chip" onclick="setMRDatePreset('today', this)" data-i18n="preset_today">اليوم</button>
+                <button class="chip" onclick="setMRDatePreset('yesterday', this)" data-i18n="preset_yesterday">أمس</button>
+                <button class="chip" onclick="setMRDatePreset('week', this)" data-i18n="preset_week">الأسبوع</button>
+                <button class="chip active" onclick="setMRDatePreset('month', this)" data-i18n="preset_month">الشهر</button>
+                <button class="chip" onclick="setMRDatePreset('all', this)" data-i18n="preset_all">الكل</button>
             </div>
 
-            <div class="branch-summary-list" id="branchSummaryList">
-                <div style="text-align:center; padding: 15px; font-size: 11px;" data-i18n="loading_branches">جاري تجميع بيانات الفروع...</div>
+            <div class="branch-summary-list" id="branchSummaryList" style="display:flex; flex-direction:column; gap:6px;">
+                <div style="text-align:center; padding:15px; font-size:11px; color:var(--text-muted); font-weight:700;" data-i18n="loading_branches">جاري تجميع بيانات الفروع...</div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+    // قاموس الترجمات الشامل
     const translations = {
         ar: {
+            page_title: "إدارة المستودع - الموسى التجارية",
             app_title: "إدارة المستودع",
             app_subtitle: "سجلات المسح",
             total_scanned: "إجمالي القطع الممسوحة",
@@ -496,14 +581,15 @@
             chart_title: "أداء الموظفين هذا الشهر",
             loading: "جاري تحميل البيانات...",
             mr_modal_title: "إجمالي طلبات المواد حسب الفروع",
-            mr_total: "إجمالي المطلوب",
-            mr_transferred: "إجمالي المحول",
-            mr_pending: "إجمالي المتبقي",
+            card_required: "المطلوب",
+            card_transferred: "المحول",
+            card_pending: "المتبقي",
             loading_branches: "جاري تجميع بيانات الفروع...",
-            no_records: "لا توجد سجلات",
+            no_records: "لا توجد سجلات مسجلة",
             no_mr: "لا توجد طلبات مواد بالفترات المحددة."
         },
         en: {
+            page_title: "Warehouse - Almoosa Trading",
             app_title: "Warehouse",
             app_subtitle: "Scan Records",
             total_scanned: "Total Scanned Items",
@@ -517,14 +603,15 @@
             chart_title: "Employee Performance",
             loading: "Loading data...",
             mr_modal_title: "MR Totals by Branch",
-            mr_total: "Total Required",
-            mr_transferred: "Total Transferred",
-            mr_pending: "Total Pending",
+            card_required: "Required",
+            card_transferred: "Transferred",
+            card_pending: "Pending",
             loading_branches: "Loading branch data...",
             no_records: "No records found",
             no_mr: "No material requests found."
         },
         hi: {
+            page_title: "वेयरहाउस - अलमूसा ट्रेडिंग",
             app_title: "वेयरहाउस",
             app_subtitle: "स्कैन रिकॉर्ड",
             total_scanned: "कुल स्कैन किए गए आइटम",
@@ -538,18 +625,19 @@
             chart_title: "कर्मचारी प्रदर्शन",
             loading: "लोड हो रहा है...",
             mr_modal_title: "शाखा वार MR",
-            mr_total: "कुल आवश्यक",
-            mr_transferred: "कुल स्थानांतरित",
-            mr_pending: "कुल शेष",
+            card_required: "आवश्यक",
+            card_transferred: "स्थानांतरित",
+            card_pending: "शेष",
             loading_branches: "शाखा डेटा लोड हो रहा है...",
             no_records: "कोई रिकॉर्ड नहीं",
             no_mr: "कोई सामग्री अनुरोध नहीं मिला।"
         },
         ur: {
+            page_title: "ویئر ہاؤس - الموسی ٹریڈنگ",
             app_title: "ویئر ہاؤس",
             app_subtitle: "اسکین ریکارڈز",
             total_scanned: "کل اسکین شدہ اشیاء",
-            mr_button: "برانچ کے حساب سے MR دیکھیں",
+            mr_button: "برانچ کے حساب سے MR देखें",
             preset_today: "آج",
             preset_yesterday: "کل",
             preset_week: "ہفتہ",
@@ -559,9 +647,9 @@
             chart_title: "ملازم کی کارکردگی",
             loading: "لوڈ ہو رہا ہے...",
             mr_modal_title: "برانچ وار MR",
-            mr_total: "کل مطلوبہ",
-            mr_transferred: "کل منتقل شدہ",
-            mr_pending: "کل بقایا",
+            card_required: "مطلوبہ",
+            card_transferred: "منتقل شدہ",
+            card_pending: "بقیہ",
             loading_branches: "برانچ کا ڈیٹا لوڈ ہو رہا ہے...",
             no_records: "کوئی ریکارڈ نہیں",
             no_mr: "کوئی مواد کی درخواست نہیں ملی۔"
@@ -582,19 +670,51 @@
 
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
-            if (translations[lang][key]) el.textContent = translations[lang][key];
+            if (translations[lang] && translations[lang][key]) {
+                el.textContent = translations[lang][key];
+            }
         });
 
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
-            if (translations[lang][key]) el.placeholder = translations[lang][key];
+            if (translations[lang] && translations[lang][key]) {
+                el.placeholder = translations[lang][key];
+            }
         });
     }
 
     function changeLanguage(lang) {
         setLanguage(lang);
         filterEntries();
+        if(cacheMRDocs.length > 0) filterMRData();
     }
+
+    // وظيفة الوضع الليلي المستقلة والمضمونة
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('app_theme') || 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('app_theme', newTheme);
+        
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeIcon) {
+            themeIcon.className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLang);
+        const savedTheme = localStorage.getItem('app_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body.setAttribute('data-theme', savedTheme);
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeIcon) {
+            themeIcon.className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+        fetchScanEntries();
+    });
 
     const CONFIG = {
         serverUrl: "https://87-237-225-155.nip.io",
@@ -605,11 +725,6 @@
     let cacheDocs = [];
     let currentFilterMode = 'month';
     let empChartInstance = null;
-
-    document.addEventListener('DOMContentLoaded', () => {
-        setLanguage(currentLang);
-        fetchScanEntries();
-    });
 
     function formatDateISO(dateObj) {
         const year = dateObj.getFullYear();
@@ -626,7 +741,7 @@
 
     function setDatePreset(mode) {
         currentFilterMode = mode;
-        document.querySelectorAll('.filter-card .preset-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.filter-panel .chip').forEach(btn => btn.classList.remove('active'));
         if (event && event.target) event.target.classList.add('active');
         filterEntries();
     }
@@ -661,13 +776,12 @@
         let empTotals = {};
 
         if (docs.length === 0) {
-            container.innerHTML = `<div style="text-align:center; padding:15px; font-size:11px; color:#64748b;">${translations[currentLang].no_records}</div>`;
+            container.innerHTML = `<div style="text-align:center; padding:25px; color:var(--text-muted); font-size:11px; font-weight:700;">${translations[currentLang]?.no_records || 'لا توجد سجلات'}</div>`;
             document.getElementById('totalItemsCount').textContent = '0';
             renderChart([], []);
             return;
         }
 
-        // الترتيب من الأحدث للأقدم
         docs.sort((a, b) => new Date(extractDocDate(b)) - new Date(extractDocDate(a)));
 
         docs.forEach(doc => {
@@ -685,14 +799,19 @@
                 empTotals[empName] = (empTotals[empName] || 0) + count;
                 const percent = dayTotal > 0 ? Math.round((count / dayTotal) * 100) : 0;
 
+                let fillColor = '#2563eb';
+                if (percent >= 40) fillColor = '#10b981';
+                else if (percent >= 20) fillColor = '#f59e0b';
+                else fillColor = '#ef4444';
+
                 rowsHtml += `
                     <div class="emp-row">
                         <div class="emp-info">
                             <span>${empName}</span>
-                            <span>${count.toLocaleString('en-US')} Pcs (${percent}%)</span>
+                            <span>Pcs (${percent}%) ${count.toLocaleString('en-US')}</span>
                         </div>
                         <div class="kpi-bar">
-                            <div class="kpi-fill" style="width:${percent}%; background:var(--brand-primary);"></div>
+                            <div class="kpi-fill" style="width:${percent}%; background:${fillColor};"></div>
                         </div>
                     </div>
                 `;
@@ -705,7 +824,7 @@
             card.innerHTML = `
                 <div class="doc-card-header">
                     <span class="doc-date">${extractDocDate(doc)}</span>
-                    <span class="doc-total">إجمالي: ${dayTotal.toLocaleString('en-US')} Pcs</span>
+                    <span class="doc-total">Pcs ${dayTotal.toLocaleString('en-US')} :إجمالي</span>
                 </div>
                 ${rowsHtml}
             `;
@@ -752,18 +871,21 @@
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{ data: values, backgroundColor: '#2563eb', borderRadius: 4 }]
+                datasets: [{ data: values, backgroundColor: '#2563eb', borderRadius: 6 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true }, x: { ticks: { font: { size: 9 } } } }
+                scales: { 
+                    y: { beginAtZero: true, grid: { color: 'rgba(100, 116, 139, 0.1)' }, ticks: { font: { family: 'Cairo', size: 9 } } }, 
+                    x: { grid: { display: false }, ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } } } 
+                }
             }
         });
     }
 
-    /* طلبات المواد */
+    /* --- طلبات المواد (Material Request) --- */
     let cacheMRDocs = [];
     let mrDateFilterMode = 'month';
 
@@ -779,7 +901,7 @@
 
     async function fetchAllMR() {
         const listContainer = document.getElementById('branchSummaryList');
-        listContainer.innerHTML = `<div style="text-align:center; padding:15px; font-size:11px;">${translations[currentLang].loading_branches}</div>`;
+        listContainer.innerHTML = `<div style="text-align:center; padding:20px; font-size:11px; font-weight:700; color:var(--text-muted);">${translations[currentLang]?.loading_branches || 'جاري تجميع بيانات الفروع...'}</div>`;
 
         try {
             let allRawList = [];
@@ -823,13 +945,13 @@
 
             filterMRData();
         } catch (err) {
-            listContainer.innerHTML = `<div style="text-align:center; color:red; font-size:11px;">فشل جلب البيانات</div>`;
+            listContainer.innerHTML = `<div style="text-align:center; color:red; font-size:11px; font-weight:700;">فشل جلب البيانات من السيرفر</div>`;
         }
     }
 
     function setMRDatePreset(mode, btnEl) {
         mrDateFilterMode = mode;
-        btnEl.closest('.preset-grid').querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        btnEl.closest('.modal-body').querySelectorAll('.period-chips .chip').forEach(b => b.classList.remove('active'));
         btnEl.classList.add('active');
         filterMRData();
     }
@@ -841,7 +963,6 @@
         let totalSum = 0, transSum = 0, pendSum = 0;
         let branchTotals = {};
 
-        // الترتيب من الأحدث للأقدم
         cacheMRDocs.sort((a, b) => new Date(extractDocDate(b)) - new Date(extractDocDate(a)));
 
         cacheMRDocs.forEach(doc => {
@@ -892,7 +1013,7 @@
         const branchNames = Object.keys(branchTotals);
 
         if (branchNames.length === 0) {
-            listContainer.innerHTML = `<div style="text-align:center; padding: 15px; color: var(--text-muted); font-size: 11px;">${translations[currentLang].no_mr}</div>`;
+            listContainer.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:11px; font-weight:700;">${translations[currentLang]?.no_mr || 'لا توجد طلبات مواد بالفترات المحددة.'}</div>`;
             return;
         }
 
@@ -907,16 +1028,16 @@
                 </div>
                 <div class="branch-values-grid">
                     <div class="branch-val-box">
-                        <span>المطلب</span>
-                        <strong style="color:var(--brand-primary);">${data.qty.toLocaleString('en-US')}</strong>
+                        <span data-i18n="card_required">${translations[currentLang]?.card_required || 'المطلوب'}</span>
+                        <strong style="color:var(--danger);">${data.qty.toLocaleString('en-US')}</strong>
                     </div>
                     <div class="branch-val-box">
-                        <span>المحول</span>
+                        <span data-i18n="card_transferred">${translations[currentLang]?.card_transferred || 'المحول'}</span>
                         <strong style="color:var(--success);">${data.trans.toLocaleString('en-US')}</strong>
                     </div>
                     <div class="branch-val-box">
-                        <span>المتبقي</span>
-                        <strong style="color:var(--danger);">${data.pend.toLocaleString('en-US')}</strong>
+                        <span data-i18n="card_pending">${translations[currentLang]?.card_pending || 'المتبقي'}</span>
+                        <strong style="color:var(--warning);">${data.pend.toLocaleString('en-US')}</strong>
                     </div>
                 </div>
             `;

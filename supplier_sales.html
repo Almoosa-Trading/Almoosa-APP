@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title data-i18n="page_title">مبيعات الموردين - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary: #0f172a;
@@ -13,6 +14,8 @@
             --accent-gradient: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
             --success: #10b981;
             --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --danger: #ef4444;
+            --warning: #f59e0b;
             --bg-body: #f1f5f9;
             --bg-card: #ffffff;
             --text-main: #1e293b;
@@ -20,6 +23,16 @@
             --border: #e2e8f0;
             --radius: 16px;
             --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #090d16;
+            --bg-card: #111827;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #1f2937;
+            --accent: #3b82f6;
+            --primary: #1e293b;
         }
 
         * {
@@ -37,6 +50,7 @@
             padding: 12px;
             display: flex;
             justify-content: center;
+            transition: background 0.3s, color 0.3s;
         }
 
         .main-container {
@@ -58,7 +72,7 @@
 
         .header-title-box h1 {
             font-size: 15px;
-            color: var(--primary);
+            color: var(--text-main);
             font-weight: 800;
         }
 
@@ -75,30 +89,32 @@
         }
 
         .action-btn {
-            background: #f8fafc;
+            background: var(--bg-body);
             border: 1px solid var(--border);
             padding: 8px 12px;
             border-radius: 10px;
             cursor: pointer;
             font-size: 12px;
-            color: var(--primary);
+            color: var(--text-main);
             text-decoration: none;
             font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
+            height: 38px;
         }
 
         .lang-select {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: var(--bg-body);
             border: 1px solid var(--border);
             padding: 8px 10px;
             border-radius: 10px;
             font-size: 11px;
             font-weight: 700;
             cursor: pointer;
-            color: var(--primary);
+            color: var(--text-main);
             outline: none;
+            height: 38px;
         }
 
         .filter-panel {
@@ -133,13 +149,13 @@
         }
 
         .date-toggle-btn {
-            background: #f8fafc;
+            background: var(--bg-body);
             border: 1px solid var(--border);
             padding: 8px 12px;
             border-radius: 10px;
             font-size: 12px;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--text-main);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -153,13 +169,13 @@
         }
 
         .multi-select-btn {
-            background: #f8fafc;
+            background: var(--bg-body);
             border: 1px solid var(--border);
             padding: 8px 12px;
             border-radius: 10px;
             font-size: 12px;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--text-main);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -197,34 +213,38 @@
             font-weight: 700;
             cursor: pointer;
             border-radius: 6px;
+            color: var(--text-main);
         }
 
         .checkbox-item:hover {
-            background: #f1f5f9;
+            background: var(--bg-body);
         }
 
+        /* فلاتر الأيام بعرض الصفحة بالكامل وبشكل متناسق */
         .period-chips {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
+            display: flex;
+            width: 100%;
+            gap: 4px;
         }
 
         .chip {
-            background: #f8fafc;
+            flex: 1;
+            background: var(--bg-body);
             border: 1px solid var(--border);
-            padding: 8px 4px;
+            padding: 8px 0;
             border-radius: 10px;
             font-size: 11px;
             font-weight: 700;
             text-align: center;
             cursor: pointer;
             color: var(--text-muted);
+            transition: all 0.2s;
         }
 
         .chip.active {
-            background: var(--primary);
+            background: var(--accent);
             color: white;
-            border-color: var(--primary);
+            border-color: var(--accent);
         }
 
         .calendar-container {
@@ -241,13 +261,13 @@
             z-index: 1000;
         }
         .calendar-container.open { display: block; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; font-weight: 800; color: var(--primary); }
-        .calendar-header button { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; cursor: pointer; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 12px; font-weight: 800; color: var(--text-main); }
+        .calendar-header button { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px; cursor: pointer; color: var(--text-main); }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
         .calendar-day-name { font-size: 10px; color: var(--text-muted); font-weight: 700; }
-        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: #f8fafc; border-radius: 6px; cursor: pointer; }
+        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--bg-body); border-radius: 6px; cursor: pointer; color: var(--text-main); }
         .calendar-day.selected { background: var(--accent); color: white; }
-        .calendar-day.in-range { background: #e0e7ff; color: var(--accent); }
+        .calendar-day.in-range { background: rgba(99, 102, 241, 0.2); color: var(--accent); }
 
         .report-section {
             background: var(--bg-card);
@@ -261,7 +281,7 @@
         .section-title {
             font-size: 13px;
             font-weight: 800;
-            color: var(--primary);
+            color: var(--text-main);
             margin-bottom: 12px;
         }
 
@@ -294,7 +314,7 @@
         }
 
         .analytics-item {
-            background: #f8fafc;
+            background: var(--bg-body);
             border: 1px solid var(--border);
             padding: 12px;
             border-radius: 12px;
@@ -309,7 +329,7 @@
             align-items: center;
             font-size: 12px;
             font-weight: 800;
-            color: var(--primary);
+            color: var(--text-main);
         }
 
         .analytics-numbers {
@@ -319,7 +339,7 @@
         }
 
         .progress-track {
-            background: #e2e8f0;
+            background: var(--border);
             height: 8px;
             border-radius: 4px;
             overflow: hidden;
@@ -341,7 +361,7 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
 <div class="main-container">
     <header>
@@ -350,14 +370,18 @@
             <p data-i18n="header_subtitle">إدارة مبيعات الموردين</p>
         </div>
         <div class="header-left-group">
+            <!-- زر الوضع الليلي -->
+            <button class="action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
             <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
                 <option value="ar">العربية</option>
                 <option value="en">English</option>
                 <option value="hi">हिन्दी</option>
                 <option value="ur">اردو</option>
             </select>
-            <button class="action-btn" onclick="loadSupplierSalesData()" data-i18n="btn_refresh">🔄</button>
-            <a href="sales.html" class="action-btn" data-i18n="btn_back">⬅</a>
+            <button class="action-btn" onclick="loadSupplierSalesData()" data-i18n="btn_refresh" title="تحديث">🔄</button>
+            <a href="sales.html" class="action-btn" data-i18n="btn_back" title="الرئيسية">🏠</a>
         </div>
     </header>
 
@@ -388,7 +412,7 @@
                 </div>
             </div>
 
-            <!-- Gender Filter (الخانة الثانية) -->
+            <!-- Gender Filter -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_gender">Gender:</span>
                 <div class="multi-select-dropdown">
@@ -400,7 +424,7 @@
                 </div>
             </div>
 
-            <!-- Category Filter (الخانة الثالثة) -->
+            <!-- Category Filter -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_category">Category:</span>
                 <div class="multi-select-dropdown">
@@ -412,7 +436,7 @@
                 </div>
             </div>
 
-            <!-- Group Filter (الخانة الرابعة) -->
+            <!-- Group Filter -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_group">Group:</span>
                 <div class="multi-select-dropdown">
@@ -601,13 +625,27 @@
             }
         });
         
-        // إعادة بناء أسماء أزرار الفلاتر بناءً على اللغة
         updateAllButtonTexts();
     }
 
     function changeLanguage(selectedLang) {
         setLanguage(selectedLang);
         loadSupplierSalesData();
+    }
+
+    // وظيفة الوضع الليلي المستقلة
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('app_theme') || 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('app_theme', newTheme);
+        
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeIcon) {
+            themeIcon.className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
     }
 
     const CONFIG = {
@@ -624,6 +662,15 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         setLanguage(currentLang);
+        
+        const savedTheme = localStorage.getItem('app_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body.setAttribute('data-theme', savedTheme);
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeIcon) {
+            themeIcon.className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+
         setPreset('today', document.querySelector('.chip.active'));
         renderCalendar();
         
