@@ -2,14 +2,14 @@
 <html lang="ar" dir="rtl" id="htmlRoot">
 <head>
     <link rel="manifest" href="./manifest.json">
-<link rel="stylesheet" href="style.css?v=2.1">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title data-i18n="page_title">مبيعات الفروع - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- ربط ملف التنسیقات المشترك (Dark/Light Mode) -->
+    <!-- ربط ملف التنسيقات المشترك (Dark/Light Mode) -->
     <link rel="stylesheet" href="style.css">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -53,6 +53,57 @@
             display: flex;
             align-items: center;
             gap: 6px;
+        }
+
+        /* تكبير أزرار الرئيسية و رجوع وجعلها بأيقونات فقط بدون كلمات لترتيب الهيدر */
+        .action-btn-icon {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .action-btn-icon:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .action-btn {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 42px;
+        }
+
+        .lang-select {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            padding: 0 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-main);
+            outline: none;
+            height: 42px;
         }
 
         .hero-card {
@@ -354,6 +405,20 @@
             padding: 30px;
             color: var(--text-muted);
             font-size: 13px;
+        }
+
+        .report-btn {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: block;
         }
 
         .report-modal {
@@ -688,7 +753,7 @@
         </div>
         <div class="header-left-group">
             <!-- زر الوضع الليلي (Dark / Light Mode) -->
-            <button class="theme-btn action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+            <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
                 <i class="fa-solid fa-moon" id="themeIcon"></i>
             </button>
 
@@ -698,9 +763,17 @@
                 <option value="hi">हिन्दी</option>
                 <option value="ur">اردو</option>
             </select>
-            <button class="action-btn" onclick="loadPOSData()" title="تحديث">🔄</button>
-            <button class="action-btn" onclick="goBack()" title="رجوع" data-i18n="btn_back">⬅ رجوع</button>
-            <a href="index.html" class="action-btn" title="الرئيسية" data-i18n="btn_home">🏠 الرئيسية</a>
+            <button class="action-btn-icon" onclick="loadPOSData()" title="تحديث">
+                <i class="fa-solid fa-rotate"></i>
+            </button>
+            <!-- زر رجوع (أيقونة فقط بدون نص) -->
+            <button onclick="goBack()" class="action-btn-icon" title="رجوع">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <!-- زر الرئيسية (أيقونة فقط بدون نص) -->
+            <a href="index.html" class="action-btn-icon" title="الرئيسية">
+                <i class="fa-solid fa-house"></i>
+            </a>
         </div>
     </header>
 
