@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" id="htmlRoot">
 <head>
-    <link rel="stylesheet" href="style.css?v=2.1">
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -13,7 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        /* الألوان والمتغيرات للوضع النهاري والليلي */
         :root {
             --bg-body: #f8fafc;
             --bg-card: #ffffff;
@@ -287,20 +285,23 @@
             display: flex;
             flex-direction: column;
             gap: 3px;
-            padding: 5px 0;
-            border-top: 1px dashed var(--border);
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+        .emp-row:last-child {
+            border-bottom: none;
         }
 
         .emp-info {
             display: flex;
             justify-content: space-between;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 700;
             color: var(--text-main);
         }
 
         .kpi-bar {
-            height: 4px;
+            height: 5px;
             background: var(--border);
             border-radius: 4px;
             overflow: hidden;
@@ -454,14 +455,12 @@
 <body data-theme="light">
 
 <div class="mobile-container">
-    <!-- الهيدر العلوي -->
     <header>
         <div class="header-title-box">
             <h1 data-i18n="app_title">إدارة المستودع</h1>
             <p data-i18n="app_subtitle">سجلات المسح</p>
         </div>
         <div class="header-left-group">
-            <!-- زر الوضع الليلي -->
             <button class="action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
                 <i class="fa-solid fa-moon" id="themeIcon"></i>
             </button>
@@ -476,7 +475,6 @@
         </div>
     </header>
 
-    <!-- إحصائية الممسوح الكلي -->
     <div class="hero-metric-card">
         <div class="hero-metric-info">
             <span data-i18n="total_scanned">إجمالي القطع الممسوحة</span>
@@ -487,13 +485,11 @@
         </div>
     </div>
 
-    <!-- زر طلبات المواد (MR) البارز -->
     <button class="btn-mr-banner" onclick="openMRModal()">
         <i class="fa-solid fa-truck-ramp-box"></i>
         <span data-i18n="mr_button">عرض طلبات المواد (MR) حسب الفروع</span>
     </button>
 
-    <!-- الفلتر والبحث -->
     <div class="filter-panel">
         <div class="period-chips">
             <button class="chip" onclick="setDatePreset('today')" data-i18n="preset_today">اليوم</button>
@@ -509,7 +505,6 @@
         </div>
     </div>
 
-    <!-- الرسم البياني للأداء -->
     <div class="chart-box">
         <div class="chart-title">
             <i class="fa-solid fa-chart-column" style="color:var(--accent);"></i> 
@@ -520,7 +515,7 @@
         </div>
     </div>
 
-    <!-- السجلات -->
+    <!-- السجلات المجمعة للموظفين -->
     <div id="entriesContainer">
         <div style="text-align:center; padding: 25px; color: var(--text-muted); font-size: 11px; font-weight: 700;" data-i18n="loading">جاري تحميل البيانات...</div>
     </div>
@@ -565,12 +560,11 @@
 </div>
 
 <script>
-    // قاموس الترجمات الشامل
     const translations = {
         ar: {
             page_title: "إدارة المستودع - الموسى التجارية",
             app_title: "إدارة المستودع",
-            app_subtitle: "سجلات المسح",
+            app_subtitle: "ملخص أداء الموظفين",
             total_scanned: "إجمالي القطع الممسوحة",
             mr_button: "عرض طلبات المواد (MR) حسب الفروع",
             preset_today: "اليوم",
@@ -579,7 +573,7 @@
             preset_month: "الشهر",
             preset_all: "الكل",
             search_placeholder: "ابحث باسم الموظف...",
-            chart_title: "أداء الموظفين هذا الشهر",
+            chart_title: "أداء الموظفين للفترة المحددة",
             loading: "جاري تحميل البيانات...",
             mr_modal_title: "إجمالي طلبات المواد حسب الفروع",
             card_required: "المطلوب",
@@ -592,7 +586,7 @@
         en: {
             page_title: "Warehouse - Almoosa Trading",
             app_title: "Warehouse",
-            app_subtitle: "Scan Records",
+            app_subtitle: "Employee Performance Summary",
             total_scanned: "Total Scanned Items",
             mr_button: "View MR by Branch",
             preset_today: "Today",
@@ -614,7 +608,7 @@
         hi: {
             page_title: "वेयरहाउस - अलमूसा ट्रेडिंग",
             app_title: "वेयरहाउस",
-            app_subtitle: "स्कैन रिकॉर्ड",
+            app_subtitle: "कर्मचारी प्रदर्शन",
             total_scanned: "कुल स्कैन किए गए आइटम",
             mr_button: "शाखा द्वारा MR देखें",
             preset_today: "आज",
@@ -636,9 +630,9 @@
         ur: {
             page_title: "ویئر ہاؤس - الموسی ٹریڈنگ",
             app_title: "ویئر ہاؤس",
-            app_subtitle: "اسکین ریکارڈز",
+            app_subtitle: "ملازمین کی کارکردگی",
             total_scanned: "کل اسکین شدہ اشیاء",
-            mr_button: "برانچ کے حساب سے MR देखें",
+            mr_button: "برانچ के حساب से MR देखें",
             preset_today: "آج",
             preset_yesterday: "کل",
             preset_week: "ہفتہ",
@@ -690,7 +684,6 @@
         if(cacheMRDocs.length > 0) filterMRData();
     }
 
-    // وظيفة الوضع الليلي المستقلة والمضمونة
     function toggleTheme() {
         const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('app_theme') || 'light';
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -776,66 +769,68 @@
         let totalScanned = 0;
         let empTotals = {};
 
-        if (docs.length === 0) {
-            container.innerHTML = `<div style="text-align:center; padding:25px; color:var(--text-muted); font-size:11px; font-weight:700;">${translations[currentLang]?.no_records || 'لا توجد سجلات'}</div>`;
-            document.getElementById('totalItemsCount').textContent = '0';
-            renderChart([], []);
-            return;
-        }
-
-        docs.sort((a, b) => new Date(extractDocDate(b)) - new Date(extractDocDate(a)));
-
+        // تجميع الكميات لكل موظف خلال الفترة المحددة بالكامل
         docs.forEach(doc => {
             const scans = doc.employee_scans || [];
-            let dayTotal = 0;
-            scans.forEach(r => dayTotal += Number(r.scanned_items || 0));
-            totalScanned += dayTotal;
-
-            let rowsHtml = '';
             scans.forEach(row => {
                 const empName = row.employee_name || 'غير معروف';
                 if (searchQuery && !empName.toLowerCase().includes(searchQuery)) return;
 
                 const count = Number(row.scanned_items || 0);
                 empTotals[empName] = (empTotals[empName] || 0) + count;
-                const percent = dayTotal > 0 ? Math.round((count / dayTotal) * 100) : 0;
-
-                let fillColor = '#2563eb';
-                if (percent >= 40) fillColor = '#10b981';
-                else if (percent >= 20) fillColor = '#f59e0b';
-                else fillColor = '#ef4444';
-
-                rowsHtml += `
-                    <div class="emp-row">
-                        <div class="emp-info">
-                            <span>${empName}</span>
-                            <span>Pcs (${percent}%) ${count.toLocaleString('en-US')}</span>
-                        </div>
-                        <div class="kpi-bar">
-                            <div class="kpi-fill" style="width:${percent}%; background:${fillColor};"></div>
-                        </div>
-                    </div>
-                `;
+                totalScanned += count;
             });
-
-            if (rowsHtml === '' && searchQuery) return;
-
-            const card = document.createElement('div');
-            card.className = 'doc-card';
-            card.innerHTML = `
-                <div class="doc-card-header">
-                    <span class="doc-date">${extractDocDate(doc)}</span>
-                    <span class="doc-total">Pcs ${dayTotal.toLocaleString('en-US')} :إجمالي</span>
-                </div>
-                ${rowsHtml}
-            `;
-            container.appendChild(card);
         });
+
+        const sortedEmps = Object.keys(empTotals).sort((a, b) => empTotals[b] - empTotals[a]);
+
+        if (sortedEmps.length === 0) {
+            container.innerHTML = `<div style="text-align:center; padding:25px; color:var(--text-muted); font-size:11px; font-weight:700;">${translations[currentLang]?.no_records || 'لا توجد سجلات'}</div>`;
+            document.getElementById('totalItemsCount').textContent = '0';
+            renderChart([], []);
+            return;
+        }
+
+        // بناء بطاقة ملخص أداء الموظفين للفترة
+        const card = document.createElement('div');
+        card.className = 'doc-card';
+        
+        let rowsHtml = '';
+        sortedEmps.forEach(empName => {
+            const count = empTotals[empName];
+            const percent = totalScanned > 0 ? Math.round((count / totalScanned) * 100) : 0;
+
+            let fillColor = '#2563eb';
+            if (percent >= 40) fillColor = '#10b981';
+            else if (percent >= 20) fillColor = '#f59e0b';
+            else fillColor = '#ef4444';
+
+            rowsHtml += `
+                <div class="emp-row">
+                    <div class="emp-info">
+                        <span>${empName}</span>
+                        <span>Pcs (${percent}%) ${count.toLocaleString('en-US')}</span>
+                    </div>
+                    <div class="kpi-bar">
+                        <div class="kpi-fill" style="width:${percent}%; background:${fillColor};"></div>
+                    </div>
+                </div>
+            `;
+        });
+
+        card.innerHTML = `
+            <div class="doc-card-header">
+                <span class="doc-date" data-i18n="chart_title">ملخص أداء الموظفين</span>
+                <span class="doc-total">Pcs ${totalScanned.toLocaleString('en-US')} :إجمالي</span>
+            </div>
+            ${rowsHtml}
+        `;
+        container.appendChild(card);
 
         document.getElementById('totalItemsCount').textContent = totalScanned.toLocaleString('en-US');
 
-        const sortedEmps = Object.keys(empTotals).sort((a,b) => empTotals[b] - empTotals[a]).slice(0, 5);
-        renderChart(sortedEmps, sortedEmps.map(e => empTotals[e]));
+        const topEmps = sortedEmps.slice(0, 5);
+        renderChart(topEmps, topEmps.map(e => empTotals[e]));
     }
 
     function filterEntries() {
