@@ -1,4 +1,4 @@
-// --- تطبيق الوضع الليلي فوراً لمنع الوميض الأبيض ---
+// --- تطبيق الوضع الليلي فوراً لمنع الوميض الأبيض عند التحميل ---
 (function applyInitialTheme() {
     const savedTheme = localStorage.getItem('app_theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
@@ -368,13 +368,16 @@ function updateThemeIcon(theme) {
     }
 }
 
-// --- دالة التحديث الشاملة لمسح الكاش وجلب أحدث الملفات من السيرفر فوراً ---
+// --- دالة التحديث الشاملة المحدثة لضمان جلب أحدث البيانات والملفات ---
 async function checkForUpdates(btn) {
-    const icon = btn.querySelector('i');
-    if (icon) icon.classList.add('fa-spin');
+    let icon = null;
+    if (btn) {
+        icon = btn.querySelector('i');
+        if (icon) icon.classList.add('fa-spin');
+    }
     
     try {
-        // 1. مسح جميع بيانات الكاش المخزنة في المتصفح لجلب الملفات الجديدة
+        // 1. مسح جميع بيانات الكاش المخزنة في المتصفح
         if ('caches' in window) {
             const cacheNames = await caches.keys();
             await Promise.all(
@@ -382,18 +385,22 @@ async function checkForUpdates(btn) {
             );
         }
 
-        // 2. إلغاء تفعيل الـ Service Workers القديمة
+        // 2. إلغاء تفعيل وتحديث الـ Service Workers
         if ('serviceWorker' in navigator) {
             const registrations = await navigator.serviceWorker.getRegistrations();
             for (let registration of registrations) {
+                await registration.update();
                 await registration.unregister();
             }
         }
 
-        // 3. إعادة تحميل إجبارية للصفحة متخطية للذاكرة المؤقتة
+        // 3. إضافة طابع زمني عشوائي (Timestamp) لإجبار المتصفح على طلب الملفات كأنها جديدة
+        const timestamp = new Date().getTime();
+        const currentUrl = window.location.href.split('?')[0];
+
         setTimeout(() => {
-            window.location.reload(true);
-        }, 600);
+            window.location.href = `${currentUrl}?v=${timestamp}`;
+        }, 500);
 
     } catch (err) {
         console.error("Update failed:", err);
