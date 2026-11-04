@@ -5,7 +5,6 @@
     --accent-light: #eff6ff;    
     --accent-border: #bfdbfe;   
     
-    /* 🌟 خلفية فاتحة مطابقة تماماً لخلفية أودو (Odoo Light Background) */
     --bg-body: #e5e1ed;
     --bg-card: #ffffff;
     --text-main: #1e293b;
@@ -14,12 +13,10 @@
     --radius: 18px;
     --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
     
-    /* 🌟 هيدر احترافي داكن وفاخر */
     --header-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%);
     --btn-bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
 
-/* 🌙 الوضع الليلي (Dark Mode) الموحد لجميع الصفحات */
 [data-theme="dark"] {
     --primary: #2563eb;
     --accent: #3b82f6;
@@ -40,7 +37,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Cairo', sans-serif;
+    font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
     -webkit-tap-highlight-color: transparent;
     font-variant-numeric: lining-nums tabular-nums;
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
@@ -53,24 +50,25 @@ body {
     display: flex;
     justify-content: center;
     min-height: 100vh;
+    font-size: 15px; /* حجم قياسي ومريح للعين */
 }
 
 .dashboard-container, .mobile-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
 }
 
-/* 🎨 ترويسة (Header) احترافية ملونة وموحدة لجميع الصفحات */
+/* 🎨 ترويسة (Header) */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
-    padding: 20px 28px;
+    margin-bottom: 22px;
+    padding: 18px 25px;
     background: var(--header-bg);
     color: #ffffff;
-    border-radius: 18px;
-    box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.25);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
     border: 2px solid #38bdf8;
     position: relative;
     overflow: hidden;
@@ -87,17 +85,16 @@ header::before {
 }
 
 .header-title-box h1 {
-    font-size: 18px;
+    font-size: 20px;
     color: #ffffff;
-    font-weight: 800;
-    line-height: 1.3;
+    font-weight: 700;
 }
 
 .header-title-box p {
-    font-size: 11.5px;
+    font-size: 13px;
     color: #bae6fd;
     margin-top: 3px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .header-left-group {
@@ -109,38 +106,27 @@ header::before {
 .action-btn-icon, .action-btn {
     background: rgba(255, 255, 255, 0.12);
     border: 2px solid rgba(255, 255, 255, 0.25);
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
     cursor: pointer;
     font-size: 16px;
     color: #ffffff;
-    text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.25s;
-    backdrop-filter: blur(5px);
-}
-
-.action-btn-icon:hover, .action-btn:hover {
-    background: rgba(255, 255, 255, 0.22);
-    border-color: #38bdf8;
-    transform: translateY(-2px);
 }
 
 .lang-select {
     background: rgba(255, 255, 255, 0.12);
     border: 2px solid rgba(255, 255, 255, 0.25);
     padding: 0 14px;
-    border-radius: 14px;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
     color: #ffffff;
+    height: 42px;
     outline: none;
-    height: 44px;
-    backdrop-filter: blur(5px);
 }
 
 .lang-select option {
@@ -148,11 +134,7 @@ header::before {
     color: #ffffff;
 }
 
-.lang-select:hover, .lang-select:focus {
-    border-color: #38bdf8;
-}
-
-/* 💎 الكروت والشبكات (Grids & Cards) الموحدة */
+/* 💎 الكروت والشبكات */
 .branch-card, 
 .dashboard-card, 
 .main-chart-card, 
@@ -162,102 +144,100 @@ header::before {
 .menu-item {
     background: linear-gradient(145deg, var(--bg-card) 0%, rgba(37, 99, 235, 0.015) 100%) !important;
     border: 2px solid var(--border) !important;
-    opacity: 1 !important;
     box-shadow: var(--shadow) !important;
-    border-radius: 18px;
-    padding: 22px;
+    border-radius: 16px;
+    padding: 20px;
 }
 
-.branch-card:hover, 
-.dashboard-card:hover, 
-.main-chart-card:hover,
-.menu-item:not(.disabled):hover {
-    border-color: var(--accent) !important;
-    transform: translateY(-2px);
-}
-
-/* 🌟 كارت الإحصائية الرئيسي (Hero Card) */
+/* 🌟 كارت الإحصائية الرئيسي (حجم متوازن واحترافي) */
 .hero-card {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%) !important;
     color: #ffffff !important;
-    border-radius: 20px;
-    padding: 26px;
-    margin-bottom: 25px;
-    box-shadow: 0 15px 35px -8px rgba(2, 132, 199, 0.45) !important;
-    position: relative;
-    overflow: hidden;
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 22px;
+    box-shadow: 0 12px 30px -8px rgba(2, 132, 199, 0.35) !important;
     border: 2px solid #38bdf8 !important;
 }
 
 .hero-title {
-    font-size: 12px;
+    font-size: 13px !important;
     color: #bae6fd;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
+/* شارات الفواتير والقطع العلويّة */
+.hero-card .badge, .hero-card [class*="invoice"], .hero-card span[style*="pill"], header span {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+}
+
+/* المبلغ الرئيسي (متوسط وبارز بشكل مرتب) */
 .hero-amount {
-    font-size: 34px;
-    font-weight: 800;
-    margin-bottom: 20px;
+    font-size: 38px !important; 
+    font-weight: 800 !important;
+    margin-bottom: 18px;
     color: #ffffff;
+    letter-spacing: -0.5px;
 }
 
 .hero-grid-stats {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 12px;
     padding-top: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1.5px solid rgba(255, 255, 255, 0.15);
 }
 
 .hero-sub-stat-box {
     background: rgba(255, 255, 255, 0.08) !important;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
     padding: 14px 16px;
-    border-radius: 14px;
+    border-radius: 12px;
     border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 .hero-sub-stat-box label {
-    font-size: 11px;
+    font-size: 12px !important;
     color: #cbd5e1;
     display: block;
-    margin-bottom: 4px;
-    font-weight: 700;
+    margin-bottom: 5px;
+    font-weight: 600;
 }
 
 .hero-sub-stat-box span {
-    font-size: 14px;
-    font-weight: 800;
+    font-size: 18px !important; 
+    font-weight: 800 !important;
     color: #ffffff;
 }
 
-.hero-sub-stat-box.tax-box span { color: #fbbf24; }
-.hero-sub-stat-box.cost-box span { color: #f87171; }
+.hero-sub-stat-box.tax-box span { color: #fde047; }
+.hero-sub-stat-box.cost-box span { color: #fca5a5; }
 .hero-sub-stat-box.profit-box {
     background: rgba(16, 185, 129, 0.18) !important;
-    border-color: rgba(16, 185, 129, 0.35) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
 }
-.hero-sub-stat-box.profit-box span { color: #34d399; }
+.hero-sub-stat-box.profit-box span { color: #6ee7b7; }
 
 /* 📅 فلاتر التاريخ */
 .period-chips {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: 10px;
 }
 
 .chip {
     background: var(--accent-light);
     border: 2px solid var(--accent-border) !important;
-    padding: 10px 6px;
-    border-radius: 12px;
-    font-size: 12px;
+    padding: 10px 8px;
+    border-radius: 10px;
+    font-size: 13px !important;
     font-weight: 700;
     text-align: center;
     cursor: pointer;
@@ -272,44 +252,21 @@ header::before {
 
 footer {
     text-align: center;
-    margin-top: 30px;
-    font-size: 11px;
+    margin-top: 25px;
+    font-size: 12px;
     color: var(--text-muted);
+    font-weight: 600;
 }
 
-/* ========================================================
-   💻 التجاوب مع شاشات الكمبيوتر
-   ======================================================== */
-@media (min-width: 576px) {
-    .dashboard-container, .mobile-container {
-        max-width: 540px;
-    }
-}
-
-@media (min-width: 768px) {
-    body {
-        padding: 30px 20px;
-    }
-
-    .dashboard-container, .mobile-container {
-        max-width: 1350px !important;
-        padding: 0 20px;
-    }
-
-    .menu-grid {
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 20px;
-    }
-
-    .branches-list {
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 20px !important;
-    }
-}
-
+/* 💻 للشاشات الكبيرة */
 @media (min-width: 1200px) {
-    .dashboard-container, .mobile-container {
-        max-width: 1350px !important;
+    body {
+        font-size: 16px;
+    }
+    .hero-amount {
+        font-size: 42px !important;
+    }
+    .hero-sub-stat-box span {
+        font-size: 20px !important;
     }
 }
