@@ -12,89 +12,66 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        :root {
-            --bg-body: #f8fafc;
-            --bg-card: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --accent: #2563eb;
-            --accent-light: #eff6ff;
-            --primary: #0f172a;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --radius: 14px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        [data-theme="dark"] {
-            --bg-body: #090d16;
-            --bg-card: #111827;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #1f2937;
-            --accent: #3b82f6;
-            --accent-light: #1e3a8a;
-            --primary: #1e293b;
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            font-family: 'Cairo', sans-serif;
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        .mobile-container {
+        .main-container {
             width: 100%;
-            max-width: 480px;
+            max-width: 1350px;
             margin: 0 auto;
+            padding: 0 20px;
         }
 
+        /* 🎨 ترويسة احترافية موحدة */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding: 14px 16px;
-            background: var(--bg-card);
-            border-radius: var(--radius);
+            margin-bottom: 25px;
+            padding: 20px 28px;
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(37, 99, 235, 0.03) 100%);
+            border-radius: 18px;
             box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #10b981);
         }
 
         .header-title-box h1 {
-            font-size: 15px;
+            font-size: 18px;
             color: var(--text-main);
             font-weight: 800;
-            line-height: 1.2;
+            line-height: 1.3;
         }
 
         .header-title-box p {
-            font-size: 10px;
+            font-size: 11.5px;
             color: var(--text-muted);
-            margin-top: 2px;
+            margin-top: 3px;
+            font-weight: 700;
         }
 
         .header-left-group {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
         }
 
         .action-btn, .lang-select {
-            height: 32px;
-            padding: 0 8px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
+            height: 44px;
+            padding: 0 14px;
+            border-radius: 14px;
+            border: 2px solid var(--border);
             background: var(--bg-body);
             color: var(--text-main);
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -102,99 +79,109 @@
             cursor: pointer;
             text-decoration: none;
             outline: none;
+            transition: all 0.25s;
+        }
+        .action-btn:hover, .lang-select:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
         }
 
         .hero-metric-card {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%);
             color: white;
-            border-radius: var(--radius);
-            padding: 16px 18px;
-            margin-bottom: 12px;
-            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.3);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px -8px rgba(2, 132, 199, 0.45);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 2px solid #38bdf8;
         }
 
         .hero-metric-info span {
-            font-size: 11px;
-            color: #dbeafe;
-            font-weight: 600;
+            font-size: 12px;
+            color: #bae6fd;
+            font-weight: 700;
             display: block;
         }
 
         .hero-metric-info h2 {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 900;
-            margin-top: 4px;
+            margin-top: 6px;
             color: #ffffff;
+            letter-spacing: -0.5px;
         }
 
         .hero-metric-icon {
-            width: 45px;
-            height: 45px;
+            width: 55px;
+            height: 55px;
             background: rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 24px;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
         .btn-mr-banner {
             width: 100%;
-            height: 44px;
+            height: 50px;
             background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: white;
             border: none;
-            border-radius: var(--radius);
-            font-size: 12px;
-            font-weight: 800;
+            border-radius: 18px;
+            font-size: 13px;
+            font-weight: 850;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             cursor: pointer;
-            box-shadow: 0 6px 15px rgba(5, 150, 105, 0.25);
-            margin-bottom: 12px;
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
+            margin-bottom: 25px;
+            transition: transform 0.2s;
         }
+        .btn-mr-banner:hover { transform: translateY(-2px); }
 
         .filter-panel {
             background: var(--bg-card);
-            padding: 12px;
-            border-radius: var(--radius);
+            padding: 24px;
+            border-radius: 18px;
             box-shadow: var(--shadow);
-            margin-bottom: 12px;
+            margin-bottom: 25px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            border: 1px solid var(--border);
+            gap: 16px;
+            border: 2px solid var(--border);
         }
 
         .period-chips {
-            display: flex;
-            width: 100%;
-            gap: 4px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
         }
 
         .chip {
-            flex: 1;
-            background: var(--bg-body);
-            border: 1px solid var(--border);
-            padding: 8px 0;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 800;
+            background: var(--accent-light);
+            border: 2px solid var(--accent-border, var(--border));
+            padding: 10px 6px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
             text-align: center;
             cursor: pointer;
-            color: var(--text-muted);
+            color: var(--accent);
             transition: all 0.2s;
         }
-
         .chip.active {
             background: var(--accent);
             color: white;
             border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
         }
 
         .search-field {
@@ -203,105 +190,106 @@
 
         .search-field input {
             width: 100%;
-            padding: 9px 35px 9px 12px;
+            padding: 12px 42px 12px 16px;
             background: var(--bg-body);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 11px;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            font-size: 13px;
             outline: none;
             color: var(--text-main);
-            font-weight: 600;
+            font-weight: 700;
+            height: 46px;
+            transition: border-color 0.2s;
         }
+        .search-field input:focus { border-color: var(--accent); }
 
         .search-field i {
             position: absolute;
-            right: 12px;
+            right: 16px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .chart-box {
             background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 14px;
+            border-radius: 18px;
+            padding: 24px;
             box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            margin-bottom: 12px;
+            border: 2px solid var(--border);
+            margin-bottom: 25px;
         }
 
         .chart-title {
-            font-size: 11px;
-            font-weight: 800;
-            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 850;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             color: var(--text-main);
         }
 
         .chart-container {
             position: relative;
             width: 100%;
-            height: 150px;
+            height: 250px;
         }
 
         .doc-card {
             background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 12px 14px;
+            border-radius: 18px;
+            padding: 18px 20px;
             box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            margin-bottom: 10px;
-            border-right: 4px solid var(--accent);
+            border: 2px solid var(--border);
+            margin-bottom: 15px;
+            border-right: 5px solid var(--accent);
         }
 
         .doc-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 6px;
-            margin-bottom: 6px;
-            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--border);
         }
 
         .doc-date {
-            font-size: 11px;
-            font-weight: 800;
+            font-size: 13px;
+            font-weight: 850;
             color: var(--text-main);
         }
 
         .doc-total {
             background: var(--accent-light);
             color: var(--accent);
-            font-size: 10px;
-            font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 850;
+            padding: 4px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--accent-border, var(--border));
         }
 
         .emp-row {
             display: flex;
             flex-direction: column;
-            gap: 3px;
-            padding: 6px 0;
-            border-bottom: 1px dashed var(--border);
-        }
-        .emp-row:last-child {
-            border-bottom: none;
+            gap: 4px;
+            padding: 8px 0;
+            border-top: 1px dashed var(--border);
         }
 
         .emp-info {
             display: flex;
             justify-content: space-between;
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 750;
             color: var(--text-main);
         }
 
         .kpi-bar {
-            height: 5px;
+            height: 6px;
             background: var(--border);
             border-radius: 4px;
             overflow: hidden;
@@ -318,10 +306,12 @@
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(15, 23, 42, 0.75);
-            z-index: 1000;
+            backdrop-filter: blur(4px);
+            z-index: 2000;
             display: none;
             justify-content: center;
-            align-items: flex-end;
+            align-items: center;
+            padding: 20px;
         }
 
         .modal-overlay.active {
@@ -331,130 +321,150 @@
         .modal-box {
             background: var(--bg-card);
             width: 100%;
-            max-width: 480px;
+            max-width: 650px;
             max-height: 85vh;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+            border: 2px solid var(--border);
             animation: slideUp 0.3s ease;
         }
 
         @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-header {
-            padding: 12px 16px;
-            background: var(--primary);
-            color: white;
+            padding: 18px 24px;
+            background: var(--bg-body);
+            border-bottom: 2px solid var(--border);
+            color: var(--text-main);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .modal-header h2 {
-            font-size: 12px;
-            font-weight: 800;
+            font-size: 15px;
+            font-weight: 900;
         }
 
         .modal-close {
-            background: none;
-            border: none;
-            color: white;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: var(--text-muted);
             font-size: 16px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
         }
+        .modal-close:hover { color: var(--text-main); border-color: var(--accent); }
 
         .modal-body {
-            padding: 12px;
+            padding: 24px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 16px;
         }
 
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
+            gap: 10px;
         }
 
         .stats-card {
             background: var(--bg-body);
-            border-radius: 8px;
-            padding: 8px;
-            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            border: 2px solid var(--border);
             text-align: center;
         }
 
         .stats-card span {
-            font-size: 9px;
-            font-weight: 700;
+            font-size: 11px;
+            font-weight: 750;
             color: var(--text-muted);
             display: block;
         }
 
         .stats-card h2 {
-            font-size: 13px;
+            font-size: 18px;
             font-weight: 900;
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
         .branch-summary-card {
             background: var(--bg-body);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 10px;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
         }
 
         .branch-card-title {
-            font-size: 11px;
-            font-weight: 800;
+            font-size: 13px;
+            font-weight: 850;
             color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             border-bottom: 1px dashed var(--border);
-            padding-bottom: 4px;
+            padding-bottom: 8px;
         }
 
         .branch-values-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
+            gap: 8px;
             text-align: center;
         }
 
         .branch-val-box {
             background: var(--bg-card);
-            padding: 6px 4px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
+            padding: 8px 6px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
         }
 
         .branch-val-box span {
-            font-size: 9px;
-            font-weight: 700;
+            font-size: 10px;
+            font-weight: 750;
             color: var(--text-muted);
             display: block;
         }
 
         .branch-val-box strong {
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 900;
+        }
+
+        /* 💻 التجاوب المتقدم لشاشات الكمبيوتر واللابتوب */
+        @media (min-width: 768px) {
+            .main-container {
+                max-width: 1350px !important;
+                padding: 0 20px;
+            }
+            .filter-panel .period-chips {
+                grid-template-columns: repeat(5, 1fr) !important;
+            }
         }
     </style>
 </head>
 <body data-theme="light">
 
-<div class="mobile-container">
+<div class="main-container">
     <header>
         <div class="header-title-box">
             <h1 data-i18n="app_title">إدارة المستودع</h1>
@@ -465,10 +475,10 @@
                 <i class="fa-solid fa-moon" id="themeIcon"></i>
             </button>
             <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
-                <option value="ar">AR</option>
-                <option value="en">EN</option>
-                <option value="hi">HI</option>
-                <option value="ur">UR</option>
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ur">اردو</option>
             </select>
             <button class="action-btn" onclick="fetchScanEntries()" title="تحديث">🔄</button>
             <a href="index.html" class="action-btn" title="الرئيسية">🏠</a>
@@ -515,9 +525,8 @@
         </div>
     </div>
 
-    <!-- السجلات المجمعة للموظفين -->
     <div id="entriesContainer">
-        <div style="text-align:center; padding: 25px; color: var(--text-muted); font-size: 11px; font-weight: 700;" data-i18n="loading">جاري تحميل البيانات...</div>
+        <div style="text-align:center; padding: 35px; color: var(--text-muted); font-size: 12px; font-weight: 750;" data-i18n="loading">جاري تحميل البيانات...</div>
     </div>
 </div>
 
@@ -532,15 +541,15 @@
             <div class="metrics-grid">
                 <div class="stats-card">
                     <span data-i18n="card_required">المطلوب</span>
-                    <h2 id="mrTotalQty" style="color:var(--danger);">0</h2>
+                    <h2 id="mrTotalQty" style="color:var(--danger, #ef4444);">0</h2>
                 </div>
                 <div class="stats-card">
                     <span data-i18n="card_transferred">المحول</span>
-                    <h2 id="mrTransferredQty" style="color:var(--success);">0</h2>
+                    <h2 id="mrTransferredQty" style="color:var(--success, #10b981);">0</h2>
                 </div>
                 <div class="stats-card">
                     <span data-i18n="card_pending">المتبقي</span>
-                    <h2 id="mrPendingQty" style="color:var(--warning);">0</h2>
+                    <h2 id="mrPendingQty" style="color:var(--warning, #f59e0b);">0</h2>
                 </div>
             </div>
 
@@ -552,8 +561,8 @@
                 <button class="chip" onclick="setMRDatePreset('all', this)" data-i18n="preset_all">الكل</button>
             </div>
 
-            <div class="branch-summary-list" id="branchSummaryList" style="display:flex; flex-direction:column; gap:6px;">
-                <div style="text-align:center; padding:15px; font-size:11px; color:var(--text-muted); font-weight:700;" data-i18n="loading_branches">جاري تجميع بيانات الفروع...</div>
+            <div class="branch-summary-list" id="branchSummaryList" style="display:flex; flex-direction:column; gap:10px;">
+                <div style="text-align:center; padding:20px; font-size:12px; color:var(--text-muted); font-weight:750;" data-i18n="loading_branches">جاري تجميع بيانات الفروع...</div>
             </div>
         </div>
     </div>
@@ -564,7 +573,7 @@
         ar: {
             page_title: "إدارة المستودع - الموسى التجارية",
             app_title: "إدارة المستودع",
-            app_subtitle: "ملخص أداء الموظفين",
+            app_subtitle: "سجلات المسح",
             total_scanned: "إجمالي القطع الممسوحة",
             mr_button: "عرض طلبات المواد (MR) حسب الفروع",
             preset_today: "اليوم",
@@ -573,7 +582,7 @@
             preset_month: "الشهر",
             preset_all: "الكل",
             search_placeholder: "ابحث باسم الموظف...",
-            chart_title: "أداء الموظفين للفترة المحددة",
+            chart_title: "أداء الموظفين هذا الشهر",
             loading: "جاري تحميل البيانات...",
             mr_modal_title: "إجمالي طلبات المواد حسب الفروع",
             card_required: "المطلوب",
@@ -586,7 +595,7 @@
         en: {
             page_title: "Warehouse - Almoosa Trading",
             app_title: "Warehouse",
-            app_subtitle: "Employee Performance Summary",
+            app_subtitle: "Scan Records",
             total_scanned: "Total Scanned Items",
             mr_button: "View MR by Branch",
             preset_today: "Today",
@@ -608,7 +617,7 @@
         hi: {
             page_title: "वेयरहाउस - अलमूसा ट्रेडिंग",
             app_title: "वेयरहाउस",
-            app_subtitle: "कर्मचारी प्रदर्शन",
+            app_subtitle: "स्कैन रिकॉर्ड",
             total_scanned: "कुल स्कैन किए गए आइटम",
             mr_button: "शाखा द्वारा MR देखें",
             preset_today: "आज",
@@ -630,9 +639,9 @@
         ur: {
             page_title: "ویئر ہاؤس - الموسی ٹریڈنگ",
             app_title: "ویئر ہاؤس",
-            app_subtitle: "ملازمین کی کارکردگی",
+            app_subtitle: "اسکین ریکارڈز",
             total_scanned: "کل اسکین شدہ اشیاء",
-            mr_button: "برانچ के حساب से MR देखें",
+            mr_button: "برانچ کے حساب سے MR देखें",
             preset_today: "آج",
             preset_yesterday: "کل",
             preset_week: "ہفتہ",
@@ -730,8 +739,7 @@
     function extractDocDate(doc) {
         if (!doc) return '';
         let d = doc.scan_date || doc.date || doc.posting_date || doc.creation || '';
-        if (!d) return '';
-        return d.toString().trim().split(' ')[0];
+        return d.includes(' ') ? d.split(' ')[0] : d;
     }
 
     function setDatePreset(mode) {
@@ -745,7 +753,7 @@
         const container = document.getElementById('entriesContainer');
         try {
             const filters = JSON.stringify([["docstatus", "=", 1]]);
-            const url = `${CONFIG.serverUrl}/api/resource/Employee Scan Entry?filters=${encodeURIComponent(filters)}&limit_page_length=500&order_by=scan_date desc`;
+            const url = `${CONFIG.serverUrl}/api/resource/Employee Scan Entry?filters=${encodeURIComponent(filters)}&limit_page_length=2000&order_by=scan_date asc`;
             const res = await fetch(url, { headers: { "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}` } });
             const listData = await res.json();
             const docsList = listData.data || [];
@@ -760,7 +768,7 @@
             cacheDocs = cacheDocs.filter(d => d !== null);
             filterEntries();
         } catch (err) {
-            container.innerHTML = `<div style="text-align:center; color:red; font-size:11px;">خطأ بالاتصال بالسيرفر</div>`;
+            container.innerHTML = `<div style="text-align:center; color:red; font-size:12px;">خطأ بالاتصال بالسيرفر</div>`;
         }
     }
 
@@ -770,66 +778,66 @@
         let totalScanned = 0;
         let empTotals = {};
 
+        if (docs.length === 0) {
+            container.innerHTML = `<div style="text-align:center; padding:35px; color:var(--text-muted); font-size:12px; font-weight:750;">${translations[currentLang]?.no_records || 'لا توجد سجلات'}</div>`;
+            document.getElementById('totalItemsCount').textContent = '0';
+            renderChart([], []);
+            return;
+        }
+
+        docs.sort((a, b) => new Date(extractDocDate(b)) - new Date(extractDocDate(a)));
+
         docs.forEach(doc => {
             const scans = doc.employee_scans || [];
+            let dayTotal = 0;
+            scans.forEach(r => dayTotal += Number(r.scanned_items || 0));
+            totalScanned += dayTotal;
+
+            let rowsHtml = '';
             scans.forEach(row => {
                 const empName = row.employee_name || 'غير معروف';
                 if (searchQuery && !empName.toLowerCase().includes(searchQuery)) return;
 
                 const count = Number(row.scanned_items || 0);
                 empTotals[empName] = (empTotals[empName] || 0) + count;
-                totalScanned += count;
+                const percent = dayTotal > 0 ? Math.round((count / dayTotal) * 100) : 0;
+
+                let fillColor = '#2563eb';
+                if (percent >= 40) fillColor = '#10b981';
+                else if (percent >= 20) fillColor = '#f59e0b';
+                else fillColor = '#ef4444';
+
+                rowsHtml += `
+                    <div class="emp-row">
+                        <div class="emp-info">
+                            <span>${empName}</span>
+                            <span>Pcs (${percent}%) ${count.toLocaleString('en-US')}</span>
+                        </div>
+                        <div class="kpi-bar">
+                            <div class="kpi-fill" style="width:${percent}%; background:${fillColor};"></div>
+                        </div>
+                    </div>
+                `;
             });
-        });
 
-        const sortedEmps = Object.keys(empTotals).sort((a, b) => empTotals[b] - empTotals[a]);
+            if (rowsHtml === '' && searchQuery) return;
 
-        if (sortedEmps.length === 0) {
-            container.innerHTML = `<div style="text-align:center; padding:25px; color:var(--text-muted); font-size:11px; font-weight:700;">${translations[currentLang]?.no_records || 'لا توجد سجلات'}</div>`;
-            document.getElementById('totalItemsCount').textContent = '0';
-            renderChart([], []);
-            return;
-        }
-
-        const card = document.createElement('div');
-        card.className = 'doc-card';
-        
-        let rowsHtml = '';
-        sortedEmps.forEach(empName => {
-            const count = empTotals[empName];
-            const percent = totalScanned > 0 ? Math.round((count / totalScanned) * 100) : 0;
-
-            let fillColor = '#2563eb';
-            if (percent >= 40) fillColor = '#10b981';
-            else if (percent >= 20) fillColor = '#f59e0b';
-            else fillColor = '#ef4444';
-
-            rowsHtml += `
-                <div class="emp-row">
-                    <div class="emp-info">
-                        <span>${empName}</span>
-                        <span>Pcs (${percent}%) ${count.toLocaleString('en-US')}</span>
-                    </div>
-                    <div class="kpi-bar">
-                        <div class="kpi-fill" style="width:${percent}%; background:${fillColor};"></div>
-                    </div>
+            const card = document.createElement('div');
+            card.className = 'doc-card';
+            card.innerHTML = `
+                <div class="doc-card-header">
+                    <span class="doc-date">${extractDocDate(doc)}</span>
+                    <span class="doc-total">Pcs ${dayTotal.toLocaleString('en-US')} :إجمالي</span>
                 </div>
+                ${rowsHtml}
             `;
+            container.appendChild(card);
         });
-
-        card.innerHTML = `
-            <div class="doc-card-header">
-                <span class="doc-date" data-i18n="chart_title">ملخص أداء الموظفين</span>
-                <span class="doc-total">Pcs ${totalScanned.toLocaleString('en-US')} :إجمالي</span>
-            </div>
-            ${rowsHtml}
-        `;
-        container.appendChild(card);
 
         document.getElementById('totalItemsCount').textContent = totalScanned.toLocaleString('en-US');
 
-        const topEmps = sortedEmps.slice(0, 5);
-        renderChart(topEmps, topEmps.map(e => empTotals[e]));
+        const sortedEmps = Object.keys(empTotals).sort((a,b) => empTotals[b] - empTotals[a]).slice(0, 5);
+        renderChart(sortedEmps, sortedEmps.map(e => empTotals[e]));
     }
 
     function filterEntries() {
@@ -866,21 +874,20 @@
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{ data: values, backgroundColor: '#2563eb', borderRadius: 6 }]
+                datasets: [{ data: values, backgroundColor: '#2563eb', borderRadius: 8 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: { 
-                    y: { beginAtZero: true, grid: { color: 'rgba(100, 116, 139, 0.1)' }, ticks: { font: { family: 'Cairo', size: 9 } } }, 
-                    x: { grid: { display: false }, ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } } } 
+                    y: { beginAtZero: true, grid: { color: 'rgba(100, 116, 139, 0.1)' }, ticks: { font: { family: 'Cairo', size: 10 } } }, 
+                    x: { grid: { display: false }, ticks: { font: { family: 'Cairo', size: 10, weight: 'bold' } } } 
                 }
             }
         });
     }
 
-    /* --- طلبات المواد (Material Request) --- */
     let cacheMRDocs = [];
     let mrDateFilterMode = 'month';
 
@@ -896,7 +903,7 @@
 
     async function fetchAllMR() {
         const listContainer = document.getElementById('branchSummaryList');
-        listContainer.innerHTML = `<div style="text-align:center; padding:20px; font-size:11px; font-weight:700; color:var(--text-muted);">${translations[currentLang]?.loading_branches || 'جاري تجميع بيانات الفروع...'}</div>`;
+        listContainer.innerHTML = `<div style="text-align:center; padding:20px; font-size:12px; font-weight:750; color:var(--text-muted);">${translations[currentLang]?.loading_branches || 'جاري تجميع بيانات الفروع...'}</div>`;
 
         try {
             let allRawList = [];
@@ -906,35 +913,48 @@
                 const filters = JSON.stringify([["docstatus", "=", 1]]);
                 const fields = JSON.stringify(["name", "transaction_date", "schedule_date", "set_warehouse", "docstatus"]);
                 const url = `${CONFIG.serverUrl}/api/resource/Material Request?filters=${encodeURIComponent(filters)}&fields=${encodeURIComponent(fields)}&limit_start=${start}&limit_page_length=${pageLimit}&order_by=transaction_date desc`;
-                
+
                 const res = await fetch(url, { headers: { "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}` } });
-                const listData = await res.json();
-                const docsList = listData.data || [];
-                allRawList = allRawList.concat(docsList);
-                fetchedCount = docsList.length;
+                const data = await res.json();
+                const list = data.data || [];
+                allRawList = allRawList.concat(list);
+                fetchedCount = list.length;
                 start += pageLimit;
             }
 
-            cacheMRDocs = await Promise.all(allRawList.map(async (doc) => {
-                const resDoc = await fetch(`${CONFIG.serverUrl}/api/resource/Material Request/${encodeURIComponent(doc.name)}`, {
-                    headers: { "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}` }
-                });
-                return resDoc.ok ? (await resDoc.json()).data : null;
-            }));
+            cacheMRDocs = [];
+            const batchSize = 30;
 
-            cacheMRDocs = cacheMRDocs.filter(d => d !== null);
+            for (let i = 0; i < allRawList.length; i += batchSize) {
+                const batch = allRawList.slice(i, i + batchSize);
+                await Promise.all(batch.map(async (item) => {
+                    try {
+                        const resDoc = await fetch(`${CONFIG.serverUrl}/api/resource/Material Request/${encodeURIComponent(item.name)}`, {
+                            headers: { "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}` }
+                        });
+                        if (resDoc.ok) {
+                            const doc = (await resDoc.json()).data;
+                            if (doc && doc.items) {
+                                const mainItems = doc.items.filter(it => (it.from_warehouse || doc.set_from_warehouse || '').toLowerCase().includes('main'));
+                                if (mainItems.length > 0 || (doc.set_from_warehouse && doc.set_from_warehouse.toLowerCase().includes('main'))) {
+                                    cacheMRDocs.push(doc);
+                                }
+                            }
+                        }
+                    } catch (e) {}
+                }));
+            }
+
             filterMRData();
         } catch (err) {
-            listContainer.innerHTML = `<div style="text-align:center; color:red; font-size:11px;">خطأ بجلب بيانات الفروع</div>`;
+            listContainer.innerHTML = `<div style="text-align:center; color:red; font-size:12px; font-weight:750;">فشل جلب البيانات من السيرفر</div>`;
         }
     }
 
     function setMRDatePreset(mode, btnEl) {
         mrDateFilterMode = mode;
-        if (btnEl && btnEl.parentNode) {
-            btnEl.parentNode.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
-            btnEl.classList.add('active');
-        }
+        btnEl.closest('.modal-body').querySelectorAll('.period-chips .chip').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
         filterMRData();
     }
 
@@ -942,88 +962,84 @@
         const today = new Date();
         const todayISO = formatDateISO(today);
 
-        const filteredDocs = cacheMRDocs.filter(doc => {
-            const d = doc.transaction_date || doc.schedule_date || '';
-            const docDate = d.toString().trim().split(' ')[0];
-            if (!docDate) return false;
+        let totalSum = 0, transSum = 0, pendSum = 0;
+        let branchTotals = {};
 
-            if (mrDateFilterMode === 'today') return docDate === todayISO;
-            if (mrDateFilterMode === 'yesterday') {
+        cacheMRDocs.sort((a, b) => new Date(extractDocDate(b)) - new Date(extractDocDate(a)));
+
+        cacheMRDocs.forEach(doc => {
+            const tDate = doc.transaction_date || extractDocDate(doc);
+            let dateMatch = true;
+
+            if (mrDateFilterMode === 'today') dateMatch = (tDate === todayISO);
+            else if (mrDateFilterMode === 'yesterday') {
                 const yest = new Date(); yest.setDate(today.getDate() - 1);
-                return docDate === formatDateISO(yest);
-            }
-            if (mrDateFilterMode === 'week') {
+                dateMatch = (tDate === formatDateISO(yest));
+            } else if (mrDateFilterMode === 'week') {
                 const sevenDays = new Date(); sevenDays.setDate(today.getDate() - 7);
-                return (docDate >= formatDateISO(sevenDays) && docDate <= todayISO);
+                dateMatch = (tDate >= formatDateISO(sevenDays) && tDate <= todayISO);
+            } else if (mrDateFilterMode === 'month') {
+                dateMatch = tDate.startsWith(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`);
             }
-            if (mrDateFilterMode === 'month') {
-                return docDate.startsWith(`${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`);
-            }
-            return true;
-        });
 
-        renderMRSummary(filteredDocs);
-    }
+            if (!dateMatch) return;
 
-    function renderMRSummary(docs) {
-        let totalReq = 0, totalTrans = 0, totalPend = 0;
-        let branchMap = {};
+            const docTarget = doc.set_warehouse || (doc.items && doc.items[0] && doc.items[0].warehouse) || 'فرع غير محدد';
 
-        docs.forEach(doc => {
-            const branch = doc.set_warehouse || 'المستودع الرئيسي';
-            if (!branchMap[branch]) {
-                branchMap[branch] = { required: 0, transferred: 0, pending: 0 };
+            if (!branchTotals[docTarget]) {
+                branchTotals[docTarget] = { qty: 0, trans: 0, pend: 0 };
             }
 
             (doc.items || []).forEach(item => {
-                const req = Number(item.qty || 0);
-                const trans = Number(item.transferred_qty || item.delivered_qty || 0);
-                const pend = Math.max(0, req - trans);
+                const q = Number(item.qty || 0);
+                const t = Number(item.ordered_qty || item.transferred_qty || 0);
+                const p = Math.max(0, q - t);
 
-                totalReq += req;
-                totalTrans += trans;
-                totalPend += pend;
+                branchTotals[docTarget].qty += q;
+                branchTotals[docTarget].trans += t;
+                branchTotals[docTarget].pend += p;
 
-                branchMap[branch].required += req;
-                branchMap[branch].transferred += trans;
-                branchMap[branch].pending += pend;
+                totalSum += q;
+                transSum += t;
+                pendSum += p;
             });
         });
 
-        document.getElementById('mrTotalQty').textContent = totalReq.toLocaleString('en-US');
-        document.getElementById('mrTransferredQty').textContent = totalTrans.toLocaleString('en-US');
-        document.getElementById('mrPendingQty').textContent = totalPend.toLocaleString('en-US');
+        document.getElementById('mrTotalQty').textContent = totalSum.toLocaleString('en-US');
+        document.getElementById('mrTransferredQty').textContent = transSum.toLocaleString('en-US');
+        document.getElementById('mrPendingQty').textContent = pendSum.toLocaleString('en-US');
 
         const listContainer = document.getElementById('branchSummaryList');
         listContainer.innerHTML = '';
 
-        const branches = Object.keys(branchMap);
-        if (branches.length === 0) {
-            listContainer.innerHTML = `<div style="text-align:center; padding:15px; font-size:11px; color:var(--text-muted); font-weight:700;">${translations[currentLang]?.no_mr || 'لا توجد طلبات مواد.'}</div>`;
+        const branchNames = Object.keys(branchTotals);
+
+        if (branchNames.length === 0) {
+            listContainer.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px; font-weight:750;">${translations[currentLang]?.no_mr || 'لا توجد طلبات مواد بالفترات المحددة.'}</div>`;
             return;
         }
 
-        branches.forEach(branch => {
-            const bData = branchMap[branch];
+        branchNames.sort((a,b) => branchTotals[b].qty - branchTotals[a].qty).forEach(branchName => {
+            const data = branchTotals[branchName];
             const card = document.createElement('div');
             card.className = 'branch-summary-card';
             card.innerHTML = `
                 <div class="branch-card-title">
-                    <i class="fa-solid fa-warehouse" style="color:var(--accent);"></i>
-                    <span>${branch}</span>
+                    <i class="fa-solid fa-store"></i>
+                    <span>${branchName}</span>
                 </div>
                 <div class="branch-values-grid">
                     <div class="branch-val-box">
-                        <span data-i18n="card_required">المطلوب</span>
-                        <strong style="color:var(--danger);">${bData.required.toLocaleString('en-US')}</strong>
+                        <span data-i18n="card_required">${translations[currentLang]?.card_required || 'المطلوب'}</span>
+                        <strong style="color:var(--danger, #ef4444);">${data.qty.toLocaleString('en-US')}</strong>
                     </div>
                     <div class="branch-val-box">
-                        <span data-i18n="card_transferred">المحول</span>
-                        <strong style="color:var(--success);">${bData.transferred.toLocaleString('en-US')}</strong>
+                        <span data-i18n="card_transferred">${translations[currentLang]?.card_transferred || 'المحول'}</span>
+                        <strong style="color:var(--success, #10b981);">${data.trans.toLocaleString('en-US')}</strong>
                     </div>
                     <div class="branch-val-box">
-                        <span data-i18n="card_pending">المتبقي</span>
-                        <strong style="color:var(--warning);">${bData.pending.toLocaleString('en-US')}</strong>
+                        <span data-i18n="card_pending">${translations[currentLang]?.card_pending || 'المتبقي'}</span>
+                        <strong style="color:var(--warning, #f59e0b);">${data.pend.toLocaleString('en-US')}</strong>
                     </div>
                 </div>
             `;

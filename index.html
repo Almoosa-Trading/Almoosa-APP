@@ -2,7 +2,6 @@
 <html lang="ar" dir="rtl" id="htmlRoot">
 <head>
     <link rel="manifest" href="./manifest.json">
-    <link rel="stylesheet" href="style.css?v=2.1">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,29 +14,215 @@
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png">
 
     <title data-i18n="main_title">لوحة التحكم الاحترافية - الموسى التجارية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- ربط ملف التنسيقات والوضع الليلي المشترك -->
+    <!-- ربط ملف التنسيقات المشترك -->
     <link rel="stylesheet" href="style.css">
-    <!-- ربط ملف السكربت المباشر لتطبيق الثيم قبل تحميل الصفحة -->
-    <script src="app.js"></script>
+    <script src="app.js" defer></script>
+
+    <style>
+        .dashboard-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 🎨 ترويسة احترافية ملونة موحدة */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            padding: 20px 28px;
+            background: var(--header-bg);
+            color: #ffffff;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #fbbf24, #34d399, #60a5fa);
+        }
+
+        .header-title-box h1 {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .header-title-box p {
+            font-size: 11.5px;
+            color: #e0e7ff;
+            margin-top: 3px;
+            font-weight: 700;
+        }
+
+        .header-left-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #ffffff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s;
+            backdrop-filter: blur(5px);
+        }
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .lang-select {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 0 14px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #ffffff;
+            outline: none;
+            height: 44px;
+            backdrop-filter: blur(5px);
+        }
+        .lang-select option {
+            background: #1e293b;
+            color: #ffffff;
+        }
+
+        /* 🎴 نمط أودو المصغر (Compact Odoo Apps Grid) بدون مربعات ضخمة */
+        .odoo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding: 10px 0;
+        }
+
+        @media (min-width: 640px) {
+            .odoo-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        }
+
+        @media (min-width: 900px) {
+            .odoo-grid { grid-template-columns: repeat(6, 1fr); gap: 24px; }
+        }
+
+        .odoo-app-card {
+            background: transparent;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-main);
+            transition: transform 0.2s ease;
+            position: relative;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .odoo-app-card:hover:not(.disabled) {
+            transform: translateY(-4px);
+        }
+
+        .odoo-app-card.disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .odoo-icon-box {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin-bottom: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+        }
+
+        .odoo-app-card:hover:not(.disabled) .odoo-icon-box {
+            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.25);
+            transform: scale(1.05);
+        }
+
+        /* تخصيص ألوان الأيقونات */
+        .ic-sales { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; }
+        .ic-purchase-analytics { background: linear-gradient(135deg, #10b981 0%, #047857 100%); color: white; }
+        .ic-warehouse { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; }
+        
+        .ic-stock, .ic-purchase, .ic-transfer, .ic-receive, .ic-contract, .ic-water, .ic-electricity {
+            background: var(--bg-card); 
+            color: var(--text-muted); 
+            border: 1.5px solid var(--border);
+        }
+
+        .odoo-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.2;
+        }
+
+        .badge-orange {
+            position: absolute;
+            top: 2px;
+            right: calc(50% - 32px);
+            background: #f59e0b;
+            color: white;
+            font-size: 8.5px;
+            font-weight: 850;
+            padding: 2px 5px;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            white-space: nowrap;
+            z-index: 2;
+        }
+    </style>
 </head>
-<body>
+<body data-theme="light">
 
 <div class="dashboard-container">
     <header>
-        <div class="logo-container">
-            <img src="https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png" alt="الموسى التجارية" class="brand-logo">
+        <div class="header-title-box">
+            <h1 data-i18n="dash_header">لوحة التحكم</h1>
+            <p data-i18n="dash_subheader">النظام الإداري الموحد - الموسى التجارية</p>
         </div>
-        <div class="header-controls">
+        <div class="header-left-group">
             <!-- زر الوضع الليلي -->
-            <button class="theme-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+            <button class="action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
                 <i class="fa-solid fa-moon" id="themeIcon"></i>
             </button>
 
             <!-- زر التحديثات -->
-            <button class="update-btn" onclick="checkForUpdates(this)" title="تحميل التحديثات الأخيرة">
+            <button class="action-btn" onclick="checkForUpdates(this)" title="تحميل التحديثات الأخيرة">
                 <i class="fa-solid fa-rotate"></i>
             </button>
 
@@ -47,84 +232,69 @@
                 <option value="hi">हिन्दी</option>
                 <option value="ur">اردو</option>
             </select>
-
-            <div class="welcome-box">
-                <h1 data-i18n="dash_header">لوحة التحكم</h1>
-                <p data-i18n="dash_subheader">النظام الإداري الموحد</p>
-            </div>
         </div>
     </header>
 
-    <div class="menu-grid">
-        <a href="sales.html" class="menu-item">
-            <div class="icon-box ic-sales"><i class="fa-solid fa-chart-line"></i></div>
-            <div class="menu-title" data-i18n="menu_sales">المبيعات</div>
-            <div class="menu-desc" data-i18n="desc_sales">الفواتير والتقارير</div>
+    <div class="odoo-grid">
+        <a href="sales.html" class="odoo-app-card">
+            <div class="odoo-icon-box ic-sales"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="odoo-title" data-i18n="menu_sales">المبيعات</div>
         </a>
 
-        <a href="purchases-analytics.html" class="menu-item">
-            <div class="icon-box ic-purchase-analytics"><i class="fa-solid fa-chart-pie"></i></div>
-            <div class="menu-title" data-i18n="menu_purchases_analysis">تحليل المشتريات</div>
-            <div class="menu-desc" data-i18n="desc_purchases_analysis">مؤشرات وتقارير الشراء</div>
+        <a href="purchases.html" class="odoo-app-card">
+            <div class="odoo-icon-box ic-purchase-analytics"><i class="fa-solid fa-chart-pie"></i></div>
+            <div class="odoo-title" data-i18n="menu_purchases_analysis">تحليل المشتريات</div>
         </a>
 
-        <a href="warehouse.html" class="menu-item">
-            <div class="icon-box ic-warehouse"><i class="fa-solid fa-warehouse"></i></div>
-            <div class="menu-title" data-i18n="menu_warehouse">إدارة المستودع</div>
-            <div class="menu-desc" data-i18n="desc_warehouse">إدارة المساحات والمرافق</div>
+        <a href="warehouse.html" class="odoo-app-card">
+            <div class="odoo-icon-box ic-warehouse"><i class="fa-solid fa-warehouse"></i></div>
+            <div class="odoo-title" data-i18n="menu_warehouse">إدارة المستودع</div>
         </a>
 
-        <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
-            <div class="icon-box ic-stock"><i class="fa-solid fa-boxes-stacked"></i></div>
-            <div class="menu-title" data-i18n="menu_stock">المخزون</div>
-            <div class="menu-desc" data-i18n="desc_stock">الأصناف والأرصدة</div>
+        <div class="odoo-app-card disabled">
+            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
+            <div class="odoo-icon-box ic-stock"><i class="fa-solid fa-boxes-stacked"></i></div>
+            <div class="odoo-title" data-i18n="menu_stock">المخزون</div>
         </div>
 
-        <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
-            <div class="icon-box ic-purchase"><i class="fa-solid fa-cart-shopping"></i></div>
-            <div class="menu-title" data-i18n="menu_purchases">المشتريات</div>
-            <div class="menu-desc" data-i18n="desc_purchases">أوامر الشراء والموردين</div>
+        <div class="odoo-app-card disabled">
+            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
+            <div class="odoo-icon-box ic-purchase"><i class="fa-solid fa-cart-shopping"></i></div>
+            <div class="odoo-title" data-i18n="menu_purchases">المشتريات</div>
         </div>
 
-        <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
-            <div class="icon-box ic-transfer"><i class="fa-solid fa-right-left"></i></div>
-            <div class="menu-title" data-i18n="menu_transfers">التحويلات</div>
-            <div class="menu-desc" data-i18n="desc_transfers">النقل بين الفروع</div>
+        <div class="odoo-app-card disabled">
+            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
+            <div class="odoo-icon-box ic-transfer"><i class="fa-solid fa-right-left"></i></div>
+            <div class="odoo-title" data-i18n="menu_transfers">التحويلات</div>
         </div>
 
-        <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
-            <div class="icon-box ic-receive"><i class="fa-solid fa-box-open"></i></div>
-            <div class="menu-title" data-i18n="menu_receipts">الاستلامات</div>
-            <div class="menu-desc" data-i18n="desc_receipts">استلام البضائع والواردات</div>
+        <div class="odoo-app-card disabled">
+            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
+            <div class="odoo-icon-box ic-receive"><i class="fa-solid fa-box-open"></i></div>
+            <div class="odoo-title" data-i18n="menu_receipts">الاستلامات</div>
         </div>
 
-        <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
-            <div class="icon-box ic-contract"><i class="fa-solid fa-file-contract"></i></div>
-            <div class="menu-title" data-i18n="menu_contracts">عقود الإيجار</div>
-            <div class="menu-desc" data-i18n="desc_contracts">متابعة وتجديد العقود</div>
+        <div class="odoo-app-card disabled">
+            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
+            <div class="odoo-icon-box ic-contract"><i class="fa-solid fa-file-contract"></i></div>
+            <div class="odoo-title" data-i18n="menu_contracts">عقود الإيجار</div>
         </div>
 
-        <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
-            <div class="icon-box ic-water"><i class="fa-solid fa-droplet"></i></div>
-            <div class="menu-title" data-i18n="menu_water">فواتير المياه</div>
-            <div class="menu-desc" data-i18n="desc_water">الاستهلاك والمدفوعات</div>
+        <div class="odoo-app-card disabled">
+            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
+            <div class="odoo-icon-box ic-water"><i class="fa-solid fa-droplet"></i></div>
+            <div class="odoo-title" data-i18n="menu_water">فواتير المياه</div>
         </div>
 
-        <div class="menu-item disabled">
-            <span class="badge-orange"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="under_construction">جاري الإنشاء</span></span>
-            <div class="icon-box ic-electricity"><i class="fa-solid fa-bolt"></i></div>
-            <div class="menu-title" data-i18n="menu_electricity">فواتير الكهرباء</div>
-            <div class="menu-desc" data-i18n="desc_electricity">العدادات والسدادات</div>
+        <div class="odoo-app-card disabled">
+            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
+            <div class="odoo-icon-box ic-electricity"><i class="fa-solid fa-bolt"></i></div>
+            <div class="odoo-title" data-i18n="menu_electricity">فواتير الكهرباء</div>
         </div>
     </div>
 
-    <footer data-i18n="footer_text">
+    <footer data-i18n="footer_text" style="text-align: center; margin-top: 40px; font-size: 12px; font-weight: 700; color: var(--text-muted);">
         نظام الموسى التجارية الاحترافي © 2026
     </footer>
 </div>

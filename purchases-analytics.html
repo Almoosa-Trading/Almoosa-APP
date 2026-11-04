@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <link rel="manifest" href="./manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title data-i18n="page_title">تقرير تحليل الشحنة والمبيعات - الموسى التجارية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        .main-container {
+            width: 100%;
+            max-width: 1350px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 🎨 ترويسة احترافية موحدة */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px 28px;
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(37, 99, 235, 0.03) 100%);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #10b981);
+        }
+
+        .header-title-box h1 {
+            font-size: 18px;
+            color: var(--text-main);
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .header-title-box p {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-weight: 700;
+        }
+
+        .header-left-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: var(--bg-body);
+            border: 2px solid var(--border);
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s;
+        }
+        .action-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .lang-select {
+            background: var(--bg-body);
+            border: 2px solid var(--border);
+            padding: 0 14px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-main);
+            outline: none;
+            height: 44px;
+        }
+
+        .filter-bar {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 18px;
+            padding: 20px 24px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            background: var(--bg-body);
+            border: 2px solid var(--border);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            outline: none;
+            height: 46px;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: var(--accent); }
+
+        .table-wrapper {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+            min-width: 1100px;
+        }
+
+        th, td {
+            padding: 14px 12px;
+            border-bottom: 1.5px solid var(--border);
+            text-align: center;
+            white-space: nowrap;
+            color: var(--text-main);
+        }
+
+        th { 
+            background: var(--bg-body); 
+            color: var(--text-muted); 
+            font-weight: 850; 
+        }
+
+        tr:hover { 
+            background: var(--accent-light, rgba(37, 99, 235, 0.08)); 
+        }
+
+        .status-box { 
+            text-align: center; 
+            padding: 40px; 
+            color: var(--text-muted); 
+            font-weight: 700; 
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+<div class="main-container">
+    <header>
+        <div class="header-title-box">
+            <h1 id="pageTitle" data-i18n="header_title">تقرير مقارنة المشتريات والمبيعات</h1>
+            <p id="subTitle" data-i18n="sub_title">جاري تحميل تفاصيل الشحنة...</p>
+        </div>
+        <div class="header-left-group">
+            <button class="action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ur">اردو</option>
+            </select>
+            <a href="purchases.html" class="action-btn" title="عودة للشحنات">
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+    </header>
+
+    <div class="filter-bar">
+        <input type="text" id="filterModel" class="search-input" placeholder="بحث برقم الموديل (Variant Of)..." onkeyup="applyFilters()" data-i18n-placeholder="search_model">
+        <input type="text" id="filterColor" class="search-input" placeholder="بحث باللون (Color)..." onkeyup="applyFilters()" data-i18n-placeholder="search_color">
+    </div>
+
+    <div class="table-wrapper">
+        <div class="status-box" id="statusBox" data-i18n="status_loading">جاري جلب بيانات التقرير من السيرفر...</div>
+        <table id="reportTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th data-i18n="th_model">الموديل</th>
+                    <th data-i18n="th_color">اللون</th>
+                    <th data-i18n="th_foc">FOC</th>
+                    <th data-i18n="th_cost">التكلفة</th>
+                    <th data-i18n="th_mrp">سعر MRP</th>
+                    <th data-i18n="th_current_price">السعر الحالي</th>
+                    <th data-i18n="th_buy_qty">كمية الشراء</th>
+                    <th data-i18n="th_normal_sales">مبيعات عادية</th>
+                    <th data-i18n="th_normal_ratio">نسبة العادية</th>
+                    <th data-i18n="th_discount_sales">مبيعات مخفضة</th>
+                    <th data-i18n="th_discount_ratio">نسبة المخفضة</th>
+                    <th data-i18n="th_total_sales">إجمالي المبيعات</th>
+                    <th data-i18n="th_total_ratio">نسبة الإجمالي</th>
+                    <th data-i18n="th_stock">المخزون (STK)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const translations = {
+        ar: {
+            page_title: "تقرير تحليل الشحنة والمبيعات - الموسى التجارية",
+            header_title: "تقرير مقارنة المشتريات والمبيعات",
+            sub_title: "جاري تحميل تفاصيل الشحنة...",
+            search_model: "بحث برقم الموديل (Variant Of)...",
+            search_color: "بحث باللون (Color)...",
+            status_loading: "جاري جلب بيانات التقرير من السيرفر...",
+            th_model: "الموديل",
+            th_color: "اللون",
+            th_foc: "FOC",
+            th_cost: "التكلفة",
+            th_mrp: "سعر MRP",
+            th_current_price: "السعر الحالي",
+            th_buy_qty: "كمية الشراء",
+            th_normal_sales: "مبيعات عادية",
+            th_normal_ratio: "نسبة العادية",
+            th_discount_sales: "مبيعات مخفضة",
+            th_discount_ratio: "نسبة المخفضة",
+            th_total_sales: "إجمالي المبيعات",
+            th_total_ratio: "نسبة الإجمالي",
+            th_stock: "المخزون (STK)",
+            no_data: "لا توجد بيانات مطابقة لهذا التقرير",
+            error_server: "فشل جلب بيانات التقرير من السيرفر",
+            error_connection: "تعذر الاتصال بالسيرفر لجلب التقرير"
+        },
+        en: {
+            page_title: "Shipment & Sales Analytics - Almoosa Trading",
+            header_title: "Purchase & Sales Comparison Report",
+            sub_title: "Loading shipment details...",
+            search_model: "Search by Model (Variant Of)...",
+            search_color: "Search by Color...",
+            status_loading: "Fetching report data from server...",
+            th_model: "Model",
+            th_color: "Color",
+            th_foc: "FOC",
+            th_cost: "Cost",
+            th_mrp: "MRP Price",
+            th_current_price: "Current Price",
+            th_buy_qty: "Purchase Qty",
+            th_normal_sales: "Normal Sales",
+            th_normal_ratio: "Normal %",
+            th_discount_sales: "Discount Sales",
+            th_discount_ratio: "Discount %",
+            th_total_sales: "Total Sales",
+            th_total_ratio: "Total %",
+            th_stock: "Stock (STK)",
+            no_data: "No matching data for this report",
+            error_server: "Failed to fetch report data",
+            error_connection: "Server connection error"
+        },
+        hi: {
+            page_title: "शिपमेंट और बिक्री विश्लेषण - अलमूसा ट्रेडिंग",
+            header_title: "खरीद और बिक्री तुलना रिपोर्ट",
+            sub_title: "शिपमेंट विवरण लोड हो रहा है...",
+            search_model: "मॉडल द्वारा खोजें...",
+            search_color: "रंग द्वारा खोजें...",
+            status_loading: "सर्वर से डेटा लाया जा रहा है...",
+            th_model: "मॉडल",
+            th_color: "रंग",
+            th_foc: "FOC",
+            th_cost: "लागत",
+            th_mrp: "MRP मूल्य",
+            th_current_price: "वर्तमान मूल्य",
+            th_buy_qty: "खरीद मात्रा",
+            th_normal_sales: "सामान्य बिक्री",
+            th_normal_ratio: "सामान्य %",
+            th_discount_sales: "छूट बिक्री",
+            th_discount_ratio: "छूट %",
+            th_total_sales: "कुल बिक्री",
+            th_total_ratio: "कुल %",
+            th_stock: "स्टॉक (STK)",
+            no_data: "कोई डेटा नहीं मिला",
+            error_server: "रिपोर्ट डेटा लाने में विफल",
+            error_connection: "कनेक्शन त्रुटि"
+        },
+        ur: {
+            page_title: "شپمنٹ اور سیلز تجزیہ - الموسی ٹریڈنگ",
+            header_title: "پرچیز اینڈ سیلز کمپیریزن رپورٹ",
+            sub_title: "شپمنٹ کی تفصیلات لوڈ ہو رہی ہیں...",
+            search_model: "ماڈل کے ذریعے تلاش کریں...",
+            search_color: "رنگ کے ذریعے تلاش کریں...",
+            status_loading: "سرفر سے ڈیٹا لایا جا رہا ہے...",
+            th_model: "ماڈل",
+            th_color: "رنگ",
+            th_foc: "FOC",
+            th_cost: "لاگت",
+            th_mrp: "MRP قیمت",
+            th_current_price: "موجودہ قیمت",
+            th_buy_qty: "خرید مقدار",
+            th_normal_sales: "عام فروخت",
+            th_normal_ratio: "عام %",
+            th_discount_sales: "ڈسکاؤنٹ فروخت",
+            th_discount_ratio: "ڈسکاؤنٹ %",
+            th_total_sales: "کل فروخت",
+            th_total_ratio: "کل %",
+            th_stock: "اسٹاک (STK)",
+            no_data: "کوئی ڈیٹا نہیں ملا",
+            error_server: "رپورٹ کا ڈیٹا حاصل کرنے میں ناکامی",
+            error_connection: "کنکشن کی خرابی"
+        }
+    };
+
+    let currentLang = localStorage.getItem('app_lang') || 'ar';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('app_lang', lang);
+        const root = document.getElementById('htmlRoot');
+        root.setAttribute('lang', lang);
+        root.setAttribute('dir', (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr');
+        
+        const selectEl = document.getElementById('langSelect');
+        if (selectEl) selectEl.value = lang;
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) {
+                el.textContent = translations[lang][key];
+            }
+        });
+
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (translations[lang] && translations[lang][key]) {
+                el.placeholder = translations[lang][key];
+            }
+        });
+        if (rawData.length > 0) renderTable(rawData);
+    }
+
+    function changeLanguage(lang) {
+        setLanguage(lang);
+    }
+
+    const CONFIG = {
+        serverUrl: "https://87-237-225-155.nip.io",
+        apiKey: "6f039a5a6130b79",
+        apiSecret: "9e6d920a8fda252"
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const shipmentNo = urlParams.get('shipment');
+    const supplierCode = urlParams.get('supplier');
+
+    let rawData = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLang);
+        const savedTheme = localStorage.getItem('app_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body.setAttribute('data-theme', savedTheme);
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeIcon) {
+            themeIcon.className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+
+        if (shipmentNo) {
+            document.getElementById('pageTitle').textContent = `تقرير الشحنة: ${shipmentNo}`;
+        }
+        fetchReportData();
+    });
+
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('app_theme', newTheme);
+        document.getElementById('themeIcon').className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+
+    async function fetchReportData() {
+        const statusBox = document.getElementById('statusBox');
+        
+        try {
+            const fromDate = "2026-01-01 00:00:00";
+            const toDate = "2026-12-31 23:59:59";
+            
+            const url = `${CONFIG.serverUrl}/api/method/custom_purchase_sales_comparison?from_datetime=${encodeURIComponent(fromDate)}&to_datetime=${encodeURIComponent(toDate)}&supplier=${encodeURIComponent(supplierCode || '')}`;
+            
+            const res = await fetch(url, {
+                method: "GET",
+                headers: { "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}` }
+            });
+
+            if (res.ok) {
+                const json = await res.json();
+                rawData = json.message || [];
+
+                if (rawData.length === 0) {
+                    statusBox.textContent = translations[currentLang].no_data;
+                    return;
+                }
+
+                statusBox.style.display = 'none';
+                document.getElementById('reportTable').style.display = 'table';
+                renderTable(rawData);
+            } else {
+                statusBox.textContent = translations[currentLang].error_server;
+            }
+        } catch (err) {
+            statusBox.textContent = translations[currentLang].error_connection;
+        }
+    }
+
+    function renderTable(data) {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+
+        data.forEach(row => {
+            const tr = document.createElement('tr');
+            
+            if (row[0] === "Total") {
+                tr.style.fontWeight = "bold";
+                tr.style.background = "rgba(37, 99, 235, 0.15)";
+            }
+
+            tr.innerHTML = `
+                <td>${row[0] || ''}</td>
+                <td>${row[1] || ''}</td>
+                <td>${row[2] || 0}</td>
+                <td>${row[3] || 0}</td>
+                <td>${row[4] || 0}</td>
+                <td>${row[5] || 0}</td>
+                <td><span style="color: #10b981; font-weight: 850;">${row[6] || 0}</span></td>
+                <td>${row[7] || 0}</td>
+                <td>${row[8] || 0}%</td>
+                <td>${row[9] || 0}</td>
+                <td>${row[10] || 0}%</td>
+                <td><span style="color: #3b82f6; font-weight: 850;">${row[11] || 0}</span></td>
+                <td>${row[12] || 0}%</td>
+                <td><span style="color: #f59e0b; font-weight: 850;">${row[13] || 0}</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function applyFilters() {
+        const modelQuery = document.getElementById('filterModel').value.toLowerCase();
+        const colorQuery = document.getElementById('filterColor').value.toLowerCase();
+
+        const filtered = rawData.filter(row => {
+            if (row[0] === "Total") return true;
+            const model = String(row[0] || '').toLowerCase();
+            const color = String(row[1] || '').toLowerCase();
+            return model.includes(modelQuery) && color.includes(colorQuery);
+        });
+
+        renderTable(filtered);
+    }
+</script>
+
+</body>
+</html>

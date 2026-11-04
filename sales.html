@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- ربط ملف التنسيقات المشترك (Dark/Light Mode) -->
+    <!-- ربط ملف التنسيقات المشترك -->
     <link rel="stylesheet" href="style.css">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -29,17 +29,17 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
-            padding: 18px 20px;
+            padding: 18px 24px;
             background: var(--bg-card);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
         }
 
         .header-title-box h1 {
-            font-size: 16px;
+            font-size: 17px;
             color: var(--text-main);
-            font-weight: 700;
+            font-weight: 800;
             line-height: 1.3;
         }
 
@@ -47,17 +47,18 @@
             font-size: 11px;
             color: var(--text-muted);
             margin-top: 2px;
+            font-weight: 600;
         }
 
         .header-left-group {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .action-btn-icon {
             background: var(--bg-body);
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
             width: 42px;
             height: 42px;
             border-radius: 12px;
@@ -78,10 +79,10 @@
 
         .lang-select {
             background: var(--bg-body);
-            border: 1px solid var(--border);
-            padding: 0 10px;
+            border: 2px solid var(--border);
+            padding: 0 12px;
             border-radius: 12px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             color: var(--text-main);
@@ -89,51 +90,51 @@
             height: 42px;
         }
 
-        /* --- تصميم عالمي احترافي للكارت الرئيسي (World-Class Hero Card) --- */
+        /* --- تصميم الكارت الرئيسي (Hero Card) الاحترافي --- */
         .hero-card {
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1d4ed8 100%);
             color: white;
             border-radius: 20px;
-            padding: 22px;
-            margin-bottom: 20px;
-            box-shadow: 0 12px 30px -8px rgba(30, 58, 138, 0.5);
+            padding: 26px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px -8px rgba(29, 78, 216, 0.45);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 2px solid #3b82f6;
         }
 
         .hero-title {
             font-size: 12px;
-            color: #94a3b8;
-            margin-bottom: 8px;
+            color: #93c5fd;
+            margin-bottom: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .hero-badges-group {
             display: flex;
-            gap: 6px;
+            gap: 8px;
         }
 
         .hero-badge {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(4px);
-            padding: 4px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 10px;
+            font-size: 11px;
             color: #f8fafc;
             font-weight: 700;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .hero-amount {
-            font-size: 30px;
+            font-size: 34px;
             font-weight: 800;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
             color: #ffffff;
             letter-spacing: -0.5px;
         }
@@ -141,30 +142,29 @@
         .hero-grid-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding-top: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .hero-sub-stat-box {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
-            padding: 12px 14px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: background 0.2s;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
         }
 
         .hero-sub-stat-box label {
-            font-size: 10px;
-            color: #94a3b8;
+            font-size: 11px;
+            color: #cbd5e1;
             display: block;
             margin-bottom: 4px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .hero-sub-stat-box span {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 800;
             color: #ffffff;
         }
@@ -178,78 +178,78 @@
         }
 
         .hero-sub-stat-box.profit-box {
-            background: rgba(16, 185, 129, 0.12);
-            border-color: rgba(16, 185, 129, 0.25);
+            background: rgba(16, 185, 129, 0.18);
+            border-color: rgba(16, 185, 129, 0.35);
         }
         .hero-sub-stat-box.profit-box span {
             color: #34d399;
         }
 
+        /* --- لوحة الفلاتر والأزرار --- */
         .filter-panel {
             background: var(--bg-card);
-            padding: 15px;
+            padding: 20px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            margin-bottom: 15px;
+            margin-bottom: 25px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 16px;
             position: relative;
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
         }
 
-        /* جعل عناصر التحكم تظهر تحت بعضها (عمودياً) لضمان ظهور التقويم كاملاً */
         .controls-row {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             position: relative;
         }
 
         .control-group {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
             position: relative;
             width: 100%;
         }
 
         .control-label {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--text-muted);
         }
 
         .date-toggle-btn {
             background: var(--bg-body);
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 11px;
+            border: 2px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--text-main);
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            height: 38px;
+            height: 42px;
             width: 100%;
         }
 
         .calendar-container {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
             background: var(--bg-card);
             display: none;
             position: absolute;
-            top: 62px;
+            top: 70px;
             left: 0;
             right: 0;
             margin: 0 auto;
             width: 100%;
-            max-width: 100%;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            max-width: 350px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
             z-index: 1000;
         }
 
@@ -261,34 +261,35 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            font-size: 12px;
-            font-weight: 700;
+            margin-bottom: 12px;
+            font-size: 13px;
+            font-weight: 800;
             color: var(--text-main);
         }
 
         .calendar-header button {
             background: none;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 4px 10px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 12px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text-main);
+            font-weight: 700;
         }
 
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
+            gap: 6px;
             text-align: center;
         }
 
         .calendar-day-name {
-            font-size: 10px;
+            font-size: 11px;
             color: var(--text-muted);
-            font-weight: 700;
-            padding-bottom: 4px;
+            font-weight: 800;
+            padding-bottom: 6px;
         }
 
         .calendar-day {
@@ -296,17 +297,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             background: var(--bg-body);
             color: var(--text-main);
             border-radius: 8px;
             cursor: pointer;
+            border: 1px solid var(--border);
         }
 
         .calendar-day.selected {
             background: var(--accent);
             color: white;
+            border-color: var(--accent);
         }
 
         .calendar-day.in-range {
@@ -316,29 +319,29 @@
 
         .control-group select {
             width: 100%;
-            border: 1px solid var(--border);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 11px;
+            border: 2px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
             font-weight: 700;
             outline: none;
             background: var(--bg-body);
             color: var(--text-main);
-            height: 38px;
+            height: 42px;
         }
 
         .period-chips {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
+            gap: 8px;
         }
 
         .chip {
             background: var(--accent-light);
-            border: 1px solid var(--accent-border);
-            padding: 8px 4px;
-            border-radius: 8px;
-            font-size: 11px;
+            border: 2px solid var(--accent-border);
+            padding: 10px 6px;
+            border-radius: 10px;
+            font-size: 12px;
             font-weight: 700;
             text-align: center;
             cursor: pointer;
@@ -354,80 +357,81 @@
         .main-chart-card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 15px;
+            padding: 20px;
             box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            margin-bottom: 20px;
+            border: 2px solid var(--border);
+            margin-bottom: 25px;
         }
 
         .main-chart-title {
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 800;
             color: var(--text-main);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .section-header {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             color: var(--text-main);
         }
 
         .branches-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
         .branch-card {
             background: var(--bg-card);
             border-radius: 16px;
-            padding: 16px;
+            padding: 20px;
             box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .branch-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            border-color: var(--accent);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
         }
 
         .branch-card-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed var(--border);
+            padding-bottom: 12px;
+            border-bottom: 2px dashed var(--border);
         }
 
         .branch-title-area h3 {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 800;
             color: var(--text-main);
-            margin: 0 0 4px 0;
+            margin: 0 0 6px 0;
         }
 
         .branch-meta-badges {
             display: flex;
-            gap: 6px;
-            font-size: 10px;
+            gap: 8px;
+            font-size: 11px;
             color: var(--text-muted);
         }
 
         .branch-meta-badge {
             background: var(--bg-body);
-            padding: 2px 8px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border);
             font-weight: 700;
         }
 
@@ -436,14 +440,14 @@
         }
 
         .branch-sales-total .amount {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 800;
             color: var(--text-main);
             line-height: 1.2;
         }
 
         .branch-sales-total .label {
-            font-size: 9px;
+            font-size: 10px;
             color: var(--text-muted);
             font-weight: 700;
         }
@@ -451,66 +455,59 @@
         .branch-metrics-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            gap: 10px;
         }
 
         .metric-cell {
             background: var(--bg-body);
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
             text-align: center;
         }
 
         .metric-cell .m-label {
-            font-size: 9px;
+            font-size: 10px;
             color: var(--text-muted);
-            margin-bottom: 3px;
+            margin-bottom: 4px;
             display: block;
-            white-space: nowrap;
             font-weight: 700;
         }
 
         .metric-cell .m-val {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 800;
             color: var(--text-main);
         }
 
         .metric-cell.tax-cell {
-            background: rgba(245, 158, 11, 0.05);
-            border-color: rgba(245, 158, 11, 0.2);
+            background: rgba(245, 158, 11, 0.08);
+            border-color: rgba(245, 158, 11, 0.25);
         }
-        .metric-cell.tax-cell .m-label {
-            color: #d97706;
-        }
-        .metric-cell.tax-cell .m-val {
+        .metric-cell.tax-cell .m-label, .metric-cell.tax-cell .m-val {
             color: #d97706;
         }
 
         .metric-cell.cost-cell {
-            background: rgba(239, 68, 68, 0.05);
-            border-color: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.25);
         }
-        .metric-cell.cost-cell .m-label {
-            color: #dc2626;
-        }
-        .metric-cell.cost-cell .m-val {
+        .metric-cell.cost-cell .m-label, .metric-cell.cost-cell .m-val {
             color: #dc2626;
         }
 
         .branch-profit-banner {
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            padding: 8px 12px;
-            border-radius: 10px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1.5px solid rgba(16, 185, 129, 0.25);
+            padding: 10px 14px;
+            border-radius: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .branch-profit-banner .p-label {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 800;
             color: #10b981;
             display: flex;
@@ -519,7 +516,7 @@
         }
 
         .branch-profit-banner .p-value {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 800;
             color: #10b981;
         }
@@ -532,18 +529,29 @@
             font-weight: 700;
         }
 
+        /* --- الأزرار الاحترافية للتقارير واللوحات --- */
         .report-btn {
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
+            border: 2px solid transparent;
+            padding: 12px 16px;
+            border-radius: 12px;
             font-weight: 800;
-            font-size: 12px;
+            font-size: 13px;
             cursor: pointer;
             text-align: center;
             text-decoration: none;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            transition: all 0.2s;
+        }
+
+        .report-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
         }
 
         .report-modal {
@@ -557,7 +565,7 @@
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            padding: 10px;
+            padding: 15px;
             overflow-x: auto;
         }
 
@@ -570,13 +578,14 @@
             width: 1150px;
             max-width: 98vw;
             max-height: 96vh;
-            border-radius: 8px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 24px;
             overflow-y: auto;
             overflow-x: auto;
             position: relative;
             box-sizing: border-box;
             color: #000;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
         @media screen and (max-width: 768px) {
@@ -593,7 +602,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .close-modal {
@@ -601,7 +610,7 @@
             color: white;
             border: none;
             padding: 8px 16px;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 800;
             font-size: 12px;
@@ -616,8 +625,8 @@
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: #ffffff;
             border: none;
-            padding: 8px 16px;
-            border-radius: 10px;
+            padding: 10px 18px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 800;
             font-size: 13px;
@@ -632,12 +641,12 @@
             top: calc(100% + 8px);
             left: 0;
             background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             z-index: 1050;
             min-width: 220px;
-            padding: 6px;
+            padding: 8px;
         }
 
         .share-menu.show {
@@ -658,6 +667,10 @@
             text-align: right;
             border-radius: 8px;
             cursor: pointer;
+        }
+
+        .share-item:hover {
+            background: #f1f5f9;
         }
 
         #reportPDFContent {
@@ -834,24 +847,24 @@
 
         .dashboard-card {
             background: var(--bg-card);
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
             border-radius: var(--radius);
-            padding: 16px;
+            padding: 20px;
             box-shadow: var(--shadow);
             display: flex;
             flex-direction: column;
         }
 
         .dashboard-card-title {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 800;
             color: var(--text-main);
-            margin-bottom: 12px;
-            padding-bottom: 6px;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
             border-bottom: 2px solid var(--accent-light);
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .chart-container-box {
@@ -863,9 +876,47 @@
         .pie-chart-container {
             height: 420px !important;
         }
+
+        /* 💻 التنسيقات الاحترافية المتقدمة لشاشات الكمبيوتر واللابتوب (Desktop View) */
+        @media (min-width: 768px) {
+            .mobile-container {
+                max-width: 1350px !important;
+                padding: 0 20px;
+            }
+
+            .hero-grid-stats {
+                grid-template-columns: repeat(4, 1fr) !important;
+            }
+
+            .filter-panel .period-chips {
+                grid-template-columns: repeat(6, 1fr) !important;
+            }
+
+            .controls-row {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 20px !important;
+            }
+
+            /* ترتيب أزرار الإجراءات (التقرير، اللوحة، الموردين، المجموعات) في شبكة متناسقة احترافية */
+            .action-buttons-grid {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 12px !important;
+            }
+
+            .branches-list {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 20px !important;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
     </style>
 
-    <!-- ربط السكربت المشترك -->
     <script src="app.js" defer></script>
 </head>
 <body>
@@ -935,27 +986,24 @@
             </div>
         </div>
 
-        <div style="display: flex; gap: 8px;">
-            <button class="report-btn" style="flex: 2;" onclick="openReportModal()" data-i18n="btn_comprehensive_report">
-                📊 عرض التقرير الشامل
+        <!-- أزرار الإجراءات منظمة بشكل احترافي في شبكة -->
+        <div class="action-buttons-grid">
+            <button class="report-btn" onclick="openReportModal()" data-i18n="btn_comprehensive_report">
+                📊 التقرير الشامل
             </button>
-            <button class="report-btn" style="flex: 1; background: #059669;" onclick="openMultiDashboardModal()" data-i18n="btn_dashboard">
+            <button class="report-btn" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);" onclick="openMultiDashboardModal()" data-i18n="btn_dashboard">
                 📈 لوحة المؤشرات
             </button>
-        </div>
-
-        <!-- أزرار مبيعات الموردين ومبيعات المجموعات بجانب بعضهما البعض -->
-        <div style="display: flex; gap: 8px; margin-top: 4px;">
-            <a href="supplier_sales.html" class="report-btn" style="background: #7c3aed; flex: 1;" data-i18n="btn_supplier_sales">
-                🏢 مبيعات الموردين (Supplier Sales)
+            <a href="supplier_sales.html" class="report-btn" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);" data-i18n="btn_supplier_sales">
+                🏢 مبيعات الموردين
             </a>
-            <a href="sales_group.html" class="report-btn" style="background: #0284c7; flex: 1;" data-i18n="btn_sales_group">
-                🏷️ مبيعات المجموعات (Sales Group)
+            <a href="sales_group.html" class="report-btn" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);" data-i18n="btn_sales_group">
+                🏷️ مبيعات المجموعات
             </a>
         </div>
     </div>
 
-    <!-- كارت الإجمالي الرئيسي -->
+    <!-- كارت الإجمالي الرئيسي بتدرج وتصميم احترافي -->
     <div class="hero-card">
         <div class="hero-title">
             <span id="periodLabel" data-i18n="hero_total_sales">إجمالي المبيعات (شامل الضريبة)</span>
@@ -989,9 +1037,9 @@
     <div class="main-chart-card">
         <div class="main-chart-title">
             <span data-i18n="chart_hourly_title">📈 مقارنة المبيعات بالساعات (9ص - 12م)</span>
-            <span id="chartSubLabel" style="font-size: 10px; color: var(--text-muted); font-weight: 700;" data-i18n="chart_sub_label">مقارنة بالفترة السابقة</span>
+            <span id="chartSubLabel" style="font-size: 11px; color: var(--text-muted); font-weight: 700;" data-i18n="chart_sub_label">مقارنة بالفترة السابقة</span>
         </div>
-        <div style="height: 180px; position: relative; width: 100%;">
+        <div style="height: 220px; position: relative; width: 100%;">
             <canvas id="mainHourlyChart"></canvas>
         </div>
     </div>
@@ -1086,7 +1134,7 @@
 <div class="report-modal" id="multiDashboardModal">
     <div class="report-content" style="max-width: 750px;">
         <div class="modal-actions">
-            <h3 style="color: var(--text-main); font-size: 15px; font-weight: 800;" data-i18n="modal_sales_dashboard">📊 لوحة تحليلات ومؤشرات المبيعات (Sales Dashboard)</h3>
+            <h3 style="color: var(--text-main); font-size: 16px; font-weight: 800;" data-i18n="modal_sales_dashboard">📊 لوحة تحليلات ومؤشرات المبيعات (Sales Dashboard)</h3>
             <button class="close-modal" onclick="closeMultiDashboardModal()" data-i18n="btn_close">✕ إغلاق</button>
         </div>
 
@@ -1688,7 +1736,7 @@
                     legend: {
                         display: true,
                         position: 'top',
-                        labels: { boxWidth: 10, font: { family: 'Cairo', size: 10, weight: 'bold' } }
+                        labels: { boxWidth: 12, font: { family: 'Cairo', size: 11, weight: 'bold' } }
                     },
                     tooltip: tooltipConfig
                 },
@@ -1696,11 +1744,11 @@
                     y: {
                         beginAtZero: true,
                         grid: { color: 'rgba(100, 116, 139, 0.1)' },
-                        ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' }, callback: val => val.toLocaleString('en-US') }
+                        ticks: { font: { family: 'Cairo', size: 10, weight: 'bold' }, callback: val => val.toLocaleString('en-US') }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } }
+                        ticks: { font: { family: 'Cairo', size: 10, weight: 'bold' } }
                     }
                 }
             }
@@ -1810,15 +1858,15 @@
                     tooltip: tooltipConfig
                 },
                 scales: {
-                    x: { ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } }, grid: { display: false } },
-                    y: { type: 'linear', display: true, position: 'left', beginAtZero: true, ticks: { font: { size: 9, weight: 'bold' }, callback: val => val.toLocaleString('en-US') } },
+                    x: { ticks: { font: { family: 'Cairo', size: 10, weight: 'bold' } }, grid: { display: false } },
+                    y: { type: 'linear', display: true, position: 'left', beginAtZero: true, ticks: { font: { size: 10, weight: 'bold' }, callback: val => val.toLocaleString('en-US') } },
                     y1: {
                         type: 'linear',
                         display: true,
                         position: 'right',
                         beginAtZero: true,
                         max: 100,
-                        ticks: { font: { size: 9, weight: 'bold' }, callback: value => value.toLocaleString('en-US') + '%' },
+                        ticks: { font: { size: 10, weight: 'bold' }, callback: value => value.toLocaleString('en-US') + '%' },
                         grid: { drawOnChartArea: false }
                     }
                 }
@@ -1901,15 +1949,15 @@
                     tooltip: tooltipConfig
                 },
                 scales: {
-                    x: { ticks: { font: { family: 'Cairo', size: 9, weight: 'bold' } }, grid: { display: false } },
-                    y: { type: 'linear', display: true, position: 'left', beginAtZero: true, ticks: { font: { size: 9, weight: 'bold' }, callback: val => val.toLocaleString('en-US') } },
+                    x: { ticks: { font: { family: 'Cairo', size: 10, weight: 'bold' } }, grid: { display: false } },
+                    y: { type: 'linear', display: true, position: 'left', beginAtZero: true, ticks: { font: { size: 10, weight: 'bold' }, callback: val => val.toLocaleString('en-US') } },
                     y1: {
                         type: 'linear',
                         display: true,
                         position: 'right',
                         beginAtZero: true,
                         max: 100,
-                        ticks: { font: { size: 9, weight: 'bold' }, callback: value => value.toLocaleString('en-US') + '%' },
+                        ticks: { font: { size: 10, weight: 'bold' }, callback: value => value.toLocaleString('en-US') + '%' },
                         grid: { drawOnChartArea: false }
                     }
                 }
@@ -1969,7 +2017,7 @@
                 maintainAspectRatio: false,
                 layout: { padding: 5 },
                 plugins: {
-                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Cairo', size: 10, weight: 'bold' }, padding: 12 } },
+                    legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Cairo', size: 11, weight: 'bold' }, padding: 12 } },
                     datalabels: {
                         display: true,
                         color: '#ffffff',

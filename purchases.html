@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <link rel="manifest" href="./manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title data-i18n="page_title">قائمة شحنات الموردين - الموسى التجارية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .main-container {
+            width: 100%;
+            max-width: 1350px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 🎨 ترويسة احترافية موحدة */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px 28px;
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(37, 99, 235, 0.03) 100%);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6, #10b981);
+        }
+
+        .header-title-box h1 {
+            font-size: 18px;
+            color: var(--text-main);
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .header-title-box p {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-top: 3px;
+            font-weight: 700;
+        }
+
+        .header-left-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .action-btn-icon {
+            background: var(--bg-body);
+            border: 2px solid var(--border);
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s;
+        }
+        .action-btn-icon:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .lang-select {
+            background: var(--bg-body);
+            border: 2px solid var(--border);
+            padding: 0 14px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--text-main);
+            outline: none;
+            height: 44px;
+        }
+
+        .filter-bar {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 18px;
+            padding: 20px 24px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 280px;
+            background: var(--bg-body);
+            border: 2px solid var(--border);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            outline: none;
+            height: 46px;
+            transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: var(--accent); }
+
+        .table-wrapper {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12.5px;
+            min-width: 900px;
+        }
+
+        .report-table th, .report-table td {
+            padding: 14px 16px;
+            border-bottom: 1.5px solid var(--border);
+            text-align: right;
+            white-space: nowrap;
+            color: var(--text-main);
+        }
+
+        .report-table th {
+            background: var(--bg-body);
+            font-weight: 850;
+            color: var(--text-muted);
+        }
+
+        .report-table tbody tr {
+            transition: background 0.2s;
+            cursor: pointer;
+        }
+
+        .report-table tbody tr:hover {
+            background: var(--accent-light, rgba(37, 99, 235, 0.08));
+        }
+
+        .shipment-no-badge {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 11.5px;
+            font-weight: 850;
+            display: inline-block;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .receipt-id-badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 11.5px;
+            font-weight: 850;
+            display: inline-block;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .badge-qty {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-weight: 850;
+            font-size: 11.5px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-box {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+<div class="main-container">
+    <header>
+        <div class="header-title-box">
+            <h1 data-i18n="header_title">Purchase Receipt (قائمة الشحنات)</h1>
+            <p data-i18n="header_subtitle">الموسى التجارية - عرض المورد ورقم الشحنة وسند الاستلام</p>
+        </div>
+        <div class="header-left-group">
+            <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ur">اردو</option>
+            </select>
+            <a href="index.html" class="action-btn-icon" title="الرئيسية">
+                <i class="fa-solid fa-house"></i>
+            </a>
+        </div>
+    </header>
+
+    <div class="filter-bar">
+        <input type="text" id="searchInput" class="search-input" placeholder="بحث برقم السند، رقم الشحنة، اسم المورد..." onkeyup="filterTable()" data-i18n-placeholder="search_placeholder">
+        <span id="recordCount" style="font-size: 12.5px; color: var(--text-muted); font-weight: 800;">جاري التحميل...</span>
+    </div>
+
+    <div class="table-wrapper">
+        <div class="status-box" id="statusBox" data-i18n="status_loading">جاري تحميل الشحنات فوراً...</div>
+        <table class="report-table" id="receiptsTable" style="display: none;">
+            <thead>
+                <tr>
+                    <th data-i18n="th_receipt_id">رقم سند الاستلام (ID)</th>
+                    <th data-i18n="th_supplier">اسم المورد (Supplier)</th>
+                    <th data-i18n="th_shipment_no">رقم الشحنة (Shipment No)</th>
+                    <th data-i18n="th_date">تاريخ الشحنة (Date)</th>
+                    <th data-i18n="th_total_qty">إجمالي الكمية المستلمة (Total Qty)</th>
+                    <th data-i18n="th_grand_total">إجمالي المبلغ (Grand Total)</th>
+                    <th data-i18n="th_status">الحالة (Status)</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const translations = {
+        ar: {
+            page_title: "قائمة شحنات الموردين - الموسى التجارية",
+            header_title: "Purchase Receipt (قائمة الشحنات)",
+            header_subtitle: "الموسى التجارية - عرض المورد ورقم الشحنة وسند الاستلام",
+            search_placeholder: "بحث برقم السند، رقم الشحنة، اسم المورد...",
+            status_loading: "جاري تحميل الشحنات فوراً...",
+            th_receipt_id: "رقم سند الاستلام (ID)",
+            th_supplier: "اسم المورد (Supplier)",
+            th_shipment_no: "رقم الشحنة (Shipment No)",
+            th_date: "تاريخ الشحنة (Date)",
+            th_total_qty: "إجمالي الكمية المستلمة (Total Qty)",
+            th_grand_total: "إجمالي المبلغ (Grand Total)",
+            th_status: "الحالة (Status)",
+            no_records: "لا توجد شحنات مسجلة",
+            error_server: "فشل جلب البيانات من السيرفر",
+            error_connection: "تعذر الاتصال بالسيرفر",
+            records_count: "إجمالي الشحنات: "
+        },
+        en: {
+            page_title: "Purchase Receipts - Almoosa Trading",
+            header_title: "Purchase Receipt",
+            header_subtitle: "Almoosa Trading - Supplier, Shipment & Receipt Viewer",
+            search_placeholder: "Search by ID, shipment no, supplier...",
+            status_loading: "Loading shipments...",
+            th_receipt_id: "Receipt ID",
+            th_supplier: "Supplier",
+            th_shipment_no: "Shipment No",
+            th_date: "Date",
+            th_total_qty: "Total Qty",
+            th_grand_total: "Grand Total",
+            th_status: "Status",
+            no_records: "No shipments found",
+            error_server: "Failed to fetch data from server",
+            error_connection: "Server connection error",
+            records_count: "Total Shipments: "
+        },
+        hi: {
+            page_title: "खरीद रसीदें - अलमूसा ट्रेडिंग",
+            header_title: "खरीद रसीद",
+            header_subtitle: "अलमूसा ट्रेडिंग - आपूर्तिकर्ता, शिपमेंट और रसीद व्यूअर",
+            search_placeholder: "आईडी, शिपमेंट नंबर, आपूर्तिकर्ता द्वारा खोजें...",
+            status_loading: "शिपment लोड हो रहा है...",
+            th_receipt_id: "रसीद आईडी",
+            th_supplier: "आपूर्तिकर्ता",
+            th_shipment_no: "शिपमेंट नंबर",
+            th_date: "तारीख",
+            th_total_qty: "कुल मात्रा",
+            th_grand_total: "कुल राशि",
+            th_status: "स्थिति",
+            no_records: "कोई शिपमेंट नहीं मिला",
+            error_server: "सर्वर से डेटा लाने में विफल",
+            error_connection: "कनेक्शन त्रुटि",
+            records_count: "कुल शिपमेंट: "
+        },
+        ur: {
+            page_title: "پرچیز ریسیٹس - الموسی ٹریڈنگ",
+            header_title: "پرچیز ریسیٹ",
+            header_subtitle: "الموسی ٹریڈنگ - سپلائر، شپمنٹ اور رسید ناظر",
+            search_placeholder: "آئی ڈی، شپمنٹ نمبر، سپلائر کے ذریعے تلاش کریں...",
+            status_loading: "شپمنٹس لوڈ ہو رہی ہیں...",
+            th_receipt_id: "رسیید آئی ڈی",
+            th_supplier: "سپلائر",
+            th_shipment_no: "شپمنٹ نمبر",
+            th_date: "تاریخ",
+            th_total_qty: "کل مقدار",
+            th_grand_total: "کل رقم",
+            th_status: "حالت",
+            no_records: "کوئی شپمنٹ نہیں ملی",
+            error_server: "سرفر سے ڈیٹا حاصل کرنے میں ناکامی",
+            error_connection: "کنکشن کی خرابی",
+            records_count: "کل شپمنٹس: "
+        }
+    };
+
+    let currentLang = localStorage.getItem('app_lang') || 'ar';
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('app_lang', lang);
+        const root = document.getElementById('htmlRoot');
+        root.setAttribute('lang', lang);
+        root.setAttribute('dir', (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr');
+        
+        const selectEl = document.getElementById('langSelect');
+        if (selectEl) selectEl.value = lang;
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) {
+                el.textContent = translations[lang][key];
+            }
+        });
+
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (translations[lang] && translations[lang][key]) {
+                el.placeholder = translations[lang][key];
+            }
+        });
+        if (allReceipts.length > 0) renderTable(allReceipts);
+    }
+
+    function changeLanguage(lang) {
+        setLanguage(lang);
+    }
+
+    const CONFIG = {
+        serverUrl: "https://87-237-225-155.nip.io",
+        apiKey: "6f039a5a6130b79",
+        apiSecret: "9e6d920a8fda252"
+    };
+
+    let allReceipts = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLang);
+        const savedTheme = localStorage.getItem('app_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body.setAttribute('data-theme', savedTheme);
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeIcon) {
+            themeIcon.className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
+        loadAllReceipts();
+    });
+
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('app_theme', newTheme);
+        document.getElementById('themeIcon').className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    }
+
+    async function loadAllReceipts() {
+        const statusBox = document.getElementById('statusBox');
+        
+        try {
+            const url = `${CONFIG.serverUrl}/api/method/get_purchase_receipts_list`;
+            const res = await fetch(url, {
+                method: "GET",
+                headers: { "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}` }
+            });
+
+            if (res.ok) {
+                const json = await res.json();
+                allReceipts = json.message || [];
+
+                if (allReceipts.length === 0) {
+                    statusBox.textContent = translations[currentLang].no_records;
+                    return;
+                }
+
+                statusBox.style.display = 'none';
+                document.getElementById('receiptsTable').style.display = 'table';
+                renderTable(allReceipts);
+            } else {
+                statusBox.textContent = translations[currentLang].error_server;
+            }
+        } catch (err) {
+            statusBox.textContent = translations[currentLang].error_connection;
+        }
+    }
+
+    function renderTable(data) {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+        
+        document.getElementById('recordCount').textContent = `${translations[currentLang].records_count}${data.length}`;
+
+        data.forEach(r => {
+            const tr = document.createElement('tr');
+            tr.onclick = () => {
+                window.location.href = `purchases-analytics.html?shipment=${encodeURIComponent(r.shipment_number || '')}&supplier=${encodeURIComponent(r.supplier || '')}`;
+            };
+
+            tr.innerHTML = `
+                <td><span class="receipt-id-badge">${r.name}</span></td>
+                <td>${r.supplier_name || r.supplier}</td>
+                <td><span class="shipment-no-badge">${r.shipment_number || '-'}</span></td>
+                <td>${r.posting_date || ''}</td>
+                <td><span class="badge-qty">${parseFloat(r.total_qty || 0).toLocaleString('en-US')} Pcs</span></td>
+                <td>${parseFloat(r.grand_total || 0).toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</td>
+                <td><span style="color: #3b82f6; font-weight: 850;">${r.status || 'Submitted'}</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function filterTable() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = allReceipts.filter(r => {
+            const name = (r.name || '').toLowerCase();
+            const shipNo = (r.shipment_number || '').toLowerCase();
+            const supName = (r.supplier_name || r.supplier || '').toLowerCase();
+            const date = (r.posting_date || '').toLowerCase();
+            return name.includes(query) || shipNo.includes(query) || supName.includes(query) || date.includes(query);
+        });
+        renderTable(filtered);
+    }
+</script>
+
+</body>
+</html>
