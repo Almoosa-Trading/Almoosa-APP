@@ -58,7 +58,93 @@
             border: 1px solid var(--border);
         }
 
-        /* الكارت الرئيسي المميز للمجاميع */
+        .controls-row {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            position: relative;
+        }
+
+        .control-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .date-toggle-btn {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            height: 44px;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+        .date-toggle-btn:hover { border-color: var(--accent); }
+
+        .calendar-container {
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            background: var(--bg-card);
+            display: none;
+            position: absolute;
+            top: 48px;
+            right: 0;
+            width: 100%;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
+            z-index: 1000;
+        }
+        .calendar-container.open { display: block; }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 12px; font-weight: 800; color: var(--text-main); }
+        .calendar-header button { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; color: var(--text-main); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+        .calendar-day-name { font-size: 10px; color: var(--text-muted); font-weight: 700; }
+        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--bg-body); border-radius: 8px; cursor: pointer; color: var(--text-main); transition: background 0.15s; }
+        .calendar-day.selected { background: var(--accent); color: white; }
+        .calendar-day.in-range { background: rgba(79, 70, 229, 0.15); color: var(--accent); }
+
+        .period-chips {
+            display: flex;
+            width: 100%;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .chip {
+            flex: 1;
+            min-width: 65px;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            padding: 10px 0;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        .chip.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+
         .hero-summary-card {
             background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             color: white;
@@ -121,7 +207,6 @@
             gap: 10px;
         }
 
-        /* 📁 تصميم كارت الـ Group الاحترافي (Accordion) */
         .group-card {
             background: var(--bg-body);
             border: 1px solid var(--border);
@@ -174,7 +259,6 @@
         .group-card.open .group-chevron { transform: rotate(180deg); }
         .group-chevron { transition: transform 0.3s; font-size: 10px; color: var(--text-muted); }
 
-        /* 👥 تصميم قسم النوع (Men / Women / Unisex) الاحترافي */
         .gender-accordion {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -213,7 +297,6 @@
         .gender-accordion.open .gender-chevron { transform: rotate(180deg); }
         .gender-chevron { transition: transform 0.3s; font-size: 9px; }
 
-        /* 🏢 صف الموردين داخل النوع */
         .supplier-item-row {
             display: flex;
             justify-content: space-between;
@@ -274,10 +357,30 @@
 
     <div class="filter-panel">
         <div class="period-chips">
-            <div class="chip active" data-preset="today" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
+            <div class="chip" data-preset="today" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
             <div class="chip" data-preset="yesterday" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
-            <div class="chip" data-preset="week" onclick="setPreset('week', this)" data-i18n="chip_week">هذا الأسبوع</div>
-            <div class="chip" data-preset="month" onclick="setPreset('month', this)" data-i18n="chip_month">هذا الشهر</div>
+            <div class="chip" data-preset="week" onclick="setPreset('week', this)" data-i18n="chip_week">الأسبوع</div>
+            <div class="chip" data-preset="month" onclick="setPreset('month', this)" data-i18n="chip_month">الشهر</div>
+            <div class="chip" data-preset="year" onclick="setPreset('year', this)" data-i18n="chip_year">السنة</div>
+            <div class="chip" data-preset="custom" onclick="toggleCalendar()" data-i18n="chip_custom">📅 مخصص</div>
+        </div>
+
+        <div class="controls-row">
+            <div class="control-group">
+                <span class="control-label" data-i18n="label_time_range">النطاق الزمني:</span>
+                <div class="date-toggle-btn" onclick="toggleCalendar()">
+                    <span id="dateButtonText" data-i18n="btn_choose_range">اختر النطاق...</span>
+                    <span>▼</span>
+                </div>
+                <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
+                    <div class="calendar-header">
+                        <button onclick="changeMonth(-1)">&#9664;</button>
+                        <span id="calendarTitle">أكتوبر 2026</span>
+                        <button onclick="changeMonth(1)">&#9654;</button>
+                    </div>
+                    <div class="calendar-grid" id="calendarDaysGrid"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -312,28 +415,136 @@
 
     let currentQueryFrom = '';
     let currentQueryTo = '';
+    let selectionState = { startDate: null, endDate: null };
+    let viewDate = new Date();
 
     document.addEventListener('DOMContentLoaded', () => {
         syncWithSalesPageFilter();
+        renderCalendar();
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.control-group') && !event.target.closest('.period-chips')) {
+                document.getElementById('calendarContainer').classList.remove('open');
+            }
+        }
     });
 
     function syncWithSalesPageFilter() {
-        const salesPreset = localStorage.getItem('sales_filter_preset') || 'today';
+        const salesPreset = localStorage.getItem('sales_filter_preset');
         const salesFrom = localStorage.getItem('sales_filter_from');
         const salesTo = localStorage.getItem('sales_filter_to');
 
-        const targetChip = document.querySelector(`.chip[data-preset="${salesPreset}"]`) || document.querySelector('.chip[data-preset="today"]');
-        if (salesFrom && salesTo) {
+        if (salesPreset && salesPreset !== 'custom') {
+            const targetChip = document.querySelector(`.chip[data-preset="${salesPreset}"]`);
+            setPreset(salesPreset, targetChip, false);
+        } else if (salesFrom && salesTo) {
             currentQueryFrom = salesFrom;
             currentQueryTo = salesTo;
-            if (targetChip) {
-                document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-                targetChip.classList.add('active');
-            }
+            selectionState.startDate = salesFrom;
+            selectionState.endDate = salesTo;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            const customChip = document.querySelector('.chip[data-preset="custom"]');
+            if (customChip) customChip.classList.add('active');
+            document.getElementById('dateButtonText').textContent = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} إلى ${currentQueryTo}`;
+            loadGroupSalesData();
         } else {
-            setPreset('today', targetChip, false);
+            setPreset('today', document.querySelector('.chip[data-preset="today"]'), false);
         }
-        loadGroupSalesData();
+    }
+
+    function toggleCalendar() {
+        document.getElementById('calendarContainer').classList.toggle('open');
+    }
+
+    function changeMonth(direction) {
+        viewDate.setMonth(viewDate.getMonth() + direction);
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        const grid = document.getElementById('calendarDaysGrid');
+        const titleEl = document.getElementById('calendarTitle');
+        if (!grid || !titleEl) return;
+        grid.innerHTML = '';
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
+        const arMonths = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+        titleEl.textContent = `${arMonths[month]} ${year}`;
+
+        const daysShort = ['أحد', 'إثن', 'ثلا', 'أرب', 'خميس', 'جمع', 'سبت'];
+        daysShort.forEach(d => {
+            const div = document.createElement('div');
+            div.className = 'calendar-day-name';
+            div.textContent = d;
+            grid.appendChild(div);
+        });
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+
+        for (let i = 0; i < firstDayIndex; i++) {
+            grid.appendChild(document.createElement('div'));
+        }
+
+        for (let day = 1; day <= totalDays; day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            dayDiv.textContent = day;
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            
+            if (selectionState.startDate && dateStr === selectionState.startDate) {
+                dayDiv.classList.add('selected');
+            }
+            if (selectionState.endDate && dateStr === selectionState.endDate) {
+                dayDiv.classList.add('selected');
+            }
+            if (selectionState.startDate && selectionState.endDate && dateStr > selectionState.startDate && dateStr < selectionState.endDate) {
+                dayDiv.classList.add('in-range');
+            }
+
+            dayDiv.onclick = (e) => {
+                e.stopPropagation();
+                onCalendarDayClick(dateStr);
+            };
+            grid.appendChild(dayDiv);
+        }
+    }
+
+    function onCalendarDayClick(dateStr) {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        const customChip = document.querySelector('.chip[data-preset="custom"]');
+        if (customChip) customChip.classList.add('active');
+
+        if (!selectionState.startDate || (selectionState.startDate && selectionState.endDate)) {
+            // اختيار تاريخ البداية فقط، ولن يتم غلق التقويم
+            selectionState.startDate = dateStr;
+            selectionState.endDate = null;
+            currentQueryFrom = dateStr;
+            currentQueryTo = '';
+            document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
+            renderCalendar();
+        } else {
+            if (dateStr < selectionState.startDate) {
+                selectionState.startDate = dateStr;
+                currentQueryFrom = dateStr;
+                currentQueryTo = '';
+                document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
+                renderCalendar();
+            } else {
+                // اختيار تاريخ النهاية واكتمال الفترة، وهنا فقط يتم غلق التقويم وتحديث البيانات
+                selectionState.endDate = dateStr;
+                currentQueryTo = dateStr;
+                
+                localStorage.setItem('sales_filter_preset', 'custom');
+                localStorage.setItem('sales_filter_from', currentQueryFrom);
+                localStorage.setItem('sales_filter_to', currentQueryTo);
+
+                document.getElementById('dateButtonText').textContent = `${currentQueryFrom} إلى ${currentQueryTo}`;
+                renderCalendar();
+                loadGroupSalesData();
+                toggleCalendar(); // غلق التقويم بعد اكتمال الفترة فقط
+            }
+        }
     }
 
     function setPreset(type, element, updateLocalStorage = true) {
@@ -347,15 +558,22 @@
         else if (type === 'yesterday') { start = new Date(today); start.setDate(today.getDate() - 1); end = new Date(start); }
         else if (type === 'week') { start = new Date(today); start.setDate(today.getDate() - 6); end = new Date(today); }
         else if (type === 'month') { start = new Date(today.getFullYear(), today.getMonth(), 1); end = new Date(today); }
+        else if (type === 'year') { start = new Date(today.getFullYear(), 0, 1); end = new Date(today); }
 
         currentQueryFrom = formatDateStr(start);
         currentQueryTo = formatDateStr(end);
+        selectionState.startDate = currentQueryFrom;
+        selectionState.endDate = currentQueryTo;
+        viewDate = new Date(end);
 
         if (updateLocalStorage) {
             localStorage.setItem('sales_filter_preset', type);
             localStorage.setItem('sales_filter_from', currentQueryFrom);
             localStorage.setItem('sales_filter_to', currentQueryTo);
         }
+
+        document.getElementById('dateButtonText').textContent = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} إلى ${currentQueryTo}`;
+        renderCalendar();
         loadGroupSalesData();
     }
 
@@ -366,7 +584,7 @@
     async function loadGroupSalesData() {
         const container = document.getElementById('groupAnalyticsContainer');
         const loadingText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_loading) ? translations[currentLang].status_loading : "جاري تحضير البيانات...";
-        container.innerHTML = `<div class="status-msg">${loadingText}</div>`;
+        container.innerHTML = `<div class="status-msg"><i class="fa-solid fa-spinner fa-spin"></i> ${loadingText}</div>`;
 
         try {
             const res = await fetch(`${CONFIG.serverUrl}/api/method/get_supplier_sales_summary?from_date=${currentQueryFrom}&to_date=${currentQueryTo}`, {
@@ -462,7 +680,7 @@
                     
                     let suppliersRowsHTML = '';
                     supKeys.sort((a, b) => supObj[b].sales - supObj[a].sales).forEach(sup => {
-                        suppliersRowsKeys = supObj[sup];
+                        let suppliersRowsKeys = supObj[sup];
                         suppliersRowsHTML += `
                             <div class="supplier-item-row">
                                 <span><i class="fa-solid fa-angle-left" style="color:var(--accent);"></i> ${sup}</span>

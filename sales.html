@@ -236,15 +236,15 @@
         .calendar-container {
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 8px;
+            padding: 10px;
             background: var(--bg-card);
             display: none;
             position: absolute;
             top: 65px;
             right: 0;
-            width: 260px;
+            width: 280px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            z-index: 100;
+            z-index: 1000;
         }
 
         .calendar-container.open {
@@ -255,7 +255,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-size: 12px;
             font-weight: 700;
             color: var(--text-main);
@@ -274,7 +274,7 @@
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 2px;
+            gap: 3px;
             text-align: center;
         }
 
@@ -293,7 +293,7 @@
             font-weight: 700;
             background: var(--bg-body);
             color: var(--text-main);
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
         }
 
@@ -910,7 +910,7 @@
                     <span>▼</span>
                 </div>
                 
-                <div class="calendar-container" id="calendarContainer">
+                <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
                     <div class="calendar-header">
                         <button onclick="changeMonth(-1)">&#9664;</button>
                         <span id="calendarTitle">أكتوبر 2026</span>
@@ -1187,6 +1187,13 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         setPreset('today', document.querySelector('.chip.active'));
+        renderCalendar();
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.control-group') && !event.target.closest('.period-chips')) {
+                document.getElementById('calendarContainer').classList.remove('open');
+            }
+        }
     });
 
     function goBack() {
@@ -1247,39 +1254,53 @@
                 dayDiv.classList.add('in-range');
             }
 
-            dayDiv.onclick = () => onCalendarDayClick(dateStr);
+            dayDiv.onclick = (e) => {
+                e.stopPropagation();
+                onCalendarDayClick(dateStr);
+            };
             grid.appendChild(dayDiv);
         }
     }
 
     function onCalendarDayClick(dateStr) {
         document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        const customChip = document.querySelector('.chip[onclick*="custom"]');
+        if (customChip) customChip.classList.add('active');
+
         if (!selectionState.startDate || (selectionState.startDate && selectionState.endDate)) {
             selectionState.startDate = dateStr;
             selectionState.endDate = null;
             currentQueryFrom = dateStr;
-            currentQueryTo = dateStr;
+            currentQueryTo = '';
+            document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
+            renderCalendar();
         } else {
             if (dateStr < selectionState.startDate) {
                 selectionState.startDate = dateStr;
                 currentQueryFrom = dateStr;
-                currentQueryTo = dateStr;
+                currentQueryTo = '';
+                document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
+                renderCalendar();
             } else {
                 selectionState.endDate = dateStr;
                 currentQueryTo = dateStr;
+
+                localStorage.setItem('sales_filter_preset', 'custom');
+                localStorage.setItem('sales_filter_from', currentQueryFrom);
+                localStorage.setItem('sales_filter_to', currentQueryTo);
+
+                calculatePreviousPeriod();
+                updateDateButtonText();
+                renderCalendar();
+                loadPOSData();
+                toggleCalendar();
             }
         }
-
-        calculatePreviousPeriod();
-        updateDateButtonText();
-        renderCalendar();
-        loadPOSData();
-        toggleCalendar();
     }
 
     function updateDateButtonText() {
         const btnText = document.getElementById('dateButtonText');
-        if (currentQueryFrom === currentQueryTo) {
+        if (!currentQueryTo || currentQueryFrom === currentQueryTo) {
             btnText.textContent = `${currentQueryFrom}`;
         } else {
             btnText.textContent = `${currentQueryFrom} إلى ${currentQueryTo}`;
@@ -1322,7 +1343,6 @@
         selectionState.endDate = currentQueryTo;
         viewDate = new Date(end);
 
-        // مزامنة خيارات الفلتر لتتناسب مع صفحات المبيعات والمجموعات
         localStorage.setItem('sales_filter_preset', type);
         localStorage.setItem('sales_filter_from', currentQueryFrom);
         localStorage.setItem('sales_filter_to', currentQueryTo);
@@ -1335,7 +1355,7 @@
 
     function calculatePreviousPeriod() {
         const dFrom = new Date(currentQueryFrom);
-        const dTo = new Date(currentQueryTo);
+        const dTo = new Date(currentQueryTo || currentQueryFrom);
 
         const diffTime = Math.abs(dTo - dFrom);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
@@ -1381,8 +1401,10 @@
         branchDataSummary = [];
         allInvoicesCache = [];
 
+        let queryToDate = currentQueryTo || currentQueryFrom;
+
         try {
-            const res = await fetch(`${CONFIG.serverUrl}/api/method/get_branch_sales_cost_summary?from_date=${currentQueryFrom}&to_date=${currentQueryTo}`, {
+            const res = await fetch(`${CONFIG.serverUrl}/api/method/get_branch_sales_cost_summary?from_date=${currentQueryFrom}&to_date=${queryToDate}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`,
@@ -1409,7 +1431,7 @@
                     fields: ["name", "set_warehouse", "grand_total", "total_qty", "posting_time", "posting_date"],
                     filters: [
                         ["posting_date", ">=", currentQueryFrom],
-                        ["posting_date", "<=", currentQueryTo],
+                        ["posting_date", "<=", queryToDate],
                         ["docstatus", "=", 1]
                     ],
                     limit_page_length: 0
@@ -1499,13 +1521,11 @@
             totalQtySum += parseFloat(row.Total_Qty || 0);
         });
 
-        // الحسابات المالية
         const totalSalesExclTax = totalSales / 1.15;
         const totalTaxAmount = totalSales - totalSalesExclTax;
         const totalProfit = totalSalesExclTax - totalCost;
         const totalProfitPercentage = totalSalesExclTax > 0 ? (totalProfit / totalSalesExclTax) * 100 : 0;
 
-        // تحديث أرقام الكارت الرئيسي مع Bold والألوان الاحترافية
         document.getElementById('totalSalesAmount').textContent = totalSales.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' SAR';
         document.getElementById('totalSalesExclTax').textContent = totalSalesExclTax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' SAR';
         document.getElementById('totalTaxAmount').textContent = totalTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' SAR';
@@ -1526,7 +1546,6 @@
                 const bSales = parseFloat(row.Total_Sales || 0);
                 const bCost = parseFloat(row.Total_Cost || 0);
                 
-                // حسابات الفرع المفصلة
                 const bSalesExclTax = bSales / 1.15;
                 const bTaxAmount = bSales - bSalesExclTax;
                 const bProfit = bSalesExclTax - bCost;
@@ -1630,7 +1649,7 @@
                 labels: labels,
                 datasets: [
                     {
-                        label: currentLang === 'ar' ? 'الفترة المحددة (اليوم)' : 'Selected Period (Today)',
+                        label: currentLang === 'ar' ? 'الفترة المحددة' : 'Selected Period',
                         data: currentHourly,
                         borderColor: '#059669',
                         backgroundColor: 'rgba(5, 150, 105, 0.12)',
@@ -1641,7 +1660,7 @@
                         pointRadius: 4
                     },
                     {
-                        label: currentLang === 'ar' ? 'الفترة السابقة (أمس)' : 'Previous Period (Yesterday)',
+                        label: currentLang === 'ar' ? 'الفترة السابقة' : 'Previous Period',
                         data: prevHourly,
                         borderColor: '#dc2626',
                         backgroundColor: 'rgba(220, 38, 38, 0.05)',
@@ -2216,7 +2235,7 @@
             const pdfBlob = pdf.output('blob');
             const fileName = `Daily_Sales_Summary_Report_${currentQueryFrom}.pdf`;
             const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
-            const shareText = `تقرير المبيعات للموسى التجارية للفترة من ${currentQueryFrom} إلى ${currentQueryTo}`;
+            const shareText = `تقرير المبيعات للموسى التجارية للفترة من ${currentQueryFrom} إلى ${currentQueryTo || currentQueryFrom}`;
 
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({ title: 'تقرير المبيعات', text: shareText, files: [file] });
@@ -2233,7 +2252,7 @@
     async function shareEmail() {
         try {
             const pdf = await generatePDFBlob();
-            const dateText = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} to ${currentQueryTo}`;
+            const dateText = !currentQueryTo || currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} to ${currentQueryTo}`;
             const fileName = `Daily_Sales_Summary_Report_${currentQueryFrom}.pdf`;
             pdf.save(fileName);
 

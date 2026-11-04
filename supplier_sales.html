@@ -8,6 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+
+
+
+
         :root {
             --primary: #0f172a;
             --accent: #4f46e5;
@@ -247,7 +251,7 @@
         .calendar-header button { background: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; color: var(--text-main); }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
         .calendar-day-name { font-size: 10px; color: var(--text-muted); font-weight: 700; }
-        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--bg-body); border-radius: 8px; cursor: pointer; color: var(--text-main); }
+        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--bg-body); border-radius: 8px; cursor: pointer; color: var(--text-main); transition: background 0.15s; }
         .calendar-day.selected { background: var(--accent); color: white; }
         .calendar-day.in-range { background: rgba(79, 70, 229, 0.15); color: var(--accent); }
 
@@ -351,7 +355,6 @@
             font-weight: 700;
         }
 
-        /* الموردين القابلين للنقر باحترافية */
         .supplier-clickable {
             cursor: pointer;
             color: var(--accent);
@@ -363,7 +366,6 @@
         }
         .supplier-clickable:hover { opacity: 0.8; text-decoration: underline; }
 
-        /* Modal النافذة المنبثقة بتصميم أنيق ومدروس */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -418,7 +420,6 @@
         }
         .modal-close-btn:hover { color: var(--text-main); border-color: var(--accent); }
 
-        /* تفاصيل التصنيفات الاحترافية Man / Woman / Unisex */
         .gender-breakdown-box {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -577,7 +578,6 @@
     </div>
 </div>
 
-<!-- النافذة المنبثقة للمجموعات مع تفاصيل التصنيفات الاحترافية -->
 <div class="modal-overlay" id="supplierModal">
     <div class="modal-card">
         <div class="modal-header">
@@ -765,7 +765,8 @@
             themeIcon.className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         }
 
-        initFilterFromSalesPage();
+        // مزامنة فورية وتلقائية للفلتر من صفحة المبيعات الرئيسية في كل مرة يتم فتح هذه الصفحة أو العودة إليها
+        syncWithSalesPageFilter();
         renderCalendar();
         
         window.onclick = function(event) {
@@ -779,26 +780,27 @@
         }
     });
 
-    function initFilterFromSalesPage() {
-        const savedPreset = localStorage.getItem('sales_filter_preset');
-        const savedFromDate = localStorage.getItem('sales_filter_from');
-        const savedToDate = localStorage.getItem('sales_filter_to');
+    // دالة لجلب آخر فلتر تم اختياره في صفحة sales.html وتطبيقه مباشرة
+    function syncWithSalesPageFilter() {
+        const salesPreset = localStorage.getItem('sales_filter_preset');
+        const salesFrom = localStorage.getItem('sales_filter_from');
+        const salesTo = localStorage.getItem('sales_filter_to');
 
-        if (savedPreset && savedPreset !== 'custom') {
-            const targetChip = document.querySelector(`.chip[data-preset="${savedPreset}"]`);
-            setPreset(savedPreset, targetChip);
-        } else if (savedFromDate && savedToDate) {
-            currentQueryFrom = savedFromDate;
-            currentQueryTo = savedToDate;
-            selectionState.startDate = savedFromDate;
-            selectionState.endDate = savedToDate;
+        if (salesPreset && salesPreset !== 'custom') {
+            const targetChip = document.querySelector(`.chip[data-preset="${salesPreset}"]`);
+            setPreset(salesPreset, targetChip, false);
+        } else if (salesFrom && salesTo) {
+            currentQueryFrom = salesFrom;
+            currentQueryTo = salesTo;
+            selectionState.startDate = salesFrom;
+            selectionState.endDate = salesTo;
             document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             const customChip = document.querySelector('.chip[data-preset="custom"]');
             if (customChip) customChip.classList.add('active');
             document.getElementById('dateButtonText').textContent = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} إلى ${currentQueryTo}`;
             loadSupplierSalesData();
         } else {
-            setPreset('today', document.querySelector('.chip[data-preset="today"]'));
+            setPreset('today', document.querySelector('.chip[data-preset="today"]'), false);
         }
     }
 
@@ -848,11 +850,17 @@
             dayDiv.className = 'calendar-day';
             dayDiv.textContent = day;
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            if (selectionState.startDate && dateStr === selectionState.startDate) dayDiv.classList.add('selected');
-            if (selectionState.endDate && dateStr === selectionState.endDate) dayDiv.classList.add('selected');
+            
+            if (selectionState.startDate && dateStr === selectionState.startDate) {
+                dayDiv.classList.add('selected');
+            }
+            if (selectionState.endDate && dateStr === selectionState.endDate) {
+                dayDiv.classList.add('selected');
+            }
             if (selectionState.startDate && selectionState.endDate && dateStr > selectionState.startDate && dateStr < selectionState.endDate) {
                 dayDiv.classList.add('in-range');
             }
+
             dayDiv.onclick = () => onCalendarDayClick(dateStr);
             grid.appendChild(dayDiv);
         }
@@ -868,28 +876,33 @@
             selectionState.endDate = null;
             currentQueryFrom = dateStr;
             currentQueryTo = dateStr;
+            document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
+            renderCalendar();
         } else {
             if (dateStr < selectionState.startDate) {
                 selectionState.startDate = dateStr;
                 currentQueryFrom = dateStr;
                 currentQueryTo = dateStr;
+                document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
+                renderCalendar();
             } else {
                 selectionState.endDate = dateStr;
                 currentQueryTo = dateStr;
+                
+                // تحديث الفلتر في الذاكرة المشتركة مع صفحة المبيعات
+                localStorage.setItem('sales_filter_preset', 'custom');
+                localStorage.setItem('sales_filter_from', currentQueryFrom);
+                localStorage.setItem('sales_filter_to', currentQueryTo);
+
+                document.getElementById('dateButtonText').textContent = `${currentQueryFrom} إلى ${currentQueryTo}`;
+                renderCalendar();
+                loadSupplierSalesData();
+                toggleCalendar();
             }
         }
-        
-        localStorage.setItem('sales_filter_preset', 'custom');
-        localStorage.setItem('sales_filter_from', currentQueryFrom);
-        localStorage.setItem('sales_filter_to', currentQueryTo);
-
-        document.getElementById('dateButtonText').textContent = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} إلى ${currentQueryTo}`;
-        renderCalendar();
-        loadSupplierSalesData();
-        toggleCalendar();
     }
 
-    function setPreset(type, element) {
+    function setPreset(type, element, updateLocalStorage = true) {
         if (element) {
             document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
             element.classList.add('active');
@@ -908,11 +921,13 @@
         selectionState.endDate = currentQueryTo;
         viewDate = new Date(end);
 
-        localStorage.setItem('sales_filter_preset', type);
-        localStorage.setItem('sales_filter_from', currentQueryFrom);
-        localStorage.setItem('sales_filter_to', currentQueryTo);
+        if (updateLocalStorage) {
+            localStorage.setItem('sales_filter_preset', type);
+            localStorage.setItem('sales_filter_from', currentQueryFrom);
+            localStorage.setItem('sales_filter_to', currentQueryTo);
+        }
 
-        document.getElementById('dateButtonText').textContent = currentQueryFrom;
+        document.getElementById('dateButtonText').textContent = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} إلى ${currentQueryTo}`;
         renderCalendar();
         loadSupplierSalesData();
     }
@@ -940,14 +955,26 @@
                 const fetchedRows = jsonRes.message?.data || jsonRes.message || [];
                 
                 rawSupplierData = fetchedRows.map(row => {
-                    const parts = (row.item_group || "").split('.');
+                    const itemGrp = row.item_group || "";
+                    const parts = itemGrp.split('.');
+                    
+                    let rawGender = row.gender || row.Gender || "";
+                    if (!rawGender && parts.length > 0) {
+                        rawGender = parts.length > 3 ? parts[1] : parts[0];
+                    }
+
+                    let category = row.category || row.Category || (parts.length >= 3 ? parts[2] : "N/A");
+                    let group = row.group || row.Group || (parts.length >= 4 ? parts[3] : (parts.length > 0 ? parts[parts.length - 1] : "N/A"));
+
                     return {
                         supplier: row.supplier || "مورد غير محدد",
                         brand: row.brand || "عام",
                         product_year: row.product_year || "غير محدد",
-                        gender: parts[1] || "N/A",
-                        category: parts[2] || "N/A",
-                        group: parts[3] || "N/A",
+                        gender: rawGender || "N/A",
+                        category: category,
+                        group: group,
+                        dcs_code: row.dcs_code || row.DCS_Code || "",
+                        item_group: itemGrp,
                         total_sales: parseFloat(row.total_sales || 0),
                         total_qty: parseFloat(row.total_qty || 0)
                     };
@@ -1127,11 +1154,14 @@
             groupMap[grpName].qty += row.total_qty;
 
             let gKey = 'Unisex';
-            const gUpper = (row.gender || '').toUpperCase();
-            if (gUpper.includes('MAN') || gUpper.includes('MEN') || gUpper.includes('BOY') || gUpper === 'M') {
-                gKey = 'Man';
-            } else if (gUpper.includes('WOMAN') || gUpper.includes('WOMEN') || gUpper.includes('GIRL') || gUpper === 'W' || gUpper === 'F') {
+            const strCheck = `${row.gender} ${row.item_group} ${row.dcs_code}`.toUpperCase();
+            
+            if (strCheck.includes('UNISEX') || strCheck.includes('USX') || strCheck.includes('UNI')) {
+                gKey = 'Unisex';
+            } else if (strCheck.includes('WOMAN') || strCheck.includes('WOMEN') || strCheck.includes('WMN') || strCheck.includes('GIRL') || strCheck.includes('FEMALE') || strCheck.includes('WMS')) {
                 gKey = 'Woman';
+            } else if (strCheck.includes('MAN') || strCheck.includes('MEN') || strCheck.includes('BOY') || strCheck.includes('MENS') || strCheck.includes('MALE')) {
+                gKey = 'Man';
             }
 
             groupMap[grpName].genders[gKey].sales += row.total_sales;
