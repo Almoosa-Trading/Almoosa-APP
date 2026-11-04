@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <link rel="manifest" href="./manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title data-i18n="sales_group_title">مبيعات المجموعات - الموسى التجارية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .mobile-container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            background: var(--header-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .header-title-box h1 {
+            font-size: 15px;
+            color: var(--text-main);
+            font-weight: 800;
+        }
+
+        .header-title-box p {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .header-left-group {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .filter-panel {
+            background: var(--bg-card);
+            padding: 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border: 1px solid var(--border);
+        }
+
+        /* الكارت الرئيسي المميز للمجاميع */
+        .hero-summary-card {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        [data-theme="dark"] .hero-summary-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-color: #334155;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-stat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hero-stat-box label {
+            font-size: 11px;
+            opacity: 0.85;
+            font-weight: 700;
+        }
+
+        .hero-stat-box span {
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .report-section {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .analytics-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* 📁 تصميم كارت الـ Group الاحترافي (Accordion) */
+        .group-card {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .group-card.open {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.1);
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-main);
+            cursor: pointer;
+            user-select: none;
+            background: var(--bg-card);
+        }
+        .group-header:hover { background: var(--accent-light); }
+
+        .group-totals-badge {
+            font-size: 11px;
+            color: var(--accent);
+            background: var(--accent-light);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--accent-border);
+        }
+
+        .group-body {
+            display: none;
+            padding: 12px;
+            flex-direction: column;
+            gap: 8px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-body);
+        }
+        .group-card.open .group-body { display: flex; }
+        .group-card.open .group-chevron { transform: rotate(180deg); }
+        .group-chevron { transition: transform 0.3s; font-size: 10px; color: var(--text-muted); }
+
+        /* 👥 تصميم قسم النوع (Men / Women / Unisex) الاحترافي */
+        .gender-accordion {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .gender-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .gender-header.men { color: #2563eb; background: rgba(37, 99, 235, 0.05); }
+        .gender-header.woman { color: #db2777; background: rgba(219, 39, 119, 0.05); }
+        .gender-header.unisex { color: #059669; background: rgba(5, 150, 105, 0.05); }
+
+        [data-theme="dark"] .gender-header.men { background: rgba(37, 99, 235, 0.12); }
+        [data-theme="dark"] .gender-header.woman { background: rgba(219, 39, 119, 0.12); }
+        [data-theme="dark"] .gender-header.unisex { background: rgba(5, 150, 105, 0.12); }
+
+        .gender-body {
+            display: none;
+            padding: 8px 12px;
+            flex-direction: column;
+            gap: 6px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-body);
+        }
+        .gender-accordion.open .gender-body { display: flex; }
+        .gender-accordion.open .gender-chevron { transform: rotate(180deg); }
+        .gender-chevron { transition: transform 0.3s; font-size: 9px; }
+
+        /* 🏢 صف الموردين داخل النوع */
+        .supplier-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-main);
+            padding: 8px 12px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .supplier-item-row span:last-child {
+            color: #059669;
+            font-weight: 850;
+        }
+        [data-theme="dark"] .supplier-item-row span:last-child {
+            color: #34d399;
+        }
+
+        .status-msg {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+    </style>
+    <script src="app.js" defer></script>
+</head>
+<body data-theme="light">
+
+<div class="mobile-container">
+    <header>
+        <div class="header-title-box">
+            <h1 data-i18n="header_title">الموسى التجارية</h1>
+            <p data-i18n="sales_group_subtitle">تقرير مبيعات المجموعات الاحترافي</p>
+        </div>
+        <div class="header-left-group">
+            <button class="update-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
+            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ur">اردو</option>
+            </select>
+            <button class="update-btn" onclick="loadGroupSalesData()" title="تحديث">
+                <i class="fa-solid fa-rotate"></i>
+            </button>
+            <a href="sales.html" class="update-btn" title="الرجوع للمبيعات">
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+    </header>
+
+    <div class="filter-panel">
+        <div class="period-chips">
+            <div class="chip active" data-preset="today" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
+            <div class="chip" data-preset="yesterday" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
+            <div class="chip" data-preset="week" onclick="setPreset('week', this)" data-i18n="chip_week">هذا الأسبوع</div>
+            <div class="chip" data-preset="month" onclick="setPreset('month', this)" data-i18n="chip_month">هذا الشهر</div>
+        </div>
+    </div>
+
+    <!-- كارت الإجمالي الرئيسي المدمج الاحترافي -->
+    <div class="hero-summary-card">
+        <div class="hero-stat-box">
+            <label data-i18n="hero_total_sales">إجمالي المبيعات</label>
+            <span id="kpiTotalSales">0.00 SAR</span>
+        </div>
+        <div class="hero-stat-box" style="text-align: left;">
+            <label data-i18n="kpi_total_qty">إجمالي القطع المباعة</label>
+            <span id="kpiTotalQty">0 Pcs</span>
+        </div>
+    </div>
+
+    <div class="report-section">
+        <div class="section-title">
+            <i class="fa-solid fa-layer-group" style="color: var(--accent);"></i> <span data-i18n="section_groups_summary">تفصيل المبيعات حسب المجموعات والموردين</span>
+        </div>
+        <div class="analytics-container" id="groupAnalyticsContainer">
+            <div class="status-msg" data-i18n="status_loading">جاري تحميل البيانات وتحليل المجموعات...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CONFIG = {
+        serverUrl: "https://87-237-225-155.nip.io/",
+        apiKey: "6f039a5a6130b79",
+        apiSecret: "9e6d920a8fda252"
+    };
+
+    let currentQueryFrom = '';
+    let currentQueryTo = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        syncWithSalesPageFilter();
+    });
+
+    function syncWithSalesPageFilter() {
+        const salesPreset = localStorage.getItem('sales_filter_preset') || 'today';
+        const salesFrom = localStorage.getItem('sales_filter_from');
+        const salesTo = localStorage.getItem('sales_filter_to');
+
+        const targetChip = document.querySelector(`.chip[data-preset="${salesPreset}"]`) || document.querySelector('.chip[data-preset="today"]');
+        if (salesFrom && salesTo) {
+            currentQueryFrom = salesFrom;
+            currentQueryTo = salesTo;
+            if (targetChip) {
+                document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+                targetChip.classList.add('active');
+            }
+        } else {
+            setPreset('today', targetChip, false);
+        }
+        loadGroupSalesData();
+    }
+
+    function setPreset(type, element, updateLocalStorage = true) {
+        if (element) {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+        }
+        const today = new Date();
+        let start = new Date(), end = new Date();
+        if (type === 'today') { start = new Date(today); end = new Date(today); }
+        else if (type === 'yesterday') { start = new Date(today); start.setDate(today.getDate() - 1); end = new Date(start); }
+        else if (type === 'week') { start = new Date(today); start.setDate(today.getDate() - 6); end = new Date(today); }
+        else if (type === 'month') { start = new Date(today.getFullYear(), today.getMonth(), 1); end = new Date(today); }
+
+        currentQueryFrom = formatDateStr(start);
+        currentQueryTo = formatDateStr(end);
+
+        if (updateLocalStorage) {
+            localStorage.setItem('sales_filter_preset', type);
+            localStorage.setItem('sales_filter_from', currentQueryFrom);
+            localStorage.setItem('sales_filter_to', currentQueryTo);
+        }
+        loadGroupSalesData();
+    }
+
+    function formatDateStr(d) {
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    async function loadGroupSalesData() {
+        const container = document.getElementById('groupAnalyticsContainer');
+        const loadingText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_loading) ? translations[currentLang].status_loading : "جاري تحضير البيانات...";
+        container.innerHTML = `<div class="status-msg">${loadingText}</div>`;
+
+        try {
+            const res = await fetch(`${CONFIG.serverUrl}/api/method/get_supplier_sales_summary?from_date=${currentQueryFrom}&to_date=${currentQueryTo}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`,
+                    "X-Frappe-Site-Name": window.location.hostname
+                }
+            });
+
+            if (res.ok) {
+                const jsonRes = await res.json();
+                const fetchedRows = jsonRes.message?.data || jsonRes.message || [];
+                processAndRenderGroups(fetchedRows);
+            } else {
+                container.innerHTML = `<div class="status-msg">فشل الاتصال بالخادم</div>`;
+            }
+        } catch (err) {
+            console.error("API Error:", err);
+            container.innerHTML = `<div class="status-msg">حدث خطأ أثناء جلب البيانات</div>`;
+        }
+    }
+
+    function processAndRenderGroups(rows) {
+        let groupMap = {};
+        let grandSales = 0;
+        let grandQty = 0;
+
+        rows.forEach(row => {
+            const supplier = row.supplier || "مورد غير محدد";
+            const itemGrp = row.item_group || "";
+            const parts = itemGrp.split('.');
+            
+            let group = row.group || row.Group || (parts.length >= 4 ? parts[3] : (parts.length > 0 ? parts[parts.length - 1] : "غير محدد"));
+            
+            let genderKey = 'Unisex';
+            const strCheck = `${row.gender || ''} ${itemGrp} ${row.dcs_code || ''}`.toUpperCase();
+            if (strCheck.includes('WOMAN') || strCheck.includes('WOMEN') || strCheck.includes('WMN') || strCheck.includes('FEMALE') || strCheck.includes('WMS')) {
+                genderKey = 'Woman';
+            } else if (strCheck.includes('MAN') || strCheck.includes('MEN') || strCheck.includes('BOY') || strCheck.includes('MENS') || strCheck.includes('MALE')) {
+                genderKey = 'Man';
+            }
+
+            const sales = parseFloat(row.total_sales || 0);
+            const qty = parseFloat(row.total_qty || 0);
+
+            grandSales += sales;
+            grandQty += qty;
+
+            if (!groupMap[group]) {
+                groupMap[group] = {
+                    totalSales: 0,
+                    totalQty: 0,
+                    genders: { Man: {}, Woman: {}, Unisex: {} }
+                };
+            }
+
+            groupMap[group].totalSales += sales;
+            groupMap[group].totalQty += qty;
+
+            if (!groupMap[group].genders[genderKey][supplier]) {
+                groupMap[group].genders[genderKey][supplier] = { sales: 0, qty: 0 };
+            }
+            groupMap[group].genders[genderKey][supplier].sales += sales;
+            groupMap[group].genders[genderKey][supplier].qty += qty;
+        });
+
+        document.getElementById('kpiTotalSales').textContent = grandSales.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+        document.getElementById('kpiTotalQty').textContent = grandQty.toLocaleString('en-US') + ' Pcs';
+
+        const container = document.getElementById('groupAnalyticsContainer');
+        container.innerHTML = '';
+
+        const sortedGroups = Object.keys(groupMap).sort((a, b) => groupMap[b].totalSales - groupMap[a].totalSales);
+
+        if (sortedGroups.length === 0) {
+            container.innerHTML = `<div class="status-msg">لا توجد مبيعات مسجلة في هذه الفترة</div>`;
+            return;
+        }
+
+        sortedGroups.forEach(grp => {
+            const gData = groupMap[grp];
+            
+            let gendersHTML = '';
+            ['Man', 'Woman', 'Unisex'].forEach(gKey => {
+                const supObj = gData.genders[gKey];
+                const supKeys = Object.keys(supObj);
+                
+                if (supKeys.length > 0) {
+                    let gLabelAr = gKey === 'Man' ? 'رجالي (Men)' : (gKey === 'Woman' ? 'نسائي (Women)' : 'مشترك (Unisex)');
+                    let supTotalSales = Object.values(supObj).reduce((sum, i) => sum + i.sales, 0);
+                    let supTotalQty = Object.values(supObj).reduce((sum, i) => sum + i.qty, 0);
+                    
+                    let suppliersRowsHTML = '';
+                    supKeys.sort((a, b) => supObj[b].sales - supObj[a].sales).forEach(sup => {
+                        suppliersRowsKeys = supObj[sup];
+                        suppliersRowsHTML += `
+                            <div class="supplier-item-row">
+                                <span><i class="fa-solid fa-angle-left" style="color:var(--accent);"></i> ${sup}</span>
+                                <span>${suppliersRowsKeys.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (${suppliersRowsKeys.qty} Pcs)</span>
+                            </div>
+                        `;
+                    });
+
+                    gendersHTML += `
+                        <div class="gender-accordion">
+                            <div class="gender-header ${gKey.toLowerCase()}" onclick="toggleGenderAccordion(this)">
+                                <span><i class="fa-solid fa-user"></i> ${gLabelAr}</span>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="font-size: 10px; font-weight: 700;">${supTotalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (${supTotalQty} Pcs)</span>
+                                    <i class="fa-solid fa-chevron-down gender-chevron"></i>
+                                </div>
+                            </div>
+                            <div class="gender-body">
+                                ${suppliersRowsHTML}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML += `
+                <div class="group-card">
+                    <div class="group-header" onclick="toggleGroupAccordion(this)">
+                        <span><i class="fa-solid fa-folder" style="color: var(--accent); margin-left: 6px;"></i> ${grp}</span>
+                        <div class="group-totals-badge">
+                            <span>${gData.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (${gData.totalQty} Pcs)</span>
+                            <i class="fa-solid fa-chevron-down group-chevron"></i>
+                        </div>
+                    </div>
+                    <div class="group-body">
+                        ${gendersHTML}
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function toggleGroupAccordion(headerEl) {
+        const card = headerEl.closest('.group-card');
+        card.classList.toggle('open');
+    }
+
+    function toggleGenderAccordion(headerEl) {
+        const accordion = headerEl.closest('.gender-accordion');
+        accordion.classList.toggle('open');
+    }
+</script>
+</body>
+</html>
