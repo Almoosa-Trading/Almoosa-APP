@@ -13,6 +13,10 @@ const translations = {
         page_title: "مبيعات الفروع - الموسى التجارية",
         header_title: "الموسى التجارية",
         header_subtitle: "متابعة مبيعات نقاط البيع",
+        sales_group_title: "مبيعات المجموعات - الموسى التجارية",
+        sales_group_subtitle: "تقرير مبيعات المجموعات الاحترافي",
+        kpi_total_qty: "إجمالي القطع المباعة",
+        section_groups_summary: "تفصيل المبيعات حسب المجموعات والموردين",
         btn_back: "⬅ رجوع",
         btn_home: "🏠 الرئيسية",
         chip_today: "اليوم",
@@ -28,6 +32,7 @@ const translations = {
         btn_comprehensive_report: "📊 عرض التقرير الشامل",
         btn_dashboard: "📈 لوحة المؤشرات",
         btn_supplier_sales: "🏢 مبيعات الموردين (Supplier Sales)",
+        btn_sales_group: "🏷️ مبيعات المجموعات (Sales Group)",
         hero_total_sales: "إجمالي المبيعات",
         hero_cost: "إجمالي التكلفة (Cost):",
         hero_margin: "هامش الربح (Margin):",
@@ -83,6 +88,10 @@ const translations = {
         page_title: "Branch Sales - Almoosa Trading",
         header_title: "Almoosa Trading",
         header_subtitle: "POS Sales Monitoring",
+        sales_group_title: "Sales Groups - Almoosa Trading",
+        sales_group_subtitle: "Professional Group Sales Report",
+        kpi_total_qty: "Total Sold Qty",
+        section_groups_summary: "Sales Breakdown by Groups & Suppliers",
         btn_back: "⬅ Back",
         btn_home: "🏠 Home",
         chip_today: "Today",
@@ -98,6 +107,7 @@ const translations = {
         btn_comprehensive_report: "📊 Comprehensive Report",
         btn_dashboard: "📈 Dashboard",
         btn_supplier_sales: "🏢 Supplier Sales",
+        btn_sales_group: "🏷️ Sales Group",
         hero_total_sales: "Total Sales",
         hero_cost: "Total Cost:",
         hero_margin: "Profit Margin:",
@@ -153,6 +163,10 @@ const translations = {
         page_title: "शाखा बिक्री - अलमूसा ट्रेडिंग",
         header_title: "अलमूसा ट्रेडिंग",
         header_subtitle: "POS बिक्री निगरानी",
+        sales_group_title: "बिक्री समूह - अलमूसा ट्रेडिंग",
+        sales_group_subtitle: "पेशेवर समूह बिक्री रिपोर्ट",
+        kpi_total_qty: "कुल बेची गई मात्रा",
+        section_groups_summary: "समूहों और आपूर्तिकर्ताओं द्वारा बिक्री",
         btn_back: "⬅ पीछे",
         btn_home: "🏠 होम",
         chip_today: "आज",
@@ -168,6 +182,7 @@ const translations = {
         btn_comprehensive_report: "📊 व्यापक रिपोर्ट",
         btn_dashboard: "📈 डैशबोर्ड",
         btn_supplier_sales: "🏢 आपूर्तिकर्ता बिक्री",
+        btn_sales_group: "🏷️ बिक्री समूह",
         hero_total_sales: "कुल बिक्री",
         hero_cost: "कुल लागत (Cost):",
         hero_margin: "लाभ मार्जिन (Margin):",
@@ -223,6 +238,10 @@ const translations = {
         page_title: "برانچ سیلز - الموسی ٹریڈنگ",
         header_title: "الموسی ٹریڈنگ",
         header_subtitle: "POS سیلز مانیٹرنگ",
+        sales_group_title: "سیلز گروپس - الموسی ٹریڈنگ",
+        sales_group_subtitle: "پروفیشنل گروپ سیلز رپورٹ",
+        kpi_total_qty: "کل فروخت شدہ مقدار",
+        section_groups_summary: "گروپس اور سپلائرز کے لحاظ سے فروخت",
         btn_back: "⬅ واپس",
         btn_home: "🏠 ہوم",
         chip_today: "آج",
@@ -238,6 +257,7 @@ const translations = {
         btn_comprehensive_report: "📊 جامع رپورٹ",
         btn_dashboard: "📈 ڈیش بورڈ",
         btn_supplier_sales: "🏢 سپلائر سیلز",
+        btn_sales_group: "🏷️ سیلز گروپ",
         hero_total_sales: "کل فروخت",
         hero_cost: "کل لاگت (Cost):",
         hero_margin: "منافع کا مارجن (Margin):",
@@ -322,6 +342,9 @@ function changeLanguage(selectedLang) {
     if (typeof loadPOSData === 'function') {
         loadPOSData();
     }
+    if (typeof loadGroupSalesData === 'function') {
+        loadGroupSalesData();
+    }
 }
 
 // --- إدارة الوضع الليلي (Dark Mode) ---
@@ -345,16 +368,37 @@ function updateThemeIcon(theme) {
     }
 }
 
-function checkForUpdates(btn) {
+// --- دالة التحديث الشاملة لمسح الكاش وجلب أحدث الملفات من السيرفر فوراً ---
+async function checkForUpdates(btn) {
     const icon = btn.querySelector('i');
     if (icon) icon.classList.add('fa-spin');
     
-    setTimeout(() => {
-        if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-            navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+    try {
+        // 1. مسح جميع بيانات الكاش المخزنة في المتصفح لجلب الملفات الجديدة
+        if ('caches' in window) {
+            const cacheNames = await caches.keys();
+            await Promise.all(
+                cacheNames.map(cacheName => caches.delete(cacheName))
+            );
         }
+
+        // 2. إلغاء تفعيل الـ Service Workers القديمة
+        if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (let registration of registrations) {
+                await registration.unregister();
+            }
+        }
+
+        // 3. إعادة تحميل إجبارية للصفحة متخطية للذاكرة المؤقتة
+        setTimeout(() => {
+            window.location.reload(true);
+        }, 600);
+
+    } catch (err) {
+        console.error("Update failed:", err);
         window.location.reload(true);
-    }, 500);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
