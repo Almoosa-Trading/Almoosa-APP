@@ -59,7 +59,7 @@ body {
 }
 
 /* ========================================================
-   📱 تخصيص الموبايل (افتراضي) - منع أي تداخل وضبط العرض بالكامل
+   📱 إعدادات الموبايل (افتراضية للشاشات الصغيرة)
    ======================================================== */
 header {
     display: flex;
@@ -104,7 +104,6 @@ header::before {
     font-weight: 600;
 }
 
-/* صف أزرار الهيدر العلوية على الموبايل */
 .header-left-group {
     display: flex;
     justify-content: flex-end;
@@ -145,7 +144,7 @@ header::before {
     color: #ffffff;
 }
 
-/* 💎 الكروت والشبكات للموبايل */
+/* الكروت للموبايل */
 .branch-card, 
 .dashboard-card, 
 .main-chart-card, 
@@ -161,7 +160,7 @@ header::before {
     margin-bottom: 12px;
 }
 
-/* 🌟 كارت الإحصائية الرئيسي للموبايل */
+/* كارت الإحصائية الرئيسي للموبايل */
 .hero-card {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%) !important;
     color: #ffffff !important;
@@ -227,7 +226,7 @@ header::before {
 }
 .hero-sub-stat-box.profit-box span { color: #6ee7b7; }
 
-/* 📅 فلاتر التاريخ للموبايل (3 أعمدة مرتبة) */
+/* فلاتر التاريخ للموبايل */
 .period-chips {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -253,17 +252,25 @@ header::before {
     border-color: var(--accent) !important;
 }
 
-/* إصلاح جوهري لأزرار العمليات والتقارير على الموبايل (تأخذ عرض الشاشة بالكامل وبدون أي ميلان) */
-.action-full-btn, .custom-action-btn, .bottom-actions-grid button, .action-buttons-wrapper button {
+/* 🛑 فرض إلغاء أي تنسيق قديم وأمر الأزرار بالنزول تحت بعضها على الموبايل حصراً */
+.action-buttons-wrapper, .bottom-actions-grid, div[class*="action"], div[class*="btn"] {
+    display: flex !important;
+    flex-direction: column !important;
     width: 100% !important;
+}
+
+button, .action-full-btn, .custom-action-btn {
     display: block !important;
-    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
     margin: 0 0 10px 0 !important;
     padding: 12px !important;
     border-radius: 12px !important;
     font-size: 13px !important;
     font-weight: 700 !important;
     text-align: center !important;
+    box-sizing: border-box !important;
 }
 
 footer {
@@ -275,7 +282,7 @@ footer {
 
 
 /* ========================================================
-   💻 تخصيص الكمبيوتر والشاشات الكبيرة (يعمل حصراً إذا كانت الشاشة أكبر من 768px)
+   💻 إعدادات الكمبيوتر والشاشات الكبيرة (تعمل فقط إذا العرض > 768px)
    ======================================================== */
 @media (min-width: 768px) {
     body {
@@ -341,14 +348,14 @@ footer {
         padding: 12px;
     }
 
-    /* أزرار العمليات أفقية ومتساوية على الكمبيوتر */
+    /* إعادة الأزرار جوار بعضها بنظام Grid متساوي على الكمبيوتر */
     .action-buttons-wrapper, .bottom-actions-grid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px !important;
     }
 
-    .action-full-btn, .custom-action-btn, .bottom-actions-grid button, .action-buttons-wrapper button {
+    button, .action-full-btn, .custom-action-btn {
         width: auto !important;
         margin-bottom: 0 !important;
         font-size: 13px !important;
