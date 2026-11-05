@@ -58,7 +58,7 @@ body {
     max-width: 1400px;
 }
 
-/* 🎨 ترويسة (Header) متجاوبة مع الجوال */
+/* 🎨 ترويسة (Header) متجاوبة */
 header {
     display: flex;
     flex-wrap: wrap;
@@ -175,11 +175,6 @@ header::before {
     text-transform: uppercase;
 }
 
-.hero-card .badge, .hero-card [class*="invoice"], .hero-card span[style*="pill"], header span {
-    font-size: 12px !important;
-    font-weight: 600 !important;
-}
-
 .hero-amount {
     font-size: 32px !important; 
     font-weight: 800 !important;
@@ -188,7 +183,6 @@ header::before {
     letter-spacing: -0.5px;
 }
 
-/* التوزيع الافتراضي للجوال: عمودين للمربعات الفرعية لتجنب التزاحم */
 .hero-grid-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -227,7 +221,7 @@ header::before {
 }
 .hero-sub-stat-box.profit-box span { color: #6ee7b7; }
 
-/* 📅 فلاتر التاريخ (تتخذ 3 أعمدة بشكل متناسق جداً على الجوال) */
+/* 📅 فلاتر التاريخ (افتراضي للجوال) */
 .period-chips {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -253,15 +247,15 @@ header::before {
     border-color: var(--accent) !important;
 }
 
-/* تنسيق الأزرار الطويلة (مثل عرض التقرير ومبيعات الموردين) لتملأ العرض بانتظام */
-button, .btn, .action-full-btn {
-    width: 100%;
-    margin-bottom: 8px;
+/* 💻 تنسيق الأزرار والعمليات بشكل متناسق ومستقل للشاشات الكبيرة والصغيرة */
+.action-full-btn, .custom-action-btn {
     padding: 12px;
     border-radius: 12px;
     font-size: 13px;
     font-weight: 700;
     text-align: center;
+    width: 100%;
+    margin-bottom: 8px;
 }
 
 footer {
@@ -273,7 +267,7 @@ footer {
 }
 
 /* ========================================================
-   💻 للشاشات الكبيرة (الكمبيوتر والتابلت الواسع)
+   💻 للشاشات الكبيرة (الكمبيوتر) - لضبط وتوسيع الأزرار بجانب بعضها تماماً
    ======================================================== */
 @media (min-width: 768px) {
     body {
@@ -309,7 +303,6 @@ footer {
         font-size: 42px !important;
     }
 
-    /* في الشاشات الكبيرة تتحول المربعات الأربعة إلى صف واحد أفقي */
     .hero-grid-stats {
         grid-template-columns: repeat(4, 1fr);
         gap: 14px;
@@ -319,8 +312,28 @@ footer {
         font-size: 20px !important;
     }
 
+    /* إعادة ترتيب أزرار الفلاتر لتكون بجانب بعضها بانتظام على الكمبيوتر */
+    .period-chips {
+        display: flex;
+        flex-direction: row-reverse; /* لتتوافق مع اتجاه الواجهة العربية */
+        gap: 10px;
+    }
+
     .chip {
+        flex: 1;
         font-size: 14px !important;
         padding: 12px;
+    }
+
+    /* ضبط أزرار العمليات السفلية لتكون متجاورة ومنتظمة بانتظام أفقياً على الكمبيوتر */
+    .action-buttons-wrapper, .bottom-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .action-full-btn, .custom-action-btn {
+        width: auto;
+        margin-bottom: 0;
     }
 }
