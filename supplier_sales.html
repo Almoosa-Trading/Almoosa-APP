@@ -488,6 +488,18 @@
                 </div>
             </div>
 
+            <!-- Branch Filter -->
+            <div class="control-group">
+                <span class="control-label">الفرع (Branch):</span>
+                <div class="multi-select-dropdown">
+                    <div class="multi-select-btn" onclick="toggleDropdown('branchContent')">
+                        <span id="branchBtnText">الكل مختار</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="multi-select-content" id="branchContent"></div>
+                </div>
+            </div>
+
             <!-- Gender Filter -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_gender">Gender:</span>
@@ -958,6 +970,7 @@
 
                     return {
                         supplier: row.supplier || "مورد غير محدد",
+                        branch: row.branch || row.warehouse || row.pos_profile || "فرع رئيسي",
                         brand: row.brand || "عام",
                         product_year: row.product_year || "غير محدد",
                         gender: rawGender || "N/A",
@@ -979,9 +992,10 @@
     }
 
     function populateDropdowns() {
-        const sets = { gender: new Set(), category: new Set(), group: new Set(), year: new Set(), brand: new Set() };
+        const sets = { branch: new Set(), gender: new Set(), category: new Set(), group: new Set(), year: new Set(), brand: new Set() };
 
         rawSupplierData.forEach(row => {
+            if (row.branch) sets.branch.add(row.branch);
             if (row.gender) sets.gender.add(row.gender);
             if (row.category) sets.category.add(row.category);
             if (row.group) sets.group.add(row.group);
@@ -989,6 +1003,7 @@
             if (row.brand) sets.brand.add(row.brand);
         });
 
+        buildCheckboxes('branchContent', sets.branch, 'branchBtnText');
         buildCheckboxes('level2Content', sets.gender, 'level2BtnText');
         buildCheckboxes('level3Content', sets.category, 'level3BtnText');
         buildCheckboxes('level4Content', sets.group, 'level4BtnText');
@@ -1035,6 +1050,7 @@
     }
 
     function updateAllButtonTexts() {
+        updateButtonText('branchContent', 'branchBtnText');
         updateButtonText('level2Content', 'level2BtnText');
         updateButtonText('level3Content', 'level3BtnText');
         updateButtonText('level4Content', 'level4BtnText');
@@ -1049,6 +1065,7 @@
     }
 
     function renderReports() {
+        const selBranches = getSelectedValues('branchContent');
         const selGender = getSelectedValues('level2Content');
         const selCategory = getSelectedValues('level3Content');
         const selGroup = getSelectedValues('level4Content');
@@ -1056,7 +1073,8 @@
         const selBrands = getSelectedValues('brandContent');
 
         let filtered = rawSupplierData.filter(row => {
-            return (selGender.length === 0 || selGender.includes(row.gender)) &&
+            return (selBranches.length === 0 || selBranches.includes(row.branch)) &&
+                   (selGender.length === 0 || selGender.includes(row.gender)) &&
                    (selCategory.length === 0 || selCategory.includes(row.category)) &&
                    (selGroup.length === 0 || selGroup.includes(row.group)) &&
                    (selYears.length === 0 || selYears.includes(row.product_year)) &&
@@ -1115,6 +1133,7 @@
         titleEl.textContent = `مجموعات المورد: ${supplierName}`;
         container.innerHTML = '';
 
+        const selBranches = getSelectedValues('branchContent');
         const selGender = getSelectedValues('level2Content');
         const selCategory = getSelectedValues('level3Content');
         const selGroup = getSelectedValues('level4Content');
@@ -1123,6 +1142,7 @@
 
         let filteredRows = rawSupplierData.filter(row => {
             return row.supplier === supplierName &&
+                   (selBranches.length === 0 || selBranches.includes(row.branch)) &&
                    (selGender.length === 0 || selGender.includes(row.gender)) &&
                    (selCategory.length === 0 || selCategory.includes(row.category)) &&
                    (selGroup.length === 0 || selGroup.includes(row.group)) &&

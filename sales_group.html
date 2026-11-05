@@ -108,9 +108,9 @@
         }
 
         .controls-row {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
         }
 
         .control-group {
@@ -126,7 +126,7 @@
             color: var(--text-muted);
         }
 
-        .date-toggle-btn {
+        .date-toggle-btn, .multi-select-btn {
             background: var(--bg-body);
             border: 2px solid var(--border);
             padding: 10px 14px;
@@ -142,7 +142,43 @@
             width: 100%;
             transition: border-color 0.2s;
         }
-        .date-toggle-btn:hover { border-color: var(--accent); }
+        .date-toggle-btn:hover, .multi-select-btn:hover { border-color: var(--accent); }
+
+        .multi-select-dropdown {
+            position: relative;
+            width: 100%;
+        }
+
+        .multi-select-content {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 100%;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 100;
+            padding: 10px;
+        }
+        .multi-select-content.open { display: block; }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 8px;
+            color: var(--text-main);
+            transition: background 0.15s;
+        }
+        .checkbox-item:hover { background: var(--bg-body); }
 
         .calendar-container {
             border: 2px solid var(--border);
@@ -151,7 +187,7 @@
             background: var(--bg-card);
             display: none;
             position: absolute;
-            top: 75px;
+            top: 50px;
             right: 0;
             width: 100%;
             max-width: 350px;
@@ -369,8 +405,8 @@
                 grid-template-columns: repeat(6, 1fr) !important;
             }
             .controls-row {
-                display: grid !important;
-                grid-template-columns: 1fr !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 16px !important;
             }
             .analytics-container {
                 display: grid !important;
@@ -434,6 +470,18 @@
                     <div class="calendar-grid" id="calendarDaysGrid"></div>
                 </div>
             </div>
+
+            <!-- Branch Filter -->
+            <div class="control-group">
+                <span class="control-label">الفرع (Branch):</span>
+                <div class="multi-select-dropdown">
+                    <div class="multi-select-btn" onclick="toggleDropdown('branchContent')">
+                        <span id="branchBtnText">الكل مختار</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="multi-select-content" id="branchContent"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -466,6 +514,7 @@
         apiSecret: "9e6d920a8fda252"
     };
 
+    let rawGroupData = [];
     let currentQueryFrom = '';
     let currentQueryTo = '';
     let selectionState = { startDate: null, endDate: null };
@@ -476,11 +525,19 @@
         renderCalendar();
 
         window.onclick = function(event) {
-            if (!event.target.closest('.control-group') && !event.target.closest('.period-chips')) {
+            if (!event.target.closest('.control-group') && !event.target.closest('.period-chips') && !event.target.closest('.multi-select-dropdown')) {
                 document.getElementById('calendarContainer').classList.remove('open');
+                document.querySelectorAll('.multi-select-content').forEach(el => el.classList.remove('open'));
             }
         }
     });
+
+    function toggleDropdown(id) {
+        document.querySelectorAll('.multi-select-content').forEach(el => {
+            if (el.id !== id) el.classList.remove('open');
+        });
+        document.getElementById(id).classList.toggle('open');
+    }
 
     function syncWithSalesPageFilter() {
         const salesPreset = localStorage.getItem('sales_filter_preset');
@@ -634,8 +691,8 @@
 
     async function loadGroupSalesData() {
         const container = document.getElementById('groupAnalyticsContainer');
-        const loadingText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_loading) ? translations[currentLang].status_loading : "جاري تحضير البيانات...";
-        container.innerHTML = `<div class="status-msg"><i class="fa-solid fa-spinner fa-spin"></i> ${loadingText}</div>`;
+        container.innerHTML = `<div class="status-msg"><i class="fa-solid fa-spinner fa-spin"></i> جاري تحميل البيانات...</div>`;
+        rawGroupData = [];
 
         try {
             const res = await fetch(`${CONFIG.serverUrl}/api/method/get_supplier_sales_summary?from_date=${currentQueryFrom}&to_date=${currentQueryTo}`, {
@@ -649,7 +706,23 @@
             if (res.ok) {
                 const jsonRes = await res.json();
                 const fetchedRows = jsonRes.message?.data || jsonRes.message || [];
-                processAndRenderGroups(fetchedRows);
+                
+                rawGroupData = fetchedRows.map(row => {
+                    const itemGrp = row.item_group || "";
+                    const parts = itemGrp.split('.');
+                    let group = row.group || row.Group || (parts.length >= 4 ? parts[3] : (parts.length > 0 ? parts[parts.length - 1] : "غير محدد"));
+                    
+                    return {
+                        supplier: row.supplier || "مورد غير محدد",
+                        branch: row.branch || row.warehouse || row.pos_profile || "فرع رئيسي",
+                        item_group: itemGrp,
+                        group: group,
+                        gender: row.gender || row.Gender || "",
+                        dcs_code: row.dcs_code || "",
+                        total_sales: parseFloat(row.total_sales || 0),
+                        total_qty: parseFloat(row.total_qty || 0)
+                    };
+                });
             } else {
                 container.innerHTML = `<div class="status-msg">فشل الاتصال بالخادم</div>`;
             }
@@ -657,40 +730,84 @@
             console.error("API Error:", err);
             container.innerHTML = `<div class="status-msg">حدث خطأ أثناء جلب البيانات</div>`;
         }
+
+        populateBranchDropdown();
+        processAndRenderGroups();
     }
 
-    function processAndRenderGroups(rows) {
+    function populateBranchDropdown() {
+        const branchSet = new Set();
+        rawGroupData.forEach(row => { if (row.branch) branchSet.add(row.branch); });
+        
+        const container = document.getElementById('branchContent');
+        container.innerHTML = '';
+        
+        const allDiv = document.createElement('label');
+        allDiv.className = 'checkbox-item';
+        allDiv.innerHTML = `<input type="checkbox" checked onchange="toggleSelectAllBranches(this)"> <b>تحديد الكل</b>`;
+        container.appendChild(allDiv);
+
+        Array.from(branchSet).sort().forEach(val => {
+            const lbl = document.createElement('label');
+            lbl.className = 'checkbox-item';
+            lbl.innerHTML = `<input type="checkbox" value="${val}" checked onchange="updateBranchButtonText()"> ${val}`;
+            container.appendChild(lbl);
+        });
+        updateBranchButtonText();
+    }
+
+    function toggleSelectAllBranches(master) {
+        document.querySelectorAll('#branchContent input[type="checkbox"]').forEach(cb => cb.checked = master.checked);
+        updateBranchButtonText();
+        processAndRenderGroups();
+    }
+
+    function updateBranchButtonText() {
+        const checkboxes = document.querySelectorAll('#branchContent input[type="checkbox"]');
+        const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
+        const btnText = document.getElementById('branchBtnText');
+        if (checked.length === 0 || checked.length === checkboxes.length - 1) {
+            btnText.textContent = "الكل مختار";
+        } else {
+            btnText.textContent = `مختار (${checked.length})`;
+        }
+        processAndRenderGroups();
+    }
+
+    function getSelectedBranches() {
+        const checkboxes = document.querySelectorAll('#branchContent input[type="checkbox"]');
+        return Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on").map(cb => cb.value);
+    }
+
+    function processAndRenderGroups() {
+        const selBranches = getSelectedBranches();
+        let filtered = rawGroupData.filter(row => selBranches.length === 0 || selBranches.includes(row.branch));
+
         let groupMap = {};
         let grandSales = 0;
         let grandQty = 0;
 
-        rows.forEach(row => {
-            const supplier = row.supplier || "مورد غير محدد";
-            const itemGrp = row.item_group || "";
-            const parts = itemGrp.split('.');
-            
-            let group = row.group || row.Group || (parts.length >= 4 ? parts[3] : (parts.length > 0 ? parts[parts.length - 1] : "غير محدد"));
+        filtered.forEach(row => {
+            const supplier = row.supplier;
+            const itemGrp = row.item_group;
+            let group = row.group;
             
             let genderKey = 'Unisex';
-            const strCheck = `${row.gender || ''} ${itemGrp} ${row.dcs_code || ''}`.toUpperCase();
+            const strCheck = `${row.gender} ${itemGrp} ${row.dcs_code}`.toUpperCase();
             if (strCheck.includes('WOMAN') || strCheck.includes('WOMEN') || strCheck.includes('WMN') || strCheck.includes('FEMALE') || strCheck.includes('WMS')) {
                 genderKey = 'Woman';
             } else if (strCheck.includes('MAN') || strCheck.includes('MEN') || strCheck.includes('BOY') || strCheck.includes('MENS') || strCheck.includes('MALE')) {
                 genderKey = 'Man';
             }
 
-            const sales = parseFloat(row.total_sales || 0);
-            const qty = parseFloat(row.total_qty || 0);
+            const sales = row.total_sales;
+            const qty = row.total_qty;
 
             grandSales += sales;
             grandQty += qty;
 
             if (!groupMap[group]) {
-                groupMap[group] = {
-                    totalSales: 0,
-                    totalQty: 0,
-                    genders: { Man: {}, Woman: {}, Unisex: {} }
-                };
+                groupMap[group] = { totalSales: 0, totalQty: 0, genders: { Man: {}, Woman: {}, Unisex: {} } };
             }
 
             groupMap[group].totalSales += sales;
@@ -718,7 +835,6 @@
 
         sortedGroups.forEach(grp => {
             const gData = groupMap[grp];
-            
             let gendersHTML = '';
             ['Man', 'Woman', 'Unisex'].forEach(gKey => {
                 const supObj = gData.genders[gKey];
@@ -749,9 +865,7 @@
                                     <i class="fa-solid fa-chevron-down gender-chevron"></i>
                                 </div>
                             </div>
-                            <div class="gender-body">
-                                ${suppliersRowsHTML}
-                            </div>
+                            <div class="gender-body">${suppliersRowsHTML}</div>
                         </div>
                     `;
                 }
@@ -766,23 +880,14 @@
                             <i class="fa-solid fa-chevron-down group-chevron"></i>
                         </div>
                     </div>
-                    <div class="group-body">
-                        ${gendersHTML}
-                    </div>
+                    <div class="group-body">${gendersHTML}</div>
                 </div>
             `;
         });
     }
 
-    function toggleGroupAccordion(headerEl) {
-        const card = headerEl.closest('.group-card');
-        card.classList.toggle('open');
-    }
-
-    function toggleGenderAccordion(headerEl) {
-        const accordion = headerEl.closest('.gender-accordion');
-        accordion.classList.toggle('open');
-    }
+    function toggleGroupAccordion(headerEl) { headerEl.closest('.group-card').classList.toggle('open'); }
+    function toggleGenderAccordion(headerEl) { headerEl.closest('.gender-accordion').classList.toggle('open'); }
 </script>
 </body>
 </html>
