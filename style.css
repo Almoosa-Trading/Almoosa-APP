@@ -46,7 +46,7 @@
 body {
     background-color: var(--bg-body);
     color: var(--text-main);
-    padding: 12px 8px;
+    padding: 10px;
     display: flex;
     justify-content: center;
     min-height: 100vh;
@@ -58,15 +58,16 @@ body {
     max-width: 1400px;
 }
 
-/* 🎨 ترويسة الجوال الافتراضية */
+/* ========================================================
+   📱 تخصيص الموبايل (افتراضي) - منع أي تداخل وضبط العرض بالكامل
+   ======================================================== */
 header {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
     margin-bottom: 15px;
-    padding: 14px 16px;
+    padding: 15px;
     background: var(--header-bg);
     color: #ffffff;
     border-radius: 14px;
@@ -86,34 +87,41 @@ header::before {
     background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
 }
 
+.header-title-box {
+    text-align: right;
+}
+
 .header-title-box h1 {
-    font-size: 16px;
+    font-size: 18px;
     color: #ffffff;
     font-weight: 700;
 }
 
 .header-title-box p {
-    font-size: 11px;
+    font-size: 12px;
     color: #bae6fd;
     margin-top: 2px;
     font-weight: 600;
 }
 
+/* صف أزرار الهيدر العلوية على الموبايل */
 .header-left-group {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     flex-wrap: wrap;
+    width: 100%;
 }
 
 .action-btn-icon, .action-btn {
     background: rgba(255, 255, 255, 0.12);
     border: 2px solid rgba(255, 255, 255, 0.25);
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     color: #ffffff;
     display: flex;
     align-items: center;
@@ -123,12 +131,12 @@ header::before {
 .lang-select {
     background: rgba(255, 255, 255, 0.12);
     border: 2px solid rgba(255, 255, 255, 0.25);
-    padding: 0 8px;
+    padding: 0 10px;
     border-radius: 10px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     color: #ffffff;
-    height: 36px;
+    height: 40px;
     outline: none;
 }
 
@@ -137,7 +145,7 @@ header::before {
     color: #ffffff;
 }
 
-/* 💎 الكروت والشبكات */
+/* 💎 الكروت والشبكات للموبايل */
 .branch-card, 
 .dashboard-card, 
 .main-chart-card, 
@@ -153,7 +161,7 @@ header::before {
     margin-bottom: 12px;
 }
 
-/* 🌟 كارت الإحصائية الرئيسي */
+/* 🌟 كارت الإحصائية الرئيسي للموبايل */
 .hero-card {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%) !important;
     color: #ffffff !important;
@@ -219,18 +227,18 @@ header::before {
 }
 .hero-sub-stat-box.profit-box span { color: #6ee7b7; }
 
-/* 📅 فلاتر التاريخ (تظهر مرتبة 3 أعمدة في الأعلى على الموبايل) */
+/* 📅 فلاتر التاريخ للموبايل (3 أعمدة مرتبة) */
 .period-chips {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 6px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .chip {
     background: var(--accent-light);
     border: 1.5px solid var(--accent-border) !important;
-    padding: 8px 4px;
+    padding: 10px 4px;
     border-radius: 8px;
     font-size: 11px !important;
     font-weight: 700;
@@ -245,16 +253,17 @@ header::before {
     border-color: var(--accent) !important;
 }
 
-/* الأزرار الكبرى والعمليات تأخذ عرض الشاشة بانتظام على الجوال لمنع التداخل */
-.action-full-btn, .custom-action-btn, button:not(.chip):not(.action-btn-icon) {
+/* إصلاح جوهري لأزرار العمليات والتقارير على الموبايل (تأخذ عرض الشاشة بالكامل وبدون أي ميلان) */
+.action-full-btn, .custom-action-btn, .bottom-actions-grid button, .action-buttons-wrapper button {
     width: 100% !important;
-    display: block;
-    margin-bottom: 8px;
-    padding: 10px 12px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: 700;
-    text-align: center;
+    display: block !important;
+    float: none !important;
+    margin: 0 0 10px 0 !important;
+    padding: 12px !important;
+    border-radius: 12px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-align: center !important;
 }
 
 footer {
@@ -264,8 +273,9 @@ footer {
     color: var(--text-muted);
 }
 
+
 /* ========================================================
-   💻 للشاشات الكبيرة وكمبيوتر فقط (لا تؤثر نهائياً على الموبايل)
+   💻 تخصيص الكمبيوتر والشاشات الكبيرة (يعمل حصراً إذا كانت الشاشة أكبر من 768px)
    ======================================================== */
 @media (min-width: 768px) {
     body {
@@ -274,12 +284,19 @@ footer {
     }
 
     header {
-        flex-wrap: nowrap;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
         padding: 20px 25px;
     }
 
     .header-title-box h1 {
         font-size: 22px;
+    }
+
+    .header-left-group {
+        width: auto;
+        justify-content: flex-start;
     }
 
     .action-btn-icon, .action-btn {
@@ -311,7 +328,7 @@ footer {
         font-size: 20px !important;
     }
 
-    /* أزرار الفلاتر أفقية ومتساوية على الكمبيوتر */
+    /* فلاتر التاريخ أفقية على الكمبيوتر */
     .period-chips {
         display: flex;
         flex-direction: row-reverse;
@@ -324,22 +341,17 @@ footer {
         padding: 12px;
     }
 
-    /* أزرار العمليات السفلية بجانب بعضها على الكمبيوتر */
+    /* أزرار العمليات أفقية ومتساوية على الكمبيوتر */
     .action-buttons-wrapper, .bottom-actions-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
     }
 
-    .action-full-btn, .custom-action-btn, button:not(.chip):not(.action-btn-icon) {
+    .action-full-btn, .custom-action-btn, .bottom-actions-grid button, .action-buttons-wrapper button {
         width: auto !important;
-        margin-bottom: 0;
-        font-size: 13px;
-        padding: 12px;
-    }
-}
-    .action-full-btn, .custom-action-btn {
-        width: auto;
-        margin-bottom: 0;
+        margin-bottom: 0 !important;
+        font-size: 13px !important;
+        padding: 12px !important;
     }
 }
