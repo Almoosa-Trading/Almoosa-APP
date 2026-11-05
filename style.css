@@ -59,13 +59,13 @@ body {
 }
 
 /* ========================================================
-   📱 إعدادات الموبايل (افتراضية للشاشات الصغيرة)
+   📱 إعدادات الموبايل (مضبوطة ومحمية من تداخل الأزرار)
    ======================================================== */
 header {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
     margin-bottom: 15px;
     padding: 15px;
     background: var(--header-bg);
@@ -87,56 +87,56 @@ header::before {
     background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
 }
 
-.header-title-box {
-    text-align: right;
-}
-
 .header-title-box h1 {
-    font-size: 18px;
+    font-size: 17px;
     color: #ffffff;
     font-weight: 700;
 }
 
 .header-title-box p {
-    font-size: 12px;
+    font-size: 11px;
     color: #bae6fd;
     margin-top: 2px;
     font-weight: 600;
 }
 
+/* 🔒 الحفاظ على أزرار الهيدر في صف أفقي متناسق وأحجام ثابتة */
 .header-left-group {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    width: 100%;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: auto !important;
 }
 
 .action-btn-icon, .action-btn {
     background: rgba(255, 255, 255, 0.12);
     border: 2px solid rgba(255, 255, 255, 0.25);
-    width: 40px;
-    height: 40px;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 14px;
     color: #ffffff;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
+    margin: 0 !important;
 }
 
 .lang-select {
     background: rgba(255, 255, 255, 0.12);
     border: 2px solid rgba(255, 255, 255, 0.25);
-    padding: 0 10px;
+    padding: 0 8px;
     border-radius: 10px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     color: #ffffff;
-    height: 40px;
+    height: 38px !important;
+    width: auto !important;
     outline: none;
+    margin: 0 !important;
 }
 
 .lang-select option {
@@ -144,7 +144,7 @@ header::before {
     color: #ffffff;
 }
 
-/* الكروت للموبايل */
+/* 💎 الكروت والشبكات */
 .branch-card, 
 .dashboard-card, 
 .main-chart-card, 
@@ -160,7 +160,7 @@ header::before {
     margin-bottom: 12px;
 }
 
-/* كارت الإحصائية الرئيسي للموبايل */
+/* كارت الإحصائية الرئيسي */
 .hero-card {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%) !important;
     color: #ffffff !important;
@@ -226,12 +226,12 @@ header::before {
 }
 .hero-sub-stat-box.profit-box span { color: #6ee7b7; }
 
-/* فلاتر التاريخ للموبايل */
+/* 🔒 أزرار فلاتر التاريخ (صف يحتوي على 3 أعمدة مرتبة) */
 .period-chips {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    margin-bottom: 12px;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+    margin-bottom: 12px !important;
 }
 
 .chip {
@@ -244,6 +244,8 @@ header::before {
     text-align: center;
     cursor: pointer;
     color: var(--accent);
+    width: auto !important;
+    margin: 0 !important;
 }
 
 .chip.active {
@@ -252,18 +254,15 @@ header::before {
     border-color: var(--accent) !important;
 }
 
-/* 🛑 فرض إلغاء أي تنسيق قديم وأمر الأزرار بالنزول تحت بعضها على الموبايل حصراً */
-.action-buttons-wrapper, .bottom-actions-grid, div[class*="action"], div[class*="btn"] {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-}
-
-button, .action-full-btn, .custom-action-btn {
+/* 🎯 الأزرار الكبيرة والعمليات التقارير والموردين (تحديد دقيق بالاسم بدلاً من الإشراك العام) */
+.action-full-btn, 
+.custom-action-btn, 
+.bottom-actions-grid button, 
+.action-buttons-wrapper button,
+.report-btn,
+.supplier-btn {
     display: block !important;
     width: 100% !important;
-    max-width: 100% !important;
-    flex: none !important;
     margin: 0 0 10px 0 !important;
     padding: 12px !important;
     border-radius: 12px !important;
@@ -282,7 +281,7 @@ footer {
 
 
 /* ========================================================
-   💻 إعدادات الكمبيوتر والشاشات الكبيرة (تعمل فقط إذا العرض > 768px)
+   💻 تخصيص الكمبيوتر (تعمل فقط عندما يكون العرض أسرع وأكبر من 768px)
    ======================================================== */
 @media (min-width: 768px) {
     body {
@@ -291,9 +290,6 @@ footer {
     }
 
     header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
         padding: 20px 25px;
     }
 
@@ -301,19 +297,14 @@ footer {
         font-size: 22px;
     }
 
-    .header-left-group {
-        width: auto;
-        justify-content: flex-start;
-    }
-
     .action-btn-icon, .action-btn {
-        width: 44px;
-        height: 44px;
+        width: 44px !important;
+        height: 44px !important;
         font-size: 16px;
     }
 
     .lang-select {
-        height: 44px;
+        height: 44px !important;
         font-size: 13px;
         padding: 0 14px;
     }
@@ -335,11 +326,10 @@ footer {
         font-size: 20px !important;
     }
 
-    /* فلاتر التاريخ أفقية على الكمبيوتر */
     .period-chips {
-        display: flex;
-        flex-direction: row-reverse;
-        gap: 10px;
+        display: flex !important;
+        flex-direction: row-reverse !important;
+        gap: 10px !important;
     }
 
     .chip {
@@ -348,15 +338,19 @@ footer {
         padding: 12px;
     }
 
-    /* إعادة الأزرار جوار بعضها بنظام Grid متساوي على الكمبيوتر */
     .action-buttons-wrapper, .bottom-actions-grid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px !important;
     }
 
-    button, .action-full-btn, .custom-action-btn {
-        width: auto !important;
+    .action-full-btn, 
+    .custom-action-btn, 
+    .bottom-actions-grid button, 
+    .action-buttons-wrapper button,
+    .report-btn,
+    .supplier-btn {
+        width: 100% !important;
         margin-bottom: 0 !important;
         font-size: 13px !important;
         padding: 12px !important;
