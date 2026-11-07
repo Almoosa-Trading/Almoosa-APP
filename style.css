@@ -59,13 +59,12 @@ body {
     max-width: 1400px;
 }
 
-/* 🎨 ترويسة (Header) ثابتة وموحدة في كل الصفحات نفس الـ Index */
+/* 🎨 ترويسة (Header) ثابتة وموحدة ومتناسقة تماماً على الجوال */
 header {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     margin-bottom: 15px;
     padding: 14px 16px;
     background: var(--header-bg) !important;
@@ -87,27 +86,38 @@ header::before {
     background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
 }
 
+.header-title-box {
+    flex: 1;
+    min-width: 0;
+}
+
 .header-title-box h1 {
-    font-size: 16px;
+    font-size: 15px;
     color: #ffffff !important;
     font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .header-title-box p {
-    font-size: 11px;
+    font-size: 10.5px;
     color: #bae6fd !important;
     margin-top: 2px;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .header-left-group {
     display: flex;
     align-items: center;
     gap: 6px;
-    flex-wrap: wrap;
+    flex-shrink: 0;
 }
 
-.action-btn-icon, .action-btn {
+.action-btn-icon, .action-btn, .update-btn {
     background: rgba(255, 255, 255, 0.12) !important;
     border: 2px solid rgba(255, 255, 255, 0.25) !important;
     width: 36px;
@@ -119,6 +129,8 @@ header::before {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none;
+    flex-shrink: 0;
 }
 
 .lang-select {
@@ -131,6 +143,7 @@ header::before {
     color: #ffffff !important;
     height: 36px;
     outline: none;
+    flex-shrink: 0;
 }
 
 .lang-select option {
@@ -250,7 +263,7 @@ header::before {
     border-color: var(--accent) !important;
 }
 
-.action-full-btn, .custom-action-btn, button:not(.chip):not(.action-btn-icon) {
+.action-full-btn, .custom-action-btn, button:not(.chip):not(.action-btn-icon):not(.update-btn) {
     width: 100% !important;
     display: block;
     margin-bottom: 8px;
@@ -278,7 +291,6 @@ footer {
     }
 
     header {
-        flex-wrap: nowrap;
         padding: 20px 25px;
     }
 
@@ -286,7 +298,11 @@ footer {
         font-size: 22px;
     }
 
-    .action-btn-icon, .action-btn {
+    .header-title-box p {
+        font-size: 13px;
+    }
+
+    .action-btn-icon, .action-btn, .update-btn {
         width: 44px;
         height: 44px;
         font-size: 16px;
@@ -433,7 +449,7 @@ footer {
         gap: 12px;
     }
 
-    .action-full-btn, .custom-action-btn, button:not(.chip):not(.action-btn-icon) {
+    .action-full-btn, .custom-action-btn, button:not(.chip):not(.action-btn-icon):not(.update-btn) {
         width: auto !important;
         margin-bottom: 0;
         font-size: 13px;
