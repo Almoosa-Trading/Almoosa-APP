@@ -953,7 +953,8 @@
             groupMap[group].genders[genderKey][supplier].qty += qty;
         });
 
-        const grandMargin = grandWithoutVat > 0 ? (grandCost / grandWithoutVat) * 100 : 0;
+        // 🎯 تم التعديل هنا: (بدون الضريبة - التكلفة) / بدون الضريبة
+        const grandMargin = grandWithoutVat > 0 ? ((grandWithoutVat - grandCost) / grandWithoutVat) * 100 : 0;
 
         document.getElementById('kpiTotalSales').textContent = grandSales.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
         document.getElementById('kpiWithoutVat').textContent = grandWithoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
@@ -973,7 +974,8 @@
 
         sortedGroups.forEach(grp => {
             const gData = groupMap[grp];
-            const grpMargin = gData.totalWithoutVat > 0 ? (gData.totalCost / gData.totalWithoutVat) * 100 : 0;
+            // 🎯 تعديل هامش المجموعة بناءً على المعادلة الجديدة
+            const grpMargin = gData.totalWithoutVat > 0 ? ((gData.totalWithoutVat - gData.totalCost) / gData.totalWithoutVat) * 100 : 0;
             let gendersHTML = '';
             
             ['Man', 'Woman', 'Unisex'].forEach(gKey => {
@@ -986,12 +988,14 @@
                     let supTotalWithoutVat = Object.values(supObj).reduce((sum, i) => sum + i.withoutVat, 0);
                     let supTotalCost = Object.values(supObj).reduce((sum, i) => sum + i.cost, 0);
                     let supTotalQty = Object.values(supObj).reduce((sum, i) => sum + i.qty, 0);
-                    let supMargin = supTotalWithoutVat > 0 ? (supTotalCost / supTotalWithoutVat) * 100 : 0;
+                    // 🎯 تعديل هامش الجنس بناءً على المعادلة الجديدة
+                    let supMargin = supTotalWithoutVat > 0 ? ((supTotalWithoutVat - supTotalCost) / supTotalWithoutVat) * 100 : 0;
                     
                     let suppliersCardsHTML = '';
                     supKeys.sort((a, b) => supObj[b].sales - supObj[a].sales).forEach(sup => {
                         let rowData = supObj[sup];
-                        let itemMargin = rowData.withoutVat > 0 ? (rowData.cost / rowData.withoutVat) * 100 : 0;
+                        // 🎯 تعديل هامش المورد بناءً على المعادلة الصحيحة الجديدة
+                        let itemMargin = rowData.withoutVat > 0 ? ((rowData.withoutVat - rowData.cost) / rowData.withoutVat) * 100 : 0;
                         suppliersCardsHTML += `
                             <div class="supplier-item-card">
                                 <div class="supplier-card-header">
