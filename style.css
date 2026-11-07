@@ -58,7 +58,7 @@ body {
     max-width: 1400px;
 }
 
-/* 🎨 الهيدر المُحسّن خصيصاً للجوال لمنع التداخل والأزرار الطائرة */
+/* 🎨 الهيدر المُحسّن خصيصاً للجوال لترتيب الأزرار في صف واحد باحترافية */
 header {
     display: flex;
     justify-content: space-between;
@@ -137,7 +137,7 @@ header::before {
     border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
     padding: 0 4px;
     border-radius: 8px;
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 600;
     color: #ffffff !important;
     height: 32px;
