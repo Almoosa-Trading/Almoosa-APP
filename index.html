@@ -8,7 +8,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Almoosa Trading">
 
-    <!-- أيقونة الـ Web App والـ Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png">
     <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png">
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png">
@@ -17,8 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- ربط ملف التنسيقات المشترك مع إضافة رقم إصدار لمنع الـ Cache -->
-    <link rel="stylesheet" href="style.css?v=999">
+    <link rel="stylesheet" href="style.css?v=2026">
     <script src="app.js" defer></script>
 
     <style>
@@ -26,57 +24,47 @@
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 15px 10px;
+            padding: 10px;
         }
 
-        /* 📱 فرض تنسيق الهيدر والأزرار في سطر واحد على الجوال بشكل قاطع */
+        /* 📱 قفل الهيدر بأبعاد صارمة تمنع نزول الأزرار تحت أي ظرف على الموبايل */
         header {
             display: flex !important;
             flex-direction: row !important;
             justify-content: space-between !important;
             align-items: center !important;
             flex-wrap: nowrap !important;
-            gap: 6px !important;
-            margin-bottom: 20px !important;
-            padding: 12px 14px !important;
+            gap: 4px !important;
+            margin-bottom: 15px !important;
+            padding: 10px 10px !important;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
             color: #ffffff !important;
-            border-radius: 14px !important;
+            border-radius: 12px !important;
             box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
             border: 2px solid #38bdf8 !important;
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
         }
 
         .header-title-box {
             flex: 1 1 auto !important;
             min-width: 0 !important;
+            overflow: hidden !important;
         }
 
         .header-title-box h1 {
-            font-size: 14px !important;
+            font-size: 13px !important;
             color: #ffffff !important;
             font-weight: 800;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
+            margin: 0 !important;
         }
 
         .header-title-box p {
-            font-size: 10px !important;
+            font-size: 9px !important;
             color: #bae6fd !important;
-            margin-top: 2px;
-            font-weight: 700;
+            margin: 0 !important;
+            font-weight: 600;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
@@ -87,38 +75,39 @@
             flex-direction: row !important;
             align-items: center !important;
             flex-wrap: nowrap !important;
-            gap: 4px !important;
+            gap: 3px !important;
             flex-shrink: 0 !important;
         }
 
         .action-btn {
             background: rgba(255, 255, 255, 0.15) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            width: 32px !important;
-            height: 32px !important;
-            min-width: 32px !important;
-            border-radius: 8px !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            width: 28px !important;
+            height: 28px !important;
+            min-width: 28px !important;
+            border-radius: 6px !important;
             cursor: pointer;
-            font-size: 13px !important;
+            font-size: 11px !important;
             color: #ffffff !important;
             text-decoration: none;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            flex-shrink: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
         }
 
         .lang-select {
             background: rgba(255, 255, 255, 0.15) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            padding: 0 4px !important;
-            border-radius: 8px !important;
-            font-size: 10px !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            padding: 0 2px !important;
+            border-radius: 6px !important;
+            font-size: 9.5px !important;
             font-weight: 700;
             color: #ffffff !important;
-            height: 32px !important;
+            height: 28px !important;
             outline: none;
-            flex-shrink: 0 !important;
+            margin: 0 !important;
         }
 
         .lang-select option {
@@ -126,12 +115,12 @@
             color: #ffffff;
         }
 
-        /* 🎴 نمط أودو المصغر (Compact Odoo Apps Grid) */
+        /* 🎴 شبكة أودو */
         .odoo-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            padding: 10px 0;
+            gap: 14px;
+            padding: 5px 0;
         }
 
         @media (min-width: 640px) {
@@ -154,7 +143,7 @@
             transition: transform 0.2s ease;
             position: relative;
             cursor: pointer;
-            padding: 8px;
+            padding: 6px;
         }
 
         .odoo-app-card:hover:not(.disabled) {
@@ -167,21 +156,15 @@
         }
 
         .odoo-icon-box {
-            width: 64px;
-            height: 64px;
-            border-radius: 18px;
+            width: 58px;
+            height: 58px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
-            margin-bottom: 8px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            transition: all 0.2s;
-        }
-
-        .odoo-app-card:hover:not(.disabled) .odoo-icon-box {
-            box-shadow: 0 12px 25px rgba(37, 99, 235, 0.25);
-            transform: scale(1.05);
+            font-size: 24px;
+            margin-bottom: 6px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
         }
 
         .ic-sales { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; }
@@ -195,24 +178,21 @@
         }
 
         .odoo-title {
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 800;
             color: var(--text-main);
-            line-height: 1.2;
         }
 
         .badge-orange {
             position: absolute;
-            top: 2px;
-            right: calc(50% - 32px);
+            top: 0;
+            right: calc(50% - 28px);
             background: #f59e0b;
             color: white;
-            font-size: 8.5px;
+            font-size: 8px;
             font-weight: 850;
-            padding: 2px 5px;
+            padding: 1px 4px;
             border-radius: 4px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-            white-space: nowrap;
             z-index: 2;
         }
     </style>
@@ -226,16 +206,12 @@
             <p data-i18n="dash_subheader">النظام الإداري الموحد - الموسى التجارية</p>
         </div>
         <div class="header-left-group">
-            <!-- زر الوضع الليلي -->
             <button class="action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
                 <i class="fa-solid fa-moon" id="themeIcon"></i>
             </button>
-
-            <!-- زر التحديثات -->
             <button class="action-btn" onclick="checkForUpdates(this)" title="تحميل التحديثات الأخيرة">
                 <i class="fa-solid fa-rotate"></i>
             </button>
-
             <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
                 <option value="ar">العربية</option>
                 <option value="en">English</option>
@@ -263,7 +239,7 @@
 
         <div class="odoo-app-card disabled">
             <span class="badge-orange" data-i18n="under_construction">قريباً</span>
-            <div class="odoo-icon-box ic-stock"><i class="fa-solid fa-boxes-stacked"></i></div>
+            <div class="odoo-icon-box ic-stock"><h5 style="margin:0;"><i class="fa-solid fa-boxes-stacked"></i></h5></div>
             <div class="odoo-title" data-i18n="menu_stock">المخزون</div>
         </div>
 
@@ -304,7 +280,7 @@
         </div>
     </div>
 
-    <footer data-i18n="footer_text" style="text-align: center; margin-top: 40px; font-size: 12px; font-weight: 700; color: var(--text-muted);">
+    <footer data-i18n="footer_text" style="text-align: center; margin-top: 30px; font-size: 11px; font-weight: 700; color: var(--text-muted);">
         نظام الموسى التجارية الاحترافي © 2026
     </footer>
 </div>
