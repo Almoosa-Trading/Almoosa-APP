@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="style.css?v=2026">
+    <link rel="stylesheet" href="style.css?v=2026.5">
     <script src="app.js" defer></script>
 
     <style>
@@ -27,19 +27,19 @@
             padding: 10px;
         }
 
-        /* 📱 قفل الهيدر بأبعاد صارمة تمنع نزول الأزرار تحت أي ظرف على الموبايل */
+        /* 📱 هيدر مرتب وصارم يمنع تمدد الأزرار */
         header {
             display: flex !important;
             flex-direction: row !important;
             justify-content: space-between !important;
             align-items: center !important;
             flex-wrap: nowrap !important;
-            gap: 4px !important;
+            gap: 6px !important;
             margin-bottom: 15px !important;
-            padding: 10px 10px !important;
+            padding: 12px 14px !important;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
             color: #ffffff !important;
-            border-radius: 12px !important;
+            border-radius: 14px !important;
             box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
             border: 2px solid #38bdf8 !important;
         }
@@ -47,11 +47,10 @@
         .header-title-box {
             flex: 1 1 auto !important;
             min-width: 0 !important;
-            overflow: hidden !important;
         }
 
         .header-title-box h1 {
-            font-size: 13px !important;
+            font-size: 14px !important;
             color: #ffffff !important;
             font-weight: 800;
             white-space: nowrap !important;
@@ -61,7 +60,7 @@
         }
 
         .header-title-box p {
-            font-size: 9px !important;
+            font-size: 9.5px !important;
             color: #bae6fd !important;
             margin: 0 !important;
             font-weight: 600;
@@ -75,39 +74,44 @@
             flex-direction: row !important;
             align-items: center !important;
             flex-wrap: nowrap !important;
-            gap: 3px !important;
+            gap: 4px !important;
             flex-shrink: 0 !important;
+            width: auto !important;
         }
 
-        .action-btn {
+        /* إعطاء أبعاد ثابتة وصغيرة تمنع تمدد أزرار الهيدر تحت أي ظرف */
+        .header-left-group .action-btn-icon {
             background: rgba(255, 255, 255, 0.15) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-            width: 28px !important;
-            height: 28px !important;
-            min-width: 28px !important;
-            border-radius: 6px !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
+            max-width: 32px !important;
+            border-radius: 8px !important;
             cursor: pointer;
-            font-size: 11px !important;
+            font-size: 13px !important;
             color: #ffffff !important;
-            text-decoration: none;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             padding: 0 !important;
             margin: 0 !important;
+            flex-shrink: 0 !important;
         }
 
-        .lang-select {
+        .header-left-group .lang-select {
             background: rgba(255, 255, 255, 0.15) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-            padding: 0 2px !important;
-            border-radius: 6px !important;
-            font-size: 9.5px !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            padding: 0 4px !important;
+            border-radius: 8px !important;
+            font-size: 10px !important;
             font-weight: 700;
             color: #ffffff !important;
-            height: 28px !important;
+            height: 32px !important;
             outline: none;
             margin: 0 !important;
+            flex-shrink: 0 !important;
+            width: auto !important;
         }
 
         .lang-select option {
@@ -115,7 +119,7 @@
             color: #ffffff;
         }
 
-        /* 🎴 شبكة أودو */
+        /* 🎴 شبكة أودو المصغرة */
         .odoo-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -206,10 +210,11 @@
             <p data-i18n="dash_subheader">النظام الإداري الموحد - الموسى التجارية</p>
         </div>
         <div class="header-left-group">
-            <button class="action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+            <!-- أضفنا الكلاس action-btn-icon هنا لضمان بقائها صغيرة وعدم تمددها -->
+            <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
                 <i class="fa-solid fa-moon" id="themeIcon"></i>
             </button>
-            <button class="action-btn" onclick="checkForUpdates(this)" title="تحميل التحديثات الأخيرة">
+            <button class="action-btn-icon" onclick="checkForUpdates(this)" title="تحميل التحديثات الأخيرة">
                 <i class="fa-solid fa-rotate"></i>
             </button>
             <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
@@ -239,7 +244,7 @@
 
         <div class="odoo-app-card disabled">
             <span class="badge-orange" data-i18n="under_construction">قريباً</span>
-            <div class="odoo-icon-box ic-stock"><h5 style="margin:0;"><i class="fa-solid fa-boxes-stacked"></i></h5></div>
+            <div class="odoo-icon-box ic-stock"><i class="fa-solid fa-boxes-stacked"></i></div>
             <div class="odoo-title" data-i18n="menu_stock">المخزون</div>
         </div>
 
