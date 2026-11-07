@@ -7,25 +7,30 @@
     <title data-i18n="page_title">مبيعات الموردين - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2026.5">
     <style>
         .main-container {
             width: 100%;
-            max-width: 480px;
+            max-width: 1350px;
             margin: 0 auto;
+            padding: 0 15px;
         }
 
-        /* 🎨 ترويسة احترافية موحدة */
+        /* 📱 ترويسة ثابتة وموحدة تضمن بقاء الأزرار في سطر واحد على الجوال */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding: 20px 28px;
-            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(37, 99, 235, 0.03) 100%);
-            border-radius: 18px;
-            box-shadow: var(--shadow);
-            border: 2px solid var(--border);
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            gap: 6px !important;
+            margin-bottom: 20px !important;
+            padding: 12px 14px !important;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
+            color: #ffffff !important;
+            border-radius: 14px !important;
+            box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
+            border: 2px solid #38bdf8 !important;
             position: relative;
             overflow: hidden;
         }
@@ -37,61 +42,89 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #2563eb, #3b82f6, #10b981);
+            background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
+        }
+
+        .header-title-box {
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
         }
 
         .header-title-box h1 {
-            font-size: 18px;
-            color: var(--text-main);
+            font-size: 14px !important;
+            color: #ffffff !important;
             font-weight: 800;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            margin: 0 !important;
             line-height: 1.3;
         }
 
         .header-title-box p {
-            font-size: 11.5px;
-            color: var(--text-muted);
-            margin-top: 3px;
-            font-weight: 700;
+            font-size: 9.5px !important;
+            color: #bae6fd !important;
+            margin: 0 !important;
+            font-weight: 600;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
         }
 
         .header-left-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            gap: 4px !important;
+            flex-shrink: 0 !important;
+            width: auto !important;
         }
 
         .action-btn {
-            background: var(--bg-body);
-            border: 2px solid var(--border);
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.15) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
+            max-width: 32px !important;
+            border-radius: 8px !important;
             cursor: pointer;
-            font-size: 16px;
-            color: var(--text-main);
+            font-size: 13px !important;
+            color: #ffffff !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 0 !important;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
             transition: all 0.25s;
         }
         .action-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
+            background: rgba(255, 255, 255, 0.25) !important;
+            border-color: #ffffff !important;
             transform: translateY(-2px);
         }
 
         .lang-select {
-            background: var(--bg-body);
-            border: 2px solid var(--border);
-            padding: 0 14px;
-            border-radius: 14px;
-            font-size: 12px;
+            background: rgba(255, 255, 255, 0.15) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            padding: 0 4px !important;
+            border-radius: 8px !important;
+            font-size: 10px !important;
             font-weight: 700;
-            cursor: pointer;
-            color: var(--text-main);
+            color: #ffffff !important;
+            height: 32px !important;
             outline: none;
-            height: 44px;
+            cursor: pointer;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
+            width: auto !important;
+        }
+        .lang-select option {
+            background: #1e293b;
+            color: #ffffff;
         }
 
         .filter-panel {
@@ -276,7 +309,7 @@
             font-weight: 700;
         }
 
-        /* 🌲 هيكل الشجرة (Supplier Tree Accordion) */
+        /* 🌲 هيكل الشجرة الأنيق (Supplier Tree Accordion) */
         .tree-container {
             display: flex;
             flex-direction: column;
@@ -338,18 +371,18 @@
 
         /* المستوى الثاني: الجنس / التصنيف (Gender / Category) */
         .gender-accordion {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        .gender-accordion:last-child { margin-bottom: 0; }
-
-        .gender-header {
             background: var(--bg-body);
             border: 1.5px solid var(--border);
-            border-radius: 12px;
-            padding: 12px 16px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+        .gender-accordion:last-child { margin-bottom: 0; }
+        .gender-accordion.open { border-color: var(--accent); }
+
+        .gender-header {
+            padding: 14px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -357,39 +390,76 @@
             font-size: 13px;
             font-weight: 800;
             color: var(--text-main);
-            transition: all 0.2s;
+            background: var(--bg-card);
+            user-select: none;
         }
-        .gender-header:hover { border-color: var(--accent); }
         .gender-title { display: flex; align-items: center; gap: 8px; }
         
         .gender-body {
             display: none;
-            padding: 10px 0 5px 15px;
-            flex-direction: column;
-            gap: 8px;
+            padding: 14px;
+            background: var(--bg-body);
+            border-top: 1px solid var(--border);
         }
-        .gender-accordion.open .gender-body { display: flex; }
+        .gender-accordion.open .gender-body { display: block; }
 
-        /* المستوى الثالث: المجموعات (Groups Node) */
+        /* المستوى الثالث: شبكة المجموعات (Groups Grid المنظمة والاحترافية) */
+        .groups-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
         .group-node {
             background: var(--bg-card);
             border: 1.5px solid var(--border);
-            border-radius: 10px;
-            padding: 10px 14px;
+            border-radius: 12px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 12px;
             font-weight: 700;
             color: var(--text-main);
-            transition: transform 0.15s;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
-        .group-node:hover { transform: translateX(-3px); border-color: var(--accent); }
-        .group-name { display: flex; align-items: center; gap: 8px; color: var(--text-muted); }
-        .group-val { color: #059669; font-weight: 800; }
+        .group-node:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.1);
+        }
+        .group-name { display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 800; }
+        .group-name i { color: var(--accent); font-size: 10px; }
+        .group-val { color: #059669; font-weight: 900; font-size: 12.5px; background: rgba(5, 150, 105, 0.08); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(5, 150, 105, 0.2); }
 
         /* 💻 التجاوب المتقدم لشاشات الكمبيوتر واللابتوب */
         @media (min-width: 768px) {
+            header {
+                padding: 20px 28px !important;
+            }
+            .header-title-box h1 {
+                font-size: 18px !important;
+            }
+            .header-title-box p {
+                font-size: 11.5px !important;
+            }
+            .action-btn {
+                width: 44px !important;
+                height: 44px !important;
+                min-width: 44px !important;
+                font-size: 16px !important;
+                border-radius: 14px !important;
+            }
+            .lang-select {
+                height: 44px !important;
+                font-size: 12px !important;
+                padding: 0 14px !important;
+                border-radius: 14px !important;
+            }
+            .header-left-group {
+                gap: 10px !important;
+            }
             .main-container {
                 max-width: 1350px !important;
                 padding: 0 20px;
@@ -406,6 +476,10 @@
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 20px !important;
                 align-items: start;
+            }
+            .groups-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
             }
         }
     </style>
@@ -428,8 +502,12 @@
                 <option value="hi">हिन्दी</option>
                 <option value="ur">اردو</option>
             </select>
-            <button class="action-btn" onclick="loadSupplierSalesData()" data-i18n="btn_refresh" title="تحديث">🔄</button>
-            <a href="sales.html" class="action-btn" data-i18n="btn_back" title="الرئيسية">🏠</a>
+            <button class="action-btn" onclick="loadSupplierSalesData()" data-i18n="btn_refresh" title="تحديث">
+                <i class="fa-solid fa-rotate"></i>
+            </button>
+            <a href="sales.html" class="action-btn" data-i18n="btn_back" title="الرئيسية">
+                <i class="fa-solid fa-house"></i>
+            </a>
         </div>
     </header>
 
@@ -1051,7 +1129,6 @@
                    (selBrands.length === 0 || selBrands.includes(row.brand));
         });
 
-        // 🌲 تجميع البيانات بنظام: Supplier -> Gender -> Group
         let treeData = {};
         let grandSales = 0, grandQty = 0;
 
@@ -1096,7 +1173,7 @@
             return;
         }
 
-        let isFirstSupplier = false;
+        let isFirstSupplier = true;
 
         sortedSuppliers.forEach(sup => {
             const supItem = treeData[sup];
@@ -1106,7 +1183,7 @@
             let gendersHTML = '';
             const sortedGenders = Object.keys(supItem.genders).sort((a, b) => supItem.genders[b].sales - supItem.genders[a].sales);
 
-            let isFirstGender = false;
+            let isFirstGender = true;
 
             sortedGenders.forEach(gKey => {
                 const gItem = supItem.genders[gKey];
@@ -1120,8 +1197,8 @@
                     const grpItem = gItem.groups[grp];
                     groupsHTML += `
                         <div class="group-node">
-                            <span class="group-name"><i class="fa-solid fa-angle-left"></i> ${grp}</span>
-                            <span class="group-val">${grpItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR <small style="opacity:0.75;">(${grpItem.qty} Pcs)</small></span>
+                            <span class="group-name"><i class="fa-solid fa-folder-open"></i> ${grp}</span>
+                            <span class="group-val">${grpItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR <small style="opacity:0.8; font-weight:700;">(${grpItem.qty} Pcs)</small></span>
                         </div>
                     `;
                 });
@@ -1138,7 +1215,9 @@
                             </div>
                         </div>
                         <div class="gender-body">
-                            ${groupsHTML}
+                            <div class="groups-grid">
+                                ${groupsHTML}
+                            </div>
                         </div>
                     </div>
                 `;
