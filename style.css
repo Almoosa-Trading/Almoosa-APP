@@ -13,7 +13,6 @@
     --radius: 18px;
     --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
     
-    /* 🎨 توحيد تدرج خلفية الـ Header في جميع الصفحات نفس الـ Index تماماً */
     --header-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%);
     --btn-bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
@@ -47,7 +46,7 @@
 body {
     background-color: var(--bg-body);
     color: var(--text-main);
-    padding: 12px 8px;
+    padding: 10px 6px;
     display: flex;
     justify-content: center;
     min-height: 100vh;
@@ -59,14 +58,14 @@ body {
     max-width: 1400px;
 }
 
-/* 🎨 ترويسة (Header) ثابتة وموحدة ومتناسقة تماماً على الجوال */
+/* 🎨 الهيدر المُحسّن خصيصاً للجوال لمنع التداخل والأزرار الطائرة */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     margin-bottom: 15px;
-    padding: 14px 16px;
+    padding: 12px 14px;
     background: var(--header-bg) !important;
     color: #ffffff !important;
     border-radius: 14px;
@@ -92,7 +91,7 @@ header::before {
 }
 
 .header-title-box h1 {
-    font-size: 15px;
+    font-size: 14px;
     color: #ffffff !important;
     font-weight: 700;
     white-space: nowrap;
@@ -101,9 +100,9 @@ header::before {
 }
 
 .header-title-box p {
-    font-size: 10.5px;
+    font-size: 10px;
     color: #bae6fd !important;
-    margin-top: 2px;
+    margin-top: 1px;
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
@@ -113,18 +112,18 @@ header::before {
 .header-left-group {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
     flex-shrink: 0;
 }
 
 .action-btn-icon, .action-btn, .update-btn {
     background: rgba(255, 255, 255, 0.12) !important;
-    border: 2px solid rgba(255, 255, 255, 0.25) !important;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     color: #ffffff !important;
     display: flex;
     align-items: center;
@@ -135,13 +134,13 @@ header::before {
 
 .lang-select {
     background: rgba(255, 255, 255, 0.12) !important;
-    border: 2px solid rgba(255, 255, 255, 0.25) !important;
-    padding: 0 8px;
-    border-radius: 10px;
-    font-size: 11px;
+    border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+    padding: 0 4px;
+    border-radius: 8px;
+    font-size: 10.5px;
     font-weight: 600;
     color: #ffffff !important;
-    height: 36px;
+    height: 32px;
     outline: none;
     flex-shrink: 0;
 }
@@ -292,6 +291,7 @@ footer {
 
     header {
         padding: 20px 25px;
+        gap: 15px;
     }
 
     .header-title-box h1 {
@@ -306,12 +306,20 @@ footer {
         width: 44px;
         height: 44px;
         font-size: 16px;
+        border-width: 2px !important;
+        border-radius: 10px;
     }
 
     .lang-select {
         height: 44px;
         font-size: 13px;
         padding: 0 14px;
+        border-width: 2px !important;
+        border-radius: 10px;
+    }
+
+    .header-left-group {
+        gap: 10px;
     }
 
     .hero-card {
@@ -343,7 +351,6 @@ footer {
         padding: 12px;
     }
 
-    /* 🎯 صفحة الموردين (2 أعمدة) */
     .tree-container {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
@@ -351,7 +358,6 @@ footer {
         align-items: start;
     }
 
-    /* 🎯 باقي الصفحات (3 أعمدة) */
     .salesmen-list, 
     .branches-list, 
     .branches-grid, 
