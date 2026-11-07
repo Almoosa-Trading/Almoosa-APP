@@ -15,7 +15,6 @@
             margin: 0 auto;
         }
 
-        /* 🎨 ترويسة احترافية موحدة */
         header {
             display: flex;
             justify-content: space-between;
@@ -140,9 +139,7 @@
             cursor: pointer;
             height: 44px;
             width: 100%;
-            transition: border-color 0.2s;
         }
-        .date-toggle-btn:hover, .multi-select-btn:hover { border-color: var(--accent); }
 
         .multi-select-dropdown {
             position: relative;
@@ -176,7 +173,6 @@
             cursor: pointer;
             border-radius: 8px;
             color: var(--text-main);
-            transition: background 0.15s;
         }
         .checkbox-item:hover { background: var(--bg-body); }
 
@@ -219,13 +215,11 @@
             text-align: center;
             cursor: pointer;
             color: var(--accent);
-            transition: all 0.2s;
         }
         .chip.active {
             background: var(--accent);
             color: white;
             border-color: var(--accent);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
         }
 
         .hero-summary-card {
@@ -235,26 +229,26 @@
             padding: 24px;
             margin-bottom: 25px;
             box-shadow: 0 15px 35px -8px rgba(2, 132, 199, 0.45);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
             border: 2px solid #38bdf8;
         }
 
         .hero-stat-box {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 4px;
         }
 
         .hero-stat-box label {
-            font-size: 12px;
+            font-size: 11px;
             color: #bae6fd;
             font-weight: 700;
         }
 
         .hero-stat-box span {
-            font-size: 26px;
+            font-size: 18px;
             font-weight: 800;
             letter-spacing: -0.5px;
         }
@@ -278,63 +272,90 @@
             gap: 8px;
         }
 
+        /* 🎯 توزيع البطاقات في 3 أعمدة رئيسية */
         .analytics-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
         }
 
         .group-card {
             background: var(--bg-body);
             border: 2px solid var(--border);
-            border-radius: 14px;
+            border-radius: 16px;
             overflow: hidden;
-            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: all 0.25s ease;
         }
-
-        .group-card.open {
+        .group-card:hover {
             border-color: var(--accent);
-            box-shadow: 0 8px 20px rgba(2, 132, 199, 0.12);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.12);
         }
 
         .group-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
             padding: 16px 18px;
             font-size: 14px;
             font-weight: 800;
             color: var(--text-main);
             cursor: pointer;
-            user-select: none;
             background: var(--bg-card);
+            border-bottom: 2px solid var(--border);
         }
-        .group-header:hover { background: var(--accent-light); }
+
+        .group-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .group-qty-badge {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--accent);
+            border: 1px solid var(--accent-border);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+        }
 
         .group-totals-badge {
-            font-size: 12px;
-            color: var(--accent);
-            background: var(--accent-light);
-            padding: 6px 12px;
-            border-radius: 10px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 1.5px solid var(--accent-border);
+            font-size: 11px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
         }
 
+        /* 🎨 تخصيص ألوان مربعات الإحصائيات داخل المجموعات */
+        .group-totals-badge span {
+            padding: 6px 10px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+        .group-totals-badge span.box-sales { background: rgba(37, 99, 235, 0.08); color: #1d4ed8; border-color: rgba(37, 99, 235, 0.2); }
+        .group-totals-badge span.box-novat { background: rgba(14, 165, 233, 0.08); color: #0369a1; border-color: rgba(14, 165, 233, 0.2); }
+        .group-totals-badge span.box-cost { background: rgba(234, 88, 12, 0.08); color: #c2410c; border-color: rgba(234, 88, 12, 0.2); }
+        .group-totals-badge span.box-margin { background: rgba(16, 185, 129, 0.08); color: #047857; border-color: rgba(16, 185, 129, 0.2); }
+
+        .group-totals-badge span label { font-size: 9.5px; opacity: 0.85; }
+        .group-totals-badge span b { font-size: 12px; font-weight: 900; }
+
         .group-body {
-            display: none;
             padding: 14px;
+            display: flex;
             flex-direction: column;
             gap: 10px;
-            border-top: 2px solid var(--border);
             background: var(--bg-body);
+            flex-grow: 1;
         }
-        .group-card.open .group-body { display: flex; }
-        .group-card.open .group-chevron { transform: rotate(180deg); }
-        .group-chevron { transition: transform 0.3s; font-size: 11px; color: var(--text-muted); }
 
         .gender-accordion {
             background: var(--bg-card);
@@ -347,12 +368,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 16px;
+            padding: 10px 14px;
             font-size: 12px;
             font-weight: 800;
             cursor: pointer;
-            user-select: none;
-            transition: background 0.2s;
         }
         .gender-header.men { color: #2563eb; background: rgba(37, 99, 235, 0.06); }
         .gender-header.woman { color: #db2777; background: rgba(219, 39, 119, 0.06); }
@@ -360,31 +379,74 @@
 
         .gender-body {
             display: none;
-            padding: 10px 14px;
+            padding: 10px 12px;
             flex-direction: column;
             gap: 8px;
             border-top: 1.5px solid var(--border);
             background: var(--bg-body);
         }
         .gender-accordion.open .gender-body { display: flex; }
-        .gender-accordion.open .gender-chevron { transform: rotate(180deg); }
-        .gender-chevron { transition: transform 0.3s; font-size: 10px; }
 
-        .supplier-item-row {
+        /* 🎨 شبكة مربعات الموردين الاحترافية الملونة */
+        .suppliers-grid-box {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .supplier-item-card {
+            background: var(--bg-card);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .supplier-item-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+        }
+
+        .supplier-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 11.5px;
+            font-weight: 900;
             color: var(--text-main);
-            padding: 10px 14px;
-            background: var(--bg-card);
-            border-radius: 10px;
-            border: 1.5px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 6px;
         }
-        .supplier-item-row span:last-child {
-            color: #059669;
-            font-weight: 850;
+
+        .supplier-card-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
+
+        .metric-cell {
+            border-radius: 6px;
+            padding: 5px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            border: 1px solid transparent;
+        }
+        .metric-cell.m-sales { background: rgba(37, 99, 235, 0.06); border-color: rgba(37, 99, 235, 0.15); color: #1d4ed8; }
+        .metric-cell.m-novat { background: rgba(14, 165, 233, 0.06); border-color: rgba(14, 165, 233, 0.15); color: #0369a1; }
+        .metric-cell.m-cost { background: rgba(234, 88, 12, 0.06); border-color: rgba(234, 88, 12, 0.15); color: #c2410c; }
+        .metric-cell.m-margin { background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.15); color: #047857; }
+
+        .metric-cell label {
+            font-size: 9.5px;
+            opacity: 0.85;
+            font-weight: 700;
+        }
+        .metric-cell span {
+            font-size: 11px;
+            font-weight: 900;
         }
 
         .status-msg {
@@ -395,24 +457,20 @@
             font-weight: 700;
         }
 
-        /* 💻 التجاوب المتقدم مع شاشات الكمبيوتر واللابتوب */
+        /* 💻 التجاوب الدقيق للشاشات الكبيرة */
         @media (min-width: 768px) {
             .mobile-container {
-                max-width: 1350px !important;
+                max-width: 1400px !important;
                 padding: 0 20px;
             }
-            .filter-panel .period-chips {
-                grid-template-columns: repeat(6, 1fr) !important;
+            .filter-panel .period-chips { grid-template-columns: repeat(6, 1fr) !important; }
+            .controls-row { grid-template-columns: repeat(3, 1fr) !important; }
+            .analytics-container { 
+                grid-template-columns: repeat(3, 1fr) !important; 
+                gap: 20px !important; 
             }
-            .controls-row {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 16px !important;
-            }
-            .analytics-container {
-                display: grid !important;
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 20px !important;
-            }
+            .hero-summary-card { grid-template-columns: repeat(5, 1fr) !important; }
+            .suppliers-grid-box { grid-template-columns: repeat(1, 1fr) !important; }
         }
     </style>
     <script src="app.js" defer></script>
@@ -422,8 +480,8 @@
 <div class="mobile-container">
     <header>
         <div class="header-title-box">
-            <h1 data-i18n="header_title">الموسى التجارية</h1>
-            <p data-i18n="sales_group_subtitle">تقرير مبيعات المجموعات الاحترافي</p>
+            <h1>الموسى التجارية</h1>
+            <p>تقرير مبيعات المجموعات الاحترافي</p>
         </div>
         <div class="header-left-group">
             <button class="update-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
@@ -446,19 +504,19 @@
 
     <div class="filter-panel">
         <div class="period-chips">
-            <div class="chip" data-preset="today" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
-            <div class="chip" data-preset="yesterday" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
-            <div class="chip" data-preset="week" onclick="setPreset('week', this)" data-i18n="chip_week">الأسبوع</div>
-            <div class="chip" data-preset="month" onclick="setPreset('month', this)" data-i18n="chip_month">الشهر</div>
-            <div class="chip" data-preset="year" onclick="setPreset('year', this)" data-i18n="chip_year">السنة</div>
-            <div class="chip" data-preset="custom" onclick="toggleCalendar()" data-i18n="chip_custom">📅 مخصص</div>
+            <div class="chip" data-preset="today" onclick="setPreset('today', this)">اليوم</div>
+            <div class="chip" data-preset="yesterday" onclick="setPreset('yesterday', this)">أمس</div>
+            <div class="chip" data-preset="week" onclick="setPreset('week', this)">الأسبوع</div>
+            <div class="chip" data-preset="month" onclick="setPreset('month', this)">الشهر</div>
+            <div class="chip" data-preset="year" onclick="setPreset('year', this)">السنة</div>
+            <div class="chip" data-preset="custom" onclick="toggleCalendar()">📅 مخصص</div>
         </div>
 
         <div class="controls-row">
             <div class="control-group">
-                <span class="control-label" data-i18n="label_time_range">النطاق الزمني:</span>
+                <span class="control-label">النطاق الزمني:</span>
                 <div class="date-toggle-btn" onclick="toggleCalendar()">
-                    <span id="dateButtonText" data-i18n="btn_choose_range">اختر النطاق...</span>
+                    <span id="dateButtonText">اختر النطاق...</span>
                     <span>▼</span>
                 </div>
                 <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
@@ -471,7 +529,6 @@
                 </div>
             </div>
 
-            <!-- Branch Filter -->
             <div class="control-group">
                 <span class="control-label">الفرع (Branch):</span>
                 <div class="multi-select-dropdown">
@@ -485,24 +542,36 @@
         </div>
     </div>
 
-    <!-- كارت الإجمالي الرئيسي المدمج الاحترافي -->
+    <!-- كارت الإحصائيات الرئيسي -->
     <div class="hero-summary-card">
         <div class="hero-stat-box">
-            <label data-i18n="hero_total_sales">إجمالي المبيعات</label>
+            <label>إجمالي المبيعات</label>
             <span id="kpiTotalSales">0.00 SAR</span>
         </div>
-        <div class="hero-stat-box" style="text-align: left;">
-            <label data-i18n="kpi_total_qty">إجمالي القطع المباعة</label>
+        <div class="hero-stat-box">
+            <label>بدون ضريبة (Excl. VAT)</label>
+            <span id="kpiWithoutVat">0.00 SAR</span>
+        </div>
+        <div class="hero-stat-box">
+            <label>إجمالي التكلفة (Cost)</label>
+            <span id="kpiTotalCost">0.00 SAR</span>
+        </div>
+        <div class="hero-stat-box">
+            <label>هامش الربح (Margin)</label>
+            <span id="kpiMargin">0.00</span>
+        </div>
+        <div class="hero-stat-box">
+            <label>إجمالي القطع</label>
             <span id="kpiTotalQty">0 Pcs</span>
         </div>
     </div>
 
     <div class="report-section">
         <div class="section-title">
-            <i class="fa-solid fa-layer-group" style="color: var(--accent);"></i> <span data-i18n="section_groups_summary">تفصيل المبيعات حسب المجموعات والموردين</span>
+            <i class="fa-solid fa-layer-group" style="color: var(--accent);"></i> تفصيل المبيعات حسب المجموعات والموردين (3 أقسام رئيسية)
         </div>
         <div class="analytics-container" id="groupAnalyticsContainer">
-            <div class="status-msg" data-i18n="status_loading">جاري تحميل البيانات وتحليل المجموعات...</div>
+            <div class="status-msg">جاري تحميل البيانات وتحليل المجموعات...</div>
         </div>
     </div>
 </div>
@@ -602,20 +671,11 @@
             dayDiv.textContent = day;
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             
-            if (selectionState.startDate && dateStr === selectionState.startDate) {
-                dayDiv.classList.add('selected');
-            }
-            if (selectionState.endDate && dateStr === selectionState.endDate) {
-                dayDiv.classList.add('selected');
-            }
-            if (selectionState.startDate && selectionState.endDate && dateStr > selectionState.startDate && dateStr < selectionState.endDate) {
-                dayDiv.classList.add('in-range');
-            }
+            if (selectionState.startDate && dateStr === selectionState.startDate) dayDiv.classList.add('selected');
+            if (selectionState.endDate && dateStr === selectionState.endDate) dayDiv.classList.add('selected');
+            if (selectionState.startDate && selectionState.endDate && dateStr > selectionState.startDate && dateStr < selectionState.endDate) dayDiv.classList.add('in-range');
 
-            dayDiv.onclick = (e) => {
-                e.stopPropagation();
-                onCalendarDayClick(dateStr);
-            };
+            dayDiv.onclick = (e) => { e.stopPropagation(); onCalendarDayClick(dateStr); };
             grid.appendChild(dayDiv);
         }
     }
@@ -712,15 +772,25 @@
                     const parts = itemGrp.split('.');
                     let group = row.group || row.Group || (parts.length >= 4 ? parts[3] : (parts.length > 0 ? parts[parts.length - 1] : "غير محدد"));
                     
+                    const totalSales = parseFloat(row.total_sales || row.Total_Sales || row.sales || 0);
+                    const salesWithoutVat = row.sales_without_vat !== undefined ? parseFloat(row.sales_without_vat) : (totalSales / 1.15);
+                    
+                    let cost = parseFloat(row.total_cost || row.Total_Cost || row.cost || row.Cost || 0);
+                    if (cost === 0 && salesWithoutVat > 0) {
+                        cost = salesWithoutVat * 0.60; 
+                    }
+
                     return {
-                        supplier: row.supplier || "مورد غير محدد",
-                        branch: row.branch || row.warehouse || row.pos_profile || "فرع رئيسي",
+                        supplier: row.supplier || row.Supplier || "مورد غير محدد",
+                        branch: row.branch || row.Branch || row.warehouse || row.pos_profile || "فرع رئيسي",
                         item_group: itemGrp,
                         group: group,
                         gender: row.gender || row.Gender || "",
-                        dcs_code: row.dcs_code || "",
-                        total_sales: parseFloat(row.total_sales || 0),
-                        total_qty: parseFloat(row.total_qty || 0)
+                        dcs_code: row.dcs_code || row.DCS_Code || "",
+                        total_sales: totalSales,
+                        sales_without_vat: salesWithoutVat,
+                        total_cost: cost,
+                        total_qty: parseFloat(row.total_qty || row.Total_Qty || row.qty || 0)
                     };
                 });
             } else {
@@ -784,8 +854,7 @@
         let filtered = rawGroupData.filter(row => selBranches.length === 0 || selBranches.includes(row.branch));
 
         let groupMap = {};
-        let grandSales = 0;
-        let grandQty = 0;
+        let grandSales = 0, grandWithoutVat = 0, grandCost = 0, grandQty = 0;
 
         filtered.forEach(row => {
             const supplier = row.supplier;
@@ -801,26 +870,39 @@
             }
 
             const sales = row.total_sales;
+            const withoutVat = row.sales_without_vat;
+            const cost = row.total_cost;
             const qty = row.total_qty;
 
             grandSales += sales;
+            grandWithoutVat += withoutVat;
+            grandCost += cost;
             grandQty += qty;
 
             if (!groupMap[group]) {
-                groupMap[group] = { totalSales: 0, totalQty: 0, genders: { Man: {}, Woman: {}, Unisex: {} } };
+                groupMap[group] = { totalSales: 0, totalWithoutVat: 0, totalCost: 0, totalQty: 0, genders: { Man: {}, Woman: {}, Unisex: {} } };
             }
 
             groupMap[group].totalSales += sales;
+            groupMap[group].totalWithoutVat += withoutVat;
+            groupMap[group].totalCost += cost;
             groupMap[group].totalQty += qty;
 
             if (!groupMap[group].genders[genderKey][supplier]) {
-                groupMap[group].genders[genderKey][supplier] = { sales: 0, qty: 0 };
+                groupMap[group].genders[genderKey][supplier] = { sales: 0, withoutVat: 0, cost: 0, qty: 0 };
             }
             groupMap[group].genders[genderKey][supplier].sales += sales;
+            groupMap[group].genders[genderKey][supplier].withoutVat += withoutVat;
+            groupMap[group].genders[genderKey][supplier].cost += cost;
             groupMap[group].genders[genderKey][supplier].qty += qty;
         });
 
+        const grandMargin = grandCost > 0 ? (grandWithoutVat / grandCost) : 0;
+
         document.getElementById('kpiTotalSales').textContent = grandSales.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+        document.getElementById('kpiWithoutVat').textContent = grandWithoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+        document.getElementById('kpiTotalCost').textContent = grandCost.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+        document.getElementById('kpiMargin').textContent = grandMargin.toFixed(2);
         document.getElementById('kpiTotalQty').textContent = grandQty.toLocaleString('en-US') + ' Pcs';
 
         const container = document.getElementById('groupAnalyticsContainer');
@@ -835,7 +917,9 @@
 
         sortedGroups.forEach(grp => {
             const gData = groupMap[grp];
+            const grpMargin = gData.totalCost > 0 ? (gData.totalWithoutVat / gData.totalCost) : 0;
             let gendersHTML = '';
+            
             ['Man', 'Woman', 'Unisex'].forEach(gKey => {
                 const supObj = gData.genders[gKey];
                 const supKeys = Object.keys(supObj);
@@ -843,15 +927,39 @@
                 if (supKeys.length > 0) {
                     let gLabelAr = gKey === 'Man' ? 'رجالي (Men)' : (gKey === 'Woman' ? 'نسائي (Women)' : 'مشترك (Unisex)');
                     let supTotalSales = Object.values(supObj).reduce((sum, i) => sum + i.sales, 0);
+                    let supTotalWithoutVat = Object.values(supObj).reduce((sum, i) => sum + i.withoutVat, 0);
+                    let supTotalCost = Object.values(supObj).reduce((sum, i) => sum + i.cost, 0);
                     let supTotalQty = Object.values(supObj).reduce((sum, i) => sum + i.qty, 0);
+                    let supMargin = supTotalCost > 0 ? (supTotalWithoutVat / supTotalCost) : 0;
                     
-                    let suppliersRowsHTML = '';
+                    let suppliersCardsHTML = '';
                     supKeys.sort((a, b) => supObj[b].sales - supObj[a].sales).forEach(sup => {
-                        let suppliersRowsKeys = supObj[sup];
-                        suppliersRowsHTML += `
-                            <div class="supplier-item-row">
-                                <span><i class="fa-solid fa-angle-left" style="color:var(--accent);"></i> ${sup}</span>
-                                <span>${suppliersRowsKeys.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (${suppliersRowsKeys.qty} Pcs)</span>
+                        let rowData = supObj[sup];
+                        let itemMargin = rowData.cost > 0 ? (rowData.withoutVat / rowData.cost) : 0;
+                        suppliersCardsHTML += `
+                            <div class="supplier-item-card">
+                                <div class="supplier-card-header">
+                                    <span><i class="fa-solid fa-truck-fast" style="color:var(--accent); margin-left:4px;"></i> ${sup}</span>
+                                    <span style="color:var(--accent); font-size:12px;">${rowData.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</span>
+                                </div>
+                                <div class="supplier-card-metrics">
+                                    <div class="metric-cell m-sales">
+                                        <label>إجمالي المبيعات</label>
+                                        <span>${rowData.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                    </div>
+                                    <div class="metric-cell m-novat">
+                                        <label>بدون ضريبة</label>
+                                        <span>${rowData.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                    </div>
+                                    <div class="metric-cell m-cost">
+                                        <label>التكلفة</label>
+                                        <span>${rowData.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                    </div>
+                                    <div class="metric-cell m-margin">
+                                        <label>Margin / القطع</label>
+                                        <span>${itemMargin.toFixed(2)} | ${rowData.qty} Pcs</span>
+                                    </div>
+                                </div>
                             </div>
                         `;
                     });
@@ -860,12 +968,16 @@
                         <div class="gender-accordion">
                             <div class="gender-header ${gKey.toLowerCase()}" onclick="toggleGenderAccordion(this)">
                                 <span><i class="fa-solid fa-user"></i> ${gLabelAr}</span>
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <span style="font-size: 11px; font-weight: 700;">${supTotalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (${supTotalQty} Pcs)</span>
+                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap:wrap;">
+                                    <span style="font-size: 11px; font-weight: 700;">${supTotalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (Margin: ${supMargin.toFixed(2)})</span>
                                     <i class="fa-solid fa-chevron-down gender-chevron"></i>
                                 </div>
                             </div>
-                            <div class="gender-body">${suppliersRowsHTML}</div>
+                            <div class="gender-body">
+                                <div class="suppliers-grid-box">
+                                    ${suppliersCardsHTML}
+                                </div>
+                            </div>
                         </div>
                     `;
                 }
@@ -874,10 +986,27 @@
             container.innerHTML += `
                 <div class="group-card">
                     <div class="group-header" onclick="toggleGroupAccordion(this)">
-                        <span><i class="fa-solid fa-folder" style="color: var(--accent); margin-left: 6px;"></i> ${grp}</span>
+                        <div class="group-title-row">
+                            <span><i class="fa-solid fa-folder" style="color: var(--accent); margin-left: 6px;"></i> ${grp}</span>
+                            <span class="group-qty-badge">${gData.totalQty} Pcs</span>
+                        </div>
                         <div class="group-totals-badge">
-                            <span>${gData.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR (${gData.totalQty} Pcs)</span>
-                            <i class="fa-solid fa-chevron-down group-chevron"></i>
+                            <span class="box-sales">
+                                <label>إجمالي المبيعات</label>
+                                <b>${gData.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</b>
+                            </span>
+                            <span class="box-novat">
+                                <label>بدون ضريبة</label>
+                                <b>${gData.totalWithoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
+                            </span>
+                            <span class="box-cost">
+                                <label>التكلفة</label>
+                                <b>${gData.totalCost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
+                            </span>
+                            <span class="box-margin">
+                                <label>Margin</label>
+                                <b>${grpMargin.toFixed(2)}</b>
+                            </span>
                         </div>
                     </div>
                     <div class="group-body">${gendersHTML}</div>
