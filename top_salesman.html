@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <link rel="manifest" href="./manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title data-i18n="top_sales_page_title">أفضل موظفي المبيعات - الموسى التجارية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- ربط ملف التنسيقات المشترك -->
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        .calendar-container {
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 16px;
+            background: var(--bg-card);
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            z-index: 1000;
+        }
+
+        .calendar-container.open {
+            display: block;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .calendar-header button {
+            background: var(--bg-body);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            color: var(--text-main);
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+
+        .calendar-header button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            text-align: center;
+        }
+
+        .calendar-day-name {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 800;
+            padding-bottom: 6px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            background: var(--bg-body);
+            color: var(--text-main);
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            transition: all 0.15s;
+        }
+
+        .calendar-day:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .calendar-day.selected {
+            background: var(--accent) !important;
+            color: white !important;
+            border-color: var(--accent) !important;
+        }
+
+        .calendar-day.in-range {
+            background: var(--accent-light) !important;
+            color: var(--accent) !important;
+        }
+
+        .high3-btn {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: white;
+            border: 2px solid #f59e0b;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 6px 16px rgba(217, 119, 6, 0.35);
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .high3-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(217, 119, 6, 0.45);
+        }
+
+        .report-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.85);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .report-modal.open {
+            display: flex;
+        }
+        .report-content {
+            background: var(--bg-card);
+            color: var(--text-main);
+            width: 650px;
+            max-width: 98vw;
+            max-height: 95vh;
+            border-radius: 24px;
+            padding: 24px;
+            overflow-y: auto;
+            position: relative;
+            box-sizing: border-box;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            border: 2px solid var(--border);
+        }
+
+        /* قائمة الموظفين (تصميم عمودي افتراضي للجوال) */
+        .salesmen-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* كارت الموظف الفردي */
+        .salesman-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 18px 20px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.2s;
+        }
+        .salesman-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+        .salesman-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .salesman-rank {
+            width: 38px;
+            height: 38px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 800;
+            border: 2px solid var(--accent-border);
+            flex-shrink: 0;
+        }
+        .salesman-card:nth-child(1) .salesman-rank { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: white; }
+        .salesman-card:nth-child(2) .salesman-rank { background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); color: white; }
+        .salesman-card:nth-child(3) .salesman-rank { background: linear-gradient(135deg, #b45309 0%, #78350f 100%); color: white; }
+
+        .salesman-details h3 { font-size: 14px; font-weight: 800; color: var(--text-main); margin: 0 0 4px 0; }
+        .salesman-details p { font-size: 11px; color: var(--text-muted); margin: 0; font-weight: 700; }
+        .salesman-totals { text-align: left; }
+        .salesman-totals .amount { font-size: 16px; font-weight: 800; color: var(--text-main); line-height: 1.2; }
+        .salesman-totals .count { font-size: 11px; color: var(--text-muted); font-weight: 700; }
+        .status-msg { text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; font-weight: 700; }
+
+        /* ========================================================
+           💻 تحويل قائمة الموظفين لمربعات بجانب بعضها على الكمبيوتر
+           ======================================================== */
+        @media (min-width: 768px) {
+            .salesmen-list {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr); /* 3 كروت بجانب بعضها */
+                gap: 16px;
+            }
+
+            .salesman-card {
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: flex-start;
+                gap: 14px;
+                padding: 20px;
+            }
+
+            .salesman-info {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .salesman-totals {
+                width: 100%;
+                text-align: right;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-top: 1px solid var(--border);
+                padding-top: 12px;
+                margin-top: 4px;
+            }
+
+            .salesman-totals .amount {
+                font-size: 18px;
+            }
+        }
+
+        .exact-poster-container {
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            background: linear-gradient(180deg, #ffffff 0%, #fef3c7 40%, #fdf8f6 100%);
+            border-radius: 24px;
+            border: 2px solid #e2e8f0;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.1);
+            box-sizing: border-box;
+        }
+
+        .poster-top-banner {
+            background: #0f172a;
+            height: 45px;
+            width: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+        }
+        .poster-top-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 5px;
+            background: linear-gradient(135deg, #7f1d1d 0%, #0f172a 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 65%, 50% 100%, 0 65%);
+        }
+
+        .poster-header-content {
+            padding: 20px 20px 10px 20px;
+            text-align: center;
+        }
+
+        .poster-brand-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .poster-brand-area .company-name {
+            font-size: 20px;
+            font-weight: 900;
+            color: #0f172a;
+            line-height: 1.1;
+        }
+        .poster-brand-area .company-sub {
+            font-size: 11px;
+            font-weight: 800;
+            color: #1e3a8a;
+            letter-spacing: 1px;
+        }
+
+        .poster-contest-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #0f172a;
+            font-style: italic;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .poster-contest-badge-box {
+            background: #111827;
+            color: #fef08a;
+            display: inline-block;
+            padding: 6px 22px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 2px solid #374151;
+            transform: rotate(-1.5deg);
+            margin-bottom: 25px;
+        }
+
+        .podium-layout-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 0 20px 30px 20px;
+        }
+
+        .podium-item-first {
+            width: 85%;
+            position: relative;
+            z-index: 3;
+        }
+
+        .podium-row-bottom {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 15px;
+            z-index: 2;
+        }
+
+        .podium-item-sub {
+            flex: 1;
+        }
+
+        .podium-card-box {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 22px 10px 14px 10px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+            border: 2px solid #e2e8f0;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .podium-card-box::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            background: #0f172a;
+            border-radius: 18px;
+            z-index: -1;
+            transform: rotate(-3deg);
+        }
+
+        .podium-card-box.first-card::before {
+            background: #0f172a;
+            transform: rotate(2deg);
+        }
+
+        .podium-card-box.third-card::before {
+            background: #78350f;
+        }
+
+        .podium-card-box.second-card::before {
+            background: #334155;
+        }
+
+        .diamond-badge-wrapper {
+            position: absolute;
+            top: -26px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .diamond-number {
+            width: 44px;
+            height: 44px;
+            background: #ffffff;
+            border: 3px solid #0f172a;
+            color: #0f172a;
+            font-size: 22px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotate(45deg);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        .diamond-number span {
+            transform: rotate(-45deg);
+        }
+
+        .ribbon-red-decoration {
+            width: 36px;
+            height: 16px;
+            background: #dc2626;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            margin-top: -6px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+
+        .card-percentage-val {
+            font-size: 30px;
+            font-weight: 900;
+            color: #1e293b;
+            margin-top: 14px;
+            line-height: 1;
+        }
+        .card-percentage-val small {
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .card-prize-banner {
+            margin-top: 12px;
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .third-card .card-prize-banner {
+            background: linear-gradient(135deg, #b45309 0%, #451a03 100%);
+        }
+        .second-card .card-prize-banner {
+            background: linear-gradient(135deg, #64748b 0%, #1e293b 100%);
+        }
+
+        .table-responsive-box {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+        }
+
+        .report-table-pro {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .report-table-pro th {
+            background: var(--primary);
+            color: #f8fafc;
+            padding: 12px 10px;
+            font-weight: 800;
+            font-size: 11px;
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .report-table-pro td {
+            padding: 12px 10px;
+            font-weight: 700;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-card);
+            white-space: nowrap;
+        }
+
+        .report-table-pro tr:last-child td {
+            border-bottom: none;
+        }
+
+        .zatca-ref-pill {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--accent-border);
+            display: inline-block;
+            letter-spacing: 0.5px;
+        }
+
+        .bonus-amount-cell {
+            color: #d97706;
+            font-weight: 900;
+            font-size: 13px;
+        }
+
+        .share-actions-bar {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        .share-btn {
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+        }
+        .btn-whatsapp { background: linear-gradient(135deg, #25d366 0%, #16a34a 100%); }
+        .btn-email { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); }
+        .btn-download { background: linear-gradient(135deg, #475569 0%, #1e293b 100%); }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container">
+    <header>
+        <div class="header-title-box">
+            <h1 data-i18n="header_title">الموسى التجارية</h1>
+            <p data-i18n="top_sales_subtitle">أفضل موظفي المبيعات (Top Sales Man)</p>
+        </div>
+        <div class="header-left-group">
+            <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ur">اردو</option>
+            </select>
+            <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
+            <button class="action-btn-icon" onclick="loadTopSalesmen()" title="تحديث">
+                <i class="fa-solid fa-rotate"></i>
+            </button>
+            <a href="sales.html" class="action-btn-icon" title="رجوع للمبيعات">
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="index.html" class="action-btn-icon" title="الرئيسية">
+                <i class="fa-solid fa-house"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- لوحة الفلاتر المتوافقة مع style.css -->
+    <div class="filter-panel">
+        <div class="period-chips">
+            <div class="chip active" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
+            <div class="chip" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
+            <div class="chip" onclick="setPreset('week', this)" data-i18n="chip_week">هذا الأسبوع</div>
+            <div class="chip" onclick="setPreset('month', this)" data-i18n="chip_month">هذا الشهر</div>
+            <div class="chip" onclick="setPreset('year', this)" data-i18n="chip_year">هذه السنة</div>
+            <div class="chip" onclick="toggleCalendar()" data-i18n="chip_custom">📅 مخصص</div>
+        </div>
+
+        <div class="controls-row" style="position: relative; margin-top: 10px;">
+            <div class="control-group" style="width: 100%;">
+                <div class="date-toggle-btn" onclick="toggleCalendar()" style="background: var(--bg-body); border: 2px solid var(--border); padding: 12px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                    <span id="dateButtonText" data-i18n="btn_choose_range">اختر النطاق...</span>
+                    <i class="fa-solid fa-calendar-days" style="color: var(--accent);"></i>
+                </div>
+                
+                <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
+                    <div class="calendar-header">
+                        <button onclick="changeMonth(-1)">&#9664;</button>
+                        <span id="calendarTitle">نوفمبر 2026</span>
+                        <button onclick="changeMonth(1)">&#9654;</button>
+                    </div>
+                    <div class="calendar-grid" id="calendarDaysGrid"></div>
+                </div>
+            </div>
+        </div>
+
+        <button class="high3-btn" onclick="openHigh3Report()">
+            <i class="fa-solid fa-trophy"></i> High 3 (أعلى 3 فواتير للفترة > 1000 ر.س)
+        </button>
+    </div>
+
+    <!-- كارت الإجمالي -->
+    <div class="hero-card">
+        <div class="hero-title" data-i18n="top_sales_hero_title">إجمالي مبيعات الموظفين في الفترة</div>
+        <div class="hero-amount" id="totalSalesAmount">0.00 SAR</div>
+        <div class="hero-sub" id="totalInvoicesCount">عدد الفواتير الإجمالي: 0 فاتورة</div>
+    </div>
+
+    <div class="section-header">
+        <i class="fa-solid fa-trophy" style="color: #d97706;"></i>
+        <span data-i18n="top_sales_list_title">قائمة أفضل موظفي المبيعات</span>
+    </div>
+    
+    <div class="salesmen-list" id="salesmenContainer">
+        <div class="status-msg" data-i18n="status_loading">جاري تحميل البيانات...</div>
+    </div>
+</div>
+
+<!-- Modal تقرير High 3 -->
+<div class="report-modal" id="high3Modal">
+    <div class="report-content" id="reportPrintableArea">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 12px;" id="modalTopBar">
+            <h3 style="font-weight: 800; color: var(--text-main); font-size: 16px; margin: 0; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-trophy" style="color: #d97706;"></i>
+                <span>تقرير أعلى 3 فواتير مبيعات (تتجاوز 1000 ريال)</span>
+            </h3>
+            <button onclick="closeHigh3Modal()" style="background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 10px; cursor: pointer; font-weight: 800;" id="closeModalBtn" data-i18n="btn_close">✕ إغلاق</button>
+        </div>
+
+        <div id="high3ReportBody" style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
+            
+            <div class="exact-poster-container" id="posterSection">
+                <div class="poster-top-banner"></div>
+                
+                <div class="poster-header-content">
+                    <div class="poster-brand-area">
+                        <div class="company-name">الموسى التجارية</div>
+                        <div class="company-sub">almoosa trading</div>
+                    </div>
+
+                    <div class="poster-contest-title">Weekly Highest Sales</div>
+                    <div class="poster-contest-badge-box">INVOICE CONTEST 🏆</div>
+                </div>
+
+                <div class="podium-layout-stack">
+                    <div class="podium-item-first">
+                        <div class="podium-card-box first-card">
+                            <div class="diamond-badge-wrapper">
+                                <div class="diamond-number"><span>1</span></div>
+                                <div class="ribbon-red-decoration"></div>
+                            </div>
+                            <div class="card-percentage-val" style="color:#d97706;">2.5<small>%</small></div>
+                            <div class="card-prize-banner">Cash Prize</div>
+                        </div>
+                    </div>
+
+                    <div class="podium-row-bottom">
+                        <div class="podium-item-sub">
+                            <div class="podium-card-box third-card">
+                                <div class="diamond-badge-wrapper">
+                                    <div class="diamond-number"><span>3</span></div>
+                                    <div class="ribbon-red-decoration"></div>
+                                </div>
+                                <div class="card-percentage-val">1.0<small>%</small></div>
+                                <div class="card-prize-banner">Cash Prize</div>
+                            </div>
+                        </div>
+
+                        <div class="podium-item-sub">
+                            <div class="podium-card-box second-card">
+                                <div class="diamond-badge-wrapper">
+                                    <div class="diamond-number" style="color:#334155;"><span>2</span></div>
+                                    <div class="ribbon-red-decoration"></div>
+                                </div>
+                                <div class="card-percentage-val">1.5<small>%</small></div>
+                                <div class="card-prize-banner">Cash Prize</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="width: 100%;" id="tableSection">
+                <div id="dateRangeBanner" style="font-weight: 800; color: #d97706; margin-bottom: 10px; font-size: 13px; text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
+                    <i class="fa-regular fa-calendar-days"></i>
+                    <span id="dateRangeText">الفترة الحالية</span>
+                </div>
+                
+                <div class="table-responsive-box">
+                    <table class="report-table-pro">
+                        <thead>
+                            <tr>
+                                <th>رقم الفاتورة المرجعي</th>
+                                <th>التاريخ</th>
+                                <th>الفرع</th>
+                                <th>ID البائع</th>
+                                <th>Associate Name</th>
+                                <th>grand_total</th>
+                                <th>Bonus%</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="high3TableBody">
+                            <tr><td colspan="8" style="padding: 25px; color: var(--text-muted);" data-i18n="status_loading">جاري جلب بيانات الفواتير...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="share-actions-bar" id="shareActionsBar">
+            <button class="share-btn btn-whatsapp" onclick="shareToWhatsApp()">
+                <i class="fa-brands fa-whatsapp" style="font-size: 16px;"></i> مشاركة عبر واتساب
+            </button>
+            <button class="share-btn btn-email" onclick="shareToEmail()">
+                <i class="fa-solid fa-envelope" style="font-size: 16px;"></i> إرسال عبر البريد
+            </button>
+            <button class="share-btn btn-download" onclick="downloadReportImage()">
+                <i class="fa-solid fa-download" style="font-size: 16px;"></i> تحميل كصورة
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const CONFIG = {
+        serverUrl: "https://87-237-225-155.nip.io",
+        apiKey: "6f039a5a6130b79",
+        apiSecret: "9e6d920a8fda252"
+    };
+
+    const authHeaders = {
+        "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`,
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    };
+
+    let currentQueryFrom = '';
+    let currentQueryTo = '';
+    let selectionState = { startDate: null, endDate: null };
+    let viewDate = new Date();
+    let cachedInvoices = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setPreset('today', document.querySelector('.chip.active'));
+        renderCalendar();
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.control-group') && !event.target.closest('.period-chips') && !event.target.closest('.date-toggle-btn')) {
+                document.getElementById('calendarContainer').classList.remove('open');
+            }
+        }
+    });
+
+    function toggleCalendar() {
+        document.getElementById('calendarContainer').classList.toggle('open');
+    }
+
+    function changeMonth(direction) {
+        viewDate.setMonth(viewDate.getMonth() + direction);
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        const grid = document.getElementById('calendarDaysGrid');
+        const titleEl = document.getElementById('calendarTitle');
+        grid.innerHTML = '';
+
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
+        const arMonths = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+        titleEl.textContent = `${arMonths[month]} ${year}`;
+
+        const daysShort = ['أحد', 'إثن', 'ثلا', 'أرب', 'خميس', 'جمع', 'سبت'];
+        daysShort.forEach(d => {
+            const div = document.createElement('div');
+            div.className = 'calendar-day-name';
+            div.textContent = d;
+            grid.appendChild(div);
+        });
+
+        const firstDayOfWeek = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+
+        for (let i = 0; i < firstDayOfWeek; i++) {
+            grid.appendChild(document.createElement('div'));
+        }
+
+        for (let day = 1; day <= totalDays; day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            dayDiv.textContent = day;
+
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            if (selectionState.startDate && dateStr === selectionState.startDate) dayDiv.classList.add('selected');
+            if (selectionState.endDate && dateStr === selectionState.endDate) dayDiv.classList.add('selected');
+            if (selectionState.startDate && selectionState.endDate && dateStr > selectionState.startDate && dateStr < selectionState.endDate) {
+                dayDiv.classList.add('in-range');
+            }
+
+            dayDiv.onclick = (e) => {
+                e.stopPropagation();
+                onCalendarDayClick(dateStr);
+            };
+            grid.appendChild(dayDiv);
+        }
+    }
+
+    function onCalendarDayClick(dateStr) {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        const customChip = document.querySelector('.chip[onclick*="custom"]');
+        if (customChip) customChip.classList.add('active');
+
+        if (!selectionState.startDate || (selectionState.startDate && selectionState.endDate)) {
+            selectionState.startDate = dateStr;
+            selectionState.endDate = null;
+            currentQueryFrom = dateStr;
+            currentQueryTo = '';
+            document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
+            renderCalendar();
+        } else {
+            if (dateStr < selectionState.startDate) {
+                selectionState.startDate = dateStr;
+                currentQueryFrom = dateStr;
+                currentQueryTo = '';
+                document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
+                renderCalendar();
+            } else {
+                selectionState.endDate = dateStr;
+                currentQueryTo = dateStr;
+                updateDateButtonText();
+                renderCalendar();
+                loadTopSalesmen();
+                toggleCalendar();
+            }
+        }
+    }
+
+    function updateDateButtonText() {
+        const btnText = document.getElementById('dateButtonText');
+        if (!currentQueryTo || currentQueryFrom === currentQueryTo) {
+            btnText.textContent = `${currentQueryFrom}`;
+        } else {
+            btnText.textContent = `${currentQueryFrom} إلى ${currentQueryTo}`;
+        }
+    }
+
+    function setPreset(type, element) {
+        if (element) {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        const today = new Date();
+        let start = new Date();
+        let end = new Date();
+
+        if (type === 'today') {
+            start = new Date(today);
+            end = new Date(today);
+        } else if (type === 'yesterday') {
+            start = new Date(today);
+            start.setDate(today.getDate() - 1);
+            end = new Date(start);
+        } else if (type === 'week') {
+            start = new Date(today);
+            start.setDate(today.getDate() - 6);
+            end = new Date(today);
+        } else if (type === 'month') {
+            start = new Date(today.getFullYear(), today.getMonth(), 1);
+            end = new Date(today);
+        } else if (type === 'year') {
+            start = new Date(today.getFullYear(), 0, 1);
+            end = new Date(today);
+        }
+
+        currentQueryFrom = formatDateStr(start);
+        currentQueryTo = formatDateStr(end);
+
+        selectionState.startDate = currentQueryFrom;
+        selectionState.endDate = currentQueryTo;
+        viewDate = new Date(end);
+
+        updateDateButtonText();
+        renderCalendar();
+        loadTopSalesmen();
+    }
+
+    function formatDateStr(d) {
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    async function loadTopSalesmen() {
+        const container = document.getElementById('salesmenContainer');
+        container.innerHTML = `<div class="status-msg" data-i18n="status_loading">جاري تحميل البيانات...</div>`;
+
+        let queryToDate = currentQueryTo || currentQueryFrom;
+        let salesmenMap = {};
+        let totalSalesSum = 0;
+        let totalInvoicesSum = 0;
+        cachedInvoices = [];
+
+        const EXCLUDED_SALESMEN = ['administrator', 'guest', 'apiuser@almousatrading.com', 'none', 'غير محدد'];
+
+        try {
+            const response = await fetch(`${CONFIG.serverUrl}/api/method/get_branch_sales_summary`, {
+                method: "POST",
+                headers: authHeaders,
+                body: JSON.stringify({
+                    from_date: currentQueryFrom,
+                    to_date: queryToDate,
+                    branch_code: ""
+                })
+            });
+
+            if (response.ok) {
+                const resData = await response.json();
+                const resultMessage = resData.message || { pos: [], sales: [] };
+                cachedInvoices = [...(resultMessage.pos || []), ...(resultMessage.sales || [])];
+
+                cachedInvoices.forEach(inv => {
+                    let seller = inv.custom_sales_person || inv.sales_partner || inv.owner;
+                    if (!seller || seller.trim() === "" || seller === "-") {
+                        seller = "N/A";
+                    }
+
+                    const cleanSellerLower = seller.trim().toLowerCase();
+                    if (EXCLUDED_SALESMEN.includes(cleanSellerLower)) {
+                        return;
+                    }
+
+                    const amount = parseFloat(inv.grand_total || 0);
+
+                    if (!salesmenMap[seller]) {
+                        salesmenMap[seller] = { name: seller, totalSales: 0, invoiceCount: 0, branch: inv.set_warehouse || "-" };
+                    }
+                    salesmenMap[seller].totalSales += amount;
+                    salesmenMap[seller].invoiceCount += 1;
+
+                    totalSalesSum += amount;
+                    totalInvoicesSum += 1;
+                });
+            }
+        } catch (err) {
+            console.warn("Error fetching salesmen data:", err);
+        }
+
+        document.getElementById('totalSalesAmount').textContent = totalSalesSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' SAR';
+        document.getElementById('totalInvoicesCount').textContent = `عدد الفواتير الإجمالي: ${totalInvoicesSum.toLocaleString('en-US')} فاتورة`;
+
+        let sortedSalesmen = Object.values(salesmenMap).sort((a, b) => b.totalSales - a.totalSales);
+
+        container.innerHTML = '';
+        if (sortedSalesmen.length === 0) {
+            container.innerHTML = `<div class="status-msg">لا توجد مبيعات مسجلة للموظفين في هذه الفترة</div>`;
+        } else {
+            sortedSalesmen.forEach((sm, index) => {
+                const card = document.createElement('div');
+                card.className = 'salesman-card';
+                card.innerHTML = `
+                    <div class="salesman-info">
+                        <div class="salesman-rank">#${index + 1}</div>
+                        <div class="salesman-details">
+                            <h3>${sm.name}</h3>
+                            <p>الفرع: ${sm.branch}</p>
+                        </div>
+                    </div>
+                    <div class="salesman-totals">
+                        <div class="amount">${sm.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <small>SAR</small></div>
+                        <div class="count">${sm.invoiceCount.toLocaleString('en-US')} فاتورة</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+    }
+
+    async function openHigh3Report() {
+        const modal = document.getElementById('high3Modal');
+        modal.classList.add('open');
+
+        let queryToDate = currentQueryTo || currentQueryFrom;
+        document.getElementById('dateRangeText').textContent = `${currentQueryFrom} TO ${queryToDate}`;
+
+        if (!cachedInvoices || cachedInvoices.length === 0) {
+            await loadTopSalesmen();
+        }
+
+        await fetchAndRenderHigh3WithRealReference();
+    }
+
+    function closeHigh3Modal() {
+        document.getElementById('high3Modal').classList.remove('open');
+    }
+
+    async function fetchAndRenderHigh3WithRealReference() {
+        const tbody = document.getElementById('high3TableBody');
+        tbody.innerHTML = `<tr><td colspan="8" style="padding: 25px; color: var(--text-muted);">جاري جلب البيانات والأرقام المرجعية...</td></tr>`;
+
+        try {
+            const filteredInvoices = cachedInvoices.filter(inv => parseFloat(inv.grand_total || 0) > 1000);
+            const sortedInvoices = filteredInvoices.sort((a, b) => parseFloat(b.grand_total || 0) - parseFloat(a.grand_total || 0));
+            const top3 = sortedInvoices.slice(0, 3);
+
+            if (top3.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="padding: 25px; color: var(--text-muted);">لا توجد فواتير بقيمة أكبر من 1000 ريال في هذه الفترة</td></tr>`;
+                return;
+            }
+
+            const invoiceNames = top3.map(inv => inv.name);
+            
+            const response = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
+                method: "POST",
+                headers: authHeaders,
+                body: JSON.stringify({
+                    doctype: "POS Invoice",
+                    filters: [["name", "in", invoiceNames]],
+                    fields: ["name", "custom_reference_doc_no"]
+                })
+            });
+
+            let refMap = {};
+            if (response.ok) {
+                const resData = await response.json();
+                if (resData.message) {
+                    resData.message.forEach(item => {
+                        refMap[item.name] = item.custom_reference_doc_no;
+                    });
+                }
+            }
+
+            renderHigh3TableWithMap(top3, refMap);
+
+        } catch (err) {
+            console.warn("Error fetching real reference, falling back to cache:", err);
+            renderHigh3TableWithMap(cachedInvoices.filter(inv => parseFloat(inv.grand_total || 0) > 1000).sort((a, b) => parseFloat(b.grand_total || 0) - parseFloat(a.grand_total || 0)).slice(0, 3), {});
+        }
+    }
+
+    function renderHigh3TableWithMap(top3, refMap) {
+        const tbody = document.getElementById('high3TableBody');
+        tbody.innerHTML = '';
+
+        if (!top3 || top3.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" style="padding: 25px; color: var(--text-muted);">لا توجد فواتير بقيمة أكبر من 1000 ريال في هذه الفترة</td></tr>`;
+            return;
+        }
+
+        const bonusRates = [0.025, 0.015, 0.01];
+
+        top3.forEach((inv, idx) => {
+            const realRef = refMap[inv.name] || inv.custom_reference_doc_no;
+            const docNum = (realRef && realRef.toString().trim() !== '') ? realRef : inv.name;
+
+            const dateStr = inv.posting_date || '-';
+            const branchName = inv.set_warehouse || '-';
+            const sellerId = '3031';
+            const associateName = inv.custom_sales_person || inv.sales_partner || inv.owner || 'N/A';
+            const grandTotal = parseFloat(inv.grand_total || 0);
+            
+            const bonusRate = bonusRates[idx] || 0.01;
+            const bonusAmount = grandTotal * bonusRate;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><span class="zatca-ref-pill">${docNum}</span></td>
+                <td>${dateStr}</td>
+                <td style="text-align: right;">${branchName}</td>
+                <td>${sellerId}</td>
+                <td style="font-weight: 800; text-align: right; color: var(--text-main);">${associateName}</td>
+                <td style="font-weight: 800; color: #059669;">${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                <td>${(bonusRate * 100).toFixed(2)}%</td>
+                <td class="bonus-amount-cell">${bonusAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <small style="font-size: 10px;">ر.س</small></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    async function shareToWhatsApp() {
+        const shareText = `Huge congrats to our Top 3 from last week! 🏆🔥\n\nYou guys absolutely crushed it. Now, let’s carry that same momentum into this week—the board is reset and the top spots are up for grabs.`;
+
+        const posterEl = document.getElementById('posterSection');
+        const tableEl = document.getElementById('tableSection');
+        const topBar = document.getElementById('modalTopBar');
+        const actionsBar = document.getElementById('shareActionsBar');
+
+        topBar.style.display = 'none';
+        actionsBar.style.display = 'none';
+
+        try {
+            const canvasPoster = await html2canvas(posterEl, { scale: 2, backgroundColor: '#ffffff' });
+            
+            const originalWidth = tableEl.style.width;
+            tableEl.style.width = '1000px';
+
+            const canvasTable = await html2canvas(tableEl, { 
+                scale: 2, 
+                backgroundColor: '#f8fafc',
+                windowWidth: 1100
+            });
+
+            tableEl.style.width = originalWidth;
+
+            topBar.style.display = 'flex';
+            actionsBar.style.display = 'flex';
+
+            canvasPoster.toBlob(async (blobPoster) => {
+                canvasTable.toBlob(async (blobTable) => {
+                    if (!blobPoster || !blobTable) {
+                        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
+                        return;
+                    }
+
+                    const filePoster = new File([blobPoster], 'Top3_Poster.png', { type: 'image/png' });
+                    const fileTable = new File([blobTable], 'Top3_Invoices_Table.png', { type: 'image/png' });
+
+                    if (navigator.canShare && navigator.canShare({ files: [filePoster, fileTable] })) {
+                        await navigator.share({
+                            title: 'Top 3 Sales Report',
+                            text: shareText,
+                            files: [filePoster, fileTable]
+                        });
+                    } else if (navigator.canShare && navigator.canShare({ files: [filePoster] })) {
+                        await navigator.share({
+                            title: 'Top 3 Sales Report',
+                            text: shareText,
+                            files: [filePoster]
+                        });
+                    } else {
+                        const link1 = document.createElement('a');
+                        link1.download = 'Top3_Poster.png';
+                        link1.href = canvasPoster.toDataURL('image/png');
+                        link1.click();
+
+                        const link2 = document.createElement('a');
+                        link2.download = 'Top3_Invoices_Table.png';
+                        link2.href = canvasTable.toDataURL('image/png');
+                        link2.click();
+
+                        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + '\n\n(تم تحميل البوستر والجدول كصور لإرفاقهما)')}`, '_blank');
+                    }
+                }, 'image/png');
+            }, 'image/png');
+
+        } catch (err) {
+            console.error("WhatsApp Share Error:", err);
+            topBar.style.display = 'flex';
+            actionsBar.style.display = 'flex';
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`, '_blank');
+        }
+    }
+
+    function shareToEmail() {
+        const subject = encodeURIComponent("Huge congrats to our Top 3! 🏆🔥");
+        const body = encodeURIComponent(`Huge congrats to our Top 3 from last week! 🏆🔥\n\nYou guys absolutely crushed it. Now, let’s carry that same momentum into this week.`);
+        window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    }
+
+    function downloadReportImage() {
+        const printableArea = document.getElementById('reportPrintableArea');
+        const topBar = document.getElementById('modalTopBar');
+        const actionsBar = document.getElementById('shareActionsBar');
+
+        topBar.style.display = 'none';
+        actionsBar.style.display = 'none';
+
+        html2canvas(printableArea, { scale: 2, backgroundColor: '#f8fafc' }).then(canvas => {
+            topBar.style.display = 'flex';
+            actionsBar.style.display = 'flex';
+
+            const link = document.createElement('a');
+            link.download = 'High3_Sales_Report.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }).catch(err => {
+            topBar.style.display = 'flex';
+            actionsBar.style.display = 'flex';
+        });
+    }
+</script>
+<script src="app.js"></script>
+</body>
+</html>

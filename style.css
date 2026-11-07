@@ -13,6 +13,7 @@
     --radius: 18px;
     --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
     
+    /* 🎨 توحيد تدرج خلفية الـ Header في جميع الصفحات نفس الـ Index تماماً */
     --header-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%);
     --btn-bg: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 }
@@ -46,7 +47,7 @@
 body {
     background-color: var(--bg-body);
     color: var(--text-main);
-    padding: 10px;
+    padding: 12px 8px;
     display: flex;
     justify-content: center;
     min-height: 100vh;
@@ -58,21 +59,20 @@ body {
     max-width: 1400px;
 }
 
-/* ========================================================
-   📱 إعدادات الموبايل (مضبوطة ومحمية من تداخل الأزرار)
-   ======================================================== */
+/* 🎨 ترويسة (Header) ثابتة وموحدة في كل الصفحات نفس الـ Index */
 header {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
     margin-bottom: 15px;
-    padding: 15px;
-    background: var(--header-bg);
-    color: #ffffff;
+    padding: 14px 16px;
+    background: var(--header-bg) !important;
+    color: #ffffff !important;
     border-radius: 14px;
     box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
-    border: 2px solid #38bdf8;
+    border: 2px solid #38bdf8 !important;
     position: relative;
     overflow: hidden;
 }
@@ -88,55 +88,49 @@ header::before {
 }
 
 .header-title-box h1 {
-    font-size: 17px;
-    color: #ffffff;
+    font-size: 16px;
+    color: #ffffff !important;
     font-weight: 700;
 }
 
 .header-title-box p {
     font-size: 11px;
-    color: #bae6fd;
+    color: #bae6fd !important;
     margin-top: 2px;
     font-weight: 600;
 }
 
-/* 🔒 الحفاظ على أزرار الهيدر في صف أفقي متناسق وأحجام ثابتة */
 .header-left-group {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 6px !important;
-    width: auto !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
 }
 
 .action-btn-icon, .action-btn {
-    background: rgba(255, 255, 255, 0.12);
-    border: 2px solid rgba(255, 255, 255, 0.25);
-    width: 38px !important;
-    height: 38px !important;
-    min-width: 38px !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 2px solid rgba(255, 255, 255, 0.25) !important;
+    width: 36px;
+    height: 36px;
     border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
-    color: #ffffff;
-    display: flex !important;
+    color: #ffffff !important;
+    display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 !important;
 }
 
 .lang-select {
-    background: rgba(255, 255, 255, 0.12);
-    border: 2px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 2px solid rgba(255, 255, 255, 0.25) !important;
     padding: 0 8px;
     border-radius: 10px;
     font-size: 11px;
     font-weight: 600;
-    color: #ffffff;
-    height: 38px !important;
-    width: auto !important;
+    color: #ffffff !important;
+    height: 36px;
     outline: none;
-    margin: 0 !important;
 }
 
 .lang-select option {
@@ -144,23 +138,27 @@ header::before {
     color: #ffffff;
 }
 
-/* 💎 الكروت والشبكات */
+/* 💎 الكروت والشبكات الافتراضية */
 .branch-card, 
 .dashboard-card, 
 .main-chart-card, 
 .filter-panel, 
 .chart-wrapper-box,
 .grand-total-side-box,
-.menu-item {
+.menu-item,
+.salesman-card,
+.tree-supplier-card,
+.tree-group-card {
     background: linear-gradient(145deg, var(--bg-card) 0%, rgba(37, 99, 235, 0.015) 100%) !important;
     border: 2px solid var(--border) !important;
     box-shadow: var(--shadow) !important;
     border-radius: 14px;
     padding: 14px;
     margin-bottom: 12px;
+    position: relative;
 }
 
-/* كارت الإحصائية الرئيسي */
+/* 🌟 كارت الإحصائية الرئيسي */
 .hero-card {
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%) !important;
     color: #ffffff !important;
@@ -226,26 +224,24 @@ header::before {
 }
 .hero-sub-stat-box.profit-box span { color: #6ee7b7; }
 
-/* 🔒 أزرار فلاتر التاريخ (صف يحتوي على 3 أعمدة مرتبة) */
+/* 📅 فلاتر التاريخ */
 .period-chips {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 6px !important;
-    margin-bottom: 12px !important;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 10px;
 }
 
 .chip {
     background: var(--accent-light);
     border: 1.5px solid var(--accent-border) !important;
-    padding: 10px 4px;
+    padding: 8px 4px;
     border-radius: 8px;
     font-size: 11px !important;
     font-weight: 700;
     text-align: center;
     cursor: pointer;
     color: var(--accent);
-    width: auto !important;
-    margin: 0 !important;
 }
 
 .chip.active {
@@ -254,22 +250,15 @@ header::before {
     border-color: var(--accent) !important;
 }
 
-/* 🎯 الأزرار الكبيرة والعمليات التقارير والموردين (تحديد دقيق بالاسم بدلاً من الإشراك العام) */
-.action-full-btn, 
-.custom-action-btn, 
-.bottom-actions-grid button, 
-.action-buttons-wrapper button,
-.report-btn,
-.supplier-btn {
-    display: block !important;
+.action-full-btn, .custom-action-btn, button:not(.chip):not(.action-btn-icon) {
     width: 100% !important;
-    margin: 0 0 10px 0 !important;
-    padding: 12px !important;
-    border-radius: 12px !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    text-align: center !important;
-    box-sizing: border-box !important;
+    display: block;
+    margin-bottom: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
 }
 
 footer {
@@ -279,9 +268,8 @@ footer {
     color: var(--text-muted);
 }
 
-
 /* ========================================================
-   💻 تخصيص الكمبيوتر (تعمل فقط عندما يكون العرض أسرع وأكبر من 768px)
+   💻 للشاشات الكبيرة والكمبيوتر (أعمدة متناسقة)
    ======================================================== */
 @media (min-width: 768px) {
     body {
@@ -290,6 +278,7 @@ footer {
     }
 
     header {
+        flex-wrap: nowrap;
         padding: 20px 25px;
     }
 
@@ -298,13 +287,13 @@ footer {
     }
 
     .action-btn-icon, .action-btn {
-        width: 44px !important;
-        height: 44px !important;
+        width: 44px;
+        height: 44px;
         font-size: 16px;
     }
 
     .lang-select {
-        height: 44px !important;
+        height: 44px;
         font-size: 13px;
         padding: 0 14px;
     }
@@ -327,9 +316,9 @@ footer {
     }
 
     .period-chips {
-        display: flex !important;
-        flex-direction: row-reverse !important;
-        gap: 10px !important;
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 10px;
     }
 
     .chip {
@@ -338,21 +327,116 @@ footer {
         padding: 12px;
     }
 
-    .action-buttons-wrapper, .bottom-actions-grid {
+    /* 🎯 صفحة الموردين (2 أعمدة) */
+    .tree-container {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px !important;
+        gap: 20px !important;
+        align-items: start;
     }
 
-    .action-full-btn, 
-    .custom-action-btn, 
-    .bottom-actions-grid button, 
-    .action-buttons-wrapper button,
-    .report-btn,
-    .supplier-btn {
-        width: 100% !important;
+    /* 🎯 باقي الصفحات (3 أعمدة) */
+    .salesmen-list, 
+    .branches-list, 
+    .branches-grid, 
+    .cards-grid, 
+    .dashboard-grid, 
+    .grid-container {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 20px !important;
+    }
+
+    .salesman-card, .branch-card, .dashboard-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 18px;
         margin-bottom: 0 !important;
-        font-size: 13px !important;
-        padding: 12px !important;
+    }
+
+    .branch-card-header {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        border-bottom: 2px dashed var(--border);
+        padding-bottom: 10px;
+        width: 100%;
+    }
+
+    .branch-sales-total {
+        text-align: right;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--bg-body);
+        padding: 8px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+    }
+
+    .branch-sales-total .amount {
+        font-size: 16px !important;
+    }
+
+    .branch-metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        width: 100%;
+    }
+
+    .metric-cell {
+        padding: 8px 4px !important;
+        text-align: center;
+    }
+
+    .metric-cell .m-val {
+        font-size: 11px !important;
+    }
+
+    .branch-profit-banner {
+        padding: 8px 10px;
+        font-size: 12px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .salesman-info, .branch-info {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .salesman-totals, .branch-totals {
+        width: 100%;
+        text-align: right;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+        margin-top: 4px;
+    }
+
+    .salesman-totals .amount, .branch-totals .amount {
+        font-size: 18px;
+    }
+
+    .action-buttons-wrapper, .bottom-actions-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .action-full-btn, .custom-action-btn, button:not(.chip):not(.action-btn-icon) {
+        width: auto !important;
+        margin-bottom: 0;
+        font-size: 13px;
+        padding: 12px;
     }
 }
