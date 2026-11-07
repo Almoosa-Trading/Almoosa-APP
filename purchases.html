@@ -8,27 +8,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2026.5">
 
     <style>
         .main-container {
             width: 100%;
             max-width: 1350px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 15px;
         }
 
-        /* 🎨 ترويسة احترافية موحدة */
+        /* 📱 ترويسة ثابتة وموحدة تضمن بقاء الأزرار في سطر واحد على الجوال */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding: 20px 28px;
-            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(37, 99, 235, 0.03) 100%);
-            border-radius: 18px;
-            box-shadow: var(--shadow);
-            border: 2px solid var(--border);
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            gap: 6px !important;
+            margin-bottom: 20px !important;
+            padding: 12px 14px !important;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
+            color: #ffffff !important;
+            border-radius: 14px !important;
+            box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
+            border: 2px solid #38bdf8 !important;
             position: relative;
             overflow: hidden;
         }
@@ -40,88 +44,116 @@
             left: 0;
             right: 0;
             height: 3px;
-            background: linear-gradient(90deg, #2563eb, #3b82f6, #10b981);
+            background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
+        }
+
+        .header-title-box {
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
         }
 
         .header-title-box h1 {
-            font-size: 18px;
-            color: var(--text-main);
+            font-size: 14px !important;
+            color: #ffffff !important;
             font-weight: 800;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            margin: 0 !important;
             line-height: 1.3;
         }
 
         .header-title-box p {
-            font-size: 11.5px;
-            color: var(--text-muted);
-            margin-top: 3px;
-            font-weight: 700;
+            font-size: 9.5px !important;
+            color: #bae6fd !important;
+            margin: 0 !important;
+            font-weight: 600;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
         }
 
         .header-left-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            gap: 4px !important;
+            flex-shrink: 0 !important;
+            width: auto !important;
         }
 
         .action-btn-icon {
-            background: var(--bg-body);
-            border: 2px solid var(--border);
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.15) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
+            max-width: 32px !important;
+            border-radius: 8px !important;
             cursor: pointer;
-            font-size: 16px;
-            color: var(--text-main);
+            font-size: 13px !important;
+            color: #ffffff !important;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
             transition: all 0.25s;
         }
         .action-btn-icon:hover {
-            border-color: var(--accent);
-            color: var(--accent);
+            background: rgba(255, 255, 255, 0.25) !important;
+            border-color: #ffffff !important;
             transform: translateY(-2px);
         }
 
         .lang-select {
-            background: var(--bg-body);
-            border: 2px solid var(--border);
-            padding: 0 14px;
-            border-radius: 14px;
-            font-size: 12px;
+            background: rgba(255, 255, 255, 0.15) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            padding: 0 4px !important;
+            border-radius: 8px !important;
+            font-size: 10px !important;
             font-weight: 700;
             cursor: pointer;
-            color: var(--text-main);
+            color: #ffffff !important;
             outline: none;
-            height: 44px;
+            height: 32px !important;
+            flex-shrink: 0 !important;
+            width: auto !important;
+            margin: 0 !important;
+        }
+        .lang-select option {
+            background: #1e293b;
+            color: #ffffff;
         }
 
         .filter-bar {
             background: var(--bg-card);
             border: 2px solid var(--border);
             border-radius: 18px;
-            padding: 20px 24px;
-            margin-bottom: 25px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
             box-shadow: var(--shadow);
             display: flex;
-            gap: 16px;
+            gap: 12px;
             align-items: center;
             flex-wrap: wrap;
         }
 
         .search-input {
             flex: 1;
-            min-width: 280px;
+            min-width: 260px;
             background: var(--bg-body);
             border: 2px solid var(--border);
             color: var(--text-main);
-            padding: 12px 16px;
-            border-radius: 14px;
-            font-size: 13px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 12.5px;
             font-weight: 700;
             outline: none;
-            height: 46px;
+            height: 42px;
             transition: border-color 0.2s;
         }
         .search-input:focus { border-color: var(--accent); }
@@ -130,7 +162,7 @@
             background: var(--bg-card);
             border: 2px solid var(--border);
             border-radius: 18px;
-            padding: 24px;
+            padding: 16px;
             box-shadow: var(--shadow);
             overflow-x: auto;
             margin-bottom: 30px;
@@ -139,12 +171,12 @@
         .report-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12.5px;
-            min-width: 900px;
+            font-size: 12px;
+            min-width: 850px;
         }
 
         .report-table th, .report-table td {
-            padding: 14px 16px;
+            padding: 12px 14px;
             border-bottom: 1.5px solid var(--border);
             text-align: right;
             white-space: nowrap;
@@ -169,9 +201,9 @@
         .shipment-no-badge {
             background: rgba(245, 158, 11, 0.15);
             color: #f59e0b;
-            padding: 6px 12px;
-            border-radius: 10px;
-            font-size: 11.5px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 11px;
             font-weight: 850;
             display: inline-block;
             border: 1px solid rgba(245, 158, 11, 0.3);
@@ -180,9 +212,9 @@
         .receipt-id-badge {
             background: rgba(59, 130, 246, 0.15);
             color: #3b82f6;
-            padding: 6px 12px;
-            border-radius: 10px;
-            font-size: 11.5px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 11px;
             font-weight: 850;
             display: inline-block;
             border: 1px solid rgba(59, 130, 246, 0.3);
@@ -191,19 +223,48 @@
         .badge-qty {
             background: rgba(16, 185, 129, 0.15);
             color: #10b981;
-            padding: 6px 12px;
-            border-radius: 12px;
+            padding: 5px 10px;
+            border-radius: 10px;
             font-weight: 850;
-            font-size: 11.5px;
+            font-size: 11px;
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .status-box {
             text-align: center;
-            padding: 40px;
+            padding: 30px;
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
+        }
+
+        /* 💻 للشاشات الكبيرة والكمبيوتر */
+        @media (min-width: 768px) {
+            header {
+                padding: 20px 28px !important;
+            }
+            .header-title-box h1 {
+                font-size: 18px !important;
+            }
+            .header-title-box p {
+                font-size: 11.5px !important;
+            }
+            .action-btn-icon {
+                width: 44px !important;
+                height: 44px !important;
+                min-width: 44px !important;
+                font-size: 16px !important;
+                border-radius: 14px !important;
+            }
+            .lang-select {
+                height: 44px !important;
+                font-size: 12px !important;
+                padding: 0 14px !important;
+                border-radius: 14px !important;
+            }
+            .header-left-group {
+                gap: 10px !important;
+            }
         }
     </style>
 </head>
@@ -233,7 +294,7 @@
 
     <div class="filter-bar">
         <input type="text" id="searchInput" class="search-input" placeholder="بحث برقم السند، رقم الشحنة، اسم المورد..." onkeyup="filterTable()" data-i18n-placeholder="search_placeholder">
-        <span id="recordCount" style="font-size: 12.5px; color: var(--text-muted); font-weight: 800;">جاري التحميل...</span>
+        <span id="recordCount" style="font-size: 12px; color: var(--text-muted); font-weight: 800;">جاري التحميل...</span>
     </div>
 
     <div class="table-wrapper">
