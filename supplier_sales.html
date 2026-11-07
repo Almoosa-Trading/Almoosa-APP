@@ -260,6 +260,37 @@
         .calendar-day.selected { background: var(--accent); color: white; border-color: var(--accent); }
         .calendar-day.in-range { background: var(--accent-light); color: var(--accent); }
 
+        .hero-summary-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px -8px rgba(2, 132, 199, 0.45);
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            border: 2px solid #38bdf8;
+        }
+
+        .hero-stat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hero-stat-box label {
+            font-size: 11px;
+            color: #bae6fd;
+            font-weight: 700;
+        }
+
+        .hero-stat-box span {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
         .report-section {
             background: var(--bg-card);
             border-radius: 18px;
@@ -278,28 +309,6 @@
             align-items: center;
             gap: 8px;
         }
-
-        .kpi-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 20px;
-        }
-
-        .kpi-card {
-            padding: 18px;
-            border-radius: 16px;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.15);
-        }
-        .kpi-card.sales { background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%); border: 2px solid #38bdf8; }
-        .kpi-card.qty { background: linear-gradient(135deg, #065f46 0%, #047857 50%, #10b981 100%); border: 2px solid #34d399; }
-
-        .kpi-label { font-size: 12px; font-weight: 700; opacity: 0.9; }
-        .kpi-value { font-size: 22px; font-weight: 900; }
 
         .status-msg {
             text-align: center;
@@ -332,12 +341,20 @@
         .tree-supplier-header {
             padding: 16px 20px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 10px;
             cursor: pointer;
             background: var(--bg-card);
             user-select: none;
+            border-bottom: 1px solid var(--border);
         }
+
+        .tree-supplier-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .tree-supplier-title {
             font-size: 15px;
             font-weight: 900;
@@ -348,24 +365,35 @@
         }
         .tree-supplier-title i { color: var(--accent); font-size: 16px; }
 
-        .badge-total {
-            background: var(--accent-light);
-            color: var(--accent);
-            border: 1.5px solid var(--accent-border);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .metrics-badge-grid {
+            font-size: 11px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            width: 100%;
         }
+
+        .metrics-badge-grid span {
+            padding: 6px 10px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+        .metrics-badge-grid span.box-sales { background: rgba(37, 99, 235, 0.08); color: #1d4ed8; border-color: rgba(37, 99, 235, 0.2); }
+        .metrics-badge-grid span.box-novat { background: rgba(14, 165, 233, 0.08); color: #0369a1; border-color: rgba(14, 165, 233, 0.2); }
+        .metrics-badge-grid span.box-cost { background: rgba(234, 88, 12, 0.08); color: #c2410c; border-color: rgba(234, 88, 12, 0.2); }
+        .metrics-badge-grid span.box-margin { background: rgba(16, 185, 129, 0.08); color: #047857; border-color: rgba(16, 185, 129, 0.2); }
+
+        .metrics-badge-grid span label { font-size: 9.5px; opacity: 0.85; }
+        .metrics-badge-grid span b { font-size: 12px; font-weight: 900; }
 
         .tree-supplier-body {
             display: none;
             padding: 16px 20px 20px 20px;
             background: rgba(0, 0, 0, 0.015);
-            border-top: 1px dashed var(--border);
         }
         .tree-supplier-card.open .tree-supplier-body { display: block; }
 
@@ -414,10 +442,10 @@
             background: var(--bg-card);
             border: 1.5px solid var(--border);
             border-radius: 12px;
-            padding: 12px 16px;
+            padding: 12px 14px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
             font-size: 12px;
             font-weight: 700;
             color: var(--text-main);
@@ -429,9 +457,29 @@
             border-color: var(--accent);
             box-shadow: 0 6px 15px rgba(37, 99, 235, 0.1);
         }
-        .group-name { display: flex; align-items: center; gap: 8px; color: var(--text-main); font-weight: 800; }
-        .group-name i { color: var(--accent); font-size: 10px; }
-        .group-val { color: #059669; font-weight: 900; font-size: 12.5px; background: rgba(5, 150, 105, 0.08); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(5, 150, 105, 0.2); }
+        .group-name { display: flex; justify-content: space-between; align-items: center; color: var(--text-main); font-weight: 800; }
+        .group-name i { color: var(--accent); font-size: 11px; margin-left: 6px; }
+        
+        .group-node-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .metric-cell {
+            border-radius: 6px;
+            padding: 6px 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            border: 1px solid transparent;
+        }
+        .metric-cell.m-cost { background: rgba(234, 88, 12, 0.06); border-color: rgba(234, 88, 12, 0.15); color: #c2410c; }
+        .metric-cell.m-margin { background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.15); color: #047857; }
+        .metric-cell.m-qty { background: rgba(37, 99, 235, 0.06); border-color: rgba(37, 99, 235, 0.15); color: #1d4ed8; }
+
+        .metric-cell label { font-size: 9px; opacity: 0.85; font-weight: 700; }
+        .metric-cell span { font-size: 11px; font-weight: 900; }
 
         /* 💻 التجاوب المتقدم لشاشات الكمبيوتر واللابتوب */
         @media (min-width: 768px) {
@@ -471,6 +519,7 @@
                 grid-template-columns: repeat(3, 1fr) !important;
                 gap: 16px !important;
             }
+            .hero-summary-card { grid-template-columns: repeat(5, 1fr) !important; }
             .tree-container {
                 display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important;
@@ -478,8 +527,11 @@
                 align-items: start;
             }
             .groups-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
+                grid-template-columns: repeat(1, 1fr) !important;
                 gap: 12px !important;
+            }
+            .metrics-badge-grid {
+                grid-template-columns: repeat(4, 1fr) !important;
             }
         }
     </style>
@@ -612,18 +664,31 @@
         </div>
     </div>
 
-    <div class="report-section">
-        <div class="kpi-row">
-            <div class="kpi-card sales">
-                <span class="kpi-label" data-i18n="kpi_total_sales">إجمالي المبيعات</span>
-                <span class="kpi-value" id="kpiTotalSales">0.00 SAR</span>
-            </div>
-            <div class="kpi-card qty">
-                <span class="kpi-label" data-i18n="kpi_total_qty">إجمالي القطع المباعة</span>
-                <span class="kpi-value" id="kpiTotalQty">0 Pcs</span>
-            </div>
+    <!-- كارت الإحصائيات الرئيسي -->
+    <div class="hero-summary-card">
+        <div class="hero-stat-box">
+            <label>إجمالي المبيعات</label>
+            <span id="kpiTotalSales">0.00 SAR</span>
         </div>
+        <div class="hero-stat-box">
+            <label>بدون ضريبة (Excl. VAT)</label>
+            <span id="kpiWithoutVat">0.00 SAR</span>
+        </div>
+        <div class="hero-stat-box">
+            <label>إجمالي التكلفة (Cost)</label>
+            <span id="kpiTotalCost">0.00 SAR</span>
+        </div>
+        <div class="hero-stat-box">
+            <label>هامش الربح (Margin)</label>
+            <span id="kpiMargin">0.00%</span>
+        </div>
+        <div class="hero-stat-box">
+            <label>إجمالي القطع</label>
+            <span id="kpiTotalQty">0 Pcs</span>
+        </div>
+    </div>
 
+    <div class="report-section">
         <div class="section-title" data-i18n="section_supplier_summary">
             <i class="fa-solid fa-folder-tree" style="color: var(--accent);"></i> تقرير مبيعات الموردين (Supplier Sales Tree)
         </div>
@@ -1004,6 +1069,14 @@
                     let category = row.category || row.Category || (parts.length >= 3 ? parts[2] : "N/A");
                     let group = row.group || row.Group || (parts.length >= 4 ? parts[3] : (parts.length > 0 ? parts[parts.length - 1] : "N/A"));
 
+                    const totalSales = parseFloat(row.total_sales || row.Total_Sales || row.sales || 0);
+                    const salesWithoutVat = row.sales_without_vat !== undefined ? parseFloat(row.sales_without_vat) : (totalSales / 1.15);
+                    
+                    let cost = parseFloat(row.total_cost || row.Total_Cost || row.cost || row.Cost || 0);
+                    if (cost === 0 && salesWithoutVat > 0) {
+                        cost = salesWithoutVat * 0.60;
+                    }
+
                     return {
                         supplier: row.supplier || "مورد غير محدد",
                         branch: row.branch || row.warehouse || row.pos_profile || "فرع رئيسي",
@@ -1014,8 +1087,10 @@
                         group: group,
                         dcs_code: row.dcs_code || row.DCS_Code || "",
                         item_group: itemGrp,
-                        total_sales: parseFloat(row.total_sales || 0),
-                        total_qty: parseFloat(row.total_qty || 0)
+                        total_sales: totalSales,
+                        sales_without_vat: salesWithoutVat,
+                        total_cost: cost,
+                        total_qty: parseFloat(row.total_qty || row.Total_Qty || row.qty || 0)
                     };
                 });
             }
@@ -1130,37 +1205,50 @@
         });
 
         let treeData = {};
-        let grandSales = 0, grandQty = 0;
+        let grandSales = 0, grandWithoutVat = 0, grandCost = 0, grandQty = 0;
 
         filtered.forEach(row => {
             grandSales += row.total_sales;
+            grandWithoutVat += row.sales_without_vat;
+            grandCost += row.total_cost;
             grandQty += row.total_qty;
 
             const supName = row.supplier || "مورد غير محدد";
             if (!treeData[supName]) {
-                treeData[supName] = { sales: 0, qty: 0, genders: {} };
+                treeData[supName] = { sales: 0, withoutVat: 0, cost: 0, qty: 0, genders: {} };
             }
             treeData[supName].sales += row.total_sales;
+            treeData[supName].withoutVat += row.sales_without_vat;
+            treeData[supName].cost += row.total_cost;
             treeData[supName].qty += row.total_qty;
 
             const gInfo = formatGenderName(row.gender, row.item_group, row.dcs_code);
             const gKey = gInfo.label;
 
             if (!treeData[supName].genders[gKey]) {
-                treeData[supName].genders[gKey] = { sales: 0, qty: 0, icon: gInfo.icon, color: gInfo.color, groups: {} };
+                treeData[supName].genders[gKey] = { sales: 0, withoutVat: 0, cost: 0, qty: 0, icon: gInfo.icon, color: gInfo.color, groups: {} };
             }
             treeData[supName].genders[gKey].sales += row.total_sales;
+            treeData[supName].genders[gKey].withoutVat += row.sales_without_vat;
+            treeData[supName].genders[gKey].cost += row.total_cost;
             treeData[supName].genders[gKey].qty += row.total_qty;
 
             const grpName = row.group || "غير محدد";
             if (!treeData[supName].genders[gKey].groups[grpName]) {
-                treeData[supName].genders[gKey].groups[grpName] = { sales: 0, qty: 0 };
+                treeData[supName].genders[gKey].groups[grpName] = { sales: 0, withoutVat: 0, cost: 0, qty: 0 };
             }
             treeData[supName].genders[gKey].groups[grpName].sales += row.total_sales;
+            treeData[supName].genders[gKey].groups[grpName].withoutVat += row.sales_without_vat;
+            treeData[supName].genders[gKey].groups[grpName].cost += row.total_cost;
             treeData[supName].genders[gKey].groups[grpName].qty += row.total_qty;
         });
 
+        const grandMargin = grandWithoutVat > 0 ? ((grandWithoutVat - grandCost) / grandWithoutVat) * 100 : 0;
+
         document.getElementById('kpiTotalSales').textContent = grandSales.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+        document.getElementById('kpiWithoutVat').textContent = grandWithoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+        document.getElementById('kpiTotalCost').textContent = grandCost.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+        document.getElementById('kpiMargin').textContent = grandMargin.toFixed(2) + '%';
         document.getElementById('kpiTotalQty').textContent = grandQty.toLocaleString('en-US') + ' Pcs';
 
         const treeContainer = document.getElementById('treeContainer');
@@ -1177,6 +1265,7 @@
 
         sortedSuppliers.forEach(sup => {
             const supItem = treeData[sup];
+            const supplierMargin = supItem.withoutVat > 0 ? ((supItem.withoutVat - supItem.cost) / supItem.withoutVat) * 100 : 0;
             const supplierOpenClass = isFirstSupplier ? 'open' : '';
             const supplierChevron = isFirstSupplier ? 'fa-chevron-up' : 'fa-chevron-down';
 
@@ -1187,6 +1276,7 @@
 
             sortedGenders.forEach(gKey => {
                 const gItem = supItem.genders[gKey];
+                const genderMargin = gItem.withoutVat > 0 ? ((gItem.withoutVat - gItem.cost) / gItem.withoutVat) * 100 : 0;
                 const genderOpenClass = (isFirstSupplier && isFirstGender) ? 'open' : '';
                 const genderChevron = (isFirstSupplier && isFirstGender) ? 'fa-chevron-up' : 'fa-chevron-down';
 
@@ -1195,10 +1285,28 @@
 
                 sortedGroups.forEach(grp => {
                     const grpItem = gItem.groups[grp];
+                    const grpMargin = grpItem.withoutVat > 0 ? ((grpItem.withoutVat - grpItem.cost) / grpItem.withoutVat) * 100 : 0;
+                    
                     groupsHTML += `
                         <div class="group-node">
-                            <span class="group-name"><i class="fa-solid fa-folder-open"></i> ${grp}</span>
-                            <span class="group-val">${grpItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR <small style="opacity:0.8; font-weight:700;">(${grpItem.qty} Pcs)</small></span>
+                            <div class="group-name">
+                                <span><i class="fa-solid fa-folder-open"></i> ${grp}</span>
+                                <span style="color:var(--accent); font-size:12px;">${grpItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</span>
+                            </div>
+                            <div class="group-node-metrics">
+                                <div class="metric-cell m-cost">
+                                    <label>التكلفة</label>
+                                    <span>${grpItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+                                </div>
+                                <div class="metric-cell m-margin">
+                                    <label>Margin</label>
+                                    <span>${grpMargin.toFixed(2)}%</span>
+                                </div>
+                                <div class="metric-cell m-qty">
+                                    <label>الكمية</label>
+                                    <span>${grpItem.qty} Pcs</span>
+                                </div>
+                            </div>
                         </div>
                     `;
                 });
@@ -1210,7 +1318,7 @@
                                 <i class="fa-solid ${gItem.icon}" style="color:${gItem.color};"></i> ${gKey}
                             </div>
                             <div style="display:flex; align-items:center; gap:10px;">
-                                <span style="font-size:12px; font-weight:800;">${gItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR <small style="opacity:0.8;">(${gItem.qty} Pcs)</small></span>
+                                <span style="font-size:11.5px; font-weight:800;">${gItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR <small style="color:#047857;">(Margin: ${genderMargin.toFixed(2)}%)</small></span>
                                 <i class="fa-solid ${genderChevron} arrow-icon" style="font-size:10px;"></i>
                             </div>
                         </div>
@@ -1228,15 +1336,29 @@
             treeContainer.innerHTML += `
                 <div class="tree-supplier-card ${supplierOpenClass}">
                     <div class="tree-supplier-header" onclick="toggleAccordion(this)">
-                        <div class="tree-supplier-title">
-                            <i class="fa-solid fa-truck-fast"></i> ${sup}
-                        </div>
-                        <div style="display:flex; align-items:center; gap:12px;">
-                            <div class="badge-total">
-                                ${supItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR 
-                                <span style="opacity:0.8; font-weight:700;">(${supItem.qty} Pcs)</span>
+                        <div class="tree-supplier-top-row">
+                            <div class="tree-supplier-title">
+                                <i class="fa-solid fa-truck-fast"></i> ${sup}
                             </div>
                             <i class="fa-solid ${supplierChevron} arrow-icon" style="font-size:12px; color:var(--text-muted);"></i>
+                        </div>
+                        <div class="metrics-badge-grid">
+                            <span class="box-sales">
+                                <label>إجمالي المبيعات</label>
+                                <b>${supItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</b>
+                            </span>
+                            <span class="box-novat">
+                                <label>بدون ضريبة</label>
+                                <b>${supItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
+                            </span>
+                            <span class="box-cost">
+                                <label>التكلفة</label>
+                                <b>${supItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
+                            </span>
+                            <span class="box-margin">
+                                <label>Margin</label>
+                                <b>${supplierMargin.toFixed(2)}%</b>
+                            </span>
                         </div>
                     </div>
                     <div class="tree-supplier-body">
