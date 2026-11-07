@@ -27,7 +27,7 @@
             padding: 10px;
         }
 
-        /* 📱 هيدر مرتب وصارم يمنع تمدد الأزرار */
+        /* 📱 هيدر مرتب وصارم يمنع تمدد الأزرار ويجعلها في سطر واحد */
         header {
             display: flex !important;
             flex-direction: row !important;
@@ -35,13 +35,25 @@
             align-items: center !important;
             flex-wrap: nowrap !important;
             gap: 6px !important;
-            margin-bottom: 15px !important;
+            margin-bottom: 20px !important;
             padding: 12px 14px !important;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
             color: #ffffff !important;
             border-radius: 14px !important;
             box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
             border: 2px solid #38bdf8 !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
         }
 
         .header-title-box {
@@ -57,6 +69,7 @@
             overflow: hidden !important;
             text-overflow: ellipsis !important;
             margin: 0 !important;
+            line-height: 1.3;
         }
 
         .header-title-box p {
@@ -79,8 +92,7 @@
             width: auto !important;
         }
 
-        /* إعطاء أبعاد ثابتة وصغيرة تمنع تمدد أزرار الهيدر تحت أي ظرف */
-        .header-left-group .action-btn-icon {
+        .action-btn-icon {
             background: rgba(255, 255, 255, 0.15) !important;
             border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
             width: 32px !important;
@@ -94,12 +106,20 @@
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
+            text-decoration: none;
             padding: 0 !important;
             margin: 0 !important;
             flex-shrink: 0 !important;
+            transition: all 0.25s;
         }
 
-        .header-left-group .lang-select {
+        .action-btn-icon:hover {
+            background: rgba(255, 255, 255, 0.25) !important;
+            border-color: #ffffff !important;
+            transform: translateY(-2px);
+        }
+
+        .lang-select {
             background: rgba(255, 255, 255, 0.15) !important;
             border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
             padding: 0 4px !important;
@@ -109,6 +129,7 @@
             color: #ffffff !important;
             height: 32px !important;
             outline: none;
+            cursor: pointer;
             margin: 0 !important;
             flex-shrink: 0 !important;
             width: auto !important;
@@ -125,14 +146,6 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 14px;
             padding: 5px 0;
-        }
-
-        @media (min-width: 640px) {
-            .odoo-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
-        }
-
-        @media (min-width: 900px) {
-            .odoo-grid { grid-template-columns: repeat(6, 1fr); gap: 24px; }
         }
 
         .odoo-app-card {
@@ -199,6 +212,20 @@
             border-radius: 4px;
             z-index: 2;
         }
+
+        @media (min-width: 640px) {
+            .odoo-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+            header { padding: 20px 28px !important; }
+            .header-title-box h1 { font-size: 18px !important; }
+            .header-title-box p { font-size: 11.5px !important; }
+            .action-btn-icon { width: 44px !important; height: 44px !important; min-width: 44px !important; font-size: 16px !important; border-radius: 14px !important; }
+            .lang-select { height: 44px !important; font-size: 12px !important; padding: 0 14px !important; border-radius: 14px !important; }
+        }
+
+        @media (min-width: 900px) {
+            .odoo-grid { grid-template-columns: repeat(6, 1fr); gap: 24px; }
+            .dashboard-container { max-width: 1350px !important; padding: 0 20px; }
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -210,7 +237,6 @@
             <p data-i18n="dash_subheader">النظام الإداري الموحد - الموسى التجارية</p>
         </div>
         <div class="header-left-group">
-            <!-- أضفنا الكلاس action-btn-icon هنا لضمان بقائها صغيرة وعدم تمددها -->
             <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
                 <i class="fa-solid fa-moon" id="themeIcon"></i>
             </button>

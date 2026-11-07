@@ -5,12 +5,12 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title data-i18n="page_title">مبيعات الفروع - الموسى التجارية</title>
+    <title data-i18n="sales_page_title">مبيعات الفروع - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- ربط ملف التنسيقات المشترك -->
-    <link rel="stylesheet" href="style.css?v=2026.5">
+    <link rel="stylesheet" href="style.css?v=2026.8">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
@@ -1029,7 +1029,7 @@
 
         <div class="controls-row">
             <div class="control-group">
-                <span class="control-label" data-i18n="label_date">التاريخ:</span>
+                <span class="control-label" data-i18n="label_time_range">النطاق الزمني:</span>
                 <div class="date-toggle-btn" onclick="toggleCalendar()">
                     <span id="dateButtonText" data-i18n="btn_choose_range">اختر النطاق...</span>
                     <span>▼</span>
@@ -1053,7 +1053,7 @@
             </div>
         </div>
 
-        <!-- أزرار الإجراءات منظمة بشكل احترافي في شبكة -->
+        <!-- أزرار الإجراءات مع ربطها بوسوم الترجمة data-i18n بشكل كامل -->
         <div class="action-buttons-grid">
             <button class="report-btn" onclick="openReportModal()" data-i18n="btn_comprehensive_report">
                 📊 التقرير الشامل
@@ -1061,13 +1061,13 @@
             <button class="report-btn" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);" onclick="openMultiDashboardModal()" data-i18n="btn_dashboard">
                 📈 لوحة المؤشرات
             </button>
-            <a href="supplier_sales.html" class="report-btn" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);" data-i18n="btn_supplier_sales">
+            <a href="supplier_sales.html" class="report-btn" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);" data-i18n="menu_supplier_sales">
                 🏢 مبيعات الموردين
             </a>
-            <a href="sales_group.html" class="report-btn" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);" data-i18n="btn_sales_group">
+            <a href="sales_group.html" class="report-btn" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);" data-i18n="menu_sales_group">
                 🏷️ مبيعات المجموعات
             </a>
-            <a href="top_salesman.html" class="report-btn" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%); grid-column: span 2;" data-i18n="btn_top_salesman">
+            <a href="top_salesman.html" class="report-btn" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%); grid-column: span 2;" data-i18n="menu_top_salesman">
                 ⭐ أفضل موظفي المبيعات (Top Sales)
             </a>
         </div>
@@ -1076,7 +1076,7 @@
     <!-- كارت الإجمالي الرئيسي بتدرج وتصميم احترافي -->
     <div class="hero-card">
         <div class="hero-title">
-            <span id="periodLabel" data-i18n="hero_total_sales">إجمالي المبيعات (شامل الضريبة)</span>
+            <span id="periodLabel" data-i18n="kpi_total_sales">إجمالي المبيعات (شامل الضريبة)</span>
             <div class="hero-badges-group">
                 <span class="hero-badge" id="invoiceCountBadge">0 invoices</span>
                 <span class="hero-badge" id="totalQtyBadge">0 pcs</span>
@@ -1086,19 +1086,19 @@
         
         <div class="hero-grid-stats">
             <div class="hero-sub-stat-box">
-                <label>بدون الضريبة (Excl. VAT):</label>
+                <label data-i18n="kpi_without_vat">بدون الضريبة (Excl. VAT):</label>
                 <span id="totalSalesExclTax">0.00 SAR</span>
             </div>
             <div class="hero-sub-stat-box tax-box">
-                <label>الضريبة (VAT 15%):</label>
+                <label data-i18n="kpi_vat_15">الضريبة (VAT 15%):</label>
                 <span id="totalTaxAmount">0.00 SAR</span>
             </div>
             <div class="hero-sub-stat-box cost-box">
-                <label data-i18n="hero_cost">إجمالي التكلفة (Cost):</label>
+                <label data-i18n="kpi_total_cost">إجمالي التكلفة (Cost):</label>
                 <span id="totalCostAmount">0.00 SAR</span>
             </div>
             <div class="hero-sub-stat-box profit-box">
-                <label data-i18n="hero_margin">الربح الصافي (Profit):</label>
+                <label data-i18n="kpi_margin">الربح الصافي (Profit):</label>
                 <span id="totalMarginAmount">0.00 SAR (0%)</span>
             </div>
         </div>
@@ -1664,8 +1664,16 @@
 
         const sortedRows = [...filteredRows].sort((a, b) => parseFloat(b.Total_Sales) - parseFloat(a.Total_Sales));
 
+        const noDataText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_no_data) ? translations[currentLang].status_no_data : "لا توجد مبيعات مسجلة في هذه الفترة";
+
+        const tWithoutVat = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_without_vat) ? translations[currentLang].kpi_without_vat : "بدون ضريبة";
+        const tVat15 = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_vat_15) ? translations[currentLang].kpi_vat_15 : "الضريبة (15%)";
+        const tCost = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_total_cost) ? translations[currentLang].kpi_total_cost : "التكلفة";
+        const tNetProfit = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_margin) ? translations[currentLang].kpi_margin : "الربح الصافي:";
+        const tTotalSalesLbl = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_total_sales) ? translations[currentLang].kpi_total_sales : "إجمالي المبيعات";
+
         if (sortedRows.length === 0) {
-            container.innerHTML = `<div class="status-msg">${currentLang === 'ar' ? 'لا توجد مبيعات مسجلة في هذه الفترة' : 'No sales recorded in this period'}</div>`;
+            container.innerHTML = `<div class="status-msg">${noDataText}</div>`;
         } else {
             sortedRows.forEach(row => {
                 const bSales = parseFloat(row.Total_Sales || 0);
@@ -1689,21 +1697,21 @@
                         </div>
                         <div class="branch-sales-total">
                             <div class="amount"><strong>${bSales.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> <small style="font-size:10px">SAR</small></div>
-                            <div class="label">${currentLang === 'ar' ? 'إجمالي المبيعات' : 'Total Sales'}</div>
+                            <div class="label">${tTotalSalesLbl}</div>
                         </div>
                     </div>
 
                     <div class="branch-metrics-grid">
                         <div class="metric-cell">
-                            <span class="m-label">${currentLang === 'ar' ? 'بدون ضريبة' : 'Excl. VAT'}</span>
+                            <span class="m-label">${tWithoutVat}</span>
                             <span class="m-val"><strong>${bSalesExclTax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></span>
                         </div>
                         <div class="metric-cell tax-cell">
-                            <span class="m-label">${currentLang === 'ar' ? 'الضريبة (15%)' : 'VAT (15%)'}</span>
+                            <span class="m-label">${tVat15}</span>
                             <span class="m-val"><strong>${bTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></span>
                         </div>
                         <div class="metric-cell cost-cell">
-                            <span class="m-label">${currentLang === 'ar' ? 'التكلفة' : 'Cost'}</span>
+                            <span class="m-label">${tCost}</span>
                             <span class="m-val"><strong>${bCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></span>
                         </div>
                     </div>
@@ -1711,7 +1719,7 @@
                     <div class="branch-profit-banner">
                         <div class="p-label">
                             <i class="fa-solid fa-chart-line"></i>
-                            <span>${currentLang === 'ar' ? 'الربح الصافي:' : 'Net Profit:'}</span>
+                            <span>${tNetProfit}</span>
                         </div>
                         <div class="p-value">
                             <strong>${bProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> SAR 

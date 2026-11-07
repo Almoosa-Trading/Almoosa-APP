@@ -9,13 +9,133 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- ربط ملف التنسيقات المشترك -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2026.8">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
+        .mobile-container {
+            width: 100%;
+            max-width: 1350px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* 📱 هيدر مرتب وصارم يمنع تمدد الأزرار ويجعلها في سطر واحد */
+        header {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            gap: 6px !important;
+            margin-bottom: 20px !important;
+            padding: 12px 14px !important;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
+            color: #ffffff !important;
+            border-radius: 14px !important;
+            box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
+            border: 2px solid #38bdf8 !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
+        }
+
+        .header-title-box {
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+        }
+
+        .header-title-box h1 {
+            font-size: 14px !important;
+            color: #ffffff !important;
+            font-weight: 800;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            margin: 0 !important;
+            line-height: 1.3;
+        }
+
+        .header-title-box p {
+            font-size: 9.5px !important;
+            color: #bae6fd !important;
+            margin: 0 !important;
+            font-weight: 600;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+        }
+
+        .header-left-group {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            gap: 4px !important;
+            flex-shrink: 0 !important;
+            width: auto !important;
+        }
+
+        .action-btn-icon {
+            background: rgba(255, 255, 255, 0.15) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
+            max-width: 32px !important;
+            border-radius: 8px !important;
+            cursor: pointer;
+            font-size: 13px !important;
+            color: #ffffff !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-decoration: none;
+            padding: 0 !important;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
+            transition: all 0.25s;
+        }
+
+        .action-btn-icon:hover {
+            background: rgba(255, 255, 255, 0.25) !important;
+            border-color: #ffffff !important;
+            transform: translateY(-2px);
+        }
+
+        .lang-select {
+            background: rgba(255, 255, 255, 0.15) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            padding: 0 4px !important;
+            border-radius: 8px !important;
+            font-size: 10px !important;
+            font-weight: 700;
+            color: #ffffff !important;
+            height: 32px !important;
+            outline: none;
+            cursor: pointer;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
+            width: auto !important;
+        }
+
+        .lang-select option {
+            background: #1e293b;
+            color: #ffffff;
+        }
+
         .calendar-container {
             border: 2px solid var(--border);
             border-radius: 16px;
@@ -219,12 +339,37 @@
         .status-msg { text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; font-weight: 700; }
 
         /* ========================================================
-           💻 تحويل قائمة الموظفين لمربعات بجانب بعضها على الكمبيوتر
+           💻 التجاوب للشاشات الكبيرة والكمبيوتر
            ======================================================== */
         @media (min-width: 768px) {
+            header {
+                padding: 20px 28px !important;
+            }
+            .header-title-box h1 {
+                font-size: 18px !important;
+            }
+            .header-title-box p {
+                font-size: 11.5px !important;
+            }
+            .action-btn-icon {
+                width: 44px !important;
+                height: 44px !important;
+                min-width: 44px !important;
+                font-size: 16px !important;
+                border-radius: 14px !important;
+            }
+            .lang-select {
+                height: 44px !important;
+                font-size: 12px !important;
+                padding: 0 14px !important;
+                border-radius: 14px !important;
+            }
+            .header-left-group {
+                gap: 10px !important;
+            }
             .salesmen-list {
                 display: grid;
-                grid-template-columns: repeat(3, 1fr); /* 3 كروت بجانب بعضها */
+                grid-template-columns: repeat(3, 1fr);
                 gap: 16px;
             }
 
@@ -555,8 +700,10 @@
         .btn-email { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); }
         .btn-download { background: linear-gradient(135deg, #475569 0%, #1e293b 100%); }
     </style>
+
+    <script src="app.js" defer></script>
 </head>
-<body>
+<body data-theme="light">
 
 <div class="mobile-container">
     <header>
@@ -565,15 +712,15 @@
             <p data-i18n="top_sales_subtitle">أفضل موظفي المبيعات (Top Sales Man)</p>
         </div>
         <div class="header-left-group">
+            <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
             <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
                 <option value="ar">العربية</option>
                 <option value="en">English</option>
                 <option value="hi">हिन्दी</option>
                 <option value="ur">اردو</option>
             </select>
-            <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
-                <i class="fa-solid fa-moon" id="themeIcon"></i>
-            </button>
             <button class="action-btn-icon" onclick="loadTopSalesmen()" title="تحديث">
                 <i class="fa-solid fa-rotate"></i>
             </button>
@@ -615,7 +762,7 @@
             </div>
         </div>
 
-        <button class="high3-btn" onclick="openHigh3Report()">
+        <button class="high3-btn" onclick="openHigh3Report()" data-i18n="btn_high3_report">
             <i class="fa-solid fa-trophy"></i> High 3 (أعلى 3 فواتير للفترة > 1000 ر.س)
         </button>
     </div>
@@ -624,7 +771,7 @@
     <div class="hero-card">
         <div class="hero-title" data-i18n="top_sales_hero_title">إجمالي مبيعات الموظفين في الفترة</div>
         <div class="hero-amount" id="totalSalesAmount">0.00 SAR</div>
-        <div class="hero-sub" id="totalInvoicesCount">عدد الفواتير الإجمالي: 0 فاتورة</div>
+        <div class="hero-sub" id="totalInvoicesCount" data-i18n="total_invoices_count">عدد الفواتير الإجمالي: 0 فاتورة</div>
     </div>
 
     <div class="section-header">
@@ -643,7 +790,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 12px;" id="modalTopBar">
             <h3 style="font-weight: 800; color: var(--text-main); font-size: 16px; margin: 0; display: flex; align-items: center; gap: 8px;">
                 <i class="fa-solid fa-trophy" style="color: #d97706;"></i>
-                <span>تقرير أعلى 3 فواتير مبيعات (تتجاوز 1000 ريال)</span>
+                <span data-i18n="high3_modal_title">تقرير أعلى 3 فواتير مبيعات (تتجاوز 1000 ريال)</span>
             </h3>
             <button onclick="closeHigh3Modal()" style="background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 10px; cursor: pointer; font-weight: 800;" id="closeModalBtn" data-i18n="btn_close">✕ إغلاق</button>
         </div>
@@ -655,7 +802,7 @@
                 
                 <div class="poster-header-content">
                     <div class="poster-brand-area">
-                        <div class="company-name">الموسى التجارية</div>
+                        <div class="company-name" data-i18n="header_title">الموسى التجارية</div>
                         <div class="company-sub">almoosa trading</div>
                     </div>
 
@@ -711,14 +858,14 @@
                     <table class="report-table-pro">
                         <thead>
                             <tr>
-                                <th>رقم الفاتورة المرجعي</th>
-                                <th>التاريخ</th>
-                                <th>الفرع</th>
-                                <th>ID البائع</th>
-                                <th>Associate Name</th>
-                                <th>grand_total</th>
-                                <th>Bonus%</th>
-                                <th>Amount</th>
+                                <th data-i18n="th_invoice_ref">رقم الفاتورة المرجعي</th>
+                                <th data-i18n="th_date">التاريخ</th>
+                                <th data-i18n="th_branch">الفرع</th>
+                                <th data-i18n="th_seller_id">ID البائع</th>
+                                <th data-i18n="th_associate_name">Associate Name</th>
+                                <th data-i18n="th_grand_total">grand_total</th>
+                                <th data-i18n="th_bonus_pct">Bonus%</th>
+                                <th data-i18n="th_amount">Amount</th>
                             </tr>
                         </thead>
                         <tbody id="high3TableBody">
@@ -730,13 +877,13 @@
         </div>
 
         <div class="share-actions-bar" id="shareActionsBar">
-            <button class="share-btn btn-whatsapp" onclick="shareToWhatsApp()">
+            <button class="share-btn btn-whatsapp" onclick="shareToWhatsApp()" data-i18n="btn_share_whatsapp">
                 <i class="fa-brands fa-whatsapp" style="font-size: 16px;"></i> مشاركة عبر واتساب
             </button>
-            <button class="share-btn btn-email" onclick="shareToEmail()">
+            <button class="share-btn btn-email" onclick="shareToEmail()" data-i18n="btn_share_email">
                 <i class="fa-solid fa-envelope" style="font-size: 16px;"></i> إرسال عبر البريد
             </button>
-            <button class="share-btn btn-download" onclick="downloadReportImage()">
+            <button class="share-btn btn-download" onclick="downloadReportImage()" data-i18n="btn_download_img">
                 <i class="fa-solid fa-download" style="font-size: 16px;"></i> تحميل كصورة
             </button>
         </div>
@@ -762,7 +909,55 @@
     let viewDate = new Date();
     let cachedInvoices = [];
 
+    // قاموس الترجمات الآمن والمدمج للصفحة
+    const extraTranslations = {
+        ar: {
+            top_sales_hero_title: "إجمالي مبيعات الموظفين في الفترة",
+            top_sales_list_title: "قائمة أفضل موظفي المبيعات",
+            branch_label: "الفرع",
+            total_invoices_count: "عدد الفواتير الإجمالي",
+            invoices_word: "فاتورة",
+            status_loading: "جاري تحميل البيانات...",
+            status_no_data: "لا توجد مبيعات مسجلة للموظفين في هذه الفترة"
+        },
+        en: {
+            top_sales_hero_title: "Total Salesmen Sales in Period",
+            top_sales_list_title: "Top Salesmen List",
+            branch_label: "Branch",
+            total_invoices_count: "Total Invoices",
+            invoices_word: "Invoices",
+            status_loading: "Loading data...",
+            status_no_data: "No sales recorded for salesmen in this period"
+        },
+        hi: {
+            top_sales_hero_title: "अवधि में कुल सेल्समेन बिक्री",
+            top_sales_list_title: "शीर्ष सेल्समेन सूची",
+            branch_label: "शाखा",
+            total_invoices_count: "कुल चालान",
+            invoices_word: "Invoices",
+            status_loading: "डाटा लोड हो रहा है...",
+            status_no_data: "इस अवधि में कोई बिक्री दर्ज नहीं की गई"
+        },
+        ur: {
+            top_sales_hero_title: "مدت میں سیلزمین کی کل فروخت",
+            top_sales_list_title: "بہترین سیلزمین کی فہرست",
+            branch_label: "برانچ",
+            total_invoices_count: "کل انوائسز",
+            invoices_word: "انواٸس",
+            status_loading: "ڈیٹا لوڈ ہو رہا ہے...",
+            status_no_data: "اس مدت میں کوئی فروخت درج نہیں ہے"
+        }
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
+        // دمج الترجمات المحلية مع نظام app.js إن وجد
+        if (typeof translations !== 'undefined') {
+            for (let lang in extraTranslations) {
+                if (!translations[lang]) translations[lang] = {};
+                Object.assign(translations[lang], extraTranslations[lang]);
+            }
+        }
+
         setPreset('today', document.querySelector('.chip.active'));
         renderCalendar();
 
@@ -785,6 +980,7 @@
     function renderCalendar() {
         const grid = document.getElementById('calendarDaysGrid');
         const titleEl = document.getElementById('calendarTitle');
+        if (!grid || !titleEl) return;
         grid.innerHTML = '';
 
         const year = viewDate.getFullYear();
@@ -917,7 +1113,10 @@
 
     async function loadTopSalesmen() {
         const container = document.getElementById('salesmenContainer');
-        container.innerHTML = `<div class="status-msg" data-i18n="status_loading">جاري تحميل البيانات...</div>`;
+        const langKey = (typeof currentLang !== 'undefined' && currentLang) ? currentLang : 'ar';
+        const tObj = (extraTranslations[langKey]) ? extraTranslations[langKey] : extraTranslations['ar'];
+        
+        container.innerHTML = `<div class="status-msg">${tObj.status_loading}</div>`;
 
         let queryToDate = currentQueryTo || currentQueryFrom;
         let salesmenMap = {};
@@ -971,13 +1170,13 @@
         }
 
         document.getElementById('totalSalesAmount').textContent = totalSalesSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' SAR';
-        document.getElementById('totalInvoicesCount').textContent = `عدد الفواتير الإجمالي: ${totalInvoicesSum.toLocaleString('en-US')} فاتورة`;
+        document.getElementById('totalInvoicesCount').textContent = `${tObj.total_invoices_count}: ${totalInvoicesSum.toLocaleString('en-US')} ${tObj.invoices_word}`;
 
         let sortedSalesmen = Object.values(salesmenMap).sort((a, b) => b.totalSales - a.totalSales);
 
         container.innerHTML = '';
         if (sortedSalesmen.length === 0) {
-            container.innerHTML = `<div class="status-msg">لا توجد مبيعات مسجلة للموظفين في هذه الفترة</div>`;
+            container.innerHTML = `<div class="status-msg">${tObj.status_no_data}</div>`;
         } else {
             sortedSalesmen.forEach((sm, index) => {
                 const card = document.createElement('div');
@@ -987,12 +1186,12 @@
                         <div class="salesman-rank">#${index + 1}</div>
                         <div class="salesman-details">
                             <h3>${sm.name}</h3>
-                            <p>الفرع: ${sm.branch}</p>
+                            <p>${tObj.branch_label}: ${sm.branch}</p>
                         </div>
                     </div>
                     <div class="salesman-totals">
                         <div class="amount">${sm.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <small>SAR</small></div>
-                        <div class="count">${sm.invoiceCount.toLocaleString('en-US')} فاتورة</div>
+                        <div class="count">${sm.invoiceCount.toLocaleString('en-US')} ${tObj.invoices_word}</div>
                     </div>
                 `;
                 container.appendChild(card);
@@ -1203,6 +1402,5 @@
         });
     }
 </script>
-<script src="app.js"></script>
 </body>
 </html>

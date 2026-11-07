@@ -7,7 +7,7 @@
     <title data-i18n="sales_group_title">مبيعات المجموعات - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=2026.5">
+    <link rel="stylesheet" href="style.css?v=2026.8">
     <style>
         .mobile-container {
             width: 100%;
@@ -536,8 +536,8 @@
 <div class="mobile-container">
     <header>
         <div class="header-title-box">
-            <h1>الموسى التجارية</h1>
-            <p>تقرير مبيعات المجموعات الاحترافي</p>
+            <h1 data-i18n="header_title_group">الموسى التجارية</h1>
+            <p data-i18n="header_subtitle_group">تقرير مبيعات المجموعات الاحترافي</p>
         </div>
         <div class="header-left-group">
             <button class="update-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
@@ -560,19 +560,19 @@
 
     <div class="filter-panel">
         <div class="period-chips">
-            <div class="chip" data-preset="today" onclick="setPreset('today', this)">اليوم</div>
-            <div class="chip" data-preset="yesterday" onclick="setPreset('yesterday', this)">أمس</div>
-            <div class="chip" data-preset="week" onclick="setPreset('week', this)">الأسبوع</div>
-            <div class="chip" data-preset="month" onclick="setPreset('month', this)">الشهر</div>
-            <div class="chip" data-preset="year" onclick="setPreset('year', this)">السنة</div>
-            <div class="chip" data-preset="custom" onclick="toggleCalendar()">📅 مخصص</div>
+            <div class="chip" data-preset="today" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
+            <div class="chip" data-preset="yesterday" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
+            <div class="chip" data-preset="week" onclick="setPreset('week', this)" data-i18n="chip_week">الأسبوع</div>
+            <div class="chip" data-preset="month" onclick="setPreset('month', this)" data-i18n="chip_month">الشهر</div>
+            <div class="chip" data-preset="year" onclick="setPreset('year', this)" data-i18n="chip_year">السنة</div>
+            <div class="chip" data-preset="custom" onclick="toggleCalendar()" data-i18n="chip_custom">📅 مخصص</div>
         </div>
 
         <div class="controls-row">
             <div class="control-group">
-                <span class="control-label">النطاق الزمني:</span>
+                <span class="control-label" data-i18n="label_time_range">النطاق الزمني:</span>
                 <div class="date-toggle-btn" onclick="toggleCalendar()">
-                    <span id="dateButtonText">اختر النطاق...</span>
+                    <span id="dateButtonText" data-i18n="btn_choose_range">اختر النطاق...</span>
                     <span>▼</span>
                 </div>
                 <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
@@ -586,10 +586,10 @@
             </div>
 
             <div class="control-group">
-                <span class="control-label">الفرع (Branch):</span>
+                <span class="control-label" data-i18n="label_branch">الفرع (Branch):</span>
                 <div class="multi-select-dropdown">
                     <div class="multi-select-btn" onclick="toggleDropdown('branchContent')">
-                        <span id="branchBtnText">الكل مختار</span>
+                        <span id="branchBtnText" data-i18n="all_branches_selected">الكل مختار</span>
                         <span>▼</span>
                     </div>
                     <div class="multi-select-content" id="branchContent"></div>
@@ -601,33 +601,33 @@
     <!-- كارت الإحصائيات الرئيسي -->
     <div class="hero-summary-card">
         <div class="hero-stat-box">
-            <label>إجمالي المبيعات</label>
+            <label data-i18n="kpi_total_sales">إجمالي المبيعات</label>
             <span id="kpiTotalSales">0.00 SAR</span>
         </div>
         <div class="hero-stat-box">
-            <label>بدون ضريبة (Excl. VAT)</label>
+            <label data-i18n="kpi_without_vat">بدون ضريبة (Excl. VAT)</label>
             <span id="kpiWithoutVat">0.00 SAR</span>
         </div>
         <div class="hero-stat-box">
-            <label>إجمالي التكلفة (Cost)</label>
+            <label data-i18n="kpi_total_cost">إجمالي التكلفة (Cost)</label>
             <span id="kpiTotalCost">0.00 SAR</span>
         </div>
         <div class="hero-stat-box">
-            <label>هامش الربح (Margin)</label>
+            <label data-i18n="kpi_margin">هامش الربح (Margin)</label>
             <span id="kpiMargin">0.00%</span>
         </div>
         <div class="hero-stat-box">
-            <label>إجمالي القطع</label>
+            <label data-i18n="kpi_total_qty">إجمالي القطع</label>
             <span id="kpiTotalQty">0 Pcs</span>
         </div>
     </div>
 
     <div class="report-section">
-        <div class="section-title">
+        <div class="section-title" data-i18n="section_title_groups">
             <i class="fa-solid fa-layer-group" style="color: var(--accent);"></i> تفصيل المبيعات حسب المجموعات والموردين (3 أقسام رئيسية)
         </div>
         <div class="analytics-container" id="groupAnalyticsContainer">
-            <div class="status-msg">جاري تحميل البيانات وتحليل المجموعات...</div>
+            <div class="status-msg" data-i18n="status_loading">جاري تحميل البيانات وتحليل المجموعات...</div>
         </div>
     </div>
 </div>
@@ -807,7 +807,8 @@
 
     async function loadGroupSalesData() {
         const container = document.getElementById('groupAnalyticsContainer');
-        container.innerHTML = `<div class="status-msg"><i class="fa-solid fa-spinner fa-spin"></i> جاري تحميل البيانات...</div>`;
+        const loadingText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_loading) ? translations[currentLang].status_loading : "جاري تحميل البيانات...";
+        container.innerHTML = `<div class="status-msg"><i class="fa-solid fa-spinner fa-spin"></i> ${loadingText}</div>`;
         rawGroupData = [];
 
         try {
@@ -868,9 +869,11 @@
         const container = document.getElementById('branchContent');
         container.innerHTML = '';
         
+        const selectAllText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].select_all) ? translations[currentLang].select_all : "تحديد الكل";
+
         const allDiv = document.createElement('label');
         allDiv.className = 'checkbox-item';
-        allDiv.innerHTML = `<input type="checkbox" checked onchange="toggleSelectAllBranches(this)"> <b>تحديد الكل</b>`;
+        allDiv.innerHTML = `<input type="checkbox" checked onchange="toggleSelectAllBranches(this)"> <b>${selectAllText}</b>`;
         container.appendChild(allDiv);
 
         Array.from(branchSet).sort().forEach(val => {
@@ -892,10 +895,13 @@
         const checkboxes = document.querySelectorAll('#branchContent input[type="checkbox"]');
         const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
         const btnText = document.getElementById('branchBtnText');
+        const allSelectedText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].all_branches_selected) ? translations[currentLang].all_branches_selected : "الكل مختار";
+        const selectedCountText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].selected_count) ? translations[currentLang].selected_count : "مختار";
+
         if (checked.length === 0 || checked.length === checkboxes.length - 1) {
-            btnText.textContent = "الكل مختار";
+            btnText.textContent = allSelectedText;
         } else {
-            btnText.textContent = `مختار (${checked.length})`;
+            btnText.textContent = `${selectedCountText} (${checked.length})`;
         }
         processAndRenderGroups();
     }
@@ -953,7 +959,6 @@
             groupMap[group].genders[genderKey][supplier].qty += qty;
         });
 
-        // 🎯 تم التعديل هنا: (بدون الضريبة - التكلفة) / بدون الضريبة
         const grandMargin = grandWithoutVat > 0 ? ((grandWithoutVat - grandCost) / grandWithoutVat) * 100 : 0;
 
         document.getElementById('kpiTotalSales').textContent = grandSales.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
@@ -967,14 +972,21 @@
 
         const sortedGroups = Object.keys(groupMap).sort((a, b) => groupMap[b].totalSales - groupMap[a].totalSales);
 
+        const noDataText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_no_data) ? translations[currentLang].status_no_data : "لا توجد مبيعات مسجلة في هذه الفترة";
+
         if (sortedGroups.length === 0) {
-            container.innerHTML = `<div class="status-msg">لا توجد مبيعات مسجلة في هذه الفترة</div>`;
+            container.innerHTML = `<div class="status-msg">${noDataText}</div>`;
             return;
         }
 
+        const tTotalSales = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_total_sales) ? translations[currentLang].kpi_total_sales : "إجمالي المبيعات";
+        const tWithoutVatLbl = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_without_vat) ? translations[currentLang].kpi_without_vat : "بدون ضريبة";
+        const tCostLbl = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_total_cost) ? translations[currentLang].kpi_total_cost : "التكلفة";
+        const tMarginLbl = "Margin";
+        const tQtyLbl = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].qty_label) ? translations[currentLang].qty_label : "الكمية";
+
         sortedGroups.forEach(grp => {
             const gData = groupMap[grp];
-            // 🎯 تعديل هامش المجموعة بناءً على المعادلة الجديدة
             const grpMargin = gData.totalWithoutVat > 0 ? ((gData.totalWithoutVat - gData.totalCost) / gData.totalWithoutVat) * 100 : 0;
             let gendersHTML = '';
             
@@ -984,17 +996,23 @@
                 
                 if (supKeys.length > 0) {
                     let gLabelAr = gKey === 'Man' ? 'رجالي (Men)' : (gKey === 'Woman' ? 'نسائي (Women)' : 'مشترك (Unisex)');
+                    if (currentLang === 'en') {
+                        gLabelAr = gKey === 'Man' ? 'Men' : (gKey === 'Woman' ? 'Women' : 'Unisex');
+                    } else if (currentLang === 'ur') {
+                        gLabelAr = gKey === 'Man' ? 'مردانه (Men)' : (gKey === 'Woman' ? 'زنانہ (Women)' : 'متفرق (Unisex)');
+                    } else if (currentLang === 'hi') {
+                        gLabelAr = gKey === 'Man' ? 'पुरुष (Men)' : (gKey === 'Woman' ? 'महिला (Women)' : 'यूनisex');
+                    }
+
                     let supTotalSales = Object.values(supObj).reduce((sum, i) => sum + i.sales, 0);
                     let supTotalWithoutVat = Object.values(supObj).reduce((sum, i) => sum + i.withoutVat, 0);
                     let supTotalCost = Object.values(supObj).reduce((sum, i) => sum + i.cost, 0);
                     let supTotalQty = Object.values(supObj).reduce((sum, i) => sum + i.qty, 0);
-                    // 🎯 تعديل هامش الجنس بناءً على المعادلة الجديدة
                     let supMargin = supTotalWithoutVat > 0 ? ((supTotalWithoutVat - supTotalCost) / supTotalWithoutVat) * 100 : 0;
                     
                     let suppliersCardsHTML = '';
                     supKeys.sort((a, b) => supObj[b].sales - supObj[a].sales).forEach(sup => {
                         let rowData = supObj[sup];
-                        // 🎯 تعديل هامش المورد بناءً على المعادلة الصحيحة الجديدة
                         let itemMargin = rowData.withoutVat > 0 ? ((rowData.withoutVat - rowData.cost) / rowData.withoutVat) * 100 : 0;
                         suppliersCardsHTML += `
                             <div class="supplier-item-card">
@@ -1004,15 +1022,15 @@
                                 </div>
                                 <div class="supplier-card-metrics">
                                     <div class="metric-cell m-cost">
-                                        <label>التكلفة</label>
+                                        <label>${tCostLbl}</label>
                                         <span>${rowData.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                                     </div>
                                     <div class="metric-cell m-margin">
-                                        <label>Margin</label>
+                                        <label>${tMarginLbl}</label>
                                         <span>${itemMargin.toFixed(2)}%</span>
                                     </div>
                                     <div class="metric-cell m-qty">
-                                        <label>الكمية</label>
+                                        <label>${tQtyLbl}</label>
                                         <span>${rowData.qty} Pcs</span>
                                     </div>
                                 </div>
@@ -1048,19 +1066,19 @@
                         </div>
                         <div class="group-totals-badge">
                             <span class="box-sales">
-                                <label>إجمالي المبيعات</label>
+                                <label>${tTotalSales}</label>
                                 <b>${gData.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</b>
                             </span>
                             <span class="box-novat">
-                                <label>بدون ضريبة</label>
+                                <label>${tWithoutVatLbl}</label>
                                 <b>${gData.totalWithoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
                             </span>
                             <span class="box-cost">
-                                <label>التكلفة</label>
+                                <label>${tCostLbl}</label>
                                 <b>${gData.totalCost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
                             </span>
                             <span class="box-margin">
-                                <label>Margin</label>
+                                <label>${tMarginLbl}</label>
                                 <b>${grpMargin.toFixed(2)}%</b>
                             </span>
                         </div>

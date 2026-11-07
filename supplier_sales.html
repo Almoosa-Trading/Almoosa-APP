@@ -7,7 +7,10 @@
     <title data-i18n="page_title">مبيعات الموردين - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" href="style.css?v=2026.5">
+    <script src="app.js" defer></script>
+
     <style>
         .main-container {
             width: 100%;
@@ -554,10 +557,13 @@
                 <option value="hi">हिन्दी</option>
                 <option value="ur">اردو</option>
             </select>
-            <button class="action-btn" onclick="loadSupplierSalesData()" data-i18n="btn_refresh" title="تحديث">
+            <button class="action-btn" onclick="loadSupplierSalesData()" title="تحديث">
                 <i class="fa-solid fa-rotate"></i>
             </button>
-            <a href="sales.html" class="action-btn" data-i18n="btn_back" title="الرئيسية">
+            <a href="sales.html" class="action-btn" title="رجوع">
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="index.html" class="action-btn" title="الرئيسية">
                 <i class="fa-solid fa-house"></i>
             </a>
         </div>
@@ -574,6 +580,7 @@
         </div>
 
         <div class="controls-row">
+            <!-- Time Range -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_time_range">النطاق الزمني:</span>
                 <div class="date-toggle-btn" onclick="toggleCalendar()">
@@ -583,7 +590,7 @@
                 <div class="calendar-container" id="calendarContainer">
                     <div class="calendar-header">
                         <button onclick="changeMonth(-1)">&#9664;</button>
-                        <span id="calendarTitle">أكتوبر 2026</span>
+                        <span id="calendarTitle">نوفمبر 2026</span>
                         <button onclick="changeMonth(1)">&#9654;</button>
                     </div>
                     <div class="calendar-grid" id="calendarDaysGrid"></div>
@@ -592,10 +599,10 @@
 
             <!-- Branch Filter -->
             <div class="control-group">
-                <span class="control-label">الفرع (Branch):</span>
+                <span class="control-label" data-i18n="label_branch">الفرع (Branch):</span>
                 <div class="multi-select-dropdown">
                     <div class="multi-select-btn" onclick="toggleDropdown('branchContent')">
-                        <span id="branchBtnText">الكل مختار</span>
+                        <span id="branchBtnText" data-i18n="text_all_selected">الكل مختار</span>
                         <span>▼</span>
                     </div>
                     <div class="multi-select-content" id="branchContent"></div>
@@ -604,7 +611,7 @@
 
             <!-- Gender Filter -->
             <div class="control-group">
-                <span class="control-label" data-i18n="label_gender">Gender:</span>
+                <span class="control-label" data-i18n="label_gender">الجنس (Gender):</span>
                 <div class="multi-select-dropdown">
                     <div class="multi-select-btn" onclick="toggleDropdown('level2Content')">
                         <span id="level2BtnText" data-i18n="text_all_selected">الكل مختار</span>
@@ -616,7 +623,7 @@
 
             <!-- Category Filter -->
             <div class="control-group">
-                <span class="control-label" data-i18n="label_category">Category:</span>
+                <span class="control-label" data-i18n="label_category">الفئة (Category):</span>
                 <div class="multi-select-dropdown">
                     <div class="multi-select-btn" onclick="toggleDropdown('level3Content')">
                         <span id="level3BtnText" data-i18n="text_all_selected">الكل مختار</span>
@@ -628,7 +635,7 @@
 
             <!-- Group Filter -->
             <div class="control-group">
-                <span class="control-label" data-i18n="label_group">Group:</span>
+                <span class="control-label" data-i18n="label_group">المجموعة (Group):</span>
                 <div class="multi-select-dropdown">
                     <div class="multi-select-btn" onclick="toggleDropdown('level4Content')">
                         <span id="level4BtnText" data-i18n="text_all_selected">الكل مختار</span>
@@ -667,23 +674,23 @@
     <!-- كارت الإحصائيات الرئيسي -->
     <div class="hero-summary-card">
         <div class="hero-stat-box">
-            <label>إجمالي المبيعات</label>
+            <label data-i18n="kpi_total_sales">إجمالي المبيعات</label>
             <span id="kpiTotalSales">0.00 SAR</span>
         </div>
         <div class="hero-stat-box">
-            <label>بدون ضريبة (Excl. VAT)</label>
+            <label data-i18n="kpi_without_vat">بدون ضريبة (Excl. VAT)</label>
             <span id="kpiWithoutVat">0.00 SAR</span>
         </div>
         <div class="hero-stat-box">
-            <label>إجمالي التكلفة (Cost)</label>
+            <label data-i18n="kpi_total_cost">إجمالي التكلفة (Cost)</label>
             <span id="kpiTotalCost">0.00 SAR</span>
         </div>
         <div class="hero-stat-box">
-            <label>هامش الربح (Margin)</label>
+            <label data-i18n="kpi_margin">هامش الربح (Margin)</label>
             <span id="kpiMargin">0.00%</span>
         </div>
         <div class="hero-stat-box">
-            <label>إجمالي القطع</label>
+            <label data-i18n="kpi_total_qty">إجمالي القطع</label>
             <span id="kpiTotalQty">0 Pcs</span>
         </div>
     </div>
@@ -699,159 +706,6 @@
 </div>
 
 <script>
-    const translations = {
-        ar: {
-            page_title: "مبيعات الموردين - الموسى التجارية",
-            header_title: "الموسى التجارية",
-            header_subtitle: "إدارة مبيعات الموردين",
-            chip_today: "اليوم",
-            chip_yesterday: "أمس",
-            chip_week: "الأسبوع",
-            chip_month: "الشهر",
-            chip_year: "السنة",
-            chip_custom: "📅 مخصص",
-            label_time_range: "النطاق الزمني:",
-            btn_choose_range: "اختر النطاق...",
-            label_gender: "الجنس (Gender):",
-            label_category: "الفئة (Category):",
-            label_group: "المجموعة (Group):",
-            label_product_year: "سنة المنتج (Product Year):",
-            label_brand: "الماركة (Brand Filter):",
-            text_all_selected: "الكل مختار",
-            text_selected_count: "مختار",
-            text_select_all: "تحديد الكل",
-            kpi_total_sales: "إجمالي المبيعات",
-            kpi_total_qty: "إجمالي القطع المباعة",
-            section_supplier_summary: "تقرير مبيعات الموردين الشجري (Supplier Sales Tree)",
-            status_loading: "جاري تحضير البيانات...",
-            status_no_data: "لا توجد مبيعات مسجلة في هذه الفترة"
-        },
-        en: {
-            page_title: "Supplier Sales - Almoosa Trading",
-            header_title: "Almoosa Trading",
-            header_subtitle: "Supplier Sales Management",
-            chip_today: "Today",
-            chip_yesterday: "Yesterday",
-            chip_week: "Week",
-            chip_month: "Month",
-            chip_year: "Year",
-            chip_custom: "📅 Custom",
-            label_time_range: "Time Range:",
-            btn_choose_range: "Select range...",
-            label_gender: "Gender:",
-            label_category: "Category:",
-            label_group: "Group:",
-            label_product_year: "Product Year:",
-            label_brand: "Brand Filter:",
-            text_all_selected: "All Selected",
-            text_selected_count: "Selected",
-            text_select_all: "Select All",
-            kpi_total_sales: "Total Sales",
-            kpi_total_qty: "Total Sold Qty",
-            section_supplier_summary: "Supplier Sales Tree",
-            status_loading: "Preparing data...",
-            status_no_data: "No sales recorded in this period"
-        },
-        hi: {
-            page_title: "आपूर्तिकर्ता बिक्री - अलमूसा ट्रेडिंग",
-            header_title: "अलमूसा ट्रेडिंग",
-            header_subtitle: "आपूर्तिकर्ता बिक्री प्रबंधन",
-            chip_today: "आज",
-            chip_yesterday: "कल",
-            chip_week: "सप्ताह",
-            chip_month: "महीना",
-            chip_year: "वर्ष",
-            chip_custom: "📅 कस्टम",
-            label_time_range: "समय सीमा:",
-            btn_choose_range: "रेंज चुनें...",
-            label_gender: "Gender:",
-            label_category: "Category:",
-            label_group: "Group:",
-            label_product_year: "उत्पाद वर्ष (Product Year):",
-            label_brand: "ब्रांड फ़िल्टर (Brand Filter):",
-            text_all_selected: "सभी चयनित",
-            text_selected_count: "चयनित",
-            text_select_all: "सभी चुनें",
-            kpi_total_sales: "कुल बिक्री",
-            kpi_total_qty: "कुल बेची गई मात्रा",
-            section_supplier_summary: "Supplier Sales Tree",
-            status_loading: "डेटा तैयार किया जा रहा है...",
-            status_no_data: "इस अवधि में कोई बिक्री दर्ज नहीं की गई"
-        },
-        ur: {
-            page_title: "سپلائر سیلز - الموسی ٹریڈنگ",
-            header_title: "الموسی ٹریڈنگ",
-            header_subtitle: "سپلائر سیلز مینجمنٹ",
-            chip_today: "آج",
-            chip_yesterday: "گزشتہ کل",
-            chip_week: "ہفتہ",
-            chip_month: "مہینہ",
-            chip_year: "سال",
-            chip_custom: "📅 کسٹم",
-            label_time_range: "وقت کا دائرہ:",
-            btn_choose_range: "رینج منتخب کریں...",
-            label_gender: "Gender:",
-            label_category: "Category:",
-            label_group: "Group:",
-            label_product_year: "پروڈکٹ کا سال (Product Year):",
-            label_brand: "برانڈ فلٹر (Brand Filter):",
-            text_all_selected: "سب منتخب",
-            text_selected_count: "منتخب",
-            text_select_all: "سب منتخب کریں",
-            kpi_total_sales: "کل فروخت",
-            kpi_total_qty: "کل فروخت شدہ مقدار",
-            section_supplier_summary: "سپلائر سیلز ٹری",
-            status_loading: "ڈیٹا تیار کیا جا رہا ہے...",
-            status_no_data: "اس مدت میں کوئی فروخت درج نہیں ہے"
-        }
-    };
-
-    let currentLang = localStorage.getItem('app_lang') || 'ar';
-
-    function setLanguage(lang) {
-        currentLang = lang;
-        localStorage.setItem('app_lang', lang);
-        
-        const root = document.getElementById('htmlRoot');
-        root.setAttribute('lang', lang);
-        if (lang === 'ar' || lang === 'ur') {
-            root.setAttribute('dir', 'rtl');
-        } else {
-            root.setAttribute('dir', 'ltr');
-        }
-        
-        const selectEl = document.getElementById('langSelect');
-        if (selectEl) selectEl.value = lang;
-
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (translations[lang] && translations[lang][key]) {
-                el.textContent = translations[lang][key];
-            }
-        });
-        
-        updateAllButtonTexts();
-    }
-
-    function changeLanguage(selectedLang) {
-        setLanguage(selectedLang);
-        loadSupplierSalesData();
-    }
-
-    function toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('app_theme') || 'light';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        document.body.setAttribute('data-theme', newTheme);
-        localStorage.setItem('app_theme', newTheme);
-        
-        const themeIcon = document.getElementById('themeIcon');
-        if (themeIcon) {
-            themeIcon.className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-        }
-    }
-
     const CONFIG = {
         serverUrl: "https://87-237-225-155.nip.io/",
         apiKey: "6f039a5a6130b79",
@@ -865,22 +719,13 @@
     let viewDate = new Date();
 
     document.addEventListener('DOMContentLoaded', () => {
-        setLanguage(currentLang);
-        
-        const savedTheme = localStorage.getItem('app_theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        document.body.setAttribute('data-theme', savedTheme);
-        const themeIcon = document.getElementById('themeIcon');
-        if (themeIcon) {
-            themeIcon.className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-        }
-
         syncWithSalesPageFilter();
         renderCalendar();
         
         window.onclick = function(event) {
-            if (!event.target.closest('.multi-select-dropdown')) {
+            if (!event.target.closest('.multi-select-dropdown') && !event.target.closest('.control-group')) {
                 document.querySelectorAll('.multi-select-content').forEach(el => el.classList.remove('open'));
+                document.getElementById('calendarContainer').classList.remove('open');
             }
         }
     });
@@ -1041,7 +886,8 @@
 
     async function loadSupplierSalesData() {
         const treeContainer = document.getElementById('treeContainer');
-        treeContainer.innerHTML = `<div class="status-msg">${translations[currentLang].status_loading}</div>`;
+        const loadingText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_loading) ? translations[currentLang].status_loading : "جاري تحضير البيانات...";
+        treeContainer.innerHTML = `<div class="status-msg">${loadingText}</div>`;
         rawSupplierData = [];
 
         try {
@@ -1126,9 +972,10 @@
         const container = document.getElementById(containerId);
         container.innerHTML = '';
         
+        const selectAllText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].text_select_all) ? translations[currentLang].text_select_all : "تحديد الكل";
         const allDiv = document.createElement('label');
         allDiv.className = 'checkbox-item';
-        allDiv.innerHTML = `<input type="checkbox" checked onchange="toggleSelectAll(this, '${containerId}')"> <b>${translations[currentLang].text_select_all}</b>`;
+        allDiv.innerHTML = `<input type="checkbox" checked onchange="toggleSelectAll(this, '${containerId}')"> <b>${selectAllText}</b>`;
         container.appendChild(allDiv);
 
         Array.from(dataSet).sort().forEach(val => {
@@ -1152,21 +999,15 @@
         const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
         const btnText = document.getElementById(btnTextId);
 
+        const allSelectedText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].text_all_selected) ? translations[currentLang].text_all_selected : "الكل مختار";
+        const selectedCountText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].text_selected_count) ? translations[currentLang].text_selected_count : "مختار";
+
         if (checked.length === 0 || checked.length === checkboxes.length - 1) {
-            btnText.textContent = translations[currentLang].text_all_selected;
+            btnText.textContent = allSelectedText;
         } else {
-            btnText.textContent = `${translations[currentLang].text_selected_count} (${checked.length})`;
+            btnText.textContent = `${selectedCountText} (${checked.length})`;
         }
         renderReports();
-    }
-
-    function updateAllButtonTexts() {
-        updateButtonText('branchContent', 'branchBtnText');
-        updateButtonText('level2Content', 'level2BtnText');
-        updateButtonText('level3Content', 'level3BtnText');
-        updateButtonText('level4Content', 'level4BtnText');
-        updateButtonText('yearContent', 'yearBtnText');
-        updateButtonText('brandContent', 'brandBtnText');
     }
 
     function getSelectedValues(containerId) {
@@ -1255,11 +1096,17 @@
         treeContainer.innerHTML = '';
 
         const sortedSuppliers = Object.keys(treeData).sort((a, b) => treeData[b].sales - treeData[a].sales);
+        const noDataText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_no_data) ? translations[currentLang].status_no_data : "لا توجد مبيعات مسجلة في هذه الفترة";
 
         if (sortedSuppliers.length === 0) {
-            treeContainer.innerHTML = `<div class="status-msg">${translations[currentLang].status_no_data}</div>`;
+            treeContainer.innerHTML = `<div class="status-msg">${noDataText}</div>`;
             return;
         }
+
+        const lblTotalSales = "إجمالي المبيعات";
+        const lblWithoutVat = "بدون ضريبة";
+        const lblCost = "التكلفة";
+        const lblMargin = "Margin";
 
         let isFirstSupplier = true;
 
@@ -1295,11 +1142,11 @@
                             </div>
                             <div class="group-node-metrics">
                                 <div class="metric-cell m-cost">
-                                    <label>التكلفة</label>
+                                    <label>${lblCost}</label>
                                     <span>${grpItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                                 </div>
                                 <div class="metric-cell m-margin">
-                                    <label>Margin</label>
+                                    <label>${lblMargin}</label>
                                     <span>${grpMargin.toFixed(2)}%</span>
                                 </div>
                                 <div class="metric-cell m-qty">
@@ -1318,7 +1165,7 @@
                                 <i class="fa-solid ${gItem.icon}" style="color:${gItem.color};"></i> ${gKey}
                             </div>
                             <div style="display:flex; align-items:center; gap:10px;">
-                                <span style="font-size:11.5px; font-weight:800;">${gItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR <small style="color:#047857;">(Margin: ${genderMargin.toFixed(2)}%)</small></span>
+                                <span style="font-size:11.5px; font-weight:800;">${gItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR <small style="color:#047857;">(${lblMargin}: ${genderMargin.toFixed(2)}%)</small></span>
                                 <i class="fa-solid ${genderChevron} arrow-icon" style="font-size:10px;"></i>
                             </div>
                         </div>
@@ -1344,19 +1191,19 @@
                         </div>
                         <div class="metrics-badge-grid">
                             <span class="box-sales">
-                                <label>إجمالي المبيعات</label>
+                                <label>${lblTotalSales}</label>
                                 <b>${supItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</b>
                             </span>
                             <span class="box-novat">
-                                <label>بدون ضريبة</label>
+                                <label>${lblWithoutVat}</label>
                                 <b>${supItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
                             </span>
                             <span class="box-cost">
-                                <label>التكلفة</label>
+                                <label>${lblCost}</label>
                                 <b>${supItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
                             </span>
                             <span class="box-margin">
-                                <label>Margin</label>
+                                <label>${lblMargin}</label>
                                 <b>${supplierMargin.toFixed(2)}%</b>
                             </span>
                         </div>
