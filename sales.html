@@ -693,7 +693,7 @@
             border-radius: 14px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             z-index: 1050;
-            min-width: 220px;
+            min-width: 240px;
             padding: 8px;
         }
 
@@ -1136,6 +1136,8 @@
                     <button class="share-item" onclick="shareWhatsApp()" data-i18n="share_whatsapp">💬 إرسال عبر WhatsApp</button>
                     <button class="share-item" onclick="shareEmail()" data-i18n="share_email">✉️ إرسال عبر البريد الإلكتروني</button>
                     <button class="share-item" onclick="downloadPDF()" data-i18n="share_pdf">📄 تحميل التقرير (PDF)</button>
+                    <!-- زر تنزيل شيت إكسيل كولينز مباشرة على الجهاز -->
+                    <button class="share-item" onclick="downloadColinsExcel()" style="color: #059669; font-weight: 800;">📥 تنزيل شيت كولينز (Excel)</button>
                 </div>
             </div>
         </div>
@@ -1253,7 +1255,7 @@
     }
 
     const CONFIG = {
-        serverUrl: "https://87-237-225-155.nip.io/",
+        serverUrl: "https://87-237-225-155.nip.io",
         apiKey: "6f039a5a6130b79",
         apiSecret: "9e6d920a8fda252"
     };
@@ -2398,6 +2400,53 @@
             window.location.href = mailtoUrl;
         } catch (err) {
             console.error("Email Share Error:", err);
+        }
+    }
+
+    // دالة تنزيل تقرير كولينز بصيغة Excel مباشرة على جهازك بناءً على الفلاتر المحددة
+    async function downloadColinsExcel() {
+        const selectedDateFrom = currentQueryFrom; 
+        const selectedDateTo = currentQueryTo || currentQueryFrom;
+        const dateLabel = selectedDateFrom === selectedDateTo ? selectedDateFrom : `${selectedDateFrom}_${selectedDateTo}`;
+
+        document.getElementById('shareMenu').classList.remove('show');
+        alert(`⏳ جاري إعداد وتنزيل شيت كولينز للفترة (${dateLabel})...`);
+
+        try {
+            const apiUrl = `${CONFIG.serverUrl}/api/method/almoosa_customization.almoosa_customization.report.summery_sales_for_colins.api.download_colins_report_excel?from_date=${selectedDateFrom}&to_date=${selectedDateTo}`;
+
+            const response = await fetch(apiUrl, {
+                method: "GET",
+                headers: {
+                    "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`,
+                    "X-Frappe-Site-Name": window.location.hostname
+                }
+            });
+
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `SA_Sales_Format_${dateLabel}.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            } else {
+                const errJson = await response.json().catch(() => ({}));
+                let errMsg = "فشل تحميل الملف أو لا توجد مبيعات لكولينز في هذه الفترة.";
+                if (errJson._server_messages) {
+                    try {
+                        const parsed = JSON.parse(JSON.parse(errJson._server_messages)[0]);
+                        errMsg = parsed.message || errMsg;
+                    } catch (e) {}
+                }
+                alert("❌ تنبيه: " + errMsg);
+            }
+        } catch (err) {
+            console.error("Colins Excel Download Error:", err);
+            alert("❌ حدث خطأ في الاتصال بالسيرفر أثناء تنزيل الملف.");
         }
     }
 </script>
