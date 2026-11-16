@@ -4,21 +4,20 @@
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title data-i18n="page_title">قائمة شحنات الموردين - الموسى التجارية</title>
+    <title data-i18n="page_title">قائمة شحنات الموردين والتحليل الموسمي - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link rel="stylesheet" href="style.css?v=2026.5">
 
     <style>
         .main-container {
             width: 100%;
-            max-width: 1350px;
+            max-width: 1380px;
             margin: 0 auto;
             padding: 0 15px;
         }
 
-        /* 📱 ترويسة ثابتة وموحدة تضمن بقاء الأزرار في سطر واحد على الجوال */
+        /* Header */
         header {
             display: flex !important;
             flex-direction: row !important;
@@ -26,7 +25,7 @@
             align-items: center !important;
             flex-wrap: nowrap !important;
             gap: 6px !important;
-            margin-bottom: 20px !important;
+            margin-bottom: 18px !important;
             padding: 12px 14px !important;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
             color: #ffffff !important;
@@ -40,18 +39,12 @@
         header::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 3px;
             background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
         }
 
-        .header-title-box {
-            flex: 1 1 auto !important;
-            min-width: 0 !important;
-        }
-
+        .header-title-box { flex: 1 1 auto !important; min-width: 0 !important; }
         .header-title-box h1 {
             font-size: 14px !important;
             color: #ffffff !important;
@@ -62,7 +55,6 @@
             margin: 0 !important;
             line-height: 1.3;
         }
-
         .header-title-box p {
             font-size: 9.5px !important;
             color: #bae6fd !important;
@@ -75,22 +67,17 @@
 
         .header-left-group {
             display: flex !important;
-            flex-direction: row !important;
             align-items: center !important;
-            flex-wrap: nowrap !important;
-            gap: 4px !important;
+            gap: 5px !important;
             flex-shrink: 0 !important;
-            width: auto !important;
         }
 
         .action-btn-icon {
             background: rgba(255, 255, 255, 0.15) !important;
             border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            width: 32px !important;
-            height: 32px !important;
-            min-width: 32px !important;
-            max-width: 32px !important;
-            border-radius: 8px !important;
+            width: 34px !important;
+            height: 34px !important;
+            border-radius: 9px !important;
             cursor: pointer;
             font-size: 13px !important;
             color: #ffffff !important;
@@ -98,57 +85,49 @@
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            flex-shrink: 0 !important;
             transition: all 0.25s;
         }
         .action-btn-icon:hover {
-            background: rgba(255, 255, 255, 0.25) !important;
-            border-color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.28) !important;
             transform: translateY(-2px);
         }
 
         .lang-select {
             background: rgba(255, 255, 255, 0.15) !important;
             border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            padding: 0 4px !important;
-            border-radius: 8px !important;
-            font-size: 10px !important;
+            padding: 0 6px !important;
+            border-radius: 9px !important;
+            font-size: 10.5px !important;
             font-weight: 700;
             cursor: pointer;
             color: #ffffff !important;
             outline: none;
-            height: 32px !important;
-            flex-shrink: 0 !important;
-            width: auto !important;
-            margin: 0 !important;
+            height: 34px !important;
         }
-        .lang-select option {
-            background: #1e293b;
-            color: #ffffff;
-        }
+        .lang-select option { background: #1e293b; color: #ffffff; }
 
+        /* Filter Bar & Season Pills */
         .filter-bar {
             background: var(--bg-card);
             border: 2px solid var(--border);
             border-radius: 18px;
-            padding: 16px 20px;
-            margin-bottom: 20px;
+            padding: 14px 18px;
+            margin-bottom: 18px;
             box-shadow: var(--shadow);
             display: flex;
             gap: 12px;
             align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
         }
 
         .search-input {
             flex: 1;
-            min-width: 260px;
+            min-width: 240px;
             background: var(--bg-body);
             border: 2px solid var(--border);
             color: var(--text-main);
-            padding: 10px 14px;
+            padding: 9px 14px;
             border-radius: 12px;
             font-size: 12.5px;
             font-weight: 700;
@@ -156,8 +135,100 @@
             height: 42px;
             transition: border-color 0.2s;
         }
-        .search-input:focus { border-color: var(--accent); }
+        .search-input:focus { border-color: #0284c7; }
 
+        .season-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .season-pill {
+            border: 1.5px solid var(--border);
+            background: var(--bg-body);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.2s ease;
+        }
+
+        .season-pill:hover {
+            border-color: #0284c7;
+            transform: translateY(-1px);
+        }
+
+        .season-pill.active {
+            background: linear-gradient(135deg, #0f172a 0%, #0284c7 100%);
+            color: #ffffff;
+            border-color: #0284c7;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28);
+        }
+
+        .season-pill .icon-sun { color: #f59e0b; }
+        .season-pill.active .icon-sun { color: #fde047; }
+        .season-pill .icon-snow { color: #38bdf8; }
+        .season-pill.active .icon-snow { color: #bae6fd; }
+        .season-pill .icon-all-season { color: #10b981; }
+        .season-pill.active .icon-all-season { color: #6ee7b7; }
+
+        /* KPI Summary Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .kpi-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 18px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s;
+        }
+        .kpi-card:hover { transform: translateY(-2px); }
+
+        .kpi-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .kpi-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-muted);
+        }
+        .kpi-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+        .kpi-value {
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--text-main);
+            direction: ltr;
+            text-align: inherit;
+        }
+
+        /* Table Styles */
         .table-wrapper {
             background: var(--bg-card);
             border: 2px solid var(--border);
@@ -168,17 +239,25 @@
             margin-bottom: 30px;
         }
 
+        .table-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+
         .report-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
-            min-width: 850px;
+            font-size: 12.5px;
+            min-width: 900px;
         }
 
         .report-table th, .report-table td {
             padding: 12px 14px;
             border-bottom: 1.5px solid var(--border);
-            text-align: right;
+            text-align: start;
             white-space: nowrap;
             color: var(--text-main);
         }
@@ -193,78 +272,87 @@
             transition: background 0.2s;
             cursor: pointer;
         }
-
         .report-table tbody tr:hover {
-            background: var(--accent-light, rgba(37, 99, 235, 0.08));
+            background: rgba(2, 132, 199, 0.07);
+        }
+
+        .brand-badge {
+            background: rgba(15, 23, 42, 0.08);
+            color: var(--text-main);
+            border: 1.5px solid var(--border);
+            padding: 4px 11px;
+            border-radius: 8px;
+            font-weight: 900;
+            font-size: 11.5px;
+            display: inline-block;
+        }
+        [data-theme="dark"] .brand-badge {
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .shipment-no-badge {
             background: rgba(245, 158, 11, 0.15);
-            color: #f59e0b;
-            padding: 5px 10px;
+            color: #d97706;
+            padding: 4px 10px;
             border-radius: 8px;
             font-size: 11px;
             font-weight: 850;
-            display: inline-block;
             border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
         .receipt-id-badge {
             background: rgba(59, 130, 246, 0.15);
-            color: #3b82f6;
-            padding: 5px 10px;
+            color: #2563eb;
+            padding: 4px 10px;
             border-radius: 8px;
             font-size: 11px;
             font-weight: 850;
-            display: inline-block;
             border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         .badge-qty {
             background: rgba(16, 185, 129, 0.15);
-            color: #10b981;
-            padding: 5px 10px;
-            border-radius: 10px;
+            color: #059669;
+            padding: 4px 10px;
+            border-radius: 8px;
             font-weight: 850;
-            font-size: 11px;
+            font-size: 11.5px;
             border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .sell-through-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 115px;
+        }
+        .sell-through-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+        .sell-through-fill {
+            height: 100%;
+            border-radius: 99px;
+            transition: width 0.3s ease;
         }
 
         .status-box {
             text-align: center;
-            padding: 30px;
+            padding: 35px;
             color: var(--text-muted);
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 13.5px;
+            font-weight: 800;
         }
 
-        /* 💻 للشاشات الكبيرة والكمبيوتر */
         @media (min-width: 768px) {
-            header {
-                padding: 20px 28px !important;
-            }
-            .header-title-box h1 {
-                font-size: 18px !important;
-            }
-            .header-title-box p {
-                font-size: 11.5px !important;
-            }
-            .action-btn-icon {
-                width: 44px !important;
-                height: 44px !important;
-                min-width: 44px !important;
-                font-size: 16px !important;
-                border-radius: 14px !important;
-            }
-            .lang-select {
-                height: 44px !important;
-                font-size: 12px !important;
-                padding: 0 14px !important;
-                border-radius: 14px !important;
-            }
-            .header-left-group {
-                gap: 10px !important;
-            }
+            header { padding: 20px 28px !important; }
+            .header-title-box h1 { font-size: 18px !important; }
+            .header-title-box p { font-size: 11.5px !important; }
+            .action-btn-icon { width: 42px !important; height: 42px !important; font-size: 16px !important; border-radius: 12px !important; }
+            .lang-select { height: 42px !important; font-size: 12px !important; padding: 0 12px !important; border-radius: 12px !important; }
         }
     </style>
 </head>
@@ -273,11 +361,11 @@
 <div class="main-container">
     <header>
         <div class="header-title-box">
-            <h1 data-i18n="header_title">Purchase Receipt (قائمة الشحنات)</h1>
-            <p data-i18n="header_subtitle">الموسى التجارية - عرض المورد ورقم الشحنة وسند الاستلام</p>
+            <h1 data-i18n="header_title">Purchase Receipts & Seasonal Analytics</h1>
+            <p data-i18n="header_subtitle">الموسى التجارية - تحليل الشحنات والمشتريات حسب المواسم</p>
         </div>
         <div class="header-left-group">
-            <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+            <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" data-i18n-title="title_theme" title="تغيير المظهر">
                 <i class="fa-solid fa-moon" id="themeIcon"></i>
             </button>
             <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
@@ -286,31 +374,90 @@
                 <option value="hi">हिन्दी</option>
                 <option value="ur">اردو</option>
             </select>
-            <a href="index.html" class="action-btn-icon" title="الرئيسية">
+            <a href="index.html" class="action-btn-icon" data-i18n-title="title_home" title="الرئيسية">
                 <i class="fa-solid fa-house"></i>
             </a>
         </div>
     </header>
 
+    <!-- Filter Bar + Season Buttons -->
     <div class="filter-bar">
-        <input type="text" id="searchInput" class="search-input" placeholder="بحث برقم السند، رقم الشحنة، اسم المورد..." onkeyup="filterTable()" data-i18n-placeholder="search_placeholder">
-        <span id="recordCount" style="font-size: 12px; color: var(--text-muted); font-weight: 800;">جاري التحميل...</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="بحث بالبراند، المورد، رقم الشحنة، التاريخ..." onkeyup="filterTable()" data-i18n-placeholder="search_placeholder">
+        
+        <div class="season-tabs" id="seasonTabs">
+            <button class="season-pill active" data-season="all" onclick="selectSeason('all', this)">
+                <i class="fa-solid fa-layer-group"></i>
+                <span data-i18n="btn_all">كل المشتريات</span>
+            </button>
+            <button class="season-pill" data-season="Summer" onclick="selectSeason('Summer', this)">
+                <i class="fa-solid fa-sun icon-sun"></i>
+                <span data-i18n="btn_summer">مشتريات الصيف</span>
+            </button>
+            <button class="season-pill" data-season="Winter" onclick="selectSeason('Winter', this)">
+                <i class="fa-solid fa-snowflake icon-snow"></i>
+                <span data-i18n="btn_winter">مشتريات الشتاء</span>
+            </button>
+            <button class="season-pill" data-season="All-Season" onclick="selectSeason('All-Season', this)">
+                <i class="fa-solid fa-arrows-spin icon-all-season"></i>
+                <span data-i18n="btn_all_season">مشتريات لجميع الفصول</span>
+            </button>
+        </div>
     </div>
 
+    <!-- KPI Summary Cards -->
+    <div class="kpi-grid" id="kpiGrid">
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <span class="kpi-title" data-i18n="kpi_cost">إجمالي تكلفة الشحنات</span>
+                <div class="kpi-icon" style="background: rgba(59, 130, 246, 0.12); color: #2563eb;">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                </div>
+            </div>
+            <div class="kpi-value" id="kpiCost">0.00 SAR</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <span class="kpi-title" data-i18n="kpi_received">إجمالي الكمية المستلمة</span>
+                <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+            </div>
+            <div class="kpi-value" id="kpiReceived">0 Pcs</div>
+        </div>
+
+        <div class="kpi-card" id="kpiSoldCard" style="display: none;">
+            <div class="kpi-top">
+                <span class="kpi-title" data-i18n="kpi_sold">إجمالي الكمية المباعة</span>
+                <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+            </div>
+            <div class="kpi-value" id="kpiSold">0 Pcs</div>
+        </div>
+
+        <div class="kpi-card" id="kpiSalesVolCard" style="display: none;">
+            <div class="kpi-top">
+                <span class="kpi-title" data-i18n="kpi_sales_vol">إجمالي حجم المبيعات</span>
+                <div class="kpi-icon" style="background: rgba(139, 92, 246, 0.12); color: #7c3aed;">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+            </div>
+            <div class="kpi-value" id="kpiSalesVol">0.00 SAR</div>
+        </div>
+    </div>
+
+    <!-- Table Section -->
     <div class="table-wrapper">
-        <div class="status-box" id="statusBox" data-i18n="status_loading">جاري تحميل الشحنات فوراً...</div>
+        <div class="table-header-info">
+            <span id="activeSeasonLabel" style="font-size: 13px; font-weight: 900; color: #0284c7;">كل المشتريات</span>
+            <span id="recordCount" style="font-size: 12px; color: var(--text-muted); font-weight: 800;">جاري التحميل...</span>
+        </div>
+
+        <div class="status-box" id="statusBox" data-i18n="status_loading">جاري تحميل البيانات...</div>
+        
         <table class="report-table" id="receiptsTable" style="display: none;">
-            <thead>
-                <tr>
-                    <th data-i18n="th_receipt_id">رقم سند الاستلام (ID)</th>
-                    <th data-i18n="th_supplier">اسم المورد (Supplier)</th>
-                    <th data-i18n="th_shipment_no">رقم الشحنة (Shipment No)</th>
-                    <th data-i18n="th_date">تاريخ الشحنة (Date)</th>
-                    <th data-i18n="th_total_qty">إجمالي الكمية المستلمة (Total Qty)</th>
-                    <th data-i18n="th_grand_total">إجمالي المبلغ (Grand Total)</th>
-                    <th data-i18n="th_status">الحالة (Status)</th>
-                </tr>
-            </thead>
+            <thead id="tableHead"></thead>
             <tbody id="tableBody"></tbody>
         </table>
     </div>
@@ -319,80 +466,154 @@
 <script>
     const translations = {
         ar: {
-            page_title: "قائمة شحنات الموردين - الموسى التجارية",
-            header_title: "Purchase Receipt (قائمة الشحنات)",
-            header_subtitle: "الموسى التجارية - عرض المورد ورقم الشحنة وسند الاستلام",
-            search_placeholder: "بحث برقم السند، رقم الشحنة، اسم المورد...",
-            status_loading: "جاري تحميل الشحنات فوراً...",
-            th_receipt_id: "رقم سند الاستلام (ID)",
-            th_supplier: "اسم المورد (Supplier)",
-            th_shipment_no: "رقم الشحنة (Shipment No)",
-            th_date: "تاريخ الشحنة (Date)",
-            th_total_qty: "إجمالي الكمية المستلمة (Total Qty)",
-            th_grand_total: "إجمالي المبلغ (Grand Total)",
-            th_status: "الحالة (Status)",
-            no_records: "لا توجد شحنات مسجلة",
+            page_title: "قائمة شحنات الموردين والتحليل الموسمي - الموسى التجارية",
+            header_title: "Purchase Receipts & Seasonal Analytics",
+            header_subtitle: "الموسى التجارية - تحليل الشحنات والمشتريات حسب المواسم",
+            title_theme: "تغيير المظهر",
+            title_home: "الرئيسية",
+            search_placeholder: "بحث بالبراند، المورد، رقم الشحنة، التاريخ...",
+            btn_all: "كل المشتريات",
+            btn_summer: "مشتريات الصيف",
+            btn_winter: "مشتريات الشتاء",
+            btn_all_season: "مشتريات لجميع الفصول",
+            kpi_cost: "إجمالي تكلفة الشحنات",
+            kpi_received: "إجمالي الكمية المستلمة",
+            kpi_sold: "إجمالي الكمية المباعة",
+            kpi_sales_vol: "إجمالي حجم المبيعات",
+            status_loading: "جاري تحميل البيانات...",
+            no_records: "لا توجد بيانات مطابقة لهذا الفلتر",
             error_server: "فشل جلب البيانات من السيرفر",
             error_connection: "تعذر الاتصال بالسيرفر",
-            records_count: "إجمالي الشحنات: "
+            records_count: "عدد السجلات: ",
+            th_receipt_id: "رقم السند (ID)",
+            th_supplier: "المورد (Supplier)",
+            th_shipment_no: "رقم الشحنة (Shipment No)",
+            th_date: "تاريخ الشحنة (Date)",
+            th_total_qty: "الكمية المستلمة (Received Qty)",
+            th_grand_total: "تكلفة الشحنة (Cost)",
+            th_status: "الحالة (Status)",
+            th_brand: "البراند (Brand)",
+            th_sold_qty: "الكمية المباعة (Sold Qty)",
+            th_sales_vol: "حجم المبيعات (Sales Volume)",
+            unspecified: "غير محدد"
         },
         en: {
-            page_title: "Purchase Receipts - Almoosa Trading",
-            header_title: "Purchase Receipt",
-            header_subtitle: "Almoosa Trading - Supplier, Shipment & Receipt Viewer",
-            search_placeholder: "Search by ID, shipment no, supplier...",
-            status_loading: "Loading shipments...",
+            page_title: "Purchase Receipts & Seasonal Analytics - Almoosa Trading",
+            header_title: "Purchase Receipts & Seasonal Analytics",
+            header_subtitle: "Almoosa Trading - Supplier, Shipment & Seasonal Performance",
+            title_theme: "Toggle Theme",
+            title_home: "Home",
+            search_placeholder: "Search by brand, supplier, shipment no, date...",
+            btn_all: "All Purchases",
+            btn_summer: "Summer Purchases",
+            btn_winter: "Winter Purchases",
+            btn_all_season: "All-Season Purchases",
+            kpi_cost: "Total Shipment Cost",
+            kpi_received: "Total Received Qty",
+            kpi_sold: "Total Sold Qty",
+            kpi_sales_vol: "Total Sales Volume",
+            status_loading: "Loading data...",
+            no_records: "No records found for this filter",
+            error_server: "Failed to fetch data from server",
+            error_connection: "Server connection error",
+            records_count: "Records: ",
             th_receipt_id: "Receipt ID",
             th_supplier: "Supplier",
             th_shipment_no: "Shipment No",
-            th_date: "Date",
-            th_total_qty: "Total Qty",
-            th_grand_total: "Grand Total",
+            th_date: "Shipment Date",
+            th_total_qty: "Received Qty",
+            th_grand_total: "Shipment Cost",
             th_status: "Status",
-            no_records: "No shipments found",
-            error_server: "Failed to fetch data from server",
-            error_connection: "Server connection error",
-            records_count: "Total Shipments: "
+            th_brand: "Brand",
+            th_sold_qty: "Sold Qty",
+            th_sales_vol: "Sales Volume",
+            unspecified: "Unspecified"
         },
         hi: {
-            page_title: "खरीद रसीदें - अलमूसा ट्रेडिंग",
-            header_title: "खरीद रसीद",
-            header_subtitle: "अलमूसा ट्रेडिंग - आपूर्तिकर्ता, शिपमेंट और रसीद व्यूअर",
-            search_placeholder: "आईडी, शिपमेंट नंबर, आपूर्तिकर्ता द्वारा खोजें...",
-            status_loading: "शिपment लोड हो रहा है...",
+            page_title: "खरीद रसीद और मौसमी विश्लेषण - अलमूसा ट्रेडिंग",
+            header_title: "Purchase Receipts & Seasonal Analytics",
+            header_subtitle: "अलमूसा ट्रेडिंग - आपूर्तिकर्ता और मौसमी प्रदर्शन",
+            title_theme: "थीम बदलें",
+            title_home: "होम",
+            search_placeholder: "ब्रांड, आपूर्तिकर्ता, शिपमेंट नंबर द्वारा खोजें...",
+            btn_all: "सभी खरीद",
+            btn_summer: "गर्मियों की खरीद",
+            btn_winter: "सर्दियों की खरीद",
+            btn_all_season: "सभी मौसम की खरीद",
+            kpi_cost: "कुल शिपमेंट लागत",
+            kpi_received: "कुल प्राप्त मात्रा",
+            kpi_sold: "कुल बेची गई मात्रा",
+            kpi_sales_vol: "कुल बिक्री मात्रा",
+            status_loading: "लोड हो रहा है...",
+            no_records: "कोई रिकॉर्ड नहीं मिला",
+            error_server: "सर्वर से डेटा लाने में विफल",
+            error_connection: "कनेक्शन त्रुटि",
+            records_count: "रिकॉर्ड: ",
             th_receipt_id: "रसीद आईडी",
             th_supplier: "आपूर्तिकर्ता",
             th_shipment_no: "शिपमेंट नंबर",
             th_date: "तारीख",
-            th_total_qty: "कुल मात्रा",
-            th_grand_total: "कुल राशि",
+            th_total_qty: "प्राप्त मात्रा",
+            th_grand_total: "लागत",
             th_status: "स्थिति",
-            no_records: "कोई शिपमेंट नहीं मिला",
-            error_server: "सर्वर से डेटा लाने में विफल",
-            error_connection: "कनेक्शन त्रुटि",
-            records_count: "कुल शिपमेंट: "
+            th_brand: "ब्रांड",
+            th_sold_qty: "बेची गई मात्रा",
+            th_sales_vol: "बिक्री राशि",
+            unspecified: "अनिर्दिष्ट"
         },
         ur: {
-            page_title: "پرچیز ریسیٹس - الموسی ٹریڈنگ",
-            header_title: "پرچیز ریسیٹ",
-            header_subtitle: "الموسی ٹریڈنگ - سپلائر، شپمنٹ اور رسید ناظر",
-            search_placeholder: "آئی ڈی، شپمنٹ نمبر، سپلائر کے ذریعے تلاش کریں...",
-            status_loading: "شپمنٹس لوڈ ہو رہی ہیں...",
+            page_title: "پرچیز ریسیٹس اور موسمی تجزیہ - الموسی ٹریڈنگ",
+            header_title: "Purchase Receipts & Seasonal Analytics",
+            header_subtitle: "الموسی ٹریڈنگ - سپلائر اور موسمی کارکردگی",
+            title_theme: "تھیم تبدیل کریں",
+            title_home: "ہوم",
+            search_placeholder: "برانڈ، سپلائر، شپمنٹ نمبر تلاش کریں...",
+            btn_all: "تمام خریداریاں",
+            btn_summer: "گرمیوں کی خریداری",
+            btn_winter: "سردیوں کی خریداری",
+            btn_all_season: "تمام موسموں کی خریداری",
+            kpi_cost: "کل شپمنٹ لاگت",
+            kpi_received: "کل موصولہ مقدار",
+            kpi_sold: "کل فروخت شدہ مقدار",
+            kpi_sales_vol: "کل فروخت کا حجم",
+            status_loading: "ڈیٹا لوڈ ہو رہا ہے...",
+            no_records: "کوئی ڈیٹا نہیں ملا",
+            error_server: "سرور کی خرابی",
+            error_connection: "کنکشن کی خرابی",
+            records_count: "ریکارڈز: ",
             th_receipt_id: "رسیید آئی ڈی",
             th_supplier: "سپلائر",
             th_shipment_no: "شپمنٹ نمبر",
             th_date: "تاریخ",
-            th_total_qty: "کل مقدار",
-            th_grand_total: "کل رقم",
+            th_total_qty: "موصولہ مقدار",
+            th_grand_total: "لاگت",
             th_status: "حالت",
-            no_records: "کوئی شپمنٹ نہیں ملی",
-            error_server: "سرفر سے ڈیٹا حاصل کرنے میں ناکامی",
-            error_connection: "کنکشن کی خرابی",
-            records_count: "کل شپمنٹس: "
+            th_brand: "برانڈ",
+            th_sold_qty: "فروخت شدہ مقدار",
+            th_sales_vol: "فروخت کا حجم",
+            unspecified: "غیر متعین"
         }
     };
 
+    const CONFIG = {
+        serverUrl: "https://87-237-225-155.nip.io",
+        apiKey: "6f039a5a6130b79",
+        apiSecret: "9e6d920a8fda252"
+    };
+
     let currentLang = localStorage.getItem('app_lang') || 'ar';
+    let currentSeason = 'all';
+    let currentData = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setLanguage(currentLang);
+        const savedTheme = localStorage.getItem('app_theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.body.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeIcon').className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        
+        loadData('all');
+    });
 
     function setLanguage(lang) {
         currentLang = lang;
@@ -417,32 +638,21 @@
                 el.placeholder = translations[lang][key];
             }
         });
-        if (allReceipts.length > 0) renderTable(allReceipts);
+
+        document.querySelectorAll('[data-i18n-title]').forEach(el => {
+            const key = el.getAttribute('data-i18n-title');
+            if (translations[lang] && translations[lang][key]) {
+                el.title = translations[lang][key];
+            }
+        });
+
+        updateSeasonLabel();
+        if (currentData.length > 0) filterTable();
     }
 
     function changeLanguage(lang) {
         setLanguage(lang);
     }
-
-    const CONFIG = {
-        serverUrl: "https://87-237-225-155.nip.io",
-        apiKey: "6f039a5a6130b79",
-        apiSecret: "9e6d920a8fda252"
-    };
-
-    let allReceipts = [];
-
-    document.addEventListener('DOMContentLoaded', () => {
-        setLanguage(currentLang);
-        const savedTheme = localStorage.getItem('app_theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        document.body.setAttribute('data-theme', savedTheme);
-        const themeIcon = document.getElementById('themeIcon');
-        if (themeIcon) {
-            themeIcon.className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-        }
-        loadAllReceipts();
-    });
 
     function toggleTheme() {
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
@@ -453,11 +663,39 @@
         document.getElementById('themeIcon').className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
     }
 
-    async function loadAllReceipts() {
+    function updateSeasonLabel() {
+        const t = translations[currentLang];
+        const map = {
+            'all': t.btn_all,
+            'Summer': t.btn_summer,
+            'Winter': t.btn_winter,
+            'All-Season': t.btn_all_season
+        };
+        document.getElementById('activeSeasonLabel').textContent = map[currentSeason] || currentSeason;
+    }
+
+    function selectSeason(season, btnEl) {
+        if (currentSeason === season) return;
+        currentSeason = season;
+
+        document.querySelectorAll('.season-pill').forEach(b => b.classList.remove('active'));
+        if (btnEl) btnEl.classList.add('active');
+
+        updateSeasonLabel();
+        loadData(season);
+    }
+
+    async function loadData(season) {
         const statusBox = document.getElementById('statusBox');
+        const table = document.getElementById('receiptsTable');
         
+        statusBox.style.display = 'block';
+        statusBox.textContent = translations[currentLang].status_loading;
+        table.style.display = 'none';
+
         try {
-            const url = `${CONFIG.serverUrl}/api/method/get_purchase_receipts_list`;
+            // تم ربط الاستدعاء بـ get_purchase_receipts_list المطابق للـ Server Script
+            const url = `${CONFIG.serverUrl}/api/method/get_purchase_receipts_list?season=${encodeURIComponent(season)}`;
             const res = await fetch(url, {
                 method: "GET",
                 headers: { "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}` }
@@ -465,16 +703,8 @@
 
             if (res.ok) {
                 const json = await res.json();
-                allReceipts = json.message || [];
-
-                if (allReceipts.length === 0) {
-                    statusBox.textContent = translations[currentLang].no_records;
-                    return;
-                }
-
-                statusBox.style.display = 'none';
-                document.getElementById('receiptsTable').style.display = 'table';
-                renderTable(allReceipts);
+                currentData = json.message || [];
+                filterTable();
             } else {
                 statusBox.textContent = translations[currentLang].error_server;
             }
@@ -483,41 +713,143 @@
         }
     }
 
-    function renderTable(data) {
-        const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = '';
-        
-        document.getElementById('recordCount').textContent = `${translations[currentLang].records_count}${data.length}`;
-
-        data.forEach(r => {
-            const tr = document.createElement('tr');
-            tr.onclick = () => {
-                window.location.href = `purchases-analytics.html?shipment=${encodeURIComponent(r.shipment_number || '')}&supplier=${encodeURIComponent(r.supplier || '')}`;
-            };
-
-            tr.innerHTML = `
-                <td><span class="receipt-id-badge">${r.name}</span></td>
-                <td>${r.supplier_name || r.supplier}</td>
-                <td><span class="shipment-no-badge">${r.shipment_number || '-'}</span></td>
-                <td>${r.posting_date || ''}</td>
-                <td><span class="badge-qty">${parseFloat(r.total_qty || 0).toLocaleString('en-US')} Pcs</span></td>
-                <td>${parseFloat(r.grand_total || 0).toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</td>
-                <td><span style="color: #3b82f6; font-weight: 850;">${r.status || 'Submitted'}</span></td>
-            `;
-            tbody.appendChild(tr);
+    function filterTable() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const filtered = currentData.filter(r => {
+            const brand = (r.brand || '').toLowerCase();
+            const supName = (r.supplier_name || r.supplier || '').toLowerCase();
+            const shipNo = (r.shipment_number || '').toLowerCase();
+            const recId = (r.name || r.receipt_id || '').toLowerCase();
+            const date = (r.posting_date || '').toLowerCase();
+            return brand.includes(query) || supName.includes(query) || shipNo.includes(query) || recId.includes(query) || date.includes(query);
         });
+
+        renderView(filtered);
     }
 
-    function filterTable() {
-        const query = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = allReceipts.filter(r => {
-            const name = (r.name || '').toLowerCase();
-            const shipNo = (r.shipment_number || '').toLowerCase();
-            const supName = (r.supplier_name || r.supplier || '').toLowerCase();
-            const date = (r.posting_date || '').toLowerCase();
-            return name.includes(query) || shipNo.includes(query) || supName.includes(query) || date.includes(query);
+    function renderView(data) {
+        const statusBox = document.getElementById('statusBox');
+        const table = document.getElementById('receiptsTable');
+        const thead = document.getElementById('tableHead');
+        const tbody = document.getElementById('tableBody');
+        const t = translations[currentLang];
+
+        document.getElementById('recordCount').textContent = `${t.records_count}${data.length}`;
+
+        let totalCost = 0, totalRec = 0, totalSold = 0, totalSalesVol = 0;
+        const isSeasonal = currentSeason !== 'all';
+
+        data.forEach(r => {
+            totalCost += parseFloat(isSeasonal ? (r.shipment_cost || 0) : (r.grand_total || 0));
+            totalRec += parseFloat(isSeasonal ? (r.received_qty || 0) : (r.total_qty || 0));
+            if (isSeasonal) {
+                totalSold += parseFloat(r.sold_qty || 0);
+                totalSalesVol += parseFloat(r.sales_volume || 0);
+            }
         });
-        renderTable(filtered);
+
+        document.getElementById('kpiCost').textContent = `${totalCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR`;
+        document.getElementById('kpiReceived').textContent = `${totalRec.toLocaleString('en-US')} Pcs`;
+
+        document.getElementById('kpiSoldCard').style.display = isSeasonal ? 'flex' : 'none';
+        document.getElementById('kpiSalesVolCard').style.display = isSeasonal ? 'flex' : 'none';
+
+        if (isSeasonal) {
+            document.getElementById('kpiSold').textContent = `${totalSold.toLocaleString('en-US')} Pcs`;
+            document.getElementById('kpiSalesVol').textContent = `${totalSalesVol.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR`;
+        }
+
+        if (data.length === 0) {
+            table.style.display = 'none';
+            statusBox.style.display = 'block';
+            statusBox.textContent = t.no_records;
+            return;
+        }
+
+        statusBox.style.display = 'none';
+        table.style.display = 'table';
+        tbody.innerHTML = '';
+
+        if (!isSeasonal) {
+            thead.innerHTML = `
+                <tr>
+                    <th>${t.th_receipt_id}</th>
+                    <th>${t.th_supplier}</th>
+                    <th>${t.th_shipment_no}</th>
+                    <th>${t.th_date}</th>
+                    <th>${t.th_total_qty}</th>
+                    <th>${t.th_grand_total}</th>
+                    <th>${t.th_status}</th>
+                </tr>
+            `;
+
+            data.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.onclick = () => {
+                    window.location.href = `purchases-analytics.html?shipment=${encodeURIComponent(r.shipment_number || '')}&supplier=${encodeURIComponent(r.supplier || '')}`;
+                };
+                tr.innerHTML = `
+                    <td><span class="receipt-id-badge">${r.name}</span></td>
+                    <td><strong>${r.supplier_name || r.supplier}</strong></td>
+                    <td><span class="shipment-no-badge">${r.shipment_number || '-'}</span></td>
+                    <td>${r.posting_date || ''}</td>
+                    <td><span class="badge-qty">${parseFloat(r.total_qty || 0).toLocaleString('en-US')} Pcs</span></td>
+                    <td><strong>${parseFloat(r.grand_total || 0).toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</strong></td>
+                    <td><span style="color: #2563eb; font-weight: 850;">${r.status || 'Submitted'}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+        } else {
+            thead.innerHTML = `
+                <tr>
+                    <th>${t.th_brand}</th>
+                    <th>${t.th_supplier}</th>
+                    <th>${t.th_date}</th>
+                    <th>${t.th_grand_total}</th>
+                    <th>${t.th_total_qty}</th>
+                    <th>${t.th_sold_qty}</th>
+                    <th>${t.th_sales_vol}</th>
+                </tr>
+            `;
+
+            data.forEach(r => {
+                const recQty = parseFloat(r.received_qty || 0);
+                const soldQty = parseFloat(r.sold_qty || 0);
+                const pct = recQty > 0 ? Math.min(100, Math.round((soldQty / recQty) * 100)) : 0;
+                const barColor = pct >= 70 ? '#10b981' : (pct >= 40 ? '#f59e0b' : '#ef4444');
+                const brandLabel = (!r.brand || r.brand === 'غير محدد') ? t.unspecified : r.brand;
+
+                const tr = document.createElement('tr');
+                tr.onclick = () => {
+                    window.location.href = `purchases-analytics.html?shipment=${encodeURIComponent(r.shipment_number || '')}&supplier=${encodeURIComponent(r.supplier || '')}&brand=${encodeURIComponent(r.brand || '')}&season=${encodeURIComponent(currentSeason)}`;
+                };
+
+                tr.innerHTML = `
+                    <td><span class="brand-badge">${brandLabel}</span></td>
+                    <td>
+                        <div style="font-weight: 800;">${r.supplier_name || r.supplier}</div>
+                        <div style="font-size: 10.5px; color: var(--text-muted);">${r.shipment_number || r.receipt_id}</div>
+                    </td>
+                    <td>${r.posting_date || ''}</td>
+                    <td><strong>${parseFloat(r.shipment_cost || 0).toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</strong></td>
+                    <td><span class="badge-qty">${recQty.toLocaleString('en-US')} Pcs</span></td>
+                    <td>
+                        <div class="sell-through-wrap">
+                            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:11.5px;">
+                                <span>${soldQty.toLocaleString('en-US')} Pcs</span>
+                                <span style="color:${barColor};">${pct}%</span>
+                            </div>
+                            <div class="sell-through-bar">
+                                <div class="sell-through-fill" style="width:${pct}%; background:${barColor};"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><strong style="color: #7c3aed;">${parseFloat(r.sales_volume || 0).toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</strong></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
     }
 </script>
 

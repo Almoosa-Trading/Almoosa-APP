@@ -2403,14 +2403,25 @@
         }
     }
 
-    // دالة تنزيل تقرير كولينز بصيغة Excel مباشرة على جهازك بناءً على الفلاتر المحددة
+    // دالة تنزيل تقرير كولينز بصيغة Excel مع تنسيق اسم الملف SA_Sales Format_DD-MM-YYYY
     async function downloadColinsExcel() {
         const selectedDateFrom = currentQueryFrom; 
         const selectedDateTo = currentQueryTo || currentQueryFrom;
-        const dateLabel = selectedDateFrom === selectedDateTo ? selectedDateFrom : `${selectedDateFrom}_${selectedDateTo}`;
+
+        // دالة مساعدة لتحويل تنسيق التاريخ من YYYY-MM-DD إلى DD-MM-YYYY
+        function formatToDDMMYYYY(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}-${parts[1]}-${parts[0]}`;
+            }
+            return dateStr;
+        }
+
+        const formattedDate = formatToDDMMYYYY(selectedDateFrom);
 
         document.getElementById('shareMenu').classList.remove('show');
-        alert(`⏳ جاري إعداد وتنزيل شيت كولينز للفترة (${dateLabel})...`);
+        alert(`⏳ جاري إعداد وتنزيل شيت كولينز للفترة (${formattedDate})...`);
 
         try {
             const apiUrl = `${CONFIG.serverUrl}/api/method/almoosa_customization.almoosa_customization.report.summery_sales_for_colins.api.download_colins_report_excel?from_date=${selectedDateFrom}&to_date=${selectedDateTo}`;
@@ -2428,7 +2439,10 @@
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `SA_Sales_Format_${dateLabel}.xlsx`;
+                
+                // تسمية الملف بالصيغة المطلوبة SA_Sales Format_DD-MM-YYYY
+                a.download = `SA_Sales Format_${formattedDate}.xlsx`;
+                
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
