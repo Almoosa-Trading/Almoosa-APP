@@ -7,7 +7,7 @@
     <title data-i18n="page_title">تحليل الشحنات والمشتريات - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=2026.27">
+    <link rel="stylesheet" href="style.css?v=2026.32">
 
     <style>
         .main-container {
@@ -244,14 +244,14 @@
         .status-box { text-align: center; padding: 35px; color: var(--text-muted); font-size: 13.5px; font-weight: 800; }
 
         /* =========================================================================
-           تنسيق الطباعة الاحترافي مع ترقيم الصفحات التلقائي في الأسفل
+           تنسيق الطباعة الاحترافي المضغوط
            ========================================================================= */
         #pdfPrintContainer { display: none; }
 
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 6mm 6mm 10mm 6mm; /* ترك مساحة في الأسفل لتذييل الصفحة وترقيمها */
+                margin: 6mm 8mm 10mm 8mm;
                 @bottom-right {
                     content: "صفحة " counter(page) " من " counter(pages);
                     font-family: 'Cairo', sans-serif;
@@ -268,7 +268,7 @@
                 }
             }
 
-            body { background: #ffffff !important; color: #0f172a !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { background: #ffffff !important; color: #0f172a !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; margin: 0 !important; padding: 0 !important; }
             .main-container { display: none !important; }
             #pdfPrintContainer { display: block !important; width: 100% !important; font-family: 'Cairo', sans-serif !important; direction: rtl; }
 
@@ -277,41 +277,41 @@
                 justify-content: space-between;
                 align-items: center;
                 border-bottom: 2px solid #1e293b;
-                padding-bottom: 6px;
-                margin-bottom: 10px;
+                padding-bottom: 4px;
+                margin-bottom: 6px;
                 width: 100%;
             }
             .pdf-header-right { flex: 1.2; text-align: start; }
             .pdf-header-center { flex: 1; text-align: center; }
             .pdf-header-left { flex: 1.2; text-align: end; font-size: 9.5px; color: #334155; font-weight: 700; }
 
-            .pdf-logo-img { height: 68px; width: auto; object-fit: contain; display: inline-block; }
-            .pdf-report-title { font-size: 15px; font-weight: 900; color: #0f172a; margin: 0; }
-            .pdf-report-subtitle { font-size: 10px; font-weight: 700; color: #334155; margin: 2px 0 0 0; }
+            .pdf-logo-img { height: 60px; width: auto; object-fit: contain; display: inline-block; }
+            .pdf-report-title { font-size: 14px; font-weight: 900; color: #0f172a; margin: 0; }
+            .pdf-report-subtitle { font-size: 9.5px; font-weight: 700; color: #334155; margin: 1px 0 0 0; }
             
-            .pdf-kpi-row { display: flex; gap: 10px; margin-bottom: 10px; }
+            .pdf-kpi-row { display: flex; gap: 8px; margin-bottom: 6px; }
             .pdf-kpi-box {
                 flex: 1;
                 border: 1.5px solid #64748b;
-                border-radius: 5px;
-                padding: 5px 10px;
+                border-radius: 4px;
+                padding: 4px 8px;
                 background: #f8fafc !important;
             }
-            .pdf-kpi-lbl { font-size: 9px; color: #475569; font-weight: 800; }
-            .pdf-kpi-val { font-size: 12px; color: #0f172a; font-weight: 900; margin-top: 2px; }
+            .pdf-kpi-lbl { font-size: 8.5px; color: #475569; font-weight: 800; }
+            .pdf-kpi-val { font-size: 11.5px; color: #0f172a; font-weight: 900; margin-top: 1px; }
 
-            .pdf-table { width: 100%; border-collapse: collapse; font-size: 9.5px; margin-bottom: 8px; }
+            .pdf-table { width: 100%; border-collapse: collapse; font-size: 8.5px; margin-bottom: 6px; }
             
             .pdf-table th {
                 background: #1e293b !important;
                 color: #ffffff !important;
                 font-weight: 800;
-                padding: 5px 7px;
+                padding: 4px 5px;
                 border: 1px solid #1e293b;
                 text-align: start;
             }
             .pdf-table td {
-                padding: 3.5px 7px;
+                padding: 3px 5px;
                 border: 1px solid #94a3b8;
                 color: #0f172a;
                 font-weight: 700;
@@ -321,10 +321,11 @@
                 background: #f1f5f9 !important;
                 color: #0f172a !important;
                 font-weight: 900 !important;
-                font-size: 10px !important;
-                padding: 5px 8px;
+                font-size: 9px !important;
+                padding: 4px 7px;
                 border: 1px solid #64748b;
                 text-align: right;
+                margin-top: 6px;
             }
 
             .pdf-subtotal-row td {
@@ -338,35 +339,25 @@
             .pdf-grand-total-row td {
                 background: #e2e8f0 !important;
                 font-weight: 900 !important;
-                font-size: 10.5px !important;
+                font-size: 9.5px !important;
                 color: #0f172a !important;
                 border-top: 2px solid #0f172a !important;
                 border-bottom: 2px solid #0f172a !important;
-                padding: 6px 7px !important;
+                padding: 5px 6px !important;
             }
 
             .pdf-signatures-section {
                 display: flex;
                 justify-content: space-between;
-                margin-top: 18px;
-                padding-top: 10px;
+                margin-top: 12px;
+                padding-top: 6px;
                 border-top: 1.5px dashed #64748b;
                 page-break-inside: avoid;
             }
-            .pdf-sig-box { flex: 1; text-align: center; padding: 0 10px; }
-            .pdf-sig-title { font-size: 10.5px; font-weight: 900; color: #0f172a; margin-bottom: 18px; }
+            .pdf-sig-box { flex: 1; text-align: center; padding: 0 8px; }
+            .pdf-sig-title { font-size: 10px; font-weight: 900; color: #0f172a; margin-bottom: 14px; }
             .pdf-sig-line { border-top: 1.5px solid #334155; width: 80%; margin: 0 auto; }
-            .pdf-sig-name { font-size: 8.5px; color: #475569; margin-top: 3px; font-weight: 700; }
-
-            .pdf-footer {
-                margin-top: 8px;
-                text-align: center;
-                font-size: 8.5px;
-                color: #475569;
-                border-top: 1px solid #94a3b8;
-                padding-top: 4px;
-                page-break-inside: avoid;
-            }
+            .pdf-sig-name { font-size: 8px; color: #475569; margin-top: 2px; font-weight: 700; }
         }
     </style>
 </head>
@@ -508,6 +499,7 @@
             th_received: "المستلم (Received)",
             th_cost_sar: "التكلفة (SAR)",
             th_cost_usd: "التكلفة (USD)",
+            th_landed: "التكلفة النهائية (بعد الشحن)",
             th_sold: "المباع (Sold)",
             th_pct: "نسبة التصريف",
             th_sales_vol: "حجم المبيعات",
@@ -541,6 +533,7 @@
             th_received: "Received Qty",
             th_cost_sar: "Cost (SAR)",
             th_cost_usd: "Cost (USD)",
+            th_landed: "Final Cost (Landed)",
             th_sold: "Sold Qty",
             th_pct: "Sell-Through %",
             th_sales_vol: "Sales Volume",
@@ -648,11 +641,12 @@
 
         statusBox.style.display = 'none';
 
-        let totalRec = 0, totalCostSar = 0, totalCostUsd = 0, totalSold = 0, totalSalesVol = 0;
+        let totalRec = 0, totalCostSar = 0, totalCostUsd = 0, totalLanded = 0, totalSold = 0, totalSalesVol = 0;
         rawAnalyticsData.forEach(r => {
             totalRec += parseFloat(r.received_qty || 0);
             totalCostSar += parseFloat(r.cost || 0);
             totalCostUsd += parseFloat(r.cost_usd || 0);
+            totalLanded += parseFloat(r.landed_cost_total || 0);
             totalSold += parseFloat(r.sold_qty || 0);
             totalSalesVol += parseFloat(r.sales_vol || 0);
         });
@@ -696,13 +690,14 @@
         Object.keys(groupedBySupplier).forEach(supplierName => {
             const supplierShipments = groupedBySupplier[supplierName];
             
-            let supRec = 0, supCostSar = 0, supCostUsd = 0, supSold = 0, supSalesVol = 0;
+            let supRec = 0, supCostSar = 0, supCostUsd = 0, supLanded = 0, supSold = 0, supSalesVol = 0;
 
             supplierShipments.forEach(group => {
                 group.items.forEach(item => {
                     supRec += parseFloat(item.received_qty || 0);
                     supCostSar += parseFloat(item.cost || 0);
                     supCostUsd += parseFloat(item.cost_usd || 0);
+                    supLanded += parseFloat(item.landed_cost_total || 0);
                     supSold += parseFloat(item.sold_qty || 0);
                     supSalesVol += parseFloat(item.sales_vol || 0);
                 });
@@ -718,6 +713,7 @@
                             <th>${t.th_received}</th>
                             <th>${t.th_cost_sar}</th>
                             <th>${t.th_cost_usd}</th>
+                            <th>${t.th_landed}</th>
                             <th>${t.th_sold}</th>
                             <th>${t.th_pct}</th>
                             <th>${t.th_sales_vol}</th>
@@ -751,6 +747,7 @@
                     const rec = parseFloat(item.received_qty || 0);
                     const costSar = parseFloat(item.cost || 0);
                     const costUsd = parseFloat(item.cost_usd || 0);
+                    const landed = parseFloat(item.landed_cost_total || 0);
                     const sold = parseFloat(item.sold_qty || 0);
                     const sVol = parseFloat(item.sales_vol || 0);
                     const pct = rec > 0 ? Math.min(100, Math.round((sold / rec) * 100)) : 0;
@@ -763,19 +760,22 @@
                             <td><span class="badge-qty">${rec.toLocaleString('en-US')} Pcs</span></td>
                             <td><strong>${costSar.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</strong></td>
                             <td><strong style="color:#0284c7;">$${costUsd.toLocaleString('en-US', {minimumFractionDigits: 2})} USD</strong></td>
+                            <td><strong style="color:#059669;">${landed.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</strong></td>
                             <td>${sold.toLocaleString('en-US')} Pcs</td>
                             <td><div style="font-weight:800; color:${barColor};">${pct}%</div></td>
                             <td><strong style="color: #7c3aed;">${sVol.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</strong></td>
                         </tr>
                     `;
 
+                    // ترتيب الطباعة: كمية الاستلام <- التكلفة بالدولار <- التكلفة بالريال <- التكلفة النهائية
                     pdfTableContentHTML += `
                         <tr>
                             <td><strong>${item.code || '-'}</strong></td>
                             <td>${item.name || '-'}</td>
                             <td>${rec.toLocaleString('en-US')} Pcs</td>
-                            <td>${costSar.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</td>
                             <td>$${costUsd.toLocaleString('en-US', {minimumFractionDigits: 2})} USD</td>
+                            <td>${costSar.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</td>
+                            <td><strong style="color:#059669;">${landed.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</strong></td>
                         </tr>
                     `;
                 });
@@ -787,6 +787,7 @@
                         <td>${supRec.toLocaleString('en-US')} Pcs</td>
                         <td>${supCostSar.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</td>
                         <td>$${supCostUsd.toLocaleString('en-US', {minimumFractionDigits: 2})} USD</td>
+                        <td>${supLanded.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</td>
                         <td>${supSold.toLocaleString('en-US')} Pcs</td>
                         <td>${supPct}%</td>
                         <td>${supSalesVol.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</td>
@@ -797,22 +798,26 @@
 
             container.innerHTML += tableHTML;
 
+            // إجمالي المورد في الطباعة
             pdfTableContentHTML += `
                 <tr class="pdf-subtotal-row">
                     <td colspan="2" style="text-align:end;">${t.supplier_total_label} ${supplierName}:</td>
                     <td>${supRec.toLocaleString('en-US')} Pcs</td>
-                    <td>${supCostSar.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</td>
                     <td>$${supCostUsd.toLocaleString('en-US', {minimumFractionDigits: 2})} USD</td>
+                    <td>${supCostSar.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</td>
+                    <td>${supLanded.toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</td>
                 </tr>
             `;
         });
 
+        // الإجمالي العام في الطباعة
         pdfTableContentHTML += `
             <tr class="pdf-grand-total-row">
                 <td colspan="2" style="text-align:end;">${t.pdf_total_row}:</td>
                 <td>${totalRec.toLocaleString('en-US')} Pcs</td>
-                <td>${totalCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</td>
                 <td>$${totalCostUsd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} USD</td>
+                <td>${totalCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</td>
+                <td>${totalLanded.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</td>
             </tr>
         `;
 
@@ -839,12 +844,12 @@
                     <div class="pdf-kpi-val">${totalRec.toLocaleString('en-US')} Pcs</div>
                 </div>
                 <div class="pdf-kpi-box">
-                    <div class="pdf-kpi-lbl">${t.kpi_cost_sar}</div>
-                    <div class="pdf-kpi-val">${totalCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</div>
-                </div>
-                <div class="pdf-kpi-box">
                     <div class="pdf-kpi-lbl">${t.kpi_cost_usd}</div>
                     <div class="pdf-kpi-val">$${totalCostUsd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} USD</div>
+                </div>
+                <div class="pdf-kpi-box">
+                    <div class="pdf-kpi-lbl">${t.kpi_cost_sar}</div>
+                    <div class="pdf-kpi-val">${totalCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</div>
                 </div>
             </div>
 
@@ -854,8 +859,9 @@
                         <th>${codeHeaderTitle}</th>
                         <th>${nameHeaderTitle}</th>
                         <th>${t.th_received}</th>
-                        <th>${t.th_cost_sar}</th>
                         <th>${t.th_cost_usd}</th>
+                        <th>${t.th_cost_sar}</th>
+                        <th>${t.th_landed}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -885,8 +891,6 @@
                     <div class="pdf-sig-name">الاسم / التوقيع</div>
                 </div>
             </div>
-
-           
         `;
     }
 
