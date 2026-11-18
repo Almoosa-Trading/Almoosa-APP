@@ -7,7 +7,7 @@
     <title data-i18n="page_title">قائمة شحنات الموردين والتحليل الموسمي - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=2026.5">
+    <link rel="stylesheet" href="style.css?v=2026.13">
 
     <style>
         .main-container {
@@ -228,6 +228,96 @@
             text-align: inherit;
         }
 
+        /* Toolbar & Multi-Select */
+        .print-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1.5px solid var(--border);
+        }
+
+        .btn-print-mode {
+            background: linear-gradient(135deg, #0f172a 0%, #0284c7 100%);
+            color: #ffffff;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 11px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 12.5px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+            transition: transform 0.2s;
+        }
+        .btn-print-mode:hover { transform: translateY(-1px); }
+
+        .selection-actions-bar {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            background: rgba(2, 132, 199, 0.08);
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 1.5px solid #0284c7;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .selection-btns-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-confirm-selection {
+            background: #10b981;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 9px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-confirm-selection:hover { background: #059669; }
+
+        .btn-cancel-selection {
+            background: #ef4444;
+            color: #ffffff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 9px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-cancel-selection:hover { background: #dc2626; }
+
+        .ship-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #0284c7;
+            vertical-align: middle;
+        }
+
         /* Table Styles */
         .table-wrapper {
             background: var(--bg-card);
@@ -275,6 +365,9 @@
         .report-table tbody tr:hover {
             background: rgba(2, 132, 199, 0.07);
         }
+        .report-table tbody tr.selected-row {
+            background: rgba(2, 132, 199, 0.14) !important;
+        }
 
         .brand-badge {
             background: rgba(15, 23, 42, 0.08);
@@ -320,25 +413,6 @@
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
-        .sell-through-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-width: 115px;
-        }
-        .sell-through-bar {
-            width: 100%;
-            height: 6px;
-            background: var(--border);
-            border-radius: 99px;
-            overflow: hidden;
-        }
-        .sell-through-fill {
-            height: 100%;
-            border-radius: 99px;
-            transition: width 0.3s ease;
-        }
-
         .status-box {
             text-align: center;
             padding: 35px;
@@ -347,7 +421,7 @@
             font-weight: 800;
         }
 
-        /* تصميم نافذة الاختيارات الثلاثة (Modal) */
+        /* نافذة اختيار مستوى العرض والطباعة للشحنات المحددة */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -538,6 +612,29 @@
 
     <!-- Table Section -->
     <div class="table-wrapper">
+        <div class="print-toolbar">
+            <button class="btn-print-mode" id="btnStartPrintSelect" onclick="togglePrintSelectMode(true)">
+                <i class="fa-solid fa-check-double"></i>
+                <span data-i18n="btn_select_mode">تحديد الشحنات والموردين</span>
+            </button>
+
+            <div class="selection-actions-bar" id="selectionActionsBar">
+                <span style="font-size: 13px; font-weight: 800; color: #0284c7;">
+                    <span data-i18n="selected_suppliers_label">المحدد:</span> <b id="selectedCountBadge">0</b>
+                </span>
+                <div class="selection-btns-group">
+                    <button class="btn-confirm-selection" onclick="openViewSelectionModal()">
+                        <i class="fa-solid fa-eye"></i>
+                        <span data-i18n="btn_view_purchases">عرض المشتريات المحددة</span>
+                    </button>
+                    <button class="btn-cancel-selection" onclick="togglePrintSelectMode(false)">
+                        <i class="fa-solid fa-xmark"></i>
+                        <span data-i18n="btn_cancel">إلغاء</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="table-header-info">
             <span id="activeSeasonLabel" style="font-size: 13px; font-weight: 900; color: #0284c7;">كل المشتريات</span>
             <span id="recordCount" style="font-size: 12px; color: var(--text-muted); font-weight: 800;">جاري التحميل...</span>
@@ -552,28 +649,28 @@
     </div>
 </div>
 
-<!-- نافذة اختيار طريقة العرض عند النقر على الشحنة -->
+<!-- نافذة اختيار مستوى العرض والطباعة -->
 <div class="modal-overlay" id="viewSelectionModal" onclick="if(event.target === this) closeViewModal()">
     <div class="modal-card">
-        <div class="modal-title">اختر مستوى عرض تفاصيل الشحنة</div>
-        <div class="modal-subtitle" id="modalShipmentInfo">رقم الشحنة: -</div>
+        <div class="modal-title" data-i18n="modal_title">اختر مستوى عرض وطباعة المشتريات المحددة</div>
+        <div class="modal-subtitle" id="modalSelectionInfo">العناصر المحددة: 0</div>
         
         <div class="modal-buttons-group">
-            <button class="view-option-btn" onclick="navigateToView('variants')">
-                <span>عرض على مستوى الموديل (Model Number)</span>
+            <button class="view-option-btn" onclick="redirectToAnalyticsPrint('variants')">
+                <span data-i18n="opt_model">على مستوى الموديل (Model Number)</span>
                 <i class="fa-solid fa-shirt"></i>
             </button>
-            <button class="view-option-btn" onclick="navigateToView('groups')">
-                <span>عرض على مستوى المجموعة (Sub Group)</span>
+            <button class="view-option-btn" onclick="redirectToAnalyticsPrint('groups')">
+                <span data-i18n="opt_group">على مستوى المجموعة (Sub Group)</span>
                 <i class="fa-solid fa-folder-tree"></i>
             </button>
-            <button class="view-option-btn" onclick="navigateToView('items')">
-                <span>عرض على مستوى الصنف (Item)</span>
+            <button class="view-option-btn" onclick="redirectToAnalyticsPrint('items')">
+                <span data-i18n="opt_item">على مستوى الصنف (Item)</span>
                 <i class="fa-solid fa-box"></i>
             </button>
         </div>
 
-        <button class="modal-close-btn" onclick="closeViewModal()">إلغاء الأمر</button>
+        <button class="modal-close-btn" onclick="closeViewModal()" data-i18n="btn_cancel_modal">إلغاء الأمر</button>
     </div>
 </div>
 
@@ -590,6 +687,16 @@
             btn_summer: "مشتريات الصيف",
             btn_winter: "مشتريات الشتاء",
             btn_all_season: "مشتريات لجميع الفصول",
+            btn_select_mode: "تحديد الشحنات والموردين",
+            selected_suppliers_label: "المحدد:",
+            btn_view_purchases: "عرض المشتريات المحددة",
+            btn_cancel: "إلغاء",
+            alert_select_one: "يرجى تحديد صف واحد على الأقل للمتابعة.",
+            modal_title: "اختر مستوى عرض وطباعة المشتريات المحددة",
+            opt_model: "على مستوى الموديل (Model Number)",
+            opt_group: "على مستوى المجموعة (Sub Group)",
+            opt_item: "على مستوى الصنف (Item)",
+            btn_cancel_modal: "إلغاء الأمر",
             kpi_cost: "إجمالي تكلفة الشحنات",
             kpi_received: "إجمالي الكمية المستلمة",
             kpi_sold: "إجمالي الكمية المباعة",
@@ -606,10 +713,7 @@
             th_total_qty: "الكمية المستلمة (Received Qty)",
             th_grand_total: "تكلفة الشحنة (Cost)",
             th_status: "الحالة (Status)",
-            th_brand: "البراند (Brand)",
-            th_sold_qty: "الكمية المباعة (Sold Qty)",
-            th_sales_vol: "حجم المبيعات (Sales Volume)",
-            unspecified: "غير محدد"
+            th_brand: "البراند (Brand)"
         },
         en: {
             page_title: "Purchase Receipts & Seasonal Analytics - Almoosa Trading",
@@ -622,6 +726,16 @@
             btn_summer: "Summer Purchases",
             btn_winter: "Winter Purchases",
             btn_all_season: "All-Season Purchases",
+            btn_select_mode: "Select Shipments & Suppliers",
+            selected_suppliers_label: "Selected:",
+            btn_view_purchases: "View Selected Purchases",
+            btn_cancel: "Cancel",
+            alert_select_one: "Please select at least one row to proceed.",
+            modal_title: "Select Display Level for Selected Purchases",
+            opt_model: "By Model Number",
+            opt_group: "By Sub Group",
+            opt_item: "By Item",
+            btn_cancel_modal: "Cancel",
             kpi_cost: "Total Shipment Cost",
             kpi_received: "Total Received Qty",
             kpi_sold: "Total Sold Qty",
@@ -638,10 +752,7 @@
             th_total_qty: "Received Qty",
             th_grand_total: "Shipment Cost",
             th_status: "Status",
-            th_brand: "Brand",
-            th_sold_qty: "Sold Qty",
-            th_sales_vol: "Sales Volume",
-            unspecified: "Unspecified"
+            th_brand: "Brand"
         },
         hi: {
             page_title: "खरीद रसीद और मौसमी विश्लेषण - अलमूसा ट्रेडिंग",
@@ -654,6 +765,16 @@
             btn_summer: "गर्मियों की खरीद",
             btn_winter: "सर्दियों की खरीद",
             btn_all_season: "सभी मौसम की खरीद",
+            btn_select_mode: "शिपमेंट चुनें",
+            selected_suppliers_label: "चयनित:",
+            btn_view_purchases: "चयनित खरीद देखें",
+            btn_cancel: "रद्द करें",
+            alert_select_one: "कृपया आगे बढ़ने के लिए कम से कम एक पंक्ति चुनें।",
+            modal_title: "चयनित खरीद के लिए स्तर चुनें",
+            opt_model: "मॉडल नंबर के अनुसार",
+            opt_group: "सब ग्रुप के अनुसार",
+            opt_item: "आइटम के अनुसार",
+            btn_cancel_modal: "रद्द करें",
             kpi_cost: "कुल शिपमेंट लागत",
             kpi_received: "कुल प्राप्त मात्रा",
             kpi_sold: "कुल बेची गई मात्रा",
@@ -670,10 +791,7 @@
             th_total_qty: "प्राप्त मात्रा",
             th_grand_total: "लागत",
             th_status: "स्थिति",
-            th_brand: "ब्रांड",
-            th_sold_qty: "बेची गई मात्रा",
-            th_sales_vol: "बिक्री राशि",
-            unspecified: "अनिर्दिष्ट"
+            th_brand: "ब्रांड"
         },
         ur: {
             page_title: "پرچیز ریسیٹس اور موسمی تجزیہ - الموسی ٹریڈنگ",
@@ -681,11 +799,21 @@
             header_subtitle: "الموسی ٹریڈنگ - سپلائر اور موسمی کارکردگی",
             title_theme: "تھیم تبدیل کریں",
             title_home: "ہوم",
-            search_placeholder: "برانڈ، سپلائر، شپمنٹ نمبر تلاش کریں...",
+            search_placeholder: "برانڈ، سپلائر، شپमेंट نمبر تلاش کریں...",
             btn_all: "تمام خریداریاں",
             btn_summer: "گرمیوں کی خریداری",
             btn_winter: "سردیوں کی خریداری",
             btn_all_season: "تمام موسموں کی خریداری",
+            btn_select_mode: "شپمنٹس منتخب کریں",
+            selected_suppliers_label: "منتخب کردہ:",
+            btn_view_purchases: "منتخب خریداریاں دیکھیں",
+            btn_cancel: "منسوخ کریں",
+            alert_select_one: "براہ کرم آگے بڑھنے کے لیے کم از کم ایک قطار منتخب کریں۔",
+            modal_title: "منتخب خریداریوں کے لیے سطح منتخب کریں",
+            opt_model: "ماڈل نمبر کے لحاظ سے",
+            opt_group: "سب گروپ کے لحاظ سے",
+            opt_item: "آئٹم کے لحاظ سے",
+            btn_cancel_modal: "منسوخ کریں",
             kpi_cost: "کل شپمنٹ لاگت",
             kpi_received: "کل موصولہ مقدار",
             kpi_sold: "کل فروخت شدہ مقدار",
@@ -702,10 +830,7 @@
             th_total_qty: "موصولہ مقدار",
             th_grand_total: "لاگت",
             th_status: "حالت",
-            th_brand: "برانڈ",
-            th_sold_qty: "فروخت شدہ مقدار",
-            th_sales_vol: "فروخت کا حجم",
-            unspecified: "غیر متعین"
+            th_brand: "برانڈ"
         }
     };
 
@@ -718,7 +843,14 @@
     let currentLang = localStorage.getItem('app_lang') || 'ar';
     let currentSeason = 'all';
     let currentData = [];
-    let selectedShipmentContext = {};
+    let filteredData = [];
+
+    let isPrintSelectMode = false;
+    let selectedRowKeys = new Set();
+
+    function getUniqueRowKey(r, idx) {
+        return `${r.name || ''}|${r.receipt_id || ''}|${r.shipment_number || ''}|${r.supplier || ''}|${r.brand || ''}|${r.posting_date || ''}|${idx}`;
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
         setLanguage(currentLang);
@@ -730,9 +862,52 @@
         loadData('all');
     });
 
-    function openViewSelectionModal(shipmentNo, supplier, brand, season) {
-        selectedShipmentContext = { shipmentNo, supplier, brand, season };
-        document.getElementById('modalShipmentInfo').textContent = `الشحنة: ${shipmentNo || '-'} | المورد: ${supplier || '-'}`;
+    function togglePrintSelectMode(enable) {
+        isPrintSelectMode = enable;
+        selectedRowKeys.clear();
+        updateSelectedCountUI();
+
+        document.getElementById('btnStartPrintSelect').style.display = enable ? 'none' : 'inline-flex';
+        document.getElementById('selectionActionsBar').style.display = enable ? 'flex' : 'none';
+        renderView(filteredData);
+    }
+
+    function toggleRowSelection(rowKey, checkboxEl) {
+        if (!rowKey) return;
+        if (selectedRowKeys.has(rowKey)) {
+            selectedRowKeys.delete(rowKey);
+            if (checkboxEl) checkboxEl.checked = false;
+        } else {
+            selectedRowKeys.add(rowKey);
+            if (checkboxEl) checkboxEl.checked = true;
+        }
+        updateSelectedCountUI();
+        renderView(filteredData);
+    }
+
+    function toggleSelectAllRows(masterCb) {
+        if (masterCb.checked) {
+            filteredData.forEach((r, idx) => {
+                selectedRowKeys.add(getUniqueRowKey(r, idx));
+            });
+        } else {
+            selectedRowKeys.clear();
+        }
+        updateSelectedCountUI();
+        renderView(filteredData);
+    }
+
+    function updateSelectedCountUI() {
+        document.getElementById('selectedCountBadge').textContent = selectedRowKeys.size;
+    }
+
+    function openViewSelectionModal() {
+        const t = translations[currentLang];
+        if (selectedRowKeys.size === 0) {
+            alert(t.alert_select_one);
+            return;
+        }
+        document.getElementById('modalSelectionInfo').textContent = `${t.selected_suppliers_label} ${selectedRowKeys.size}`;
         document.getElementById('viewSelectionModal').style.display = 'flex';
     }
 
@@ -740,9 +915,29 @@
         document.getElementById('viewSelectionModal').style.display = 'none';
     }
 
-    function navigateToView(viewType) {
-        const { shipmentNo, supplier, brand, season } = selectedShipmentContext;
-        let targetUrl = `purchases-analytics.html?shipment=${encodeURIComponent(shipmentNo || '')}&supplier=${encodeURIComponent(supplier || '')}&view_type=${viewType}`;
+    function redirectToAnalyticsPrint(viewType) {
+        closeViewModal();
+        const rowsToPrint = filteredData.filter((r, idx) => {
+            return selectedRowKeys.has(getUniqueRowKey(r, idx));
+        });
+
+        if (rowsToPrint.length === 0) return;
+
+        const shipments = rowsToPrint.map(r => r.shipment_number || r.name || '').filter(Boolean).join(',');
+        const suppliers = rowsToPrint.map(r => r.supplier || r.supplier_name || '').filter(Boolean).join(',');
+        const brand = rowsToPrint[0].brand || '';
+
+        let targetUrl = `purchases-analytics.html?shipment=${encodeURIComponent(shipments)}&supplier=${encodeURIComponent(suppliers)}&view_type=${viewType}&season=${encodeURIComponent(currentSeason)}&auto_print=true`;
+        
+        if (brand && brand !== 'غير محدد') {
+            targetUrl += `&brand=${encodeURIComponent(brand)}`;
+        }
+        
+        window.location.href = targetUrl;
+    }
+
+    function openSingleViewDirect(shipmentNo, supplier, brand, season) {
+        let targetUrl = `purchases-analytics.html?shipment=${encodeURIComponent(shipmentNo || '')}&supplier=${encodeURIComponent(supplier || '')}&view_type=variants`;
         if (brand) targetUrl += `&brand=${encodeURIComponent(brand)}`;
         if (season) targetUrl += `&season=${encodeURIComponent(season)}`;
         window.location.href = targetUrl;
@@ -836,6 +1031,8 @@
             if (res.ok) {
                 const json = await res.json();
                 currentData = json.message || [];
+                selectedRowKeys.clear();
+                updateSelectedCountUI();
                 filterTable();
             } else {
                 statusBox.textContent = translations[currentLang].error_server;
@@ -847,7 +1044,7 @@
 
     function filterTable() {
         const query = document.getElementById('searchInput').value.toLowerCase().trim();
-        const filtered = currentData.filter(r => {
+        filteredData = currentData.filter(r => {
             const brand = (r.brand || '').toLowerCase();
             const supName = (r.supplier_name || r.supplier || '').toLowerCase();
             const shipNo = (r.shipment_number || '').toLowerCase();
@@ -856,7 +1053,7 @@
             return brand.includes(query) || supName.includes(query) || shipNo.includes(query) || recId.includes(query) || date.includes(query);
         });
 
-        renderView(filtered);
+        renderView(filteredData);
     }
 
     function renderView(data) {
@@ -902,9 +1099,13 @@
         table.style.display = 'table';
         tbody.innerHTML = '';
 
+        const allSelected = data.length > 0 && data.every((r, idx) => selectedRowKeys.has(getUniqueRowKey(r, idx)));
+        const checkboxHeader = isPrintSelectMode ? `<th style="width:42px; text-align:center;"><input type="checkbox" class="ship-checkbox" onchange="toggleSelectAllRows(this)" ${allSelected ? 'checked' : ''}></th>` : '';
+
         if (!isSeasonal) {
             thead.innerHTML = `
                 <tr>
+                    ${checkboxHeader}
                     <th>${t.th_receipt_id}</th>
                     <th>${t.th_supplier}</th>
                     <th>${t.th_shipment_no}</th>
@@ -915,17 +1116,26 @@
                 </tr>
             `;
 
-            data.forEach(r => {
+            data.forEach((r, idx) => {
+                const rowKey = getUniqueRowKey(r, idx);
+                const safeRowKey = rowKey.replace(/'/g, "\\'");
+                const supKey = r.supplier || r.supplier_name || '';
+                const shipKey = r.shipment_number || r.name || '';
+                const isChecked = selectedRowKeys.has(rowKey);
                 const tr = document.createElement('tr');
-                tr.onclick = () => {
-                    openViewSelectionModal(
-                        r.shipment_number || r.name || '', 
-                        r.supplier || '', 
-                        '', 
-                        'all'
-                    );
+                if (isChecked) tr.classList.add('selected-row');
+
+                tr.onclick = (e) => {
+                    if (isPrintSelectMode) {
+                        if (e.target.type !== 'checkbox') toggleRowSelection(rowKey);
+                    } else {
+                        openSingleViewDirect(shipKey, supKey, '', 'all');
+                    }
                 };
+
+                const cbCell = isPrintSelectMode ? `<td style="text-align:center;"><input type="checkbox" class="ship-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleRowSelection('${safeRowKey}', this)"></td>` : '';
                 tr.innerHTML = `
+                    ${cbCell}
                     <td><span class="receipt-id-badge">${r.name}</span></td>
                     <td><strong>${r.supplier_name || r.supplier}</strong></td>
                     <td><span class="shipment-no-badge">${r.shipment_number || '-'}</span></td>
@@ -940,6 +1150,7 @@
         } else {
             thead.innerHTML = `
                 <tr>
+                    ${checkboxHeader}
                     <th>${t.th_brand}</th>
                     <th>${t.th_supplier}</th>
                     <th>${t.th_date}</th>
@@ -950,7 +1161,12 @@
                 </tr>
             `;
 
-            data.forEach(r => {
+            data.forEach((r, idx) => {
+                const rowKey = getUniqueRowKey(r, idx);
+                const safeRowKey = rowKey.replace(/'/g, "\\'");
+                const supKey = r.supplier || r.supplier_name || '';
+                const shipKey = r.shipment_number || r.receipt_id || '';
+                const isChecked = selectedRowKeys.has(rowKey);
                 const recQty = parseFloat(r.received_qty || 0);
                 const soldQty = parseFloat(r.sold_qty || 0);
                 const pct = recQty > 0 ? Math.min(100, Math.round((soldQty / recQty) * 100)) : 0;
@@ -958,20 +1174,23 @@
                 const brandLabel = (!r.brand || r.brand === 'غير محدد') ? t.unspecified : r.brand;
 
                 const tr = document.createElement('tr');
-                tr.onclick = () => {
-                    openViewSelectionModal(
-                        r.shipment_number || r.receipt_id || '', 
-                        r.supplier || '', 
-                        r.brand || '', 
-                        currentSeason
-                    );
+                if (isChecked) tr.classList.add('selected-row');
+
+                tr.onclick = (e) => {
+                    if (isPrintSelectMode) {
+                        if (e.target.type !== 'checkbox') toggleRowSelection(rowKey);
+                    } else {
+                        openSingleViewDirect(shipKey, supKey, r.brand || '', currentSeason);
+                    }
                 };
 
+                const cbCell = isPrintSelectMode ? `<td style="text-align:center;"><input type="checkbox" class="ship-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleRowSelection('${safeRowKey}', this)"></td>` : '';
                 tr.innerHTML = `
+                    ${cbCell}
                     <td><span class="brand-badge">${brandLabel}</span></td>
                     <td>
                         <div style="font-weight: 800;">${r.supplier_name || r.supplier}</div>
-                        <div style="font-size: 10.5px; color: var(--text-muted);">${r.shipment_number || r.receipt_id}</div>
+                        <div style="font-size: 10.5px; color: var(--text-muted);">${shipKey}</div>
                     </td>
                     <td>${r.posting_date || ''}</td>
                     <td><strong>${parseFloat(r.shipment_cost || 0).toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</strong></td>
