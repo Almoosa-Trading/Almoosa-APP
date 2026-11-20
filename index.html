@@ -20,11 +20,318 @@
     <script src="app.js" defer></script>
 
     <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* ✨ خلفية احترافية مستوحاة من الصورة المرفقة */
+        .login-gate {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            background-color: #0b0d10;
+            background-image:
+                radial-gradient(ellipse 65% 55% at 14% 6%, rgba(86, 130, 168, 0.24) 0%, rgba(11, 13, 16, 0) 70%),
+                radial-gradient(ellipse 55% 75% at 88% 36%, rgba(212, 152, 68, 0.34) 0%, rgba(145, 92, 28, 0.14) 48%, rgba(11, 13, 16, 0) 78%),
+                radial-gradient(ellipse 70% 60% at 76% 85%, rgba(196, 134, 48, 0.22) 0%, rgba(11, 13, 16, 0) 75%),
+                linear-gradient(125deg, #11161d 0%, #0b0d10 48%, #16110a 100%);
+            overflow-y: auto;
+        }
+
+        /* خيوط ضوئية ذهبية ناعمة على الخلفية */
+        .login-gate::before {
+            content: '';
+            position: fixed;
+            inset: -10%;
+            pointer-events: none;
+            background:
+                linear-gradient(112deg, transparent 58%, rgba(250, 204, 21, 0.22) 58.3%, transparent 59%),
+                linear-gradient(106deg, transparent 66%, rgba(245, 158, 11, 0.28) 66.3%, transparent 67.1%),
+                linear-gradient(118deg, transparent 74%, rgba(254, 240, 138, 0.16) 74.2%, transparent 74.8%),
+                linear-gradient(101deg, transparent 81%, rgba(217, 119, 6, 0.24) 81.2%, transparent 81.9%);
+            filter: blur(0.6px);
+            z-index: 0;
+        }
+
+        .login-gate.hidden {
+            display: none !important;
+        }
+
+        .login-card {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 400px;
+            background: rgba(14, 15, 18, 0.86);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #f8fafc;
+            border-radius: 26px;
+            padding: 26px 24px 22px;
+            border: 2px solid #eab308;
+            box-shadow:
+                0 24px 55px rgba(0, 0, 0, 0.72),
+                0 0 28px rgba(234, 179, 8, 0.14),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .login-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .login-logo-ring {
+            width: 82px;
+            height: 82px;
+            border-radius: 22px;
+            padding: 6px;
+            background: rgba(24, 24, 27, 0.9);
+            border: 2px solid #facc15;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .login-logo-ring img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 16px;
+        }
+
+        .login-brand h2 {
+            margin: 0;
+            font-size: 21px;
+            font-weight: 900;
+            color: #facc15;
+            letter-spacing: 0.2px;
+        }
+
+        .login-brand p {
+            margin: 4px 0 0;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #cbd5e1;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .input-group-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group-box label {
+            font-size: 12px;
+            font-weight: 800;
+            color: #facc15;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .input-field-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 11px 14px 11px 40px;
+            border-radius: 12px;
+            border: 1.8px solid #facc15;
+            background: #ffffff;
+            color: #111827;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            outline: none;
+            transition: box-shadow 0.2s, transform 0.15s;
+            box-sizing: border-box;
+            text-align: left;
+            direction: ltr;
+        }
+
+        .login-input::placeholder {
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .login-input:focus {
+            box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.35);
+        }
+
+        /* مقترحات الحسابات المحفوظة سابقاً */
+        .suggestions-box {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .suggestions-box.has-items {
+            display: flex;
+        }
+
+        .suggestions-label {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: #fde047;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .suggestions-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .suggestion-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: rgba(250, 204, 21, 0.12);
+            border: 1px solid rgba(250, 204, 21, 0.45);
+            color: #fef08a;
+            font-family: inherit;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            direction: ltr;
+        }
+
+        .suggestion-chip:hover {
+            background: rgba(250, 204, 21, 0.25);
+            border-color: #facc15;
+            transform: translateY(-1px);
+        }
+
+        .suggestion-chip .remove-acc {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.25);
+            color: #fca5a5;
+            font-size: 10px;
+            line-height: 1;
+        }
+
+        .suggestion-chip .remove-acc:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        .toggle-pass-btn {
+            position: absolute;
+            left: 10px;
+            background: transparent;
+            border: none;
+            color: #4b5563;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 14px;
+            border-radius: 8px;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .toggle-pass-btn:hover {
+            color: #b45309;
+            background: rgba(234, 179, 8, 0.12);
+        }
+
+        .login-alert {
+            display: none;
+            padding: 10px 12px;
+            border-radius: 11px;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1.45;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .login-alert.show {
+            display: flex;
+        }
+
+        .login-alert.error {
+            background: rgba(220, 38, 38, 0.2);
+            color: #fecaca;
+            border: 1.5px solid rgba(248, 113, 113, 0.65);
+        }
+
+        .login-submit-btn {
+            margin-top: 4px;
+            width: 100%;
+            padding: 12px 18px;
+            border: 2px solid #facc15;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
+            color: #111827;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 10px 24px rgba(234, 179, 8, 0.28);
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+        }
+
+        .login-submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px rgba(234, 179, 8, 0.4);
+        }
+
+        .login-submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .login-footer-note {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(250, 204, 21, 0.28);
+            text-align: center;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #94a3b8;
+        }
+
         .dashboard-container {
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 10px;
+        }
+
+        .dashboard-container.locked {
+            display: none !important;
         }
 
         /* 📱 هيدر مرتب وصارم يمنع تمدد الأزرار ويجعلها في سطر واحد */
@@ -73,10 +380,10 @@
         }
 
         .header-title-box p {
-            font-size: 9.5px !important;
-            color: #bae6fd !important;
-            margin: 0 !important;
-            font-weight: 600;
+            font-size: 10px !important;
+            color: #fde047 !important;
+            margin: 2px 0 0 !important;
+            font-weight: 800;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
@@ -117,6 +424,11 @@
             background: rgba(255, 255, 255, 0.25) !important;
             border-color: #ffffff !important;
             transform: translateY(-2px);
+        }
+
+        .action-btn-icon.logout-btn:hover {
+            background: rgba(239, 68, 68, 0.8) !important;
+            border-color: #fca5a5 !important;
         }
 
         .lang-select {
@@ -217,7 +529,7 @@
             .odoo-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
             header { padding: 20px 28px !important; }
             .header-title-box h1 { font-size: 18px !important; }
-            .header-title-box p { font-size: 11.5px !important; }
+            .header-title-box p { font-size: 12px !important; }
             .action-btn-icon { width: 44px !important; height: 44px !important; min-width: 44px !important; font-size: 16px !important; border-radius: 14px !important; }
             .lang-select { height: 44px !important; font-size: 12px !important; padding: 0 14px !important; border-radius: 14px !important; }
         }
@@ -230,11 +542,90 @@
 </head>
 <body data-theme="light">
 
-<div class="dashboard-container">
+<!-- 🔐 شاشة تسجيل الدخول -->
+<div class="login-gate" id="loginGate">
+    <div class="login-card">
+        <div class="login-brand">
+            <div class="login-logo-ring">
+                <img src="https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png" alt="Almoosa Trading Logo">
+            </div>
+            <h2>الموسى التجارية</h2>
+            <p>النظام الإداري الموحد • تسجيل الدخول</p>
+        </div>
+
+        <form class="login-form" id="erpLoginForm" autocomplete="on" onsubmit="handleErpLogin(event)">
+            <div class="input-group-box">
+                <label for="erpUsername">
+                    <i class="fa-solid fa-user"></i>
+                    <span>اسم المستخدم</span>
+                </label>
+                <div class="input-field-wrap">
+                    <input
+                        type="text"
+                        id="erpUsername"
+                        name="username"
+                        class="login-input"
+                        list="savedUsersDatalist"
+                        placeholder="Enter username"
+                        autocomplete="username"
+                        oninput="onUsernameInputChange(this.value)"
+                        required
+                    >
+                    <datalist id="savedUsersDatalist"></datalist>
+                </div>
+
+                <div class="suggestions-box" id="savedSuggestionsBox">
+                    <div class="suggestions-label">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>الحسابات المسجلة سابقاً (اضغط للملء التلقائي):</span>
+                    </div>
+                    <div class="suggestions-list" id="savedSuggestionsList"></div>
+                </div>
+            </div>
+
+            <div class="input-group-box">
+                <label for="erpPassword">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>كلمة المرور</span>
+                </label>
+                <div class="input-field-wrap">
+                    <input
+                        type="password"
+                        id="erpPassword"
+                        name="password"
+                        class="login-input"
+                        placeholder="Enter password"
+                        autocomplete="current-password"
+                        required
+                    >
+                    <button type="button" class="toggle-pass-btn" onclick="togglePasswordVisibility()" title="إظهار / إخفاء كلمة المرور">
+                        <i class="fa-solid fa-eye" id="passEyeIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="login-alert error" id="loginAlertBox" role="alert">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="loginAlertText"></span>
+            </div>
+
+            <button type="submit" class="login-submit-btn" id="loginSubmitBtn">
+                <i class="fa-solid fa-right-to-bracket" id="loginBtnIcon"></i>
+                <span id="loginBtnText">تسجيل الدخول</span>
+            </button>
+        </form>
+
+        <div class="login-footer-note">
+            نظام الموسى التجارية الاحترافي © 2026
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-container locked" id="dashboardContainer">
     <header>
         <div class="header-title-box">
             <h1 data-i18n="dash_header">لوحة التحكم</h1>
-            <p data-i18n="dash_subheader">النظام الإداري الموحد - الموسى التجارية</p>
+            <p id="activeUserSubheader"></p>
         </div>
         <div class="header-left-group">
             <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
@@ -249,6 +640,9 @@
                 <option value="hi">हिन्दी</option>
                 <option value="ur">اردو</option>
             </select>
+            <button type="button" class="action-btn-icon logout-btn" onclick="handleErpLogout()" title="تسجيل الخروج">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
         </div>
     </header>
 
@@ -315,6 +709,358 @@
         نظام الموسى التجارية الاحترافي © 2026
     </footer>
 </div>
+
+<script>
+    const ERP_AUTH_CONFIG = {
+        serverUrl: "https://87-237-225-155.nip.io",
+        sessionKey: "almoosa_erp_session_v1",
+        historyKey: "almoosa_erp_saved_accounts_v1",
+        allowedUsers: [
+            "isspecialist@almoosa.com.sa",
+            "arshad@almoosa.com.sa",
+            "ibrahim@almoosa.com.sa",
+            "kashif@almoosa.com.sa",
+            "mohd@almoosa.com.sa"
+        ]
+    };
+
+    function normalizeUser(val) {
+        return String(val || "").trim().toLowerCase();
+    }
+
+    function isUserAllowed(usernameOrEmail) {
+        const clean = normalizeUser(usernameOrEmail);
+        return ERP_AUTH_CONFIG.allowedUsers.map(normalizeUser).includes(clean);
+    }
+
+    function extractDisplayNameOnly(rawName, emailOrUser) {
+        const cleaned = String(rawName || "").trim();
+        if (cleaned && !cleaned.includes("@") && cleaned.toLowerCase() !== "guest") {
+            return cleaned;
+        }
+        const source = cleaned || String(emailOrUser || "").trim();
+        if (source.includes("@")) {
+            const prefix = source.split("@")[0].trim();
+            return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+        }
+        return source;
+    }
+
+    function getSavedAccounts() {
+        try {
+            const list = JSON.parse(localStorage.getItem(ERP_AUTH_CONFIG.historyKey) || "[]");
+            return Array.isArray(list) ? list : [];
+        } catch (_) {
+            return [];
+        }
+    }
+
+    function saveAccountToHistory(user, password, displayName) {
+        const cleanUser = String(user || "").trim();
+        if (!cleanUser) return;
+
+        const current = getSavedAccounts().filter(
+            item => normalizeUser(item.user) !== normalizeUser(cleanUser)
+        );
+
+        current.unshift({
+            user: cleanUser,
+            password: password || "",
+            displayName: displayName || extractDisplayNameOnly("", cleanUser),
+            lastUsed: Date.now()
+        });
+
+        localStorage.setItem(ERP_AUTH_CONFIG.historyKey, JSON.stringify(current.slice(0, 8)));
+        renderSavedSuggestions();
+    }
+
+    function removeSavedAccount(userToRemove, event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const updated = getSavedAccounts().filter(
+            item => normalizeUser(item.user) !== normalizeUser(userToRemove)
+        );
+        localStorage.setItem(ERP_AUTH_CONFIG.historyKey, JSON.stringify(updated));
+        renderSavedSuggestions();
+    }
+
+    function applySavedAccount(accountObj) {
+        const usrInput = document.getElementById("erpUsername");
+        const pwdInput = document.getElementById("erpPassword");
+        if (usrInput) usrInput.value = accountObj.user || "";
+        if (pwdInput && typeof accountObj.password === "string") {
+            pwdInput.value = accountObj.password;
+        }
+        hideLoginAlert();
+    }
+
+    function onUsernameInputChange(value) {
+        const cleanVal = normalizeUser(value);
+        if (!cleanVal) return;
+        const match = getSavedAccounts().find(acc => normalizeUser(acc.user) === cleanVal);
+        if (match && match.password) {
+            const pwdInput = document.getElementById("erpPassword");
+            if (pwdInput && !pwdInput.value) {
+                pwdInput.value = match.password;
+            }
+        }
+    }
+
+    function renderSavedSuggestions() {
+        const datalist = document.getElementById("savedUsersDatalist");
+        const box = document.getElementById("savedSuggestionsBox");
+        const listEl = document.getElementById("savedSuggestionsList");
+        const accounts = getSavedAccounts();
+
+        if (datalist) {
+            datalist.innerHTML = accounts
+                .map(acc => `<option value="${acc.user.replace(/"/g, "&quot;")}"></option>`)
+                .join("");
+        }
+
+        if (!box || !listEl) return;
+
+        if (!accounts.length) {
+            box.classList.remove("has-items");
+            listEl.innerHTML = "";
+            return;
+        }
+
+        box.classList.add("has-items");
+        listEl.innerHTML = "";
+
+        accounts.forEach(acc => {
+            const chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = "suggestion-chip";
+            chip.title = `ملء بيانات ${acc.user}`;
+
+            const labelSpan = document.createElement("span");
+            labelSpan.textContent = acc.user;
+            chip.appendChild(labelSpan);
+
+            const delSpan = document.createElement("span");
+            delSpan.className = "remove-acc";
+            delSpan.title = "حذف الحساب المقترح";
+            delSpan.textContent = "×";
+            delSpan.onclick = (e) => removeSavedAccount(acc.user, e);
+            chip.appendChild(delSpan);
+
+            chip.onclick = () => applySavedAccount(acc);
+            listEl.appendChild(chip);
+        });
+    }
+
+    function showLoginAlert(message) {
+        const box = document.getElementById("loginAlertBox");
+        const txt = document.getElementById("loginAlertText");
+        if (!box || !txt) return;
+        txt.textContent = message;
+        box.classList.add("show");
+    }
+
+    function hideLoginAlert() {
+        const box = document.getElementById("loginAlertBox");
+        if (box) box.classList.remove("show");
+    }
+
+    function setLoginLoading(loading) {
+        const btn = document.getElementById("loginSubmitBtn");
+        const icon = document.getElementById("loginBtnIcon");
+        const text = document.getElementById("loginBtnText");
+        if (!btn || !icon || !text) return;
+
+        btn.disabled = loading;
+        if (loading) {
+            icon.className = "fa-solid fa-spinner fa-spin";
+            text.textContent = "جاري التحقق...";
+        } else {
+            icon.className = "fa-solid fa-right-to-bracket";
+            text.textContent = "تسجيل الدخول";
+        }
+    }
+
+    function togglePasswordVisibility() {
+        const passInput = document.getElementById("erpPassword");
+        const eyeIcon = document.getElementById("passEyeIcon");
+        if (!passInput || !eyeIcon) return;
+
+        if (passInput.type === "password") {
+            passInput.type = "text";
+            eyeIcon.className = "fa-solid fa-eye-slash";
+        } else {
+            passInput.type = "password";
+            eyeIcon.className = "fa-solid fa-eye";
+        }
+    }
+
+    function unlockDashboard(displayNameOnly) {
+        const gate = document.getElementById("loginGate");
+        const dash = document.getElementById("dashboardContainer");
+        const sub = document.getElementById("activeUserSubheader");
+
+        if (gate) gate.classList.add("hidden");
+        if (dash) dash.classList.remove("locked");
+        if (sub) sub.textContent = displayNameOnly || "";
+    }
+
+    async function verifyErpCredentials(usr, pwd) {
+        const response = await fetch(`${ERP_AUTH_CONFIG.serverUrl}/api/method/login`, {
+            method: "POST",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "Accept": "application/json"
+            },
+            body: new URLSearchParams({
+                usr: usr,
+                pwd: pwd
+            }).toString()
+        });
+
+        let data = {};
+        try {
+            data = await response.json();
+        } catch (_) {
+            data = {};
+        }
+
+        if (!response.ok || data.message === "No App" || data.exc_type === "AuthenticationError") {
+            throw new Error(data.message || "اسم المستخدم أو كلمة المرور غير صحيحة");
+        }
+
+        let loggedUser = usr;
+        try {
+            const meRes = await fetch(`${ERP_AUTH_CONFIG.serverUrl}/api/method/frappe.auth.get_logged_user`, {
+                method: "GET",
+                credentials: "include",
+                headers: { "Accept": "application/json" }
+            });
+            if (meRes.ok) {
+                const meData = await meRes.json();
+                if (meData.message && meData.message !== "Guest") {
+                    loggedUser = meData.message;
+                }
+            }
+        } catch (_) {}
+
+        return {
+            user: loggedUser,
+            fullName: data.full_name || ""
+        };
+    }
+
+    async function handleErpLogin(event) {
+        event.preventDefault();
+        hideLoginAlert();
+
+        const usrInput = document.getElementById("erpUsername");
+        const pwdInput = document.getElementById("erpPassword");
+        const usr = (usrInput?.value || "").trim();
+        const pwd = pwdInput?.value || "";
+
+        if (!usr || !pwd) {
+            showLoginAlert("يرجى إدخال اسم المستخدم وكلمة المرور.");
+            return;
+        }
+
+        setLoginLoading(true);
+        try {
+            const authResult = await verifyErpCredentials(usr, pwd);
+            const verifiedUser = authResult.user || usr;
+
+            if (!isUserAllowed(verifiedUser) && !isUserAllowed(usr)) {
+                try {
+                    await fetch(`${ERP_AUTH_CONFIG.serverUrl}/api/method/logout`, {
+                        method: "GET",
+                        credentials: "include"
+                    });
+                } catch (_) {}
+                localStorage.removeItem(ERP_AUTH_CONFIG.sessionKey);
+                showLoginAlert("ليس لديك صلاحيات للدخول");
+                return;
+            }
+
+            const finalEmail = isUserAllowed(verifiedUser) ? verifiedUser : usr;
+            const displayName = extractDisplayNameOnly(authResult.fullName, finalEmail);
+
+            saveAccountToHistory(finalEmail, pwd, displayName);
+
+            localStorage.setItem(
+                ERP_AUTH_CONFIG.sessionKey,
+                JSON.stringify({
+                    user: finalEmail,
+                    displayName: displayName,
+                    loggedAt: Date.now()
+                })
+            );
+
+            unlockDashboard(displayName);
+        } catch (err) {
+            showLoginAlert(err.message || "اسم المستخدم أو كلمة المرور غير صحيحة");
+        } finally {
+            setLoginLoading(false);
+        }
+    }
+
+    async function handleErpLogout() {
+        localStorage.removeItem(ERP_AUTH_CONFIG.sessionKey);
+        try {
+            await fetch(`${ERP_AUTH_CONFIG.serverUrl}/api/method/logout`, {
+                method: "GET",
+                credentials: "include"
+            });
+        } catch (_) {}
+
+        const gate = document.getElementById("loginGate");
+        const dash = document.getElementById("dashboardContainer");
+        const usrInput = document.getElementById("erpUsername");
+        const pwdInput = document.getElementById("erpPassword");
+
+        renderSavedSuggestions();
+        const savedAccounts = getSavedAccounts();
+        if (savedAccounts.length > 0) {
+            if (usrInput) usrInput.value = savedAccounts[0].user || "";
+            if (pwdInput) pwdInput.value = savedAccounts[0].password || "";
+        } else if (pwdInput) {
+            pwdInput.value = "";
+        }
+
+        hideLoginAlert();
+        if (dash) dash.classList.add("locked");
+        if (gate) gate.classList.remove("hidden");
+    }
+
+    (function restoreSessionImmediately() {
+        try {
+            const saved = JSON.parse(localStorage.getItem(ERP_AUTH_CONFIG.sessionKey) || "null");
+            if (saved && saved.user && isUserAllowed(saved.user)) {
+                const displayName = extractDisplayNameOnly(saved.displayName, saved.user);
+                const applyNow = () => unlockDashboard(displayName);
+                if (document.readyState === "loading") {
+                    document.addEventListener("DOMContentLoaded", applyNow);
+                } else {
+                    applyNow();
+                }
+            }
+        } catch (_) {}
+    })();
+
+    document.addEventListener("DOMContentLoaded", () => {
+        renderSavedSuggestions();
+        const usrInput = document.getElementById("erpUsername");
+        const pwdInput = document.getElementById("erpPassword");
+        const accounts = getSavedAccounts();
+        if (accounts.length > 0 && usrInput && !usrInput.value) {
+            usrInput.value = accounts[0].user || "";
+            if (pwdInput && !pwdInput.value && accounts[0].password) {
+                pwdInput.value = accounts[0].password;
+            }
+        }
+    });
+</script>
 
 </body>
 </html>

@@ -14,9 +14,13 @@
     <style>
         .main-container {
             width: 100%;
-            max-width: 1350px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 0 15px;
+        }
+
+        .view-hidden {
+            display: none !important;
         }
 
         /* 📱 ترويسة ثابتة وموحدة تضمن بقاء الأزرار في سطر واحد على الجوال */
@@ -303,14 +307,216 @@
             border: 2px solid var(--border);
         }
 
+        .section-header-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
         .section-title {
             font-size: 15px;
             font-weight: 800;
             color: var(--text-main);
-            margin-bottom: 16px;
+            margin-bottom: 0;
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .view-toggle-group {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-body);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .view-mode-btn {
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-family: 'Cairo', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 7px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .view-mode-btn.active {
+            background: var(--accent);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+        }
+
+        /* 📊 جدول صفوف وأعمدة باحترافية وهوية مبيعات المبيعات */
+        .table-view-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 2px solid var(--border);
+            overflow-x: auto;
+            box-shadow: var(--shadow);
+        }
+
+        .daily-grid-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .daily-grid-table th,
+        .daily-grid-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .daily-grid-table th:first-child,
+        .daily-grid-table td:first-child {
+            text-align: right;
+            font-weight: 800;
+            position: sticky;
+            right: 0;
+            background: var(--bg-card);
+            z-index: 2;
+        }
+
+        [dir="ltr"] .daily-grid-table th:first-child,
+        [dir="ltr"] .daily-grid-table td:first-child {
+            text-align: left;
+            right: auto;
+            left: 0;
+        }
+
+        .daily-grid-table thead th {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.14), rgba(37, 99, 235, 0.14));
+            color: var(--accent);
+            font-weight: 800;
+            border-bottom: 2px solid var(--accent-border);
+        }
+
+        .daily-grid-table thead th:first-child {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.16), rgba(37, 99, 235, 0.16));
+            z-index: 3;
+        }
+
+        .daily-grid-table tbody tr.expandable-row {
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .daily-grid-table tbody tr.expandable-row.is-open td {
+            background: rgba(2, 132, 199, 0.06);
+        }
+
+        .daily-grid-table tbody tr.expandable-row.is-open td:first-child {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .daily-grid-table tbody tr.expandable-row:hover td {
+            background: rgba(2, 132, 199, 0.09);
+        }
+
+        .daily-grid-table tbody tr.expandable-row:hover td:first-child {
+            background: var(--bg-body);
+        }
+
+        .daily-grid-table tbody tr.sub-row td {
+            background: var(--bg-body);
+            font-size: 11.5px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .daily-grid-table tbody tr.sub-row td:first-child {
+            background: var(--bg-body);
+            padding-right: 30px;
+            font-weight: 800;
+            border-right: 3px solid var(--accent);
+        }
+
+        [dir="ltr"] .daily-grid-table tbody tr.sub-row td:first-child {
+            padding-right: 14px;
+            padding-left: 30px;
+            border-right: none;
+            border-left: 3px solid var(--accent);
+        }
+
+        .daily-grid-table tbody tr.leaf-row td {
+            background: var(--bg-card);
+            font-size: 11px;
+            color: var(--text-muted);
+            padding-top: 9px;
+            padding-bottom: 9px;
+        }
+
+        .daily-grid-table tbody tr.leaf-row td:first-child {
+            background: var(--bg-card);
+            padding-right: 48px;
+            color: var(--text-main);
+            font-weight: 700;
+            border-right: 3px solid #10b981;
+        }
+
+        [dir="ltr"] .daily-grid-table tbody tr.leaf-row td:first-child {
+            padding-right: 14px;
+            padding-left: 48px;
+            border-right: none;
+            border-left: 3px solid #10b981;
+        }
+
+        .tbl-pill-sales {
+            color: #1d4ed8;
+            font-weight: 900;
+        }
+        .tbl-pill-margin {
+            background: rgba(16, 185, 129, 0.1);
+            color: #047857;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-weight: 800;
+        }
+
+        .row-caret {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            margin-left: 6px;
+            color: var(--accent);
+            font-size: 11px;
+            transition: transform 0.2s;
+        }
+
+        [dir="ltr"] .row-caret {
+            margin-left: 0;
+            margin-right: 6px;
+        }
+
+        .daily-grid-table tfoot td {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(37, 99, 235, 0.12));
+            font-weight: 900;
+            border-top: 2px solid var(--accent-border);
+            border-bottom: none;
+            color: var(--accent);
+            padding: 13px 14px;
+        }
+
+        .daily-grid-table tfoot td:first-child {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(37, 99, 235, 0.15));
         }
 
         .status-msg {
@@ -319,9 +525,10 @@
             color: var(--text-muted);
             font-size: 13px;
             font-weight: 700;
+            grid-column: 1 / -1;
         }
 
-        /* 🌲 هيكل الشجرة الأنيق (Supplier Tree Accordion) */
+        /* 🌲 هيكل الشجرة (مغلقة افتراضياً وتفتح عند الضغط) */
         .tree-container {
             display: flex;
             flex-direction: column;
@@ -349,6 +556,8 @@
             cursor: pointer;
             background: var(--bg-card);
             user-select: none;
+        }
+        .tree-supplier-card.open .tree-supplier-header {
             border-bottom: 1px solid var(--border);
         }
 
@@ -400,7 +609,6 @@
         }
         .tree-supplier-card.open .tree-supplier-body { display: block; }
 
-        /* المستوى الثاني: الجنس / التصنيف (Gender / Category) */
         .gender-accordion {
             background: var(--bg-body);
             border: 1.5px solid var(--border);
@@ -434,7 +642,6 @@
         }
         .gender-accordion.open .gender-body { display: block; }
 
-        /* المستوى الثالث: شبكة المجموعات (Groups Grid المنظمة والاحترافية) */
         .groups-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -484,7 +691,7 @@
         .metric-cell label { font-size: 9px; opacity: 0.85; font-weight: 700; }
         .metric-cell span { font-size: 11px; font-weight: 900; }
 
-        /* 💻 التجاوب المتقدم لشاشات الكمبيوتر واللابتوب */
+        /* 💻 3 مربعات في الصف على الشاشات الكبيرة */
         @media (min-width: 768px) {
             header {
                 padding: 20px 28px !important;
@@ -512,7 +719,7 @@
                 gap: 10px !important;
             }
             .main-container {
-                max-width: 1350px !important;
+                max-width: 1400px !important;
                 padding: 0 20px;
             }
             .filter-panel .period-chips {
@@ -523,9 +730,9 @@
                 gap: 16px !important;
             }
             .hero-summary-card { grid-template-columns: repeat(5, 1fr) !important; }
-            .tree-container {
+            .tree-container:not(.view-hidden) {
                 display: grid !important;
-                grid-template-columns: repeat(2, 1fr) !important;
+                grid-template-columns: repeat(3, 1fr) !important;
                 gap: 20px !important;
                 align-items: start;
             }
@@ -534,7 +741,7 @@
                 gap: 12px !important;
             }
             .metrics-badge-grid {
-                grid-template-columns: repeat(4, 1fr) !important;
+                grid-template-columns: repeat(2, 1fr) !important;
             }
         }
     </style>
@@ -580,7 +787,6 @@
         </div>
 
         <div class="controls-row">
-            <!-- Time Range -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_time_range">النطاق الزمني:</span>
                 <div class="date-toggle-btn" onclick="toggleCalendar()">
@@ -597,7 +803,6 @@
                 </div>
             </div>
 
-            <!-- Branch Filter -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_branch">الفرع (Branch):</span>
                 <div class="multi-select-dropdown">
@@ -609,7 +814,6 @@
                 </div>
             </div>
 
-            <!-- Gender Filter -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_gender">الجنس (Gender):</span>
                 <div class="multi-select-dropdown">
@@ -621,7 +825,6 @@
                 </div>
             </div>
 
-            <!-- Category Filter -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_category">الفئة (Category):</span>
                 <div class="multi-select-dropdown">
@@ -633,7 +836,6 @@
                 </div>
             </div>
 
-            <!-- Group Filter -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_group">المجموعة (Group):</span>
                 <div class="multi-select-dropdown">
@@ -645,7 +847,6 @@
                 </div>
             </div>
 
-            <!-- Product Year Filter -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_product_year">سنة المنتج (Product Year):</span>
                 <div class="multi-select-dropdown">
@@ -657,7 +858,6 @@
                 </div>
             </div>
 
-            <!-- Brand Filter -->
             <div class="control-group">
                 <span class="control-label" data-i18n="label_brand">الماركة (Brand Filter):</span>
                 <div class="multi-select-dropdown">
@@ -671,7 +871,6 @@
         </div>
     </div>
 
-    <!-- كارت الإحصائيات الرئيسي -->
     <div class="hero-summary-card">
         <div class="hero-stat-box">
             <label data-i18n="kpi_total_sales">إجمالي المبيعات</label>
@@ -696,11 +895,32 @@
     </div>
 
     <div class="report-section">
-        <div class="section-title" data-i18n="section_supplier_summary">
-            <i class="fa-solid fa-folder-tree" style="color: var(--accent);"></i> تقرير مبيعات الموردين (Supplier Sales Tree)
+        <div class="section-header-row">
+            <div class="section-title" data-i18n="section_supplier_summary">
+                <i class="fa-solid fa-folder-tree" style="color: var(--accent);"></i> تقرير مبيعات الموردين (Supplier Sales Tree)
+            </div>
+            <div class="view-toggle-group" role="group" aria-label="View Mode">
+                <button type="button" class="view-mode-btn active" id="btnViewCards" onclick="setViewMode('cards')">
+                    <i class="fa-solid fa-border-all"></i>
+                    <span id="txtViewCards">مربعات</span>
+                </button>
+                <button type="button" class="view-mode-btn" id="btnViewTable" onclick="setViewMode('table')">
+                    <i class="fa-solid fa-table"></i>
+                    <span id="txtViewTable">صفوف وأعمدة</span>
+                </button>
+            </div>
         </div>
+
         <div class="tree-container" id="treeContainer">
             <div class="status-msg" data-i18n="status_loading">جاري تحضير البيانات...</div>
+        </div>
+
+        <div class="table-view-card view-hidden" id="supplierTableContainer">
+            <table class="daily-grid-table">
+                <thead id="supplierTableHead"></thead>
+                <tbody id="supplierTableBody"></tbody>
+                <tfoot id="supplierTableFoot"></tfoot>
+            </table>
         </div>
     </div>
 </div>
@@ -717,8 +937,80 @@
     let currentQueryTo = '';
     let selectionState = { startDate: null, endDate: null };
     let viewDate = new Date();
+    let currentViewMode = 'cards';
+
+    let expandedTableSuppliers = new Set();
+    let expandedTableGenders = new Set();
+
+    function getActiveLang() {
+        return (typeof currentLang !== 'undefined' && currentLang) || localStorage.getItem('app_lang') || document.documentElement.getAttribute('lang') || 'ar';
+    }
+
+    function updateViewModeTexts() {
+        const lang = getActiveLang();
+        const labels = {
+            ar: { cards: 'مربعات', table: 'صفوف وأعمدة' },
+            en: { cards: 'Cards', table: 'Rows & Columns' },
+            hi: { cards: 'कार्ड', table: 'पंक्ति और कॉलम' },
+            ur: { cards: 'کارڈز', table: 'قطاریں اور کالم' }
+        };
+        const current = labels[lang] || labels.ar;
+        const txtCards = document.getElementById('txtViewCards');
+        const txtTable = document.getElementById('txtViewTable');
+        if (txtCards) txtCards.textContent = current.cards;
+        if (txtTable) txtTable.textContent = current.table;
+    }
+
+    function syncViewModeUI() {
+        const btnCards = document.getElementById('btnViewCards');
+        const btnTable = document.getElementById('btnViewTable');
+        const cardsBox = document.getElementById('treeContainer');
+        const tableBox = document.getElementById('supplierTableContainer');
+
+        if (!btnCards || !btnTable || !cardsBox || !tableBox) return;
+
+        const isTable = currentViewMode === 'table';
+
+        btnCards.classList.toggle('active', !isTable);
+        btnTable.classList.toggle('active', isTable);
+
+        cardsBox.classList.toggle('view-hidden', isTable);
+        tableBox.classList.toggle('view-hidden', !isTable);
+
+        cardsBox.style.setProperty('display', isTable ? 'none' : 'grid', 'important');
+        tableBox.style.setProperty('display', isTable ? 'block' : 'none', 'important');
+    }
+
+    function setViewMode(mode) {
+        currentViewMode = mode === 'table' ? 'table' : 'cards';
+        syncViewModeUI();
+        updateViewModeTexts();
+    }
+
+    function toggleTableSupplier(encodedSup) {
+        const sup = decodeURIComponent(encodedSup);
+        if (expandedTableSuppliers.has(sup)) {
+            expandedTableSuppliers.delete(sup);
+        } else {
+            expandedTableSuppliers.add(sup);
+        }
+        renderReports();
+    }
+
+    function toggleTableGender(encodedKey) {
+        const key = decodeURIComponent(encodedKey);
+        if (expandedTableGenders.has(key)) {
+            expandedTableGenders.delete(key);
+        } else {
+            expandedTableGenders.add(key);
+        }
+        renderReports();
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
+        currentViewMode = 'cards';
+        syncViewModeUI();
+        updateViewModeTexts();
         syncWithSalesPageFilter();
         renderCalendar();
         
@@ -885,9 +1177,12 @@
     }
 
     async function loadSupplierSalesData() {
+        const lang = getActiveLang();
         const treeContainer = document.getElementById('treeContainer');
-        const loadingText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_loading) ? translations[currentLang].status_loading : "جاري تحضير البيانات...";
+        const tbody = document.getElementById('supplierTableBody');
+        const loadingText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].status_loading) ? translations[lang].status_loading : "جاري تحضير البيانات...";
         treeContainer.innerHTML = `<div class="status-msg">${loadingText}</div>`;
+        if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px;">${loadingText}</td></tr>`;
         rawSupplierData = [];
 
         try {
@@ -969,10 +1264,11 @@
     }
 
     function buildCheckboxes(containerId, dataSet, btnTextId) {
+        const lang = getActiveLang();
         const container = document.getElementById(containerId);
         container.innerHTML = '';
         
-        const selectAllText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].text_select_all) ? translations[currentLang].text_select_all : "تحديد الكل";
+        const selectAllText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].text_select_all) ? translations[lang].text_select_all : "تحديد الكل";
         const allDiv = document.createElement('label');
         allDiv.className = 'checkbox-item';
         allDiv.innerHTML = `<input type="checkbox" checked onchange="toggleSelectAll(this, '${containerId}')"> <b>${selectAllText}</b>`;
@@ -995,12 +1291,13 @@
     }
 
     function updateButtonText(containerId, btnTextId) {
+        const lang = getActiveLang();
         const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]`);
         const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
         const btnText = document.getElementById(btnTextId);
 
-        const allSelectedText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].text_all_selected) ? translations[currentLang].text_all_selected : "الكل مختار";
-        const selectedCountText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].text_selected_count) ? translations[currentLang].text_selected_count : "مختار";
+        const allSelectedText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].text_all_selected) ? translations[lang].text_all_selected : "الكل مختار";
+        const selectedCountText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].text_selected_count) ? translations[lang].text_selected_count : "مختار";
 
         if (checked.length === 0 || checked.length === checkboxes.length - 1) {
             btnText.textContent = allSelectedText;
@@ -1029,6 +1326,10 @@
     }
 
     function renderReports() {
+        syncViewModeUI();
+        updateViewModeTexts();
+
+        const lang = getActiveLang();
         const selBranches = getSelectedValues('branchContent');
         const selGender = getSelectedValues('level2Content');
         const selCategory = getSelectedValues('level3Content');
@@ -1093,13 +1394,19 @@
         document.getElementById('kpiTotalQty').textContent = grandQty.toLocaleString('en-US') + ' Pcs';
 
         const treeContainer = document.getElementById('treeContainer');
+        const thead = document.getElementById('supplierTableHead');
+        const tbody = document.getElementById('supplierTableBody');
+        const tfoot = document.getElementById('supplierTableFoot');
         treeContainer.innerHTML = '';
 
         const sortedSuppliers = Object.keys(treeData).sort((a, b) => treeData[b].sales - treeData[a].sales);
-        const noDataText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_no_data) ? translations[currentLang].status_no_data : "لا توجد مبيعات مسجلة في هذه الفترة";
+        const noDataText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].status_no_data) ? translations[lang].status_no_data : "لا توجد مبيعات مسجلة في هذه الفترة";
 
         if (sortedSuppliers.length === 0) {
             treeContainer.innerHTML = `<div class="status-msg">${noDataText}</div>`;
+            if (thead) thead.innerHTML = '';
+            if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px;">${noDataText}</td></tr>`;
+            if (tfoot) tfoot.innerHTML = '';
             return;
         }
 
@@ -1107,25 +1414,54 @@
         const lblWithoutVat = "بدون ضريبة";
         const lblCost = "التكلفة";
         const lblMargin = "Margin";
+        const lblQty = "الكمية";
 
-        let isFirstSupplier = true;
+        let tableRowsHTML = '';
 
         sortedSuppliers.forEach(sup => {
             const supItem = treeData[sup];
             const supplierMargin = supItem.withoutVat > 0 ? ((supItem.withoutVat - supItem.cost) / supItem.withoutVat) * 100 : 0;
-            const supplierOpenClass = isFirstSupplier ? 'open' : '';
-            const supplierChevron = isFirstSupplier ? 'fa-chevron-up' : 'fa-chevron-down';
+
+            const isSupExpanded = expandedTableSuppliers.has(sup);
+            tableRowsHTML += `
+                <tr class="expandable-row ${isSupExpanded ? 'is-open' : ''}" onclick="toggleTableSupplier('${encodeURIComponent(sup)}')">
+                    <td>
+                        <span class="row-caret"><i class="fa-solid ${isSupExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}"></i></span>
+                        <i class="fa-solid fa-truck-fast" style="color:var(--accent); margin-left:4px;"></i> ${sup}
+                    </td>
+                    <td>${supItem.qty.toLocaleString('en-US')} Pcs</td>
+                    <td class="tbl-pill-sales">${supItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
+                    <td>${supItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                    <td>${supItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                    <td><span class="tbl-pill-margin">${supplierMargin.toFixed(2)}%</span></td>
+                </tr>
+            `;
 
             let gendersHTML = '';
             const sortedGenders = Object.keys(supItem.genders).sort((a, b) => supItem.genders[b].sales - supItem.genders[a].sales);
 
-            let isFirstGender = true;
-
             sortedGenders.forEach(gKey => {
                 const gItem = supItem.genders[gKey];
                 const genderMargin = gItem.withoutVat > 0 ? ((gItem.withoutVat - gItem.cost) / gItem.withoutVat) * 100 : 0;
-                const genderOpenClass = (isFirstSupplier && isFirstGender) ? 'open' : '';
-                const genderChevron = (isFirstSupplier && isFirstGender) ? 'fa-chevron-up' : 'fa-chevron-down';
+
+                const genderCompoundKey = `${sup}||${gKey}`;
+                const isGenExpanded = expandedTableGenders.has(genderCompoundKey);
+
+                if (isSupExpanded) {
+                    tableRowsHTML += `
+                        <tr class="expandable-row sub-row ${isGenExpanded ? 'is-open' : ''}" onclick="toggleTableGender('${encodeURIComponent(genderCompoundKey)}')">
+                            <td>
+                                <span class="row-caret"><i class="fa-solid ${isGenExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}"></i></span>
+                                <i class="fa-solid ${gItem.icon}" style="color:${gItem.color}; margin-left:4px;"></i> ${gKey}
+                            </td>
+                            <td>${gItem.qty.toLocaleString('en-US')} Pcs</td>
+                            <td class="tbl-pill-sales">${gItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
+                            <td>${gItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                            <td>${gItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                            <td><span class="tbl-pill-margin">${genderMargin.toFixed(2)}%</span></td>
+                        </tr>
+                    `;
+                }
 
                 let groupsHTML = '';
                 const sortedGroups = Object.keys(gItem.groups).sort((a, b) => gItem.groups[b].sales - gItem.groups[a].sales);
@@ -1150,23 +1486,36 @@
                                     <span>${grpMargin.toFixed(2)}%</span>
                                 </div>
                                 <div class="metric-cell m-qty">
-                                    <label>الكمية</label>
+                                    <label>${lblQty}</label>
                                     <span>${grpItem.qty} Pcs</span>
                                 </div>
                             </div>
                         </div>
                     `;
+
+                    if (isSupExpanded && isGenExpanded) {
+                        tableRowsHTML += `
+                            <tr class="leaf-row">
+                                <td><i class="fa-solid fa-folder-open" style="color:var(--accent); margin-left:4px;"></i> ${grp}</td>
+                                <td>${grpItem.qty.toLocaleString('en-US')} Pcs</td>
+                                <td class="tbl-pill-sales">${grpItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
+                                <td>${grpItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                                <td>${grpItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                                <td><span class="tbl-pill-margin">${grpMargin.toFixed(2)}%</span></td>
+                            </tr>
+                        `;
+                    }
                 });
 
                 gendersHTML += `
-                    <div class="gender-accordion ${genderOpenClass}">
+                    <div class="gender-accordion">
                         <div class="gender-header" onclick="toggleAccordion(this)">
                             <div class="gender-title">
                                 <i class="fa-solid ${gItem.icon}" style="color:${gItem.color};"></i> ${gKey}
                             </div>
                             <div style="display:flex; align-items:center; gap:10px;">
                                 <span style="font-size:11.5px; font-weight:800;">${gItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR <small style="color:#047857;">(${lblMargin}: ${genderMargin.toFixed(2)}%)</small></span>
-                                <i class="fa-solid ${genderChevron} arrow-icon" style="font-size:10px;"></i>
+                                <i class="fa-solid fa-chevron-down arrow-icon" style="font-size:10px;"></i>
                             </div>
                         </div>
                         <div class="gender-body">
@@ -1176,18 +1525,16 @@
                         </div>
                     </div>
                 `;
-
-                isFirstGender = false;
             });
 
             treeContainer.innerHTML += `
-                <div class="tree-supplier-card ${supplierOpenClass}">
+                <div class="tree-supplier-card">
                     <div class="tree-supplier-header" onclick="toggleAccordion(this)">
                         <div class="tree-supplier-top-row">
                             <div class="tree-supplier-title">
                                 <i class="fa-solid fa-truck-fast"></i> ${sup}
                             </div>
-                            <i class="fa-solid ${supplierChevron} arrow-icon" style="font-size:12px; color:var(--text-muted);"></i>
+                            <i class="fa-solid fa-chevron-down arrow-icon" style="font-size:12px; color:var(--text-muted);"></i>
                         </div>
                         <div class="metrics-badge-grid">
                             <span class="box-sales">
@@ -1213,9 +1560,36 @@
                     </div>
                 </div>
             `;
-
-            isFirstSupplier = false;
         });
+
+        if (thead && tbody && tfoot) {
+            const colSupplier = lang === 'ar' ? 'المورد' : (lang === 'ur' ? 'سپلائر' : 'Supplier');
+            const colTotal = lang === 'ar' ? 'الإجمالي' : (lang === 'ur' ? 'کل' : 'Total');
+
+            thead.innerHTML = `
+                <tr>
+                    <th>${colSupplier}</th>
+                    <th>${lblQty}</th>
+                    <th>${lblTotalSales}</th>
+                    <th>${lblWithoutVat}</th>
+                    <th>${lblCost}</th>
+                    <th>${lblMargin}</th>
+                </tr>
+            `;
+
+            tbody.innerHTML = tableRowsHTML;
+
+            tfoot.innerHTML = `
+                <tr>
+                    <td>${colTotal}</td>
+                    <td>${grandQty.toLocaleString('en-US')} Pcs</td>
+                    <td>${grandSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
+                    <td>${grandWithoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                    <td>${grandCost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                    <td>${grandMargin.toFixed(2)}%</td>
+                </tr>
+            `;
+        }
     }
 
     function toggleAccordion(headerEl) {
@@ -1223,9 +1597,18 @@
         const arrow = headerEl.querySelector('.arrow-icon');
         
         parentCard.classList.toggle('open');
+        const isOpen = parentCard.classList.contains('open');
+
+        if (parentCard.classList.contains('tree-supplier-card')) {
+            const body = parentCard.querySelector('.tree-supplier-body');
+            if (body) body.style.display = isOpen ? 'block' : 'none';
+        } else if (parentCard.classList.contains('gender-accordion')) {
+            const body = parentCard.querySelector('.gender-body');
+            if (body) body.style.display = isOpen ? 'block' : 'none';
+        }
         
         if (arrow) {
-            if (parentCard.classList.contains('open')) {
+            if (isOpen) {
                 arrow.classList.remove('fa-chevron-down');
                 arrow.classList.add('fa-chevron-up');
             } else {

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متابعة إغلاق الفروع - Animo POS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --accent: #2563eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 16px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        header p {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin: 3px 0 0 0;
+        }
+
+        .filter-box {
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .filter-group label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .filter-box input {
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            outline: none;
+            background: var(--bg-body);
+            color: var(--text-main);
+        }
+
+        .filter-box button {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            height: 40px;
+            margin-top: 17px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .branches-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .branch-closure-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .branch-info h3 {
+            font-size: 14px;
+            font-weight: 800;
+            margin: 0 0 5px 0;
+        }
+
+        .branch-info .details {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-badge.closed {
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .status-badge.pending {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.25);
+        }
+
+        .status-badge.excluded {
+            background: rgba(100, 116, 139, 0.12);
+            color: #64748b;
+            border: 1px solid rgba(100, 116, 139, 0.25);
+        }
+
+        .status-msg, .warning-msg {
+            text-align: center;
+            padding: 20px;
+            border-radius: var(--radius);
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .status-msg { color: var(--text-muted); }
+        .warning-msg { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #d97706; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div>
+            <h1>الموسى التجارية - متابعة إغلاق الفروع</h1>
+            <p>التحقق من حالة إغلاق الكاشير (Z-Report) بالبيانات الفعلية</p>
+        </div>
+        <button onclick="fetchClosureData()" style="background:var(--accent); color:white; border:none; width:40px; height:40px; border-radius:10px; cursor:pointer;">
+            <i class="fa-solid fa-rotate"></i>
+        </button>
+    </header>
+
+    <div class="filter-box">
+        <div class="filter-group">
+            <label>من تاريخ:</label>
+            <input type="date" id="fromDate" onchange="syncDates('from')">
+        </div>
+        <div class="filter-group">
+            <label>إلى تاريخ:</label>
+            <input type="date" id="toDate" onchange="syncDates('to')">
+        </div>
+        <button onclick="fetchClosureData()">عرض</button>
+    </div>
+
+    <div class="branches-list" id="closureContainer">
+        <div class="status-msg">جاري تحميل البيانات...</div>
+    </div>
+</div>
+
+<script>
+    const todayStr = "2026-10-29";
+    document.getElementById('fromDate').value = todayStr;
+    document.getElementById('toDate').value = todayStr;
+
+    const ANIMO_CONFIG = {
+        serverUrl: "http://almoosa3537115.drayddns.com:8080",
+    };
+
+    function syncDates(source) {
+        const fromInput = document.getElementById('fromDate');
+        const toInput = document.getElementById('toDate');
+        if (source === 'from') {
+            toInput.value = fromInput.value;
+        } else {
+            fromInput.value = toInput.value;
+        }
+        fetchClosureData();
+    }
+
+    function formatAnimoDate(dateStr) {
+        const parts = dateStr.split('-'); // YYYY-MM-DD
+        if (parts.length === 3) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`; // DD/MM/YYYY
+        }
+        return dateStr;
+    }
+
+    async function fetchClosureData() {
+        const container = document.getElementById('closureContainer');
+        const selectedDate = document.getElementById('fromDate').value;
+        const toDate = document.getElementById('toDate').value;
+
+        if (selectedDate !== toDate) {
+            container.innerHTML = `
+                <div class="warning-msg">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 16px; margin-bottom: 6px; display: block;"></i>
+                    تقرير إغلاق الفروع متاح للعرض عند اختيار <strong>يوم واحد فقط</strong>.
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = `<div class="status-msg">جاري جلب البيانات الفعلية ليوم ${selectedDate}...</div>`;
+
+        const formattedDate = formatAnimoDate(selectedDate);
+
+        try {
+            // جلب البيانات من الـ API الحقيقي مباشرة
+            const apiUrl = `${ANIMO_CONFIG.serverUrl}/CustomReport/M3049/GetData?fromDate=${formattedDate}&toDate=${formattedDate}`;
+            
+            const res = await fetch(apiUrl, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                processClosureData(data, selectedDate);
+            } else {
+                container.innerHTML = `<div class="status-msg">تعذر الاتصال بالخادم أو لا توجد بيانات لهذا التاريخ (${selectedDate})</div>`;
+            }
+        } catch (err) {
+            console.error("API Fetch Error:", err);
+            container.innerHTML = `<div class="status-msg">خطأ في الاتصال بنظام Animo POS. يرجى التأكد من الشبكة.</div>`;
+        }
+    }
+
+    function processClosureData(rows, date) {
+        const container = document.getElementById('closureContainer');
+        container.innerHTML = '';
+
+        if (!Array.isArray(rows) || rows.length === 0) {
+            container.innerHTML = `<div class="status-msg">لا توجد بيانات إغلاق مسجلة لهذا التاريخ (${date})</div>`;
+            return;
+        }
+
+        // استبعاد صفوف TOTAL والتركيز حصرياً على أجهزة الكاشير (Counter)
+        const cashierRows = rows.filter(r => {
+            const org = r.OrgName || r.orgName || "";
+            const counter = r.Counter || r.counter || r.Cashier || r.cashier || "";
+            return org && !org.toUpperCase().includes("TOTAL") && counter.toString().trim() !== "";
+        });
+
+        let branchMap = {};
+
+        cashierRows.forEach(row => {
+            const branchName = row.OrgName || row.orgName;
+            const opening = parseFloat(row.Opening || row.opening || 0);
+            const leftBalance = parseFloat(row.LeftBalance || row.leftBalance || row.Leftbalance || 0);
+
+            if (!branchMap[branchName]) {
+                branchMap[branchName] = {
+                    name: branchName,
+                    hasValidClosure: false,
+                    totalOpening: 0,
+                    totalLeft: 0
+                };
+            }
+
+            branchMap[branchName].totalOpening += opening;
+            branchMap[branchName].totalLeft += leftBalance;
+
+            // شرط الإغلاق: وجود افتتاح > 0 وإغلاق (LeftBalance) > 0
+            if (opening > 0 && leftBalance > 0) {
+                branchMap[branchName].hasValidClosure = true;
+            }
+        });
+
+        const branches = Object.values(branchMap);
+
+        if (branches.length === 0) {
+            container.innerHTML = `<div class="status-msg">لا توجد سجلات أجهزة كاشير لهذا التاريخ (${date})</div>`;
+            return;
+        }
+
+        branches.forEach(branch => {
+            const matchCode = branch.name.match(/\d{3}/);
+            const branchCode = matchCode ? matchCode[0] : "";
+
+            let statusHtml = '';
+
+            // 1. استثناء فرع 032 تماماً كما طلبت
+            if (branchCode === "032") {
+                statusHtml = `<div class="status-badge excluded"><i class="fa-solid fa-ban"></i> مستثنى</div>`;
+            } 
+            else if (branch.hasValidClosure) {
+                statusHtml = `<div class="status-badge closed"><i class="fa-solid fa-check-circle"></i> تم الإغلاق</div>`;
+            } else {
+                statusHtml = `<div class="status-badge pending"><i class="fa-solid fa-clock"></i> لم يتم الإغلاق</div>`;
+            }
+
+            const card = document.createElement('div');
+            card.className = 'branch-closure-card';
+            card.innerHTML = `
+                <div class="branch-info">
+                    <h3>${branch.name}</h3>
+                    <div class="details">الافتتاحي: <strong>${branch.totalOpening.toLocaleString('en-US', {minimumFractionDigits: 2})}</strong> | الختامي: <strong>${branch.totalLeft.toLocaleString('en-US', {minimumFractionDigits: 2})}</strong></div>
+                </div>
+                <div>
+                    ${statusHtml}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // التشغيل الأولي
+    fetchClosureData();
+</script>
+
+</body>
+</html>

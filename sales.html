@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- ربط ملف التنسيقات المشترك -->
-    <link rel="stylesheet" href="style.css?v=2026.8">
+    <link rel="stylesheet" href="style.css?v=2026.9">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
@@ -23,6 +23,10 @@
             max-width: 1350px;
             margin: 0 auto;
             padding: 0 15px;
+        }
+
+        .view-hidden {
+            display: none !important;
         }
 
         /* 📱 هيدر مرتب وصارم يمنع تمدد الأزرار ويجعلها في سطر واحد */
@@ -421,18 +425,29 @@
             justify-content: space-between;
         }
 
+        .section-header-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
         .section-header {
             font-size: 15px;
             font-weight: 800;
-            margin-bottom: 15px;
+            margin-bottom: 0;
             color: var(--text-main);
         }
 
+        /* --- عرض المربعات (3 أعمدة في الشاشات الكبيرة) --- */
         .branches-list {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 15px;
             margin-bottom: 30px;
+            align-items: start;
         }
 
         .branch-card {
@@ -444,13 +459,18 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            cursor: pointer;
         }
 
         .branch-card:hover {
             transform: translateY(-2px);
             border-color: var(--accent);
             box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .branch-card.expanded {
+            border-color: #0284c7;
         }
 
         .branch-card-header {
@@ -466,11 +486,15 @@
             font-weight: 800;
             color: var(--text-main);
             margin: 0 0 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .branch-meta-badges {
             display: flex;
-            gap: 8px;
+            flex-wrap: wrap;
+            gap: 6px;
             font-size: 11px;
             color: var(--text-muted);
         }
@@ -488,7 +512,7 @@
         }
 
         .branch-sales-total .amount {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 800;
             color: var(--text-main);
             line-height: 1.2;
@@ -503,12 +527,12 @@
         .branch-metrics-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
 
         .metric-cell {
             background: var(--bg-body);
-            padding: 10px;
+            padding: 10px 8px;
             border-radius: 10px;
             border: 1.5px solid var(--border);
             text-align: center;
@@ -523,7 +547,7 @@
         }
 
         .metric-cell .m-val {
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 800;
             color: var(--text-main);
         }
@@ -564,9 +588,92 @@
         }
 
         .branch-profit-banner .p-value {
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 800;
             color: #10b981;
+        }
+
+        /* --- تفصيل الساعات المنسدل داخل المربع --- */
+        .branch-hourly-panel {
+            display: none;
+            margin-top: 4px;
+            padding-top: 12px;
+            border-top: 2px solid var(--border);
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .branch-card.expanded .branch-hourly-panel {
+            display: flex;
+        }
+
+        .branch-hourly-title {
+            font-size: 11.5px;
+            font-weight: 800;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .branch-hourly-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
+
+        .hour-pill-item {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .hour-pill-item .hr-time {
+            color: var(--text-muted);
+            font-weight: 800;
+        }
+
+        .hour-pill-item .hr-val {
+            color: var(--text-main);
+            font-weight: 900;
+        }
+
+        /* --- عرض الصفوف والأعمدة بدون ضغط (عرض كامل لكل الفروع) --- */
+        .full-table-wrapper {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 2px solid var(--border);
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        .full-table-wrapper .exec-table {
+            width: 100%;
+        }
+
+        .hourly-sub-row td {
+            background: rgba(2, 132, 199, 0.04) !important;
+            font-size: 11px !important;
+            padding: 7px 12px !important;
+        }
+
+        .hourly-sub-row td:first-child {
+            background: var(--bg-body) !important;
+            padding-right: 34px !important;
+            color: #0369a1 !important;
+            font-weight: 800 !important;
+        }
+
+        [dir="ltr"] .hourly-sub-row td:first-child {
+            padding-right: 12px !important;
+            padding-left: 34px !important;
         }
 
         .status-msg {
@@ -575,9 +682,16 @@
             color: var(--text-muted);
             font-size: 13px;
             font-weight: 700;
+            grid-column: 1 / -1;
         }
 
         /* --- الأزرار الاحترافية للتقارير واللوحات --- */
+        .action-buttons-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
         .report-btn {
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             color: white;
@@ -971,15 +1085,20 @@
                 gap: 20px !important;
             }
 
-            /* ترتيب أزرار الإجراءات في شبكة متناسقة احترافية */
             .action-buttons-grid {
                 display: grid !important;
-                grid-template-columns: repeat(4, 1fr) !important;
+                grid-template-columns: repeat(3, 1fr) !important;
                 gap: 12px !important;
             }
 
             .dashboard-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            .branches-list:not(.view-hidden) {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 18px !important;
             }
         }
     </style>
@@ -1053,7 +1172,6 @@
             </div>
         </div>
 
-        <!-- أزرار الإجراءات مع ربطها بوسوم الترجمة data-i18n بشكل كامل -->
         <div class="action-buttons-grid">
             <button class="report-btn" onclick="openReportModal()" data-i18n="btn_comprehensive_report">
                 📊 التقرير الشامل
@@ -1061,19 +1179,21 @@
             <button class="report-btn" style="background: linear-gradient(135deg, #059669 0%, #047857 100%);" onclick="openMultiDashboardModal()" data-i18n="btn_dashboard">
                 📈 لوحة المؤشرات
             </button>
+            <a href="sales_per_day.html" onclick="openSalesPerDay(this)" class="report-btn" style="background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);">
+                📅 Sales Per Day
+            </a>
             <a href="supplier_sales.html" class="report-btn" style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);" data-i18n="menu_supplier_sales">
                 🏢 مبيعات الموردين
             </a>
             <a href="sales_group.html" class="report-btn" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);" data-i18n="menu_sales_group">
                 🏷️ مبيعات المجموعات
             </a>
-            <a href="top_salesman.html" class="report-btn" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%); grid-column: span 2;" data-i18n="menu_top_salesman">
+            <a href="top_salesman.html" class="report-btn" style="background: linear-gradient(135deg, #d97706 0%, #b45309 100%);" data-i18n="menu_top_salesman">
                 ⭐ أفضل موظفي المبيعات (Top Sales)
             </a>
         </div>
     </div>
 
-    <!-- كارت الإجمالي الرئيسي بتدرج وتصميم احترافي -->
     <div class="hero-card">
         <div class="hero-title">
             <span id="periodLabel" data-i18n="kpi_total_sales">إجمالي المبيعات (شامل الضريبة)</span>
@@ -1114,9 +1234,51 @@
         </div>
     </div>
 
-    <div class="section-header" data-i18n="section_branches_sales">المبيعات حسب الفروع / نقاط البيع</div>
+    <!-- عنوان القسم + علامتي العرض (مربعات / صفوف وأعمدة) -->
+    <div class="section-header-row">
+        <div class="section-header" data-i18n="section_branches_sales">المبيعات حسب الفروع / نقاط البيع</div>
+        <div class="view-toggle-group" role="group" aria-label="Branches View Mode">
+            <button type="button" class="view-mode-btn active" id="btnViewCards" onclick="setBranchesViewMode('cards')">
+                <i class="fa-solid fa-border-all"></i>
+                <span id="txtViewCards">مربعات</span>
+            </button>
+            <button type="button" class="view-mode-btn" id="btnViewTable" onclick="setBranchesViewMode('table')">
+                <i class="fa-solid fa-table"></i>
+                <span id="txtViewTable">صفوف وأعمدة</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- شريط أدوات الجدول -->
+    <div class="exec-table-toolbar view-hidden" id="branchesTableToolbar">
+        <div class="exec-table-hint">
+            <i class="fa-solid fa-circle-info"></i>
+            <span id="execTableHintText">اضغط على أي فرع في الجدول لفتح مبيعات كل ساعة لهذا الفرع</span>
+        </div>
+        <div class="exec-table-actions">
+            <button type="button" class="exec-action-btn" onclick="expandAllBranchesTable()">
+                <i class="fa-solid fa-angles-down"></i>
+                <span id="txtExpandAll">فتح الكل</span>
+            </button>
+            <button type="button" class="exec-action-btn" onclick="collapseAllBranchesTable()">
+                <i class="fa-solid fa-angles-up"></i>
+                <span id="txtCollapseAll">طي الكل</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- عرض المربعات الافتراضي (3 مربعات في الصف) -->
     <div class="branches-list" id="branchesContainer">
         <div class="status-msg" data-i18n="status_loading">جاري تحميل البيانات...</div>
+    </div>
+
+    <!-- عرض الصفوف والأعمدة الكامل بدون سكرول مضغوط -->
+    <div class="full-table-wrapper view-hidden" id="branchesTableContainer">
+        <table class="exec-table">
+            <thead id="branchesTableHead"></thead>
+            <tbody id="branchesTableBody"></tbody>
+            <tfoot id="branchesTableFoot"></tfoot>
+        </table>
     </div>
 </div>
 
@@ -1136,7 +1298,6 @@
                     <button class="share-item" onclick="shareWhatsApp()" data-i18n="share_whatsapp">💬 إرسال عبر WhatsApp</button>
                     <button class="share-item" onclick="shareEmail()" data-i18n="share_email">✉️ إرسال عبر البريد الإلكتروني</button>
                     <button class="share-item" onclick="downloadPDF()" data-i18n="share_pdf">📄 تحميل التقرير (PDF)</button>
-                    <!-- زر تنزيل شيت إكسيل كولينز مباشرة على الجهاز -->
                     <button class="share-item" onclick="downloadColinsExcel()" style="color: #059669; font-weight: 800;">📥 تنزيل شيت كولينز (Excel)</button>
                 </div>
             </div>
@@ -1271,6 +1432,156 @@
         "تبوك": ["031"]
     };
 
+    // الوضع الافتراضي دائماً هو المربعات
+    let branchesViewMode = 'cards';
+    let expandedBranchesSet = new Set();
+
+    function getActiveLang() {
+        return localStorage.getItem('app_lang') || document.documentElement.getAttribute('lang') || 'ar';
+    }
+
+    function updateBranchViewTexts() {
+        const lang = getActiveLang();
+        const labels = {
+            ar: {
+                cards: 'مربعات',
+                table: 'صفوف وأعمدة',
+                expand: 'فتح الكل',
+                collapse: 'طي الكل',
+                hint: 'اضغط على أي فرع في الجدول أو المربعات لعرض مبيعات كل ساعة'
+            },
+            en: {
+                cards: 'Cards',
+                table: 'Rows & Columns',
+                expand: 'Expand All',
+                collapse: 'Collapse All',
+                hint: 'Click any branch to view hourly sales breakdown'
+            },
+            hi: {
+                cards: 'कार्ड',
+                table: 'पंक्ति और कॉलम',
+                expand: 'सभी खोलें',
+                collapse: 'सभी बंद करें',
+                hint: 'प्रति घंटा बिक्री देखने के लिए किसी शाखा पर क्लिक करें'
+            },
+            ur: {
+                cards: 'کارڈز',
+                table: 'قطاریں اور کالم',
+                expand: 'سب کھولیں',
+                collapse: 'سب بند کریں',
+                hint: 'گھنٹہ وار سیلز دیکھنے کے لیے کسی برانچ پر کلک کریں'
+            }
+        };
+        const current = labels[lang] || labels.ar;
+        const txtCards = document.getElementById('txtViewCards');
+        const txtTable = document.getElementById('txtViewTable');
+        const txtExpand = document.getElementById('txtExpandAll');
+        const txtCollapse = document.getElementById('txtCollapseAll');
+        const hintEl = document.getElementById('execTableHintText');
+        if (txtCards) txtCards.textContent = current.cards;
+        if (txtTable) txtTable.textContent = current.table;
+        if (txtExpand) txtExpand.textContent = current.expand;
+        if (txtCollapse) txtCollapse.textContent = current.collapse;
+        if (hintEl) hintEl.textContent = current.hint;
+    }
+
+    function syncBranchesViewSwitcherUI() {
+        const btnCards = document.getElementById('btnViewCards');
+        const btnTable = document.getElementById('btnViewTable');
+        const cardsBox = document.getElementById('branchesContainer');
+        const tableBox = document.getElementById('branchesTableContainer');
+        const toolbar = document.getElementById('branchesTableToolbar');
+
+        if (!btnCards || !btnTable || !cardsBox || !tableBox) return;
+
+        const isTable = branchesViewMode === 'table';
+
+        btnCards.classList.toggle('active', !isTable);
+        btnTable.classList.toggle('active', isTable);
+
+        cardsBox.classList.toggle('view-hidden', isTable);
+        tableBox.classList.toggle('view-hidden', !isTable);
+
+        cardsBox.style.setProperty('display', isTable ? 'none' : 'grid', 'important');
+        tableBox.style.setProperty('display', isTable ? 'block' : 'none', 'important');
+
+        if (toolbar) {
+            toolbar.classList.toggle('view-hidden', !isTable);
+            toolbar.style.setProperty('display', isTable ? 'flex' : 'none', 'important');
+        }
+    }
+
+    function setBranchesViewMode(mode) {
+        branchesViewMode = mode === 'table' ? 'table' : 'cards';
+        syncBranchesViewSwitcherUI();
+        updateBranchViewTexts();
+    }
+
+    function getMarginTierClass(pct) {
+        if (pct >= 35) return 'high';
+        if (pct >= 20) return 'mid';
+        return 'low';
+    }
+
+    function toggleBranchExpand(encodedName) {
+        const name = decodeURIComponent(encodedName);
+        if (expandedBranchesSet.has(name)) {
+            expandedBranchesSet.delete(name);
+        } else {
+            expandedBranchesSet.add(name);
+        }
+        processAndRenderData();
+    }
+
+    function expandAllBranchesTable() {
+        expandedBranchesSet.clear();
+        branchDataSummary.forEach(row => {
+            if (row.Branch) expandedBranchesSet.add(row.Branch);
+        });
+        processAndRenderData();
+    }
+
+    function collapseAllBranchesTable() {
+        expandedBranchesSet.clear();
+        processAndRenderData();
+    }
+
+    function formatHourLabel12(hr24) {
+        const suffix = hr24 >= 12 ? 'PM' : 'AM';
+        const h12 = hr24 % 12 === 0 ? 12 : hr24 % 12;
+        return `${h12} ${suffix}`;
+    }
+
+    function getBranchHourlyBreakdown(branchName) {
+        const matching = allInvoicesCache.filter(inv => inv.set_warehouse === branchName);
+        const hourTotals = {};
+
+        matching.forEach(inv => {
+            if (inv.posting_time) {
+                const hr = parseInt(inv.posting_time.split(':')[0], 10);
+                if (!isNaN(hr)) {
+                    if (!hourTotals[hr]) {
+                        hourTotals[hr] = { sales: 0, qty: 0, count: 0 };
+                    }
+                    hourTotals[hr].sales += parseFloat(inv.grand_total || 0);
+                    hourTotals[hr].qty += parseFloat(inv.total_qty || 0);
+                    hourTotals[hr].count += 1;
+                }
+            }
+        });
+
+        return Object.keys(hourTotals)
+            .map(Number)
+            .sort((a, b) => a - b)
+            .map(hr => ({
+                hour: hr,
+                label: formatHourLabel12(hr),
+                sales: hourTotals[hr].sales,
+                qty: hourTotals[hr].qty,
+                count: hourTotals[hr].count
+            }));
+    }
+
     function getTooltipStyle() {
         return {
             enabled: true,
@@ -1313,6 +1624,9 @@
     let categoryChartInstance = null;
 
     document.addEventListener('DOMContentLoaded', () => {
+        branchesViewMode = 'cards';
+        syncBranchesViewSwitcherUI();
+        updateBranchViewTexts();
         setPreset('today', document.querySelector('.chip.active'));
         renderCalendar();
 
@@ -1322,6 +1636,13 @@
             }
         }
     });
+
+    function openSalesPerDay(anchorEl) {
+        const from = encodeURIComponent(currentQueryFrom || '');
+        const to = encodeURIComponent(currentQueryTo || currentQueryFrom || '');
+        const branch = encodeURIComponent(document.getElementById('branchSelect').value || 'ALL');
+        anchorEl.href = `sales_per_day.html?from=${from}&to=${to}&branch=${branch}`;
+    }
 
     function goBack() {
         if (window.history.length > 1) {
@@ -1521,9 +1842,12 @@
     }
 
     async function loadPOSData() {
+        const lang = getActiveLang();
         const container = document.getElementById('branchesContainer');
-        const loadingText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_loading) ? translations[currentLang].status_loading : "جاري تحميل البيانات...";
+        const tbody = document.getElementById('branchesTableBody');
+        const loadingText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].status_loading) ? translations[lang].status_loading : "جاري تحميل البيانات...";
         container.innerHTML = `<div class="status-msg">${loadingText}</div>`;
+        if (tbody) tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:24px;">${loadingText}</td></tr>`;
 
         branchDataSummary = [];
         allInvoicesCache = [];
@@ -1602,6 +1926,7 @@
     }
 
     function populateBranchSelect() {
+        const lang = getActiveLang();
         availableBranches.clear();
         branchDataSummary.forEach(row => {
             if (row.Branch) availableBranches.add(row.Branch);
@@ -1609,7 +1934,7 @@
 
         const select = document.getElementById('branchSelect');
         const currentVal = select.value;
-        const allBranchesText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].opt_all_branches) ? translations[currentLang].opt_all_branches : "جميع الفروع";
+        const allBranchesText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].opt_all_branches) ? translations[lang].opt_all_branches : "جميع الفروع";
         select.innerHTML = `<option value="ALL">${allBranchesText}</option>`;
 
         availableBranches.forEach(b => {
@@ -1626,9 +1951,19 @@
         }
     }
 
+    function fmtNum(num) {
+        return Number(num || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
     function processAndRenderData() {
+        syncBranchesViewSwitcherUI();
+        updateBranchViewTexts();
+
         const selectedBranch = document.getElementById('branchSelect').value;
         const container = document.getElementById('branchesContainer');
+        const thead = document.getElementById('branchesTableHead');
+        const tbody = document.getElementById('branchesTableBody');
+        const tfoot = document.getElementById('branchesTableFoot');
         container.innerHTML = '';
 
         let filteredRows = branchDataSummary;
@@ -1653,30 +1988,41 @@
         const totalProfit = totalSalesExclTax - totalCost;
         const totalProfitPercentage = totalSalesExclTax > 0 ? (totalProfit / totalSalesExclTax) * 100 : 0;
 
-        document.getElementById('totalSalesAmount').textContent = totalSales.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' SAR';
-        document.getElementById('totalSalesExclTax').textContent = totalSalesExclTax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' SAR';
-        document.getElementById('totalTaxAmount').textContent = totalTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' SAR';
-        document.getElementById('totalCostAmount').textContent = totalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' SAR';
-        document.getElementById('totalMarginAmount').textContent = `${totalProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} SAR (${totalProfitPercentage.toFixed(1)}%)`;
+        document.getElementById('totalSalesAmount').textContent = fmtNum(totalSales) + ' SAR';
+        document.getElementById('totalSalesExclTax').textContent = fmtNum(totalSalesExclTax) + ' SAR';
+        document.getElementById('totalTaxAmount').textContent = fmtNum(totalTaxAmount) + ' SAR';
+        document.getElementById('totalCostAmount').textContent = fmtNum(totalCost) + ' SAR';
+        document.getElementById('totalMarginAmount').textContent = `${fmtNum(totalProfit)} SAR (${totalProfitPercentage.toFixed(1)}%)`;
 
-        const invText = currentLang === 'ar' ? 'فاتورة' : (currentLang === 'ur' ? 'انواٸس' : 'Invoices');
-        const qtyText = currentLang === 'ar' ? 'قطعة' : (currentLang === 'ur' ? 'پیس' : 'Pcs');
+        const lang = getActiveLang();
+        const invText = lang === 'ar' ? 'فاتورة' : (lang === 'ur' ? 'انواٸس' : 'Invoices');
+        const qtyText = lang === 'ar' ? 'قطعة' : (lang === 'ur' ? 'پیس' : 'Pcs');
         document.getElementById('invoiceCountBadge').textContent = `${totalInvoices.toLocaleString('en-US')} ${invText}`;
         document.getElementById('totalQtyBadge').textContent = `${totalQtySum.toLocaleString('en-US')} ${qtyText}`;
 
         const sortedRows = [...filteredRows].sort((a, b) => parseFloat(b.Total_Sales) - parseFloat(a.Total_Sales));
 
-        const noDataText = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].status_no_data) ? translations[currentLang].status_no_data : "لا توجد مبيعات مسجلة في هذه الفترة";
+        const noDataText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].status_no_data) ? translations[lang].status_no_data : "لا توجد مبيعات مسجلة في هذه الفترة";
+        const tWithoutVat = (typeof translations !== 'undefined' && translations[lang] && translations[lang].kpi_without_vat) ? translations[lang].kpi_without_vat : "بدون ضريبة";
+        const tVat15 = (typeof translations !== 'undefined' && translations[lang] && translations[lang].kpi_vat_15) ? translations[lang].kpi_vat_15 : "الضريبة (15%)";
+        const tCost = (typeof translations !== 'undefined' && translations[lang] && translations[lang].kpi_total_cost) ? translations[lang].kpi_total_cost : "التكلفة";
+        const tNetProfit = (typeof translations !== 'undefined' && translations[lang] && translations[lang].kpi_margin) ? translations[lang].kpi_margin : "الربح الصافي:";
+        const tTotalSalesLbl = (typeof translations !== 'undefined' && translations[lang] && translations[lang].kpi_total_sales) ? translations[lang].kpi_total_sales : "إجمالي المبيعات";
 
-        const tWithoutVat = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_without_vat) ? translations[currentLang].kpi_without_vat : "بدون ضريبة";
-        const tVat15 = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_vat_15) ? translations[currentLang].kpi_vat_15 : "الضريبة (15%)";
-        const tCost = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_total_cost) ? translations[currentLang].kpi_total_cost : "التكلفة";
-        const tNetProfit = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_margin) ? translations[currentLang].kpi_margin : "الربح الصافي:";
-        const tTotalSalesLbl = (typeof translations !== 'undefined' && translations[currentLang] && translations[currentLang].kpi_total_sales) ? translations[currentLang].kpi_total_sales : "إجمالي المبيعات";
+        const colBranch = lang === 'ar' ? 'الفرع' : (lang === 'ur' ? 'برانچ' : 'Branch');
+        const colInv = invText;
+        const colQty = qtyText;
+        const colMargin = lang === 'ar' ? 'هامش الربح %' : (lang === 'ur' ? 'مارجن %' : 'Margin %');
+        const colTotal = lang === 'ar' ? 'الإجمالي' : (lang === 'ur' ? 'کل' : 'Total');
 
         if (sortedRows.length === 0) {
             container.innerHTML = `<div class="status-msg">${noDataText}</div>`;
+            if (thead) thead.innerHTML = '';
+            if (tbody) tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:24px;">${noDataText}</td></tr>`;
+            if (tfoot) tfoot.innerHTML = '';
         } else {
+            let rowsHTML = '';
+
             sortedRows.forEach(row => {
                 const bSales = parseFloat(row.Total_Sales || 0);
                 const bCost = parseFloat(row.Total_Cost || 0);
@@ -1685,20 +2031,36 @@
                 const bTaxAmount = bSales - bSalesExclTax;
                 const bProfit = bSalesExclTax - bCost;
                 const bProfitPct = bSalesExclTax > 0 ? (bProfit / bSalesExclTax) * 100 : 0;
+                const bSharePct = totalSales > 0 ? (bSales / totalSales) * 100 : 0;
+                const isExpanded = expandedBranchesSet.has(row.Branch);
+                const hourlyList = getBranchHourlyBreakdown(row.Branch);
+
+                const hourlyPillsHTML = hourlyList.length > 0
+                    ? hourlyList.map(h => `
+                        <div class="hour-pill-item">
+                            <span class="hr-time"><i class="fa-regular fa-clock"></i> ${h.label}</span>
+                            <span class="hr-val">${fmtNum(h.sales)} SAR</span>
+                        </div>
+                    `).join('')
+                    : `<div style="font-size:11px; color:var(--text-muted); grid-column:1/-1; text-align:center; padding:6px;">لا توجد تفاصيل ساعات للفترة</div>`;
 
                 const card = document.createElement('div');
-                card.className = 'branch-card';
+                card.className = `branch-card ${isExpanded ? 'expanded' : ''}`;
+                card.setAttribute('onclick', `toggleBranchExpand('${encodeURIComponent(row.Branch)}')`);
                 card.innerHTML = `
                     <div class="branch-card-header">
                         <div class="branch-title-area">
-                            <h3>${row.Branch}</h3>
+                            <h3>
+                                <i class="fa-solid ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}" style="font-size:11px; color:var(--accent);"></i>
+                                <span>${row.Branch}</span>
+                            </h3>
                             <div class="branch-meta-badges">
                                 <span class="branch-meta-badge">🧾 <strong>${parseInt(row.Invoice_Count).toLocaleString('en-US')}</strong> ${invText}</span>
                                 <span class="branch-meta-badge">📦 <strong>${parseFloat(row.Total_Qty).toLocaleString('en-US')}</strong> ${qtyText}</span>
                             </div>
                         </div>
                         <div class="branch-sales-total">
-                            <div class="amount"><strong>${bSales.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> <small style="font-size:10px">SAR</small></div>
+                            <div class="amount"><strong>${fmtNum(bSales)}</strong> <small style="font-size:10px">SAR</small></div>
                             <div class="label">${tTotalSalesLbl}</div>
                         </div>
                     </div>
@@ -1706,15 +2068,15 @@
                     <div class="branch-metrics-grid">
                         <div class="metric-cell">
                             <span class="m-label">${tWithoutVat}</span>
-                            <span class="m-val"><strong>${bSalesExclTax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></span>
+                            <span class="m-val"><strong>${fmtNum(bSalesExclTax)}</strong></span>
                         </div>
                         <div class="metric-cell tax-cell">
                             <span class="m-label">${tVat15}</span>
-                            <span class="m-val"><strong>${bTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></span>
+                            <span class="m-val"><strong>${fmtNum(bTaxAmount)}</strong></span>
                         </div>
                         <div class="metric-cell cost-cell">
                             <span class="m-label">${tCost}</span>
-                            <span class="m-val"><strong>${bCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></span>
+                            <span class="m-val"><strong>${fmtNum(bCost)}</strong></span>
                         </div>
                     </div>
 
@@ -1724,13 +2086,115 @@
                             <span>${tNetProfit}</span>
                         </div>
                         <div class="p-value">
-                            <strong>${bProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> SAR 
+                            <strong>${fmtNum(bProfit)}</strong> SAR 
                             <small style="font-size:11px; font-weight:800;">(${bProfitPct.toFixed(1)}%)</small>
+                        </div>
+                    </div>
+
+                    <div class="branch-hourly-panel">
+                        <div class="branch-hourly-title">
+                            <span><i class="fa-solid fa-clock"></i> مبيعات الفرع بالساعات</span>
+                            <span style="color:var(--text-muted); font-size:10px;">(${hourlyList.length} ساعات)</span>
+                        </div>
+                        <div class="branch-hourly-list">
+                            ${hourlyPillsHTML}
                         </div>
                     </div>
                 `;
                 container.appendChild(card);
+
+                rowsHTML += `
+                    <tr class="level-1-row ${isExpanded ? 'is-open' : ''}" onclick="toggleBranchExpand('${encodeURIComponent(row.Branch)}')">
+                        <td>
+                            <span class="exec-caret"><i class="fa-solid ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}"></i></span>
+                            <i class="fa-solid fa-store" style="color:#0284c7; margin-left:6px;"></i>
+                            <span>${row.Branch}</span>
+                        </td>
+                        <td>${parseInt(row.Invoice_Count || 0).toLocaleString('en-US')}</td>
+                        <td><span class="exec-qty-badge">${parseFloat(row.Total_Qty || 0).toLocaleString('en-US')}</span></td>
+                        <td>
+                            <div class="exec-sales-cell">
+                                <div class="exec-sales-top">
+                                    <span>${fmtNum(bSales)}</span>
+                                    <span class="exec-share-tag">${bSharePct.toFixed(1)}%</span>
+                                </div>
+                                <div class="exec-progress-track">
+                                    <div class="exec-progress-fill" style="width:${Math.min(100, Math.max(4, bSharePct)).toFixed(1)}%;"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${fmtNum(bSalesExclTax)}</td>
+                        <td>${fmtNum(bTaxAmount)}</td>
+                        <td>${fmtNum(bCost)}</td>
+                        <td>${fmtNum(bProfit)}</td>
+                        <td><span class="exec-margin-pill ${getMarginTierClass(bProfitPct)}">${bProfitPct.toFixed(1)}%</span></td>
+                    </tr>
+                `;
+
+                if (isExpanded) {
+                    if (hourlyList.length > 0) {
+                        hourlyList.forEach(h => {
+                            const hExclTax = h.sales / 1.15;
+                            const hVat = h.sales - hExclTax;
+                            const hShare = bSales > 0 ? (h.sales / bSales) * 100 : 0;
+                            rowsHTML += `
+                                <tr class="hourly-sub-row">
+                                    <td>
+                                        <i class="fa-regular fa-clock" style="margin-left:6px;"></i>
+                                        <span>الساعة: ${h.label}</span>
+                                    </td>
+                                    <td>${h.count.toLocaleString('en-US')}</td>
+                                    <td>${h.qty.toLocaleString('en-US')}</td>
+                                    <td>${fmtNum(h.sales)} <span class="exec-share-tag">${hShare.toFixed(1)}%</span></td>
+                                    <td>${fmtNum(hExclTax)}</td>
+                                    <td>${fmtNum(hVat)}</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        rowsHTML += `
+                            <tr class="hourly-sub-row">
+                                <td colspan="9" style="text-align:center;">لا توجد بيانات ساعات مسجلة لهذا الفرع في الفترة المحددة</td>
+                            </tr>
+                        `;
+                    }
+                }
             });
+
+            if (thead && tbody && tfoot) {
+                thead.innerHTML = `
+                    <tr>
+                        <th>${colBranch}</th>
+                        <th>${colInv}</th>
+                        <th>${colQty}</th>
+                        <th>${tTotalSalesLbl}</th>
+                        <th>${tWithoutVat}</th>
+                        <th>${tVat15}</th>
+                        <th>${tCost}</th>
+                        <th>${tNetProfit}</th>
+                        <th>${colMargin}</th>
+                    </tr>
+                `;
+
+                tbody.innerHTML = rowsHTML;
+
+                tfoot.innerHTML = `
+                    <tr>
+                        <td>${colTotal}</td>
+                        <td>${totalInvoices.toLocaleString('en-US')}</td>
+                        <td>${totalQtySum.toLocaleString('en-US')}</td>
+                        <td>${fmtNum(totalSales)}</td>
+                        <td>${fmtNum(totalSalesExclTax)}</td>
+                        <td>${fmtNum(totalTaxAmount)}</td>
+                        <td>${fmtNum(totalCost)}</td>
+                        <td>${fmtNum(totalProfit)}</td>
+                        <td><span class="exec-margin-pill ${getMarginTierClass(totalProfitPercentage)}">${totalProfitPercentage.toFixed(1)}%</span></td>
+                    </tr>
+                `;
+            }
         }
 
         let filteredHourly = allInvoicesCache;
@@ -1778,13 +2242,15 @@
             }
         };
 
+        const lang = getActiveLang();
+
         mainHourlyChartInstance = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
                 datasets: [
                     {
-                        label: currentLang === 'ar' ? 'الفترة المحددة' : 'Selected Period',
+                        label: lang === 'ar' ? 'الفترة المحددة' : 'Selected Period',
                         data: currentHourly,
                         borderColor: '#059669',
                         backgroundColor: 'rgba(5, 150, 105, 0.12)',
@@ -1795,7 +2261,7 @@
                         pointRadius: 4
                     },
                     {
-                        label: currentLang === 'ar' ? 'الفترة السابقة' : 'Previous Period',
+                        label: lang === 'ar' ? 'الفترة السابقة' : 'Previous Period',
                         data: prevHourly,
                         borderColor: '#dc2626',
                         backgroundColor: 'rgba(220, 38, 38, 0.05)',
@@ -2403,12 +2869,10 @@
         }
     }
 
-    // دالة تنزيل تقرير كولينز بصيغة Excel مع تنسيق اسم الملف SA_Sales Format_DD-MM-YYYY
     async function downloadColinsExcel() {
         const selectedDateFrom = currentQueryFrom; 
         const selectedDateTo = currentQueryTo || currentQueryFrom;
 
-        // دالة مساعدة لتحويل تنسيق التاريخ من YYYY-MM-DD إلى DD-MM-YYYY
         function formatToDDMMYYYY(dateStr) {
             if (!dateStr) return '';
             const parts = dateStr.split('-');
@@ -2439,10 +2903,7 @@
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                
-                // تسمية الملف بالصيغة المطلوبة SA_Sales Format_DD-MM-YYYY
                 a.download = `SA_Sales Format_${formattedDate}.xlsx`;
-                
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);

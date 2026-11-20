@@ -7,15 +7,19 @@
     <title data-i18n="top_sales_page_title">أفضل موظفي المبيعات - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- ربط ملف التنسيقات المشترك -->
     <link rel="stylesheet" href="style.css?v=2026.8">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+
         .mobile-container {
             width: 100%;
             max-width: 1350px;
@@ -23,7 +27,7 @@
             padding: 0 15px;
         }
 
-        /* 📱 هيدر مرتب وصارم يمنع تمدد الأزرار ويجعلها في سطر واحد */
+        /* هيدر مرتب وصارم يمنع تمدد الأزرار ويجعلها في سطر واحد */
         header {
             display: flex !important;
             flex-direction: row !important;
@@ -36,7 +40,7 @@
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
             color: #ffffff !important;
             border-radius: 14px !important;
-            box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
+            box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.25);
             border: 2px solid #38bdf8 !important;
             position: relative;
             overflow: hidden;
@@ -136,6 +140,77 @@
             color: #ffffff;
         }
 
+        .filter-panel {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            margin-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            position: relative;
+            border: 2px solid var(--border);
+        }
+
+        .period-chips {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .chip {
+            background: var(--accent-light);
+            border: 2px solid var(--accent-border);
+            padding: 10px 6px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            color: var(--accent);
+            transition: all 0.2s;
+        }
+
+        .chip.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .controls-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+        }
+
+        .date-toggle-btn {
+            background: var(--bg-body);
+            border: 2px solid var(--border);
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .date-toggle-btn:hover {
+            border-color: var(--accent);
+        }
+
         .calendar-container {
             border: 2px solid var(--border);
             border-radius: 16px;
@@ -149,7 +224,7 @@
             margin: 0 auto;
             width: 100%;
             max-width: 350px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
             z-index: 1000;
         }
 
@@ -231,7 +306,7 @@
 
         .high3-btn {
             background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-            color: white;
+            color: #ffffff;
             border: 2px solid #f59e0b;
             padding: 12px 18px;
             border-radius: 12px;
@@ -242,46 +317,61 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 6px 16px rgba(217, 119, 6, 0.35);
+            box-shadow: 0 6px 16px rgba(217, 119, 6, 0.32);
             transition: all 0.2s;
             width: 100%;
-            margin-top: 10px;
-        }
-        .high3-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(217, 119, 6, 0.45);
+            margin-top: 4px;
+            font-family: inherit;
         }
 
-        .report-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(15, 23, 42, 0.85);
-            z-index: 1100;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            overflow-y: auto;
+        .high3-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(217, 119, 6, 0.42);
         }
-        .report-modal.open {
+
+        .hero-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%);
+            color: #ffffff;
+            border-radius: 20px;
+            padding: 20px 24px;
+            margin-bottom: 18px;
+            box-shadow: 0 15px 35px -8px rgba(2, 132, 199, 0.35);
+            border: 2px solid #38bdf8;
+        }
+
+        .hero-title {
+            font-size: 12px;
+            color: #bae6fd;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .hero-amount {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.25;
+            margin-bottom: 6px;
+        }
+
+        .hero-sub {
+            font-size: 12px;
+            color: #e0f2fe;
+            font-weight: 700;
             display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
         }
-        .report-content {
-            background: var(--bg-card);
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 800;
             color: var(--text-main);
-            width: 650px;
-            max-width: 98vw;
-            max-height: 95vh;
-            border-radius: 24px;
-            padding: 24px;
-            overflow-y: auto;
-            position: relative;
-            box-sizing: border-box;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
-            border: 2px solid var(--border);
+            margin-bottom: 14px;
         }
 
         /* قائمة الموظفين (تصميم عمودي افتراضي للجوال) */
@@ -290,6 +380,7 @@
             flex-direction: column;
             gap: 14px;
             margin-bottom: 30px;
+            align-items: stretch;
         }
 
         /* كارت الموظف الفردي */
@@ -300,19 +391,31 @@
             box-shadow: var(--shadow);
             border: 2px solid var(--border);
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: transform 0.2s;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.2s, border-color 0.2s;
         }
+
         .salesman-card:hover {
             transform: translateY(-2px);
             border-color: var(--accent);
         }
+
+        .salesman-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            width: 100%;
+        }
+
         .salesman-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 14px;
+            min-width: 0;
         }
+
         .salesman-rank {
             width: 38px;
             height: 38px;
@@ -327,20 +430,223 @@
             border: 2px solid var(--accent-border);
             flex-shrink: 0;
         }
-        .salesman-card:nth-child(1) .salesman-rank { background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%); color: white; }
-        .salesman-card:nth-child(2) .salesman-rank { background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); color: white; }
-        .salesman-card:nth-child(3) .salesman-rank { background: linear-gradient(135deg, #b45309 0%, #78350f 100%); color: white; }
 
-        .salesman-details h3 { font-size: 14px; font-weight: 800; color: var(--text-main); margin: 0 0 4px 0; }
-        .salesman-details p { font-size: 11px; color: var(--text-muted); margin: 0; font-weight: 700; }
-        .salesman-totals { text-align: left; }
-        .salesman-totals .amount { font-size: 16px; font-weight: 800; color: var(--text-main); line-height: 1.2; }
-        .salesman-totals .count { font-size: 11px; color: var(--text-muted); font-weight: 700; }
-        .status-msg { text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; font-weight: 700; }
+        .salesman-card:nth-child(1) .salesman-rank {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            color: #ffffff;
+            border-color: #f59e0b;
+        }
 
-        /* ========================================================
-           💻 التجاوب للشاشات الكبيرة والكمبيوتر
-           ======================================================== */
+        .salesman-card:nth-child(2) .salesman-rank {
+            background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+            color: #ffffff;
+            border-color: #94a3b8;
+        }
+
+        .salesman-card:nth-child(3) .salesman-rank {
+            background: linear-gradient(135deg, #b45309 0%, #78350f 100%);
+            color: #ffffff;
+            border-color: #b45309;
+        }
+
+        .salesman-details h3 {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 0 0 4px 0;
+            word-break: break-word;
+        }
+
+        .salesman-details p {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .salesman-totals {
+            text-align: end;
+            flex-shrink: 0;
+        }
+
+        .salesman-totals .amount {
+            font-size: 16px;
+            font-weight: 900;
+            color: #1d4ed8;
+            line-height: 1.25;
+        }
+
+        .salesman-totals .meta-line {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 700;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        .qty-tag {
+            color: #047857;
+            font-weight: 800;
+        }
+
+        /* الزران ظاهران تلقائياً تحت كل موظف */
+        .seller-action-btns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            padding-top: 10px;
+            border-top: 1.5px dashed var(--border);
+        }
+
+        .seller-insight-btn {
+            background: var(--accent-light);
+            border: 1.5px solid var(--accent-border);
+            color: var(--accent);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 11.5px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .seller-insight-btn:hover,
+        .seller-insight-btn.active {
+            background: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent);
+        }
+
+        .seller-insight-btn.group-btn {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #047857;
+        }
+
+        .seller-insight-btn.group-btn:hover,
+        .seller-insight-btn.group-btn.active {
+            background: #059669;
+            color: #ffffff;
+            border-color: #059669;
+        }
+
+        /* صندوق التفاصيل داخل نفس المربع (الكارت) */
+        .inline-details-box {
+            background: var(--bg-body);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .inline-details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11.5px;
+            font-weight: 800;
+            color: var(--accent);
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .inline-close-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        .inline-close-btn:hover {
+            background: rgba(239, 68, 68, 0.12);
+            color: #dc2626;
+        }
+
+        .inline-detail-row {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .inline-detail-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .inline-detail-row .d-main {
+            color: var(--text-main);
+            font-weight: 800;
+            font-size: 11.5px;
+        }
+
+        .inline-detail-row .d-sub {
+            color: var(--text-muted);
+            font-size: 10.5px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .pct-badge {
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 1px 6px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 10px;
+        }
+
+        .inline-detail-row .d-val {
+            color: #1d4ed8;
+            font-weight: 900;
+            white-space: nowrap;
+            font-size: 11.5px;
+        }
+
+        .inline-status {
+            text-align: center;
+            padding: 12px 8px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .status-msg {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 700;
+            grid-column: 1 / -1;
+        }
+
         @media (min-width: 768px) {
             header {
                 padding: 20px 28px !important;
@@ -355,6 +661,7 @@
                 width: 44px !important;
                 height: 44px !important;
                 min-width: 44px !important;
+                max-width: 44px !important;
                 font-size: 16px !important;
                 border-radius: 14px !important;
             }
@@ -370,36 +677,72 @@
             .salesmen-list {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
-                gap: 16px;
+                gap: 18px;
+                align-items: start;
             }
-
             .salesman-card {
-                flex-direction: column;
-                align-items: flex-start;
-                justify-content: flex-start;
-                gap: 14px;
                 padding: 20px;
             }
-
-            .salesman-info {
-                width: 100%;
-                justify-content: flex-start;
-            }
-
-            .salesman-totals {
-                width: 100%;
-                text-align: right;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                border-top: 1px solid var(--border);
-                padding-top: 12px;
-                margin-top: 4px;
-            }
-
             .salesman-totals .amount {
-                font-size: 18px;
+                font-size: 17px;
             }
+        }
+
+        /* مودال High 3 */
+        .report-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.85);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .report-modal.open {
+            display: flex;
+        }
+
+        .report-content {
+            background: var(--bg-card);
+            color: var(--text-main);
+            width: 720px;
+            max-width: 98vw;
+            max-height: 95vh;
+            border-radius: 24px;
+            padding: 24px;
+            overflow-y: auto;
+            position: relative;
+            box-sizing: border-box;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            border: 2px solid var(--border);
+        }
+
+        .modal-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 12px;
+        }
+
+        .modal-close-btn {
+            background: #ef4444;
+            color: #ffffff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 800;
+            font-family: inherit;
+            flex-shrink: 0;
         }
 
         .exact-poster-container {
@@ -411,7 +754,7 @@
             border: 2px solid #e2e8f0;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.1);
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.12);
             box-sizing: border-box;
         }
 
@@ -425,11 +768,15 @@
             align-items: center;
             clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
         }
+
         .poster-top-banner::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 5px;
-            background: linear-gradient(135deg, #7f1d1d 0%, #0f172a 100%);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 5px;
+            background: linear-gradient(135deg, #0284c7 0%, #0f172a 100%);
             clip-path: polygon(0 0, 100% 0, 100% 65%, 50% 100%, 0 65%);
         }
 
@@ -444,16 +791,18 @@
             align-items: center;
             margin-bottom: 15px;
         }
+
         .poster-brand-area .company-name {
             font-size: 20px;
             font-weight: 900;
             color: #0f172a;
             line-height: 1.1;
         }
+
         .poster-brand-area .company-sub {
             font-size: 11px;
             font-weight: 800;
-            color: #1e3a8a;
+            color: #0284c7;
             letter-spacing: 1px;
         }
 
@@ -475,7 +824,7 @@
             font-size: 13px;
             font-weight: 900;
             letter-spacing: 1px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             border: 2px solid #374151;
             transform: rotate(-1.5deg);
             margin-bottom: 25px;
@@ -567,9 +916,10 @@
             align-items: center;
             justify-content: center;
             transform: rotate(45deg);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             border-radius: 8px;
         }
+
         .diamond-number span {
             transform: rotate(-45deg);
         }
@@ -580,7 +930,7 @@
             background: #dc2626;
             clip-path: polygon(0 0, 100% 0, 50% 100%);
             margin-top: -6px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
         }
 
         .card-percentage-val {
@@ -590,6 +940,7 @@
             margin-top: 14px;
             line-height: 1;
         }
+
         .card-percentage-val small {
             font-size: 16px;
             font-weight: 800;
@@ -598,7 +949,7 @@
         .card-prize-banner {
             margin-top: 12px;
             background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
-            color: white;
+            color: #ffffff;
             padding: 5px 10px;
             border-radius: 8px;
             font-size: 11px;
@@ -606,9 +957,11 @@
             letter-spacing: 0.5px;
             text-transform: uppercase;
         }
+
         .third-card .card-prize-banner {
             background: linear-gradient(135deg, #b45309 0%, #451a03 100%);
         }
+
         .second-card .card-prize-banner {
             background: linear-gradient(135deg, #64748b 0%, #1e293b 100%);
         }
@@ -617,8 +970,8 @@
             width: 100%;
             overflow-x: auto;
             border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border);
             background: var(--bg-card);
         }
 
@@ -628,25 +981,28 @@
             border-spacing: 0;
             font-size: 12px;
             text-align: center;
-        }
-
-        .report-table-pro th {
-            background: var(--primary);
-            color: #f8fafc;
-            padding: 12px 10px;
-            font-weight: 800;
-            font-size: 11px;
-            border-bottom: 2px solid var(--border);
             white-space: nowrap;
         }
 
+        .report-table-pro th {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.14), rgba(37, 99, 235, 0.14));
+            color: var(--accent);
+            padding: 12px 12px;
+            font-weight: 800;
+            font-size: 11px;
+            border-bottom: 2px solid var(--accent-border);
+        }
+
         .report-table-pro td {
-            padding: 12px 10px;
+            padding: 12px 12px;
             font-weight: 700;
             color: var(--text-main);
             border-bottom: 1px solid var(--border);
             background: var(--bg-card);
-            white-space: nowrap;
+        }
+
+        .report-table-pro tbody tr:hover td {
+            background: var(--bg-body);
         }
 
         .report-table-pro tr:last-child td {
@@ -666,7 +1022,7 @@
         }
 
         .bonus-amount-cell {
-            color: #d97706;
+            color: #047857;
             font-weight: 900;
             font-size: 13px;
         }
@@ -678,6 +1034,7 @@
             margin-top: 25px;
             flex-wrap: wrap;
         }
+
         .share-btn {
             padding: 12px 20px;
             border-radius: 14px;
@@ -688,17 +1045,28 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: white;
+            color: #ffffff;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            font-family: inherit;
         }
+
         .share-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
         }
-        .btn-whatsapp { background: linear-gradient(135deg, #25d366 0%, #16a34a 100%); }
-        .btn-email { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); }
-        .btn-download { background: linear-gradient(135deg, #475569 0%, #1e293b 100%); }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25d366 0%, #16a34a 100%);
+        }
+
+        .btn-email {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #475569 0%, #1e293b 100%);
+        }
     </style>
 
     <script src="app.js" defer></script>
@@ -712,7 +1080,7 @@
             <p data-i18n="top_sales_subtitle">أفضل موظفي المبيعات (Top Sales Man)</p>
         </div>
         <div class="header-left-group">
-            <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
+            <button type="button" class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
                 <i class="fa-solid fa-moon" id="themeIcon"></i>
             </button>
             <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
@@ -721,7 +1089,7 @@
                 <option value="hi">हिन्दी</option>
                 <option value="ur">اردو</option>
             </select>
-            <button class="action-btn-icon" onclick="loadTopSalesmen()" title="تحديث">
+            <button type="button" class="action-btn-icon" onclick="loadTopSalesmen()" title="تحديث">
                 <i class="fa-solid fa-rotate"></i>
             </button>
             <a href="sales.html" class="action-btn-icon" title="رجوع للمبيعات">
@@ -744,26 +1112,26 @@
             <div class="chip" onclick="toggleCalendar()" data-i18n="chip_custom">📅 مخصص</div>
         </div>
 
-        <div class="controls-row" style="position: relative; margin-top: 10px;">
+        <div class="controls-row">
             <div class="control-group" style="width: 100%;">
-                <div class="date-toggle-btn" onclick="toggleCalendar()" style="background: var(--bg-body); border: 2px solid var(--border); padding: 12px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                <div class="date-toggle-btn" onclick="toggleCalendar()">
                     <span id="dateButtonText" data-i18n="btn_choose_range">اختر النطاق...</span>
                     <i class="fa-solid fa-calendar-days" style="color: var(--accent);"></i>
                 </div>
-                
+
                 <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
                     <div class="calendar-header">
-                        <button onclick="changeMonth(-1)">&#9664;</button>
+                        <button type="button" onclick="changeMonth(-1)">&#9664;</button>
                         <span id="calendarTitle">نوفمبر 2026</span>
-                        <button onclick="changeMonth(1)">&#9654;</button>
+                        <button type="button" onclick="changeMonth(1)">&#9654;</button>
                     </div>
                     <div class="calendar-grid" id="calendarDaysGrid"></div>
                 </div>
             </div>
         </div>
 
-        <button class="high3-btn" onclick="openHigh3Report()" data-i18n="btn_high3_report">
-            <i class="fa-solid fa-trophy"></i> High 3 (أعلى 3 فواتير للفترة > 1000 ر.س)
+        <button type="button" class="high3-btn" onclick="openHigh3Report()" data-i18n="btn_high3_report">
+            <i class="fa-solid fa-trophy"></i> High 3 (أعلى 3 فواتير للفترة &gt; 1000 ر.س)
         </button>
     </div>
 
@@ -771,14 +1139,15 @@
     <div class="hero-card">
         <div class="hero-title" data-i18n="top_sales_hero_title">إجمالي مبيعات الموظفين في الفترة</div>
         <div class="hero-amount" id="totalSalesAmount">0.00 SAR</div>
-        <div class="hero-sub" id="totalInvoicesCount" data-i18n="total_invoices_count">عدد الفواتير الإجمالي: 0 فاتورة</div>
+        <div class="hero-sub" id="totalInvoicesCount">عدد الفواتير الإجمالي: 0 فاتورة • عدد القطع: 0 قطعة</div>
     </div>
 
     <div class="section-header">
         <i class="fa-solid fa-trophy" style="color: #d97706;"></i>
         <span data-i18n="top_sales_list_title">قائمة أفضل موظفي المبيعات</span>
     </div>
-    
+
+    <!-- عرض المربعات -->
     <div class="salesmen-list" id="salesmenContainer">
         <div class="status-msg" data-i18n="status_loading">جاري تحميل البيانات...</div>
     </div>
@@ -787,19 +1156,18 @@
 <!-- Modal تقرير High 3 -->
 <div class="report-modal" id="high3Modal">
     <div class="report-content" id="reportPrintableArea">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 12px;" id="modalTopBar">
+        <div class="modal-top-bar" id="modalTopBar">
             <h3 style="font-weight: 800; color: var(--text-main); font-size: 16px; margin: 0; display: flex; align-items: center; gap: 8px;">
                 <i class="fa-solid fa-trophy" style="color: #d97706;"></i>
                 <span data-i18n="high3_modal_title">تقرير أعلى 3 فواتير مبيعات (تتجاوز 1000 ريال)</span>
             </h3>
-            <button onclick="closeHigh3Modal()" style="background: #ef4444; color: white; border: none; padding: 6px 14px; border-radius: 10px; cursor: pointer; font-weight: 800;" id="closeModalBtn" data-i18n="btn_close">✕ إغلاق</button>
+            <button type="button" class="modal-close-btn" onclick="closeHigh3Modal()" id="closeModalBtn" data-i18n="btn_close">✕ إغلاق</button>
         </div>
 
         <div id="high3ReportBody" style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
-            
             <div class="exact-poster-container" id="posterSection">
                 <div class="poster-top-banner"></div>
-                
+
                 <div class="poster-header-content">
                     <div class="poster-brand-area">
                         <div class="company-name" data-i18n="header_title">الموسى التجارية</div>
@@ -817,7 +1185,7 @@
                                 <div class="diamond-number"><span>1</span></div>
                                 <div class="ribbon-red-decoration"></div>
                             </div>
-                            <div class="card-percentage-val" style="color:#d97706;">2.5<small>%</small></div>
+                            <div class="card-percentage-val" style="color: #d97706;">2.5<small>%</small></div>
                             <div class="card-prize-banner">Cash Prize</div>
                         </div>
                     </div>
@@ -837,7 +1205,7 @@
                         <div class="podium-item-sub">
                             <div class="podium-card-box second-card">
                                 <div class="diamond-badge-wrapper">
-                                    <div class="diamond-number" style="color:#334155;"><span>2</span></div>
+                                    <div class="diamond-number" style="color: #334155;"><span>2</span></div>
                                     <div class="ribbon-red-decoration"></div>
                                 </div>
                                 <div class="card-percentage-val">1.5<small>%</small></div>
@@ -849,11 +1217,11 @@
             </div>
 
             <div style="width: 100%;" id="tableSection">
-                <div id="dateRangeBanner" style="font-weight: 800; color: #d97706; margin-bottom: 10px; font-size: 13px; text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 6px;">
+                <div id="dateRangeBanner" style="font-weight: 800; color: var(--accent); margin-bottom: 10px; font-size: 13px; text-align: start; display: flex; align-items: center; gap: 6px;">
                     <i class="fa-regular fa-calendar-days"></i>
                     <span id="dateRangeText">الفترة الحالية</span>
                 </div>
-                
+
                 <div class="table-responsive-box">
                     <table class="report-table-pro">
                         <thead>
@@ -877,13 +1245,13 @@
         </div>
 
         <div class="share-actions-bar" id="shareActionsBar">
-            <button class="share-btn btn-whatsapp" onclick="shareToWhatsApp()" data-i18n="btn_share_whatsapp">
+            <button type="button" class="share-btn btn-whatsapp" onclick="shareToWhatsApp()" data-i18n="btn_share_whatsapp">
                 <i class="fa-brands fa-whatsapp" style="font-size: 16px;"></i> مشاركة عبر واتساب
             </button>
-            <button class="share-btn btn-email" onclick="shareToEmail()" data-i18n="btn_share_email">
+            <button type="button" class="share-btn btn-email" onclick="shareToEmail()" data-i18n="btn_share_email">
                 <i class="fa-solid fa-envelope" style="font-size: 16px;"></i> إرسال عبر البريد
             </button>
-            <button class="share-btn btn-download" onclick="downloadReportImage()" data-i18n="btn_download_img">
+            <button type="button" class="share-btn btn-download" onclick="downloadReportImage()" data-i18n="btn_download_img">
                 <i class="fa-solid fa-download" style="font-size: 16px;"></i> تحميل كصورة
             </button>
         </div>
@@ -908,8 +1276,10 @@
     let selectionState = { startDate: null, endDate: null };
     let viewDate = new Date();
     let cachedInvoices = [];
+    let latestSortedSalesmen = [];
+    let activeCardTab = {}; // { [sellerName]: 'hours' | 'group' | null }
+    let sellerGroupsCache = {};
 
-    // قاموس الترجمات الآمن والمدمج للصفحة
     const extraTranslations = {
         ar: {
             top_sales_hero_title: "إجمالي مبيعات الموظفين في الفترة",
@@ -917,8 +1287,11 @@
             branch_label: "الفرع",
             total_invoices_count: "عدد الفواتير الإجمالي",
             invoices_word: "فاتورة",
+            items_word: "قطعة",
             status_loading: "جاري تحميل البيانات...",
-            status_no_data: "لا توجد مبيعات مسجلة للموظفين في هذه الفترة"
+            status_no_data: "لا توجد مبيعات مسجلة للموظفين في هذه الفترة",
+            btn_hours: "ساعات المبيعات",
+            btn_top_group: "أكثر مجموعة (Group)"
         },
         en: {
             top_sales_hero_title: "Total Salesmen Sales in Period",
@@ -926,31 +1299,102 @@
             branch_label: "Branch",
             total_invoices_count: "Total Invoices",
             invoices_word: "Invoices",
+            items_word: "Items",
             status_loading: "Loading data...",
-            status_no_data: "No sales recorded for salesmen in this period"
+            status_no_data: "No sales recorded for salesmen in this period",
+            btn_hours: "Sales Hours",
+            btn_top_group: "Top Item Group"
         },
         hi: {
             top_sales_hero_title: "अवधि में कुल सेल्समेन बिक्री",
             top_sales_list_title: "शीर्ष सेल्समेन सूची",
             branch_label: "शाखा",
             total_invoices_count: "कुल चालान",
-            invoices_word: "Invoices",
+            invoices_word: "चालान",
+            items_word: "आइटम",
             status_loading: "डाटा लोड हो रहा है...",
-            status_no_data: "इस अवधि में कोई बिक्री दर्ज नहीं की गई"
+            status_no_data: "इस अवधि में कोई बिक्री दर्ज नहीं की गई",
+            btn_hours: "बिक्री के घंटे",
+            btn_top_group: "शीर्ष ग्रुप"
         },
         ur: {
             top_sales_hero_title: "مدت میں سیلزمین کی کل فروخت",
             top_sales_list_title: "بہترین سیلزمین کی فہرست",
             branch_label: "برانچ",
             total_invoices_count: "کل انوائسز",
-            invoices_word: "انواٸس",
+            invoices_word: "انوائس",
+            items_word: "آئٹمز",
             status_loading: "ڈیٹا لوڈ ہو رہا ہے...",
-            status_no_data: "اس مدت میں کوئی فروخت درج نہیں ہے"
+            status_no_data: "اس مدت میں کوئی فروخت درج نہیں ہے",
+            btn_hours: "فروخت کے اوقات",
+            btn_top_group: "اہم گروپ"
         }
     };
 
+    function getLangBundle() {
+        const langKey = (typeof currentLang !== 'undefined' && currentLang) ? currentLang : 'ar';
+        return extraTranslations[langKey] || extraTranslations.ar;
+    }
+
+    function fmtNum(num) {
+        return Number(num || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function fmtQty(qty) {
+        const n = Number(qty || 0);
+        return Number.isInteger(n) ? n.toLocaleString('en-US') : n.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+    }
+
+    function escapeAttr(str) {
+        return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    }
+
+    function escapeHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    function toTitleSegment(seg) {
+        const clean = String(seg || '').trim().toLowerCase();
+        if (!clean) return '';
+        return clean.replace(/\b\w+/g, word => word.charAt(0).toUpperCase() + word.slice(1));
+    }
+
+    function formatShortItemGroup(rawGroup) {
+        const str = String(rawGroup || '').trim();
+        if (!str || !str.includes('.')) return str || 'غير مصنف';
+
+        const parts = str.split('.').map(p => p.trim()).filter(Boolean);
+        if (parts.length < 2) return toTitleSegment(parts[0] || str);
+
+        const secondPart = toTitleSegment(parts[1]);
+        const lastPart = toTitleSegment(parts[parts.length - 1]);
+
+        if (!secondPart) return lastPart;
+        if (!lastPart || secondPart.toLowerCase() === lastPart.toLowerCase()) {
+            return secondPart;
+        }
+        return `${secondPart} • ${lastPart}`;
+    }
+
+    function extractInvoiceQty(inv) {
+        const directQty = inv.total_qty ?? inv.qty ?? inv.items_qty;
+        if (directQty !== undefined && directQty !== null && directQty !== '') {
+            return parseFloat(directQty) || 0;
+        }
+        const items = inv.items || inv.invoice_items || [];
+        if (Array.isArray(items) && items.length > 0) {
+            return items.reduce((sum, it) => sum + (parseFloat(it.qty || 0) || 0), 0);
+        }
+        return 0;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-        // دمج الترجمات المحلية مع نظام app.js إن وجد
+        activeCardTab = {};
+
         if (typeof translations !== 'undefined') {
             for (let lang in extraTranslations) {
                 if (!translations[lang]) translations[lang] = {};
@@ -965,7 +1409,7 @@
             if (!event.target.closest('.control-group') && !event.target.closest('.period-chips') && !event.target.closest('.date-toggle-btn')) {
                 document.getElementById('calendarContainer').classList.remove('open');
             }
-        }
+        };
     });
 
     function toggleCalendar() {
@@ -1111,17 +1555,305 @@
         return `${yyyy}-${mm}-${dd}`;
     }
 
-    async function loadTopSalesmen() {
+    function resolveSellerName(inv) {
+        let seller = inv.custom_sales_person || inv.sales_partner || inv.owner;
+        if (!seller || seller.trim() === "" || seller === "-") {
+            seller = "N/A";
+        }
+        return seller.trim();
+    }
+
+    function extractHourLabel(inv) {
+        const rawTime = inv.posting_time || inv.transaction_time || (inv.creation ? String(inv.creation).split(' ')[1] : '') || '';
+        const match = String(rawTime).match(/(\d{1,2})/);
+        if (match) {
+            const h = parseInt(match[1], 10);
+            if (!Number.isNaN(h) && h >= 0 && h <= 23) {
+                const startH = String(h).padStart(2, '0');
+                const endH = String((h + 1) % 24).padStart(2, '0');
+                return `${startH}:00 - ${endH}:00`;
+            }
+        }
+        return 'غير محدد';
+    }
+
+    function buildHoursRowsHtml(sellerObj) {
+        const tObj = getLangBundle();
+        const hourMap = {};
+        sellerObj.invoices.forEach(inv => {
+            const slot = extractHourLabel(inv);
+            if (!hourMap[slot]) {
+                hourMap[slot] = { slot, total: 0, count: 0, qty: 0 };
+            }
+            hourMap[slot].total += parseFloat(inv.grand_total || 0);
+            hourMap[slot].count += 1;
+            hourMap[slot].qty += extractInvoiceQty(inv);
+        });
+
+        const rows = Object.values(hourMap).sort((a, b) => a.slot.localeCompare(b.slot));
+        if (!rows.length) {
+            return `<div class="inline-status">لا توجد بيانات ساعات متاحة</div>`;
+        }
+
+        return rows.map(r => {
+            const pct = sellerObj.totalSales > 0 ? (r.total / sellerObj.totalSales) * 100 : 0;
+            return `
+                <div class="inline-detail-row">
+                    <div class="inline-detail-left">
+                        <div class="d-main"><i class="fa-regular fa-clock" style="color:var(--accent);"></i> ${escapeHtml(r.slot)}</div>
+                        <div class="d-sub">
+                            <span>${r.count.toLocaleString('en-US')} ${escapeHtml(tObj.invoices_word)}</span>
+                            <span>•</span>
+                            <span class="qty-tag">${fmtQty(r.qty)} ${escapeHtml(tObj.items_word)}</span>
+                            <span class="pct-badge">${pct.toFixed(1)}%</span>
+                        </div>
+                    </div>
+                    <div class="d-val">${fmtNum(r.total)} SAR</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function buildGroupsRowsHtml(groupsList, sellerTotalSales) {
+        const tObj = getLangBundle();
+        if (!groupsList || !groupsList.length) {
+            return `<div class="inline-status">لا تتوفر تفاصيل مجموعات الأصناف لهذا الموظف</div>`;
+        }
+
+        const groupsTotal = groupsList.reduce((acc, g) => acc + g.amount, 0) || sellerTotalSales;
+        return groupsList.map((g, idx) => {
+            const pct = groupsTotal > 0 ? (g.amount / groupsTotal) * 100 : 0;
+            return `
+                <div class="inline-detail-row">
+                    <div class="inline-detail-left">
+                        <div class="d-main">${idx === 0 ? '🏆 ' : ''}${escapeHtml(g.group)}</div>
+                        <div class="d-sub">
+                            <span class="qty-tag">${fmtQty(g.qty)} ${escapeHtml(tObj.items_word)}</span>
+                            <span class="pct-badge">${pct.toFixed(1)}%</span>
+                        </div>
+                    </div>
+                    <div class="d-val" style="color:#047857;">${fmtNum(g.amount)} SAR</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async function fetchSingleDocItems(inv) {
+        const docName = inv.name || inv.invoice_name || inv.id;
+        if (!docName) return [];
+
+        const doctypeCandidates = inv.doctype
+            ? [inv.doctype]
+            : ["POS Invoice", "Sales Invoice"];
+
+        for (const dt of doctypeCandidates) {
+            try {
+                const url = `${CONFIG.serverUrl}/api/method/frappe.client.get?doctype=${encodeURIComponent(dt)}&name=${encodeURIComponent(docName)}`;
+                const res = await fetch(url, {
+                    method: "GET",
+                    headers: authHeaders
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    const doc = data.message;
+                    if (doc && Array.isArray(doc.items) && doc.items.length > 0) {
+                        return doc.items;
+                    }
+                }
+            } catch (err) {
+                console.warn(`frappe.client.get failed for ${dt} ${docName}:`, err);
+            }
+        }
+        return [];
+    }
+
+    async function fetchItemGroupsMap(itemCodes) {
+        const cleanCodes = [...new Set(itemCodes.filter(Boolean))];
+        const map = {};
+        if (!cleanCodes.length) return map;
+
+        try {
+            const response = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
+                method: "POST",
+                headers: authHeaders,
+                body: JSON.stringify({
+                    doctype: "Item",
+                    filters: [["name", "in", cleanCodes.slice(0, 200)]],
+                    fields: ["name", "item_group"],
+                    limit_page_length: 500
+                })
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (Array.isArray(data.message)) {
+                    data.message.forEach(it => {
+                        if (it.name && it.item_group) map[it.name] = it.item_group;
+                    });
+                }
+            }
+        } catch (e) {
+            console.warn("Item group map lookup failed:", e);
+        }
+        return map;
+    }
+
+    async function toggleCardInsight(sellerName, tabType) {
+        const safeKey = encodeURIComponent(sellerName);
+        if (activeCardTab[sellerName] === tabType) {
+            activeCardTab[sellerName] = null;
+            renderSalesmenCards();
+            return;
+        }
+
+        activeCardTab[sellerName] = tabType;
+        renderSalesmenCards();
+
+        if (tabType === 'group') {
+            const sellerObj = latestSortedSalesmen.find(s => s.name === sellerName);
+            if (!sellerObj) return;
+
+            const cacheKey = `${currentQueryFrom}_${currentQueryTo}_${sellerName}`;
+            if (sellerGroupsCache[cacheKey]) {
+                const box = document.getElementById(`inlineBody_${safeKey}`);
+                if (box) box.innerHTML = buildGroupsRowsHtml(sellerGroupsCache[cacheKey], sellerObj.totalSales);
+                return;
+            }
+
+            const groupStats = {};
+            let rawItems = [];
+
+            sellerObj.invoices.forEach(inv => {
+                const items = inv.items || inv.invoice_items || [];
+                if (Array.isArray(items) && items.length > 0) {
+                    items.forEach(it => rawItems.push(it));
+                }
+            });
+
+            if (!rawItems.length && sellerObj.invoices.length > 0) {
+                const targetInvoices = sellerObj.invoices.slice(0, 30);
+                const docsItemsArrays = await Promise.all(targetInvoices.map(inv => fetchSingleDocItems(inv)));
+                docsItemsArrays.forEach(arr => {
+                    if (Array.isArray(arr) && arr.length > 0) {
+                        rawItems.push(...arr);
+                    }
+                });
+            }
+
+            const missingGroupCodes = rawItems
+                .filter(it => !it.item_group && !it.custom_item_group && it.item_code)
+                .map(it => it.item_code);
+            const itemCodeToGroup = missingGroupCodes.length ? await fetchItemGroupsMap(missingGroupCodes) : {};
+
+            rawItems.forEach(it => {
+                const rawGrp = it.item_group || it.custom_item_group || itemCodeToGroup[it.item_code] || it.item_code || 'غير مصنف';
+                const shortGrp = formatShortItemGroup(rawGrp);
+                const amt = parseFloat(it.amount || it.base_amount || it.net_amount || 0) || 0;
+                const qty = parseFloat(it.qty || 0) || 0;
+                if (!groupStats[shortGrp]) groupStats[shortGrp] = { group: shortGrp, qty: 0, amount: 0 };
+                groupStats[shortGrp].qty += qty;
+                groupStats[shortGrp].amount += amt;
+            });
+
+            const sortedGroups = Object.values(groupStats).sort((a, b) => b.amount - a.amount);
+            sellerGroupsCache[cacheKey] = sortedGroups;
+
+            if (activeCardTab[sellerName] === 'group') {
+                const box = document.getElementById(`inlineBody_${safeKey}`);
+                if (box) box.innerHTML = buildGroupsRowsHtml(sortedGroups, sellerObj.totalSales);
+            }
+        }
+    }
+
+    function renderSalesmenCards() {
         const container = document.getElementById('salesmenContainer');
-        const langKey = (typeof currentLang !== 'undefined' && currentLang) ? currentLang : 'ar';
-        const tObj = (extraTranslations[langKey]) ? extraTranslations[langKey] : extraTranslations['ar'];
-        
+        const tObj = getLangBundle();
+
+        if (!latestSortedSalesmen.length) {
+            container.innerHTML = `<div class="status-msg">${tObj.status_no_data}</div>`;
+            return;
+        }
+
+        container.innerHTML = latestSortedSalesmen.map((sm, index) => {
+            const currentTab = activeCardTab[sm.name] || null;
+            const safeKey = encodeURIComponent(sm.name);
+            const attrName = escapeAttr(sm.name);
+            const cacheKey = `${currentQueryFrom}_${currentQueryTo}_${sm.name}`;
+
+            let inlineSectionHtml = '';
+            if (currentTab === 'hours') {
+                inlineSectionHtml = `
+                    <div class="inline-details-box">
+                        <div class="inline-details-header">
+                            <span><i class="fa-regular fa-clock"></i> ${escapeHtml(tObj.btn_hours)}</span>
+                            <button type="button" class="inline-close-btn" onclick="toggleCardInsight('${attrName}', 'hours')">✕</button>
+                        </div>
+                        <div id="inlineBody_${safeKey}">${buildHoursRowsHtml(sm)}</div>
+                    </div>
+                `;
+            } else if (currentTab === 'group') {
+                const bodyContent = sellerGroupsCache[cacheKey]
+                    ? buildGroupsRowsHtml(sellerGroupsCache[cacheKey], sm.totalSales)
+                    : `<div class="inline-status">جاري تحميل مجموعات الأصناف...</div>`;
+                inlineSectionHtml = `
+                    <div class="inline-details-box">
+                        <div class="inline-details-header" style="color:#047857;">
+                            <span><i class="fa-solid fa-layer-group"></i> ${escapeHtml(tObj.btn_top_group)}</span>
+                            <button type="button" class="inline-close-btn" onclick="toggleCardInsight('${attrName}', 'group')">✕</button>
+                        </div>
+                        <div id="inlineBody_${safeKey}">${bodyContent}</div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="salesman-card">
+                    <div class="salesman-top-row">
+                        <div class="salesman-info">
+                            <div class="salesman-rank">#${index + 1}</div>
+                            <div class="salesman-details">
+                                <h3>${escapeHtml(sm.name)}</h3>
+                                <p>${escapeHtml(tObj.branch_label)}: ${escapeHtml(sm.branch)}</p>
+                            </div>
+                        </div>
+                        <div class="salesman-totals">
+                            <div class="amount">${fmtNum(sm.totalSales)} <small>SAR</small></div>
+                            <div class="meta-line">
+                                <span>${sm.invoiceCount.toLocaleString('en-US')} ${escapeHtml(tObj.invoices_word)}</span>
+                                <span>•</span>
+                                <span class="qty-tag">${fmtQty(sm.totalQty)} ${escapeHtml(tObj.items_word)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="seller-action-btns">
+                        <button type="button" class="seller-insight-btn ${currentTab === 'hours' ? 'active' : ''}" onclick="toggleCardInsight('${attrName}', 'hours')">
+                            <i class="fa-regular fa-clock"></i>
+                            <span>${escapeHtml(tObj.btn_hours)}</span>
+                        </button>
+                        <button type="button" class="seller-insight-btn group-btn ${currentTab === 'group' ? 'active' : ''}" onclick="toggleCardInsight('${attrName}', 'group')">
+                            <i class="fa-solid fa-layer-group"></i>
+                            <span>${escapeHtml(tObj.btn_top_group)}</span>
+                        </button>
+                    </div>
+
+                    ${inlineSectionHtml}
+                </div>
+            `;
+        }).join('');
+    }
+
+    async function loadTopSalesmen() {
+        activeCardTab = {};
+        sellerGroupsCache = {};
+        const tObj = getLangBundle();
+        const container = document.getElementById('salesmenContainer');
         container.innerHTML = `<div class="status-msg">${tObj.status_loading}</div>`;
 
         let queryToDate = currentQueryTo || currentQueryFrom;
         let salesmenMap = {};
         let totalSalesSum = 0;
         let totalInvoicesSum = 0;
+        let totalQtySum = 0;
         cachedInvoices = [];
 
         const EXCLUDED_SALESMEN = ['administrator', 'guest', 'apiuser@almousatrading.com', 'none', 'غير محدد'];
@@ -1143,60 +1875,49 @@
                 cachedInvoices = [...(resultMessage.pos || []), ...(resultMessage.sales || [])];
 
                 cachedInvoices.forEach(inv => {
-                    let seller = inv.custom_sales_person || inv.sales_partner || inv.owner;
-                    if (!seller || seller.trim() === "" || seller === "-") {
-                        seller = "N/A";
-                    }
-
-                    const cleanSellerLower = seller.trim().toLowerCase();
+                    const seller = resolveSellerName(inv);
+                    const cleanSellerLower = seller.toLowerCase();
                     if (EXCLUDED_SALESMEN.includes(cleanSellerLower)) {
                         return;
                     }
 
-                    const amount = parseFloat(inv.grand_total || 0);
+                    const amount = parseFloat(inv.grand_total || 0) || 0;
+                    const qty = extractInvoiceQty(inv);
+                    const branchName = inv.set_warehouse || "-";
 
                     if (!salesmenMap[seller]) {
-                        salesmenMap[seller] = { name: seller, totalSales: 0, invoiceCount: 0, branch: inv.set_warehouse || "-" };
+                        salesmenMap[seller] = {
+                            name: seller,
+                            totalSales: 0,
+                            invoiceCount: 0,
+                            totalQty: 0,
+                            branch: branchName,
+                            invoices: []
+                        };
                     }
                     salesmenMap[seller].totalSales += amount;
                     salesmenMap[seller].invoiceCount += 1;
+                    salesmenMap[seller].totalQty += qty;
+                    salesmenMap[seller].invoices.push(inv);
 
                     totalSalesSum += amount;
                     totalInvoicesSum += 1;
+                    totalQtySum += qty;
                 });
             }
         } catch (err) {
             console.warn("Error fetching salesmen data:", err);
         }
 
-        document.getElementById('totalSalesAmount').textContent = totalSalesSum.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' SAR';
-        document.getElementById('totalInvoicesCount').textContent = `${tObj.total_invoices_count}: ${totalInvoicesSum.toLocaleString('en-US')} ${tObj.invoices_word}`;
+        document.getElementById('totalSalesAmount').textContent = fmtNum(totalSalesSum) + ' SAR';
+        document.getElementById('totalInvoicesCount').innerHTML = `
+            <span>${escapeHtml(tObj.total_invoices_count)}: ${totalInvoicesSum.toLocaleString('en-US')} ${escapeHtml(tObj.invoices_word)}</span>
+            <span>•</span>
+            <span>${escapeHtml(tObj.items_word)}: ${fmtQty(totalQtySum)}</span>
+        `;
 
-        let sortedSalesmen = Object.values(salesmenMap).sort((a, b) => b.totalSales - a.totalSales);
-
-        container.innerHTML = '';
-        if (sortedSalesmen.length === 0) {
-            container.innerHTML = `<div class="status-msg">${tObj.status_no_data}</div>`;
-        } else {
-            sortedSalesmen.forEach((sm, index) => {
-                const card = document.createElement('div');
-                card.className = 'salesman-card';
-                card.innerHTML = `
-                    <div class="salesman-info">
-                        <div class="salesman-rank">#${index + 1}</div>
-                        <div class="salesman-details">
-                            <h3>${sm.name}</h3>
-                            <p>${tObj.branch_label}: ${sm.branch}</p>
-                        </div>
-                    </div>
-                    <div class="salesman-totals">
-                        <div class="amount">${sm.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <small>SAR</small></div>
-                        <div class="count">${sm.invoiceCount.toLocaleString('en-US')} ${tObj.invoices_word}</div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
+        latestSortedSalesmen = Object.values(salesmenMap).sort((a, b) => b.totalSales - a.totalSales);
+        renderSalesmenCards();
     }
 
     async function openHigh3Report() {
@@ -1232,7 +1953,7 @@
             }
 
             const invoiceNames = top3.map(inv => inv.name);
-            
+
             const response = await fetch(`${CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
                 method: "POST",
                 headers: authHeaders,
@@ -1254,10 +1975,12 @@
             }
 
             renderHigh3TableWithMap(top3, refMap);
-
         } catch (err) {
             console.warn("Error fetching real reference, falling back to cache:", err);
-            renderHigh3TableWithMap(cachedInvoices.filter(inv => parseFloat(inv.grand_total || 0) > 1000).sort((a, b) => parseFloat(b.grand_total || 0) - parseFloat(a.grand_total || 0)).slice(0, 3), {});
+            renderHigh3TableWithMap(
+                cachedInvoices.filter(inv => parseFloat(inv.grand_total || 0) > 1000).sort((a, b) => parseFloat(b.grand_total || 0) - parseFloat(a.grand_total || 0)).slice(0, 3),
+                {}
+            );
         }
     }
 
@@ -1279,9 +2002,9 @@
             const dateStr = inv.posting_date || '-';
             const branchName = inv.set_warehouse || '-';
             const sellerId = '3031';
-            const associateName = inv.custom_sales_person || inv.sales_partner || inv.owner || 'N/A';
+            const associateName = resolveSellerName(inv);
             const grandTotal = parseFloat(inv.grand_total || 0);
-            
+
             const bonusRate = bonusRates[idx] || 0.01;
             const bonusAmount = grandTotal * bonusRate;
 
@@ -1289,12 +2012,12 @@
             tr.innerHTML = `
                 <td><span class="zatca-ref-pill">${docNum}</span></td>
                 <td>${dateStr}</td>
-                <td style="text-align: right;">${branchName}</td>
+                <td>${branchName}</td>
                 <td>${sellerId}</td>
-                <td style="font-weight: 800; text-align: right; color: var(--text-main);">${associateName}</td>
-                <td style="font-weight: 800; color: #059669;">${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                <td style="font-weight: 800; color: var(--text-main);">${associateName}</td>
+                <td style="font-weight: 800; color: #1d4ed8;">${fmtNum(grandTotal)}</td>
                 <td>${(bonusRate * 100).toFixed(2)}%</td>
-                <td class="bonus-amount-cell">${bonusAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <small style="font-size: 10px;">ر.س</small></td>
+                <td class="bonus-amount-cell">${fmtNum(bonusAmount)} <small style="font-size: 10px;">ر.س</small></td>
             `;
             tbody.appendChild(tr);
         });
@@ -1313,12 +2036,12 @@
 
         try {
             const canvasPoster = await html2canvas(posterEl, { scale: 2, backgroundColor: '#ffffff' });
-            
+
             const originalWidth = tableEl.style.width;
             tableEl.style.width = '1000px';
 
-            const canvasTable = await html2canvas(tableEl, { 
-                scale: 2, 
+            const canvasTable = await html2canvas(tableEl, {
+                scale: 2,
                 backgroundColor: '#f8fafc',
                 windowWidth: 1100
             });
@@ -1365,7 +2088,6 @@
                     }
                 }, 'image/png');
             }, 'image/png');
-
         } catch (err) {
             console.error("WhatsApp Share Error:", err);
             topBar.style.display = 'flex';
@@ -1396,7 +2118,7 @@
             link.download = 'High3_Sales_Report.png';
             link.href = canvas.toDataURL('image/png');
             link.click();
-        }).catch(err => {
+        }).catch(() => {
             topBar.style.display = 'flex';
             actionsBar.style.display = 'flex';
         });

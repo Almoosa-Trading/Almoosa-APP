@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <link rel="manifest" href="./manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title id="pageTitle">Sales Per Day - الموسى التجارية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=2026.8">
+
+    <style>
+        body {
+            font-family: 'Cairo', 'Noto Sans Devanagari', 'Noto Nastaliq Urdu', sans-serif;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 1350px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .view-hidden {
+            display: none !important;
+        }
+
+        header {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            gap: 6px !important;
+            margin-bottom: 20px !important;
+            padding: 12px 14px !important;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
+            color: #ffffff !important;
+            border-radius: 14px !important;
+            box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.25);
+            border: 2px solid #38bdf8 !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
+        }
+
+        .header-title-box {
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
+        }
+
+        .header-title-box h1 {
+            font-size: 14px !important;
+            color: #ffffff !important;
+            font-weight: 800;
+            margin: 0 !important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .header-title-box p {
+            font-size: 10px !important;
+            color: #bae6fd !important;
+            margin: 0 !important;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .header-left-group {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important;
+            gap: 5px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .lang-select {
+            background: rgba(255, 255, 255, 0.15) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            padding: 0 6px !important;
+            border-radius: 8px !important;
+            font-size: 10.5px !important;
+            font-weight: 700;
+            color: #ffffff !important;
+            height: 34px !important;
+            outline: none;
+            cursor: pointer;
+            margin: 0 !important;
+            flex-shrink: 0 !important;
+            width: auto !important;
+        }
+
+        .lang-select option {
+            background: #1e293b;
+            color: #ffffff;
+        }
+
+        .action-btn-icon {
+            background: rgba(255, 255, 255, 0.15) !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
+            width: 34px !important;
+            height: 34px !important;
+            min-width: 34px !important;
+            border-radius: 8px !important;
+            cursor: pointer;
+            font-size: 13px !important;
+            color: #ffffff !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            flex-shrink: 0 !important;
+            transition: all 0.2s;
+        }
+
+        .action-btn-icon:hover {
+            background: rgba(255, 255, 255, 0.25) !important;
+            border-color: #ffffff !important;
+        }
+
+        .filter-panel {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            margin-bottom: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            border: 2px solid var(--border);
+        }
+
+        .period-chips {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .chip {
+            background: var(--accent-light);
+            border: 2px solid var(--accent-border);
+            padding: 10px 6px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            color: var(--accent);
+            transition: all 0.2s;
+        }
+
+        .chip.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .controls-row {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+        }
+
+        .control-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .date-toggle-btn, .control-group select {
+            background: var(--bg-body);
+            border: 2px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-main);
+            height: 42px;
+            width: 100%;
+            outline: none;
+        }
+
+        .date-toggle-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .calendar-container {
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            background: var(--bg-card);
+            display: none;
+            position: absolute;
+            top: 70px;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+            z-index: 1000;
+        }
+
+        .calendar-container.open {
+            display: block;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .calendar-header button {
+            background: none;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 4px 10px;
+            cursor: pointer;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            text-align: center;
+        }
+
+        .calendar-day-name {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 800;
+            padding-bottom: 4px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            background: var(--bg-body);
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+
+        .calendar-day.selected {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .calendar-day.in-range {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .hero-summary-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 20px 24px;
+            margin-bottom: 18px;
+            box-shadow: 0 15px 35px -8px rgba(2, 132, 199, 0.35);
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            border: 2px solid #38bdf8;
+        }
+
+        .hero-stat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hero-stat-box label {
+            font-size: 11px;
+            color: #bae6fd;
+            font-weight: 700;
+        }
+
+        .hero-stat-box strong {
+            font-size: 16px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.3px;
+        }
+
+        .view-switcher-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .view-toggle-group {
+            display: inline-flex;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 4px;
+            gap: 4px;
+            box-shadow: var(--shadow);
+        }
+
+        .view-mode-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 7px 14px;
+            border-radius: 9px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .view-mode-btn:hover {
+            background: var(--bg-body);
+        }
+
+        .view-mode-btn.active {
+            background: var(--accent);
+            color: #ffffff;
+            box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+        }
+
+        .days-cards-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+            align-items: start;
+        }
+
+        .day-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .day-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .day-card.open {
+            border-color: var(--accent);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.15);
+        }
+
+        .day-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed var(--border);
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .day-title-box h3 {
+            margin: 0 0 4px 0;
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .day-badge {
+            display: inline-block;
+            background: var(--accent-light);
+            color: var(--accent);
+            border: 1px solid var(--accent-border);
+            padding: 2px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .day-main-amount {
+            text-align: end;
+        }
+
+        .day-main-amount .val {
+            font-size: 16px;
+            font-weight: 900;
+            color: #1d4ed8;
+            line-height: 1.2;
+        }
+
+        .day-main-amount .lbl {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .day-boxes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .day-boxes-grid.two-cols {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .mini-square {
+            background: var(--bg-body);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 8px;
+            text-align: center;
+        }
+
+        .mini-square .s-lbl {
+            display: block;
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .mini-square .s-val {
+            font-size: 11.5px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .mini-square.disc-sq {
+            background: rgba(239, 68, 68, 0.07);
+            border-color: rgba(239, 68, 68, 0.25);
+        }
+        .mini-square.disc-sq .s-lbl, .mini-square.disc-sq .s-val {
+            color: #dc2626;
+        }
+
+        .mini-square.vat-sq {
+            background: rgba(245, 158, 11, 0.08);
+            border-color: rgba(245, 158, 11, 0.25);
+        }
+        .mini-square.vat-sq .s-lbl, .mini-square.vat-sq .s-val {
+            color: #d97706;
+        }
+
+        .day-profit-bar {
+            background: rgba(16, 185, 129, 0.11);
+            border: 1.5px solid rgba(16, 185, 129, 0.28);
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .day-profit-bar .p-title {
+            font-size: 12px;
+            font-weight: 800;
+            color: #047857;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .day-profit-bar .p-num {
+            font-size: 13px;
+            font-weight: 900;
+            color: #047857;
+        }
+
+        .day-branches-trigger {
+            background: var(--accent-light);
+            border: 1.5px solid var(--accent-border);
+            color: var(--accent);
+            border-radius: 12px;
+            padding: 9px 12px;
+            font-size: 11.5px;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .day-branches-trigger:hover {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        .day-branches-panel {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 8px;
+            border-top: 1.5px solid var(--border);
+        }
+
+        .day-card.open .day-branches-panel {
+            display: flex;
+        }
+
+        .branch-mini-card {
+            background: var(--bg-body);
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .branch-mini-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .branch-mini-top .b-sales {
+            color: #1d4ed8;
+            font-weight: 900;
+        }
+
+        .branch-mini-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+
+        .b-metric {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 5px 6px;
+            text-align: center;
+        }
+
+        .b-metric span {
+            display: block;
+            font-size: 9.5px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .b-metric strong {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .b-metric.b-profit {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.22);
+        }
+        .b-metric.b-profit span, .b-metric.b-profit strong {
+            color: #047857;
+        }
+
+        .table-view-card {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            margin-bottom: 32px;
+        }
+
+        table.daily-grid-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        table.daily-grid-table th,
+        table.daily-grid-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        table.daily-grid-table th:first-child,
+        table.daily-grid-table td:first-child {
+            text-align: right;
+            font-weight: 800;
+            position: sticky;
+            right: 0;
+            background: var(--bg-card);
+            z-index: 2;
+        }
+
+        [dir="ltr"] table.daily-grid-table th:first-child,
+        [dir="ltr"] table.daily-grid-table td:first-child {
+            text-align: left;
+            right: auto;
+            left: 0;
+        }
+
+        table.daily-grid-table thead th {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.14), rgba(37, 99, 235, 0.14));
+            color: var(--accent);
+            font-weight: 800;
+            border-bottom: 2px solid var(--accent-border);
+        }
+
+        table.daily-grid-table thead th:first-child {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.16), rgba(37, 99, 235, 0.16));
+            z-index: 3;
+        }
+
+        table.daily-grid-table tbody tr.day-main-row {
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        table.daily-grid-table tbody tr.day-main-row:hover td {
+            background: rgba(2, 132, 199, 0.08);
+        }
+
+        table.daily-grid-table tbody tr.day-main-row:hover td:first-child {
+            background: var(--bg-body);
+        }
+
+        table.daily-grid-table tbody tr.day-main-row.is-open td {
+            background: rgba(2, 132, 199, 0.06);
+        }
+
+        table.daily-grid-table tbody tr.day-main-row.is-open td:first-child {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        table.daily-grid-table tbody tr.branch-sub-row td {
+            background: var(--bg-body);
+            font-size: 11.5px;
+            padding-top: 9px;
+            padding-bottom: 9px;
+        }
+
+        table.daily-grid-table tbody tr.branch-sub-row td:first-child {
+            background: var(--bg-body);
+            padding-right: 34px;
+            font-weight: 800;
+            color: var(--text-main);
+            border-right: 3px solid var(--accent);
+        }
+
+        [dir="ltr"] table.daily-grid-table tbody tr.branch-sub-row td:first-child {
+            padding-right: 14px;
+            padding-left: 34px;
+            border-right: none;
+            border-left: 3px solid var(--accent);
+        }
+
+        .row-caret {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            margin-left: 6px;
+            color: var(--accent);
+            font-size: 11px;
+        }
+
+        [dir="ltr"] .row-caret {
+            margin-left: 0;
+            margin-right: 6px;
+        }
+
+        .tbl-pill-sales {
+            color: #1d4ed8;
+            font-weight: 900;
+        }
+
+        .tbl-pill-margin {
+            background: rgba(16, 185, 129, 0.1);
+            color: #047857;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-weight: 800;
+        }
+
+        table.daily-grid-table tfoot td {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(37, 99, 235, 0.12));
+            font-weight: 900;
+            border-top: 2px solid var(--accent-border);
+            border-bottom: none;
+            color: var(--accent);
+            padding: 13px 14px;
+        }
+
+        table.daily-grid-table tfoot td:first-child {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(37, 99, 235, 0.15));
+        }
+
+        .status-msg {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-weight: 700;
+            grid-column: 1 / -1;
+        }
+
+        @media (min-width: 768px) {
+            .header-title-box h1 {
+                font-size: 18px !important;
+            }
+            .filter-panel .period-chips {
+                grid-template-columns: repeat(6, 1fr);
+            }
+            .controls-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+            .hero-summary-card {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .days-cards-list:not(.view-hidden) {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 18px !important;
+            }
+        }
+    </style>
+
+    <script src="app.js" defer></script>
+</head>
+<body data-theme="light">
+<div class="mobile-container">
+    <header>
+        <div class="header-title-box">
+            <h1 id="headerTitle">Sales Per Day - المبيعات باليوم</h1>
+            <p id="headerSubtitle">عرض يومي بنظام المربعات أو الصفوف والأعمدة</p>
+        </div>
+        <div class="header-left-group">
+            <select id="langSelect" class="lang-select" onchange="setLanguage(this.value)" title="Language">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="ur">اردو</option>
+            </select>
+            <button class="action-btn-icon" onclick="loadDailySales()" id="btnRefresh" title="تحديث">
+                <i class="fa-solid fa-rotate"></i>
+            </button>
+            <a href="sales.html" class="action-btn-icon" id="btnBack" title="رجوع">
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+    </header>
+
+    <div class="filter-panel">
+        <div class="period-chips">
+            <div class="chip" data-preset="today" onclick="setPreset('today', this)">اليوم</div>
+            <div class="chip" data-preset="yesterday" onclick="setPreset('yesterday', this)">أمس</div>
+            <div class="chip active" data-preset="week" onclick="setPreset('week', this)">هذا الأسبوع</div>
+            <div class="chip" data-preset="month" onclick="setPreset('month', this)">هذا الشهر</div>
+            <div class="chip" data-preset="year" onclick="setPreset('year', this)">هذه السنة</div>
+            <div class="chip" data-preset="custom" onclick="toggleCalendar()">📅 مخصص</div>
+        </div>
+
+        <div class="controls-row">
+            <div class="control-group">
+                <span class="control-label" id="labelTimeRange">النطاق الزمني:</span>
+                <div class="date-toggle-btn" onclick="toggleCalendar()">
+                    <span id="dateButtonText">اختر النطاق...</span>
+                    <span>▼</span>
+                </div>
+
+                <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
+                    <div class="calendar-header">
+                        <button type="button" onclick="changeMonth(-1)">&#9664;</button>
+                        <span id="calendarTitle"></span>
+                        <button type="button" onclick="changeMonth(1)">&#9654;</button>
+                    </div>
+                    <div class="calendar-grid" id="calendarDaysGrid"></div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <span class="control-label" id="labelBranch">الفرع:</span>
+                <select id="branchSelect" onchange="onBranchFilterChange()">
+                    <option value="ALL">جميع الفروع</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero-summary-card">
+        <div class="hero-stat-box">
+            <label id="lblSumAfterDisc">مبيعات بعد الخصم (شامل الضريبة)</label>
+            <strong id="sumSalesAfterDiscount">0.00 SAR</strong>
+        </div>
+        <div class="hero-stat-box">
+            <label id="lblSumNetSales">صافي المبيعات (بدون الضريبة)</label>
+            <strong id="sumNetSales">0.00 SAR</strong>
+        </div>
+        <div class="hero-stat-box">
+            <label id="lblSumCost">إجمالي التكلفة</label>
+            <strong id="sumTotalCost">0.00 SAR</strong>
+        </div>
+        <div class="hero-stat-box">
+            <label id="lblSumProfit">إجمالي الربح (هامش الربح)</label>
+            <strong id="sumGrossProfit">0.00 SAR (0%)</strong>
+        </div>
+    </div>
+
+    <div class="view-switcher-bar">
+        <div class="view-toggle-group" role="group" aria-label="View Mode">
+            <button type="button" class="view-mode-btn active" id="btnViewCards" onclick="setViewMode('cards')">
+                <i class="fa-solid fa-border-all"></i>
+                <span id="txtViewCards">مربعات</span>
+            </button>
+            <button type="button" class="view-mode-btn" id="btnViewTable" onclick="setViewMode('table')">
+                <i class="fa-solid fa-table"></i>
+                <span id="txtViewTable">صفوف وأعمدة</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="days-cards-list" id="daysCardsContainer">
+        <div class="status-msg" id="statusMsgBox">جاري تحميل البيانات...</div>
+    </div>
+
+    <div class="table-view-card view-hidden" id="daysTableContainer">
+        <table class="daily-grid-table">
+            <thead id="dailyTableHead"></thead>
+            <tbody id="dailyTableBody"></tbody>
+            <tfoot id="dailyTableFoot"></tfoot>
+        </table>
+    </div>
+</div>
+
+<script>
+    const CONFIG = {
+        serverUrl: "https://87-237-225-155.nip.io",
+        apiKey: "6f039a5a6130b79",
+        apiSecret: "9e6d920a8fda252"
+    };
+
+    const I18N = {
+        ar: {
+            dir: "rtl",
+            lang: "ar",
+            pageTitle: "Sales Per Day - الموسى التجارية",
+            headerTitle: "Sales Per Day - المبيعات باليوم",
+            headerSubtitle: "عرض يومي بنظام المربعات أو الصفوف والأعمدة",
+            chip_today: "اليوم",
+            chip_yesterday: "أمس",
+            chip_week: "هذا الأسبوع",
+            chip_month: "هذا الشهر",
+            chip_year: "هذه السنة",
+            chip_custom: "📅 مخصص",
+            labelTimeRange: "النطاق الزمني:",
+            chooseRange: "اختر النطاق...",
+            pickEndDate: "(اختر نهاية الفترة)",
+            toWord: "إلى",
+            labelBranch: "الفرع:",
+            allBranches: "جميع الفروع",
+            viewCards: "مربعات",
+            viewTable: "صفوف وأعمدة",
+            sumAfterDisc: "مبيعات بعد الخصم (شامل الضريبة)",
+            sumNetSales: "صافي المبيعات (بدون الضريبة)",
+            sumCost: "إجمالي التكلفة",
+            sumProfit: "إجمالي الربح (هامش الربح)",
+            loading: "جاري تحميل البيانات...",
+            noData: "لا توجد بيانات في هذه الفترة",
+            errorServer: "تعذر جلب البيانات من السيرفر",
+            cardAfterDisc: "مبيعات بعد الخصم",
+            branchesSalesBtn: "مبيعات الفروع لهذا اليوم",
+            branchesCountSuffix: "فرع",
+            colDate: "التاريخ / الفرع",
+            colDay: "اليوم",
+            beforeDisc: "قبل الخصم",
+            discount: "الخصم",
+            afterDiscCol: "بعد الخصم",
+            vat15: "الضريبة 15%",
+            netSalesExclVat: "صافي المبيعات (بدون ضريبة)",
+            cost: "التكلفة",
+            netProfit: "الربح الصافي",
+            marginCol: "هامش الربح %",
+            totalRow: "الإجمالي",
+            currency: "SAR",
+            months: ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"],
+            daysShort: ["أحد", "إثن", "ثلا", "أرب", "خميس", "جمع", "سبت"],
+            daysMap: {
+                "Sunday": "الأحد",
+                "Monday": "الإثنين",
+                "Tuesday": "الثلاثاء",
+                "Wednesday": "الأربعاء",
+                "Thursday": "الخميس",
+                "Friday": "الجمعة",
+                "Saturday": "السبت"
+            }
+        },
+        en: {
+            dir: "ltr",
+            lang: "en",
+            pageTitle: "Sales Per Day - Almoosa Trading",
+            headerTitle: "Sales Per Day",
+            headerSubtitle: "Daily sales view in cards or rows & columns",
+            chip_today: "Today",
+            chip_yesterday: "Yesterday",
+            chip_week: "This Week",
+            chip_month: "This Month",
+            chip_year: "This Year",
+            chip_custom: "📅 Custom",
+            labelTimeRange: "Date Range:",
+            chooseRange: "Select range...",
+            pickEndDate: "(Select end date)",
+            toWord: "to",
+            labelBranch: "Branch:",
+            allBranches: "All Branches",
+            viewCards: "Cards",
+            viewTable: "Rows & Columns",
+            sumAfterDisc: "Sales After Discount (Incl. VAT)",
+            sumNetSales: "Net Sales (Excl. VAT)",
+            sumCost: "Total Cost",
+            sumProfit: "Gross Profit (Margin)",
+            loading: "Loading data...",
+            noData: "No data found for this period",
+            errorServer: "Failed to fetch data from server",
+            cardAfterDisc: "After Discount",
+            branchesSalesBtn: "Branches Sales for This Day",
+            branchesCountSuffix: "Branches",
+            colDate: "Date / Branch",
+            colDay: "Day",
+            beforeDisc: "Before Discount",
+            discount: "Discount",
+            afterDiscCol: "After Discount",
+            vat15: "VAT 15%",
+            netSalesExclVat: "Net Sales (Excl. VAT)",
+            cost: "Cost",
+            netProfit: "Net Profit",
+            marginCol: "Margin %",
+            totalRow: "Total",
+            currency: "SAR",
+            months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            daysMap: {}
+        },
+        hi: {
+            dir: "ltr",
+            lang: "hi",
+            pageTitle: "प्रतिदिन बिक्री - अलमूसा ट्रेडिंग",
+            headerTitle: "प्रतिदिन बिक्री (Sales Per Day)",
+            headerSubtitle: "कार्ड या पंक्ति और कॉलम में दैनिक बिक्री देखें",
+            chip_today: "आज",
+            chip_yesterday: "कल",
+            chip_week: "इस सप्ताह",
+            chip_month: "इस महीने",
+            chip_year: "इस वर्ष",
+            chip_custom: "📅 कस्टम",
+            labelTimeRange: "समय सीमा:",
+            chooseRange: "सीमा चुनें...",
+            pickEndDate: "(अंतिम तिथि चुनें)",
+            toWord: "से",
+            labelBranch: "शाखा:",
+            allBranches: "सभी शाखाएं",
+            viewCards: "कार्ड",
+            viewTable: "पंक्ति और कॉलम",
+            sumAfterDisc: "छूट के बाद बिक्री (VAT सहित)",
+            sumNetSales: "शुद्ध बिक्री (VAT के बिना)",
+            sumCost: "कुल लागत",
+            sumProfit: "सकल लाभ (मार्जिन)",
+            loading: "डेटा लोड हो रहा है...",
+            noData: "इस अवधि के लिए कोई डेटा नहीं मिला",
+            errorServer: "सर्वर से डेटा प्राप्त करने में विफल",
+            cardAfterDisc: "छूट के बाद",
+            branchesSalesBtn: "इस दिन की शाखा बिक्री",
+            branchesCountSuffix: "शाखाएं",
+            colDate: "तारीख / शाखा",
+            colDay: "दिन",
+            beforeDisc: "छूट से पहले",
+            discount: "छूट",
+            afterDiscCol: "छूट के बाद",
+            vat15: "VAT 15%",
+            netSalesExclVat: "शुद्ध बिक्री (VAT रहित)",
+            cost: "लागत",
+            netProfit: "शुद्ध लाभ",
+            marginCol: "मार्जिन %",
+            totalRow: "कुल",
+            currency: "SAR",
+            months: ["जनवरी", "फ़रवरी", "मार्च", "अप्रैल", "मई", "जून", "जुलाई", "अगस्त", "सितंबर", "अक्टूबर", "नवंबर", "दिसंबर"],
+            daysShort: ["रवि", "सोम", "मंगल", "बुध", "गुरु", "शुक्र", "शनि"],
+            daysMap: {
+                "Sunday": "रविवार",
+                "Monday": "सोमवार",
+                "Tuesday": "मंगलवार",
+                "Wednesday": "बुधवार",
+                "Thursday": "गुरुवार",
+                "Friday": "शुक्रवार",
+                "Saturday": "शनिवार"
+            }
+        },
+        ur: {
+            dir: "rtl",
+            lang: "ur",
+            pageTitle: "روزانہ فروخت - الموسیٰ ٹریڈنگ",
+            headerTitle: "روزانہ فروخت (Sales Per Day)",
+            headerSubtitle: "کارڈز یا قطاروں اور کالمز میں یومیہ فروخت",
+            chip_today: "آج",
+            chip_yesterday: "کل",
+            chip_week: "اس ہفتے",
+            chip_month: "اس مہینے",
+            chip_year: "اس سال",
+            chip_custom: "📅 حسب ضرورت",
+            labelTimeRange: "عرصہ:",
+            chooseRange: "عرصہ منتخب کریں...",
+            pickEndDate: "(آخری تاریخ منتخب کریں)",
+            toWord: "تا",
+            labelBranch: "برانچ:",
+            allBranches: "تمام برانچز",
+            viewCards: "کارڈز",
+            viewTable: "قطاریں اور کالم",
+            sumAfterDisc: "رعایت کے بعد فروخت (ٹیکس سمیت)",
+            sumNetSales: "خالص فروخت (ٹیکس کے بغیر)",
+            sumCost: "کل لاگت",
+            sumProfit: "مجموعی منافع (مارجن)",
+            loading: "ڈیٹا لوڈ ہو رہا ہے...",
+            noData: "اس مدت کے لیے کوئی ڈیٹا نہیں ملا",
+            errorServer: "سرور سے ڈیٹا لانے میں ناکامی",
+            cardAfterDisc: "رعایت کے بعد",
+            branchesSalesBtn: "اس دن کی برانچز فروخت",
+            branchesCountSuffix: "برانچز",
+            colDate: "تاریخ / برانچ",
+            colDay: "دن",
+            beforeDisc: "رعایت سے پہلے",
+            discount: "رعایت",
+            afterDiscCol: "رعایت کے بعد",
+            vat15: "ٹیکس 15%",
+            netSalesExclVat: "خالص فروخت (بغیر ٹیکس)",
+            cost: "لاگت",
+            netProfit: "خالص منافع",
+            marginCol: "مارجن %",
+            totalRow: "کل",
+            currency: "SAR",
+            months: ["جنوری", "فروری", "مارچ", "اپریل", "مئی", "جون", "جولائی", "اگست", "ستمبر", "اکتوبر", "نومبر", "دسمبر"],
+            daysShort: ["اتوار", "پیر", "منگل", "بدھ", "جمعرات", "جمعہ", "ہفتہ"],
+            daysMap: {
+                "Sunday": "اتوار",
+                "Monday": "پیر",
+                "Tuesday": "منگل",
+                "Wednesday": "بدھ",
+                "Thursday": "جمعرات",
+                "Friday": "جمعہ",
+                "Saturday": "ہفتہ"
+            }
+        }
+    };
+
+    let currentLang = localStorage.getItem('app_lang') || localStorage.getItem('lang') || 'ar';
+    if (!I18N[currentLang]) currentLang = 'ar';
+
+    let currentViewMode = 'cards';
+    let expandedDays = new Set();
+
+    let rawItemsRows = [];
+    let currentQueryFrom = '';
+    let currentQueryTo = '';
+    let isPickingEndDate = false;
+    let initialBranchParam = 'ALL';
+    let selectionState = { startDate: null, endDate: null };
+    let viewDate = new Date();
+
+    function t(key) {
+        return (I18N[currentLang] && I18N[currentLang][key]) || I18N.ar[key] || key;
+    }
+
+    function translateDayName(dayName) {
+        if (!dayName) return '';
+        const clean = String(dayName).trim();
+        const map = I18N[currentLang]?.daysMap || {};
+        return map[clean] || clean;
+    }
+
+    function setViewMode(mode) {
+        currentViewMode = mode === 'table' ? 'table' : 'cards';
+        syncViewSwitcherUI();
+        renderDataViews();
+    }
+
+    function syncViewSwitcherUI() {
+        const btnCards = document.getElementById('btnViewCards');
+        const btnTable = document.getElementById('btnViewTable');
+        const cardsBox = document.getElementById('daysCardsContainer');
+        const tableBox = document.getElementById('daysTableContainer');
+
+        const isTable = currentViewMode === 'table';
+        btnCards.classList.toggle('active', !isTable);
+        btnTable.classList.toggle('active', isTable);
+        cardsBox.classList.toggle('view-hidden', isTable);
+        tableBox.classList.toggle('view-hidden', !isTable);
+        cardsBox.style.setProperty('display', isTable ? 'none' : 'grid', 'important');
+        tableBox.style.setProperty('display', isTable ? 'block' : 'none', 'important');
+    }
+
+    function onBranchFilterChange() {
+        const selectedBranch = document.getElementById('branchSelect').value;
+        if (selectedBranch !== 'ALL') {
+            expandedDays.clear();
+        }
+        renderDataViews();
+    }
+
+    function toggleDayBranches(dateKey) {
+        const selectedBranch = document.getElementById('branchSelect').value;
+        if (selectedBranch !== 'ALL') return;
+
+        if (expandedDays.has(dateKey)) {
+            expandedDays.delete(dateKey);
+        } else {
+            expandedDays.add(dateKey);
+        }
+        renderDataViews();
+    }
+
+    function applyLanguageUI() {
+        const dict = I18N[currentLang];
+        document.documentElement.lang = dict.lang;
+        document.documentElement.dir = dict.dir;
+        document.title = dict.pageTitle;
+
+        const langSelect = document.getElementById('langSelect');
+        if (langSelect) langSelect.value = currentLang;
+
+        document.getElementById('headerTitle').textContent = dict.headerTitle;
+        document.getElementById('headerSubtitle').textContent = dict.headerSubtitle;
+        document.getElementById('txtViewCards').textContent = dict.viewCards;
+        document.getElementById('txtViewTable').textContent = dict.viewTable;
+
+        document.querySelectorAll('.chip[data-preset]').forEach(chip => {
+            const p = chip.getAttribute('data-preset');
+            if (dict[`chip_${p}`]) chip.textContent = dict[`chip_${p}`];
+        });
+
+        document.getElementById('labelTimeRange').textContent = dict.labelTimeRange;
+        document.getElementById('labelBranch').textContent = dict.labelBranch;
+        document.getElementById('lblSumAfterDisc').textContent = dict.sumAfterDisc;
+        document.getElementById('lblSumNetSales').textContent = dict.sumNetSales;
+        document.getElementById('lblSumCost').textContent = dict.sumCost;
+        document.getElementById('lblSumProfit').textContent = dict.sumProfit;
+
+        const branchSelect = document.getElementById('branchSelect');
+        if (branchSelect && branchSelect.options.length > 0) {
+            branchSelect.options[0].textContent = dict.allBranches;
+        }
+
+        updateDateButtonText();
+        renderCalendar();
+        if (rawItemsRows.length > 0) {
+            renderDataViews();
+        } else {
+            const msgBox = document.getElementById('statusMsgBox');
+            if (msgBox) msgBox.textContent = dict.loading;
+        }
+    }
+
+    function setLanguage(lang) {
+        currentLang = I18N[lang] ? lang : 'ar';
+        localStorage.setItem('app_lang', currentLang);
+        localStorage.setItem('lang', currentLang);
+        if (typeof changeLanguage === 'function') {
+            try { changeLanguage(currentLang); } catch (e) {}
+        }
+        applyLanguageUI();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        currentViewMode = 'cards';
+        expandedDays.clear();
+        syncViewSwitcherUI();
+        applyLanguageUI();
+
+        const params = new URLSearchParams(window.location.search);
+        const pFrom = params.get('from') || localStorage.getItem('sales_filter_from');
+        const pTo = params.get('to') || localStorage.getItem('sales_filter_to');
+        initialBranchParam = params.get('branch') || 'ALL';
+
+        if (pFrom) {
+            currentQueryFrom = pFrom;
+            currentQueryTo = pTo || pFrom;
+            selectionState.startDate = currentQueryFrom;
+            selectionState.endDate = currentQueryTo;
+            viewDate = new Date(currentQueryTo);
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            updateDateButtonText();
+            renderCalendar();
+            loadDailySales();
+        } else {
+            setPreset('week', document.querySelector('.chip.active'));
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.control-group') && !event.target.closest('.period-chips')) {
+                document.getElementById('calendarContainer').classList.remove('open');
+            }
+        };
+    });
+
+    function toggleCalendar() {
+        document.getElementById('calendarContainer').classList.toggle('open');
+    }
+
+    function changeMonth(direction) {
+        viewDate.setMonth(viewDate.getMonth() + direction);
+        renderCalendar();
+    }
+
+    function renderCalendar() {
+        const grid = document.getElementById('calendarDaysGrid');
+        const titleEl = document.getElementById('calendarTitle');
+        if (!grid || !titleEl) return;
+        grid.innerHTML = '';
+
+        const year = viewDate.getFullYear();
+        const month = viewDate.getMonth();
+        const months = t('months');
+        titleEl.textContent = `${months[month]} ${year}`;
+
+        t('daysShort').forEach(d => {
+            const div = document.createElement('div');
+            div.className = 'calendar-day-name';
+            div.textContent = d;
+            grid.appendChild(div);
+        });
+
+        const firstDayIndex = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+
+        for (let i = 0; i < firstDayIndex; i++) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.className = 'calendar-day empty';
+            grid.appendChild(emptyDiv);
+        }
+
+        for (let day = 1; day <= totalDays; day++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            dayDiv.textContent = day;
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+            if (selectionState.startDate && dateStr === selectionState.startDate) dayDiv.classList.add('selected');
+            if (selectionState.endDate && dateStr === selectionState.endDate) dayDiv.classList.add('selected');
+            if (selectionState.startDate && selectionState.endDate && dateStr > selectionState.startDate && dateStr < selectionState.endDate) {
+                dayDiv.classList.add('in-range');
+            }
+
+            dayDiv.onclick = (e) => {
+                e.stopPropagation();
+                onCalendarDayClick(dateStr);
+            };
+            grid.appendChild(dayDiv);
+        }
+    }
+
+    function onCalendarDayClick(dateStr) {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        const customChip = document.querySelector('.chip[data-preset="custom"]');
+        if (customChip) customChip.classList.add('active');
+
+        if (!selectionState.startDate || (selectionState.startDate && selectionState.endDate)) {
+            selectionState.startDate = dateStr;
+            selectionState.endDate = null;
+            currentQueryFrom = dateStr;
+            currentQueryTo = '';
+            isPickingEndDate = true;
+            updateDateButtonText();
+            renderCalendar();
+        } else {
+            if (dateStr < selectionState.startDate) {
+                selectionState.startDate = dateStr;
+                currentQueryFrom = dateStr;
+                currentQueryTo = '';
+                isPickingEndDate = true;
+                updateDateButtonText();
+                renderCalendar();
+            } else {
+                selectionState.endDate = dateStr;
+                currentQueryTo = dateStr;
+                isPickingEndDate = false;
+                updateDateButtonText();
+                renderCalendar();
+                loadDailySales();
+                toggleCalendar();
+            }
+        }
+    }
+
+    function updateDateButtonText() {
+        const btnText = document.getElementById('dateButtonText');
+        if (!btnText) return;
+        if (!currentQueryFrom) {
+            btnText.textContent = t('chooseRange');
+            return;
+        }
+        if (isPickingEndDate && !currentQueryTo) {
+            btnText.textContent = `${currentQueryFrom} ${t('pickEndDate')}`;
+        } else if (!currentQueryTo || currentQueryFrom === currentQueryTo) {
+            btnText.textContent = `${currentQueryFrom}`;
+        } else {
+            btnText.textContent = `${currentQueryFrom} ${t('toWord')} ${currentQueryTo}`;
+        }
+    }
+
+    function setPreset(type, element) {
+        if (element) {
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        isPickingEndDate = false;
+        const today = new Date();
+        let start = new Date(today);
+        let end = new Date(today);
+
+        if (type === 'yesterday') {
+            start.setDate(today.getDate() - 1);
+            end = new Date(start);
+        } else if (type === 'week') {
+            start.setDate(today.getDate() - 6);
+        } else if (type === 'month') {
+            start = new Date(today.getFullYear(), today.getMonth(), 1);
+        } else if (type === 'year') {
+            start = new Date(today.getFullYear(), 0, 1);
+        }
+
+        currentQueryFrom = formatDateStr(start);
+        currentQueryTo = formatDateStr(end);
+        selectionState.startDate = currentQueryFrom;
+        selectionState.endDate = currentQueryTo;
+        viewDate = new Date(end);
+
+        updateDateButtonText();
+        renderCalendar();
+        loadDailySales();
+    }
+
+    function formatDateStr(d) {
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+    async function loadDailySales() {
+        expandedDays.clear();
+        const container = document.getElementById('daysCardsContainer');
+        const tbody = document.getElementById('dailyTableBody');
+        container.innerHTML = `<div class="status-msg" id="statusMsgBox">${t('loading')}</div>`;
+        tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:24px;">${t('loading')}</td></tr>`;
+
+        const toDate = currentQueryTo || currentQueryFrom;
+
+        try {
+            const url = `${CONFIG.serverUrl}/api/method/get_sales_per_day?from_date=${encodeURIComponent(currentQueryFrom)}&to_date=${encodeURIComponent(toDate)}`;
+            const res = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`,
+                    "X-Frappe-Site-Name": window.location.hostname
+                }
+            });
+
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}`);
+            }
+
+            const json = await res.json();
+            rawItemsRows = json.message?.data || json.message || [];
+
+            if (!Array.isArray(rawItemsRows)) {
+                rawItemsRows = [];
+            }
+
+            populateBranches();
+            renderDataViews();
+        } catch (err) {
+            console.error("Sales Per Day API Error:", err);
+            container.innerHTML = `<div class="status-msg" id="statusMsgBox">${t('errorServer')}</div>`;
+            tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:24px;">${t('errorServer')}</td></tr>`;
+        }
+    }
+
+    function populateBranches() {
+        const select = document.getElementById('branchSelect');
+        const prevVal = initialBranchParam || select.value || 'ALL';
+        const branches = [...new Set(rawItemsRows.map(r => r.warehouse).filter(Boolean))].sort();
+
+        select.innerHTML = `<option value="ALL">${t('allBranches')}</option>`;
+        branches.forEach(b => {
+            const opt = document.createElement('option');
+            opt.value = b;
+            opt.textContent = b;
+            select.appendChild(opt);
+        });
+
+        select.value = branches.includes(prevVal) ? prevVal : 'ALL';
+        initialBranchParam = null;
+    }
+
+    function fmt(num) {
+        return Number(num || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function getAggregatedDays() {
+        const selectedBranch = document.getElementById('branchSelect').value;
+        const filtered = selectedBranch === 'ALL'
+            ? rawItemsRows
+            : rawItemsRows.filter(r => r.warehouse === selectedBranch);
+
+        const byDate = {};
+        filtered.forEach(r => {
+            const d = r.posting_date;
+            if (!d) return;
+            if (!byDate[d]) {
+                byDate[d] = {
+                    posting_date: d,
+                    day_name: r.day_name,
+                    before_disc: 0,
+                    discount: 0,
+                    after_disc: 0,
+                    vat: 0,
+                    net_sales: 0,
+                    cost: 0,
+                    branchesMap: {}
+                };
+            }
+
+            const bBefore = parseFloat(r.sales_before_discount || 0);
+            const bDisc = parseFloat(r.total_discount || 0);
+            const bAfter = parseFloat(r.sales_after_discount || 0);
+            const bVat = parseFloat(r.vat_amount || 0);
+            const bNet = parseFloat(r.net_amount || 0);
+            const bCost = parseFloat(r.total_cost || 0);
+
+            byDate[d].before_disc += bBefore;
+            byDate[d].discount += bDisc;
+            byDate[d].after_disc += bAfter;
+            byDate[d].vat += bVat;
+            byDate[d].net_sales += bNet;
+            byDate[d].cost += bCost;
+
+            const branchName = r.warehouse || t('allBranches');
+            if (!byDate[d].branchesMap[branchName]) {
+                byDate[d].branchesMap[branchName] = {
+                    warehouse: branchName,
+                    before_disc: 0,
+                    discount: 0,
+                    after_disc: 0,
+                    vat: 0,
+                    net_sales: 0,
+                    cost: 0
+                };
+            }
+            byDate[d].branchesMap[branchName].before_disc += bBefore;
+            byDate[d].branchesMap[branchName].discount += bDisc;
+            byDate[d].branchesMap[branchName].after_disc += bAfter;
+            byDate[d].branchesMap[branchName].vat += bVat;
+            byDate[d].branchesMap[branchName].net_sales += bNet;
+            byDate[d].branchesMap[branchName].cost += bCost;
+        });
+
+        return Object.values(byDate)
+            .map(dayObj => {
+                dayObj.branches = Object.values(dayObj.branchesMap).sort((a, b) => b.after_disc - a.after_disc);
+                return dayObj;
+            })
+            .sort((a, b) => b.posting_date.localeCompare(a.posting_date));
+    }
+
+    function renderDataViews() {
+        syncViewSwitcherUI();
+        const selectedBranch = document.getElementById('branchSelect').value;
+        const isAllBranches = selectedBranch === 'ALL';
+        const daysList = getAggregatedDays();
+        const cardsContainer = document.getElementById('daysCardsContainer');
+        const thead = document.getElementById('dailyTableHead');
+        const tbody = document.getElementById('dailyTableBody');
+        const tfoot = document.getElementById('dailyTableFoot');
+
+        if (!daysList.length) {
+            cardsContainer.innerHTML = `<div class="status-msg" id="statusMsgBox">${t('noData')}</div>`;
+            thead.innerHTML = '';
+            tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; padding:24px;">${t('noData')}</td></tr>`;
+            tfoot.innerHTML = '';
+            updateSummary(0, 0, 0, 0, 0);
+            return;
+        }
+
+        let gBefore = 0, gDisc = 0, gAfter = 0, gVat = 0, gNet = 0, gCost = 0;
+        let tableRowsHTML = '';
+
+        cardsContainer.innerHTML = daysList.map(row => {
+            const profit = row.net_sales - row.cost;
+            const margin = row.net_sales !== 0 ? (profit / row.net_sales) * 100 : 0;
+            const isExpanded = isAllBranches && expandedDays.has(row.posting_date);
+
+            gBefore += row.before_disc;
+            gDisc += row.discount;
+            gAfter += row.after_disc;
+            gVat += row.vat;
+            gNet += row.net_sales;
+            gCost += row.cost;
+
+            let branchesCardsHTML = '';
+            if (isAllBranches && row.branches.length > 0) {
+                branchesCardsHTML = row.branches.map(br => {
+                    const bProfit = br.net_sales - br.cost;
+                    const bMargin = br.net_sales !== 0 ? (bProfit / br.net_sales) * 100 : 0;
+                    return `
+                        <div class="branch-mini-card">
+                            <div class="branch-mini-top">
+                                <span><i class="fa-solid fa-store" style="color:var(--accent); margin-left:4px;"></i> ${br.warehouse}</span>
+                                <span class="b-sales">${fmt(br.after_disc)} ${t('currency')}</span>
+                            </div>
+                            <div class="branch-mini-metrics">
+                                <div class="b-metric">
+                                    <span>${t('netSalesExclVat')}</span>
+                                    <strong>${fmt(br.net_sales)}</strong>
+                                </div>
+                                <div class="b-metric">
+                                    <span>${t('cost')}</span>
+                                    <strong>${fmt(br.cost)}</strong>
+                                </div>
+                                <div class="b-metric b-profit">
+                                    <span>${t('netProfit')}</span>
+                                    <strong>${fmt(bProfit)} (${bMargin.toFixed(1)}%)</strong>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            tableRowsHTML += `
+                <tr class="day-main-row ${isExpanded ? 'is-open' : ''}" onclick="toggleDayBranches('${row.posting_date}')">
+                    <td>
+                        ${isAllBranches ? `<span class="row-caret"><i class="fa-solid ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}"></i></span>` : ''}
+                        <i class="fa-solid fa-calendar-day" style="color:var(--accent); margin-left:4px;"></i> ${row.posting_date}
+                    </td>
+                    <td>${translateDayName(row.day_name)}</td>
+                    <td>${fmt(row.before_disc)}</td>
+                    <td>${fmt(row.discount)}</td>
+                    <td class="tbl-pill-sales">${fmt(row.after_disc)}</td>
+                    <td>${fmt(row.vat)}</td>
+                    <td>${fmt(row.net_sales)}</td>
+                    <td>${fmt(row.cost)}</td>
+                    <td>${fmt(profit)}</td>
+                    <td><span class="tbl-pill-margin">${margin.toFixed(2)}%</span></td>
+                </tr>
+            `;
+
+            if (isExpanded) {
+                row.branches.forEach(br => {
+                    const bProfit = br.net_sales - br.cost;
+                    const bMargin = br.net_sales !== 0 ? (bProfit / br.net_sales) * 100 : 0;
+                    tableRowsHTML += `
+                        <tr class="branch-sub-row">
+                            <td><i class="fa-solid fa-store" style="color:var(--accent); margin-left:4px;"></i> ${br.warehouse}</td>
+                            <td>${translateDayName(row.day_name)}</td>
+                            <td>${fmt(br.before_disc)}</td>
+                            <td>${fmt(br.discount)}</td>
+                            <td class="tbl-pill-sales">${fmt(br.after_disc)}</td>
+                            <td>${fmt(br.vat)}</td>
+                            <td>${fmt(br.net_sales)}</td>
+                            <td>${fmt(br.cost)}</td>
+                            <td>${fmt(bProfit)}</td>
+                            <td><span class="tbl-pill-margin">${bMargin.toFixed(2)}%</span></td>
+                        </tr>
+                    `;
+                });
+            }
+
+            return `
+                <div class="day-card ${isExpanded ? 'open' : ''}">
+                    <div class="day-card-header" onclick="toggleDayBranches('${row.posting_date}')">
+                        <div class="day-title-box">
+                            <h3>
+                                ${isAllBranches ? `<i class="fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'}" style="font-size:11px; color:var(--accent);"></i>` : ''}
+                                ${row.posting_date}
+                            </h3>
+                            <span class="day-badge">${translateDayName(row.day_name)}</span>
+                        </div>
+                        <div class="day-main-amount">
+                            <div class="val">${fmt(row.after_disc)} <small style="font-size:10px">${t('currency')}</small></div>
+                            <div class="lbl">${t('cardAfterDisc')}</div>
+                        </div>
+                    </div>
+
+                    <div class="day-boxes-grid">
+                        <div class="mini-square">
+                            <span class="s-lbl">${t('beforeDisc')}</span>
+                            <span class="s-val">${fmt(row.before_disc)}</span>
+                        </div>
+                        <div class="mini-square disc-sq">
+                            <span class="s-lbl">${t('discount')}</span>
+                            <span class="s-val">${fmt(row.discount)}</span>
+                        </div>
+                        <div class="mini-square vat-sq">
+                            <span class="s-lbl">${t('vat15')}</span>
+                            <span class="s-val">${fmt(row.vat)}</span>
+                        </div>
+                    </div>
+
+                    <div class="day-boxes-grid two-cols">
+                        <div class="mini-square">
+                            <span class="s-lbl">${t('netSalesExclVat')}</span>
+                            <span class="s-val">${fmt(row.net_sales)}</span>
+                        </div>
+                        <div class="mini-square">
+                            <span class="s-lbl">${t('cost')}</span>
+                            <span class="s-val">${fmt(row.cost)}</span>
+                        </div>
+                    </div>
+
+                    <div class="day-profit-bar">
+                        <div class="p-title">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>${t('netProfit')}</span>
+                        </div>
+                        <div class="p-num">
+                            ${fmt(profit)} ${t('currency')} <small style="font-size:11px">(${margin.toFixed(1)}%)</small>
+                        </div>
+                    </div>
+
+                    ${isAllBranches ? `
+                        <div class="day-branches-trigger" onclick="toggleDayBranches('${row.posting_date}')">
+                            <span><i class="fa-solid fa-store" style="margin-left:5px;"></i> ${t('branchesSalesBtn')} (${row.branches.length} ${t('branchesCountSuffix')})</span>
+                            <i class="fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'}"></i>
+                        </div>
+                        <div class="day-branches-panel">
+                            ${branchesCardsHTML}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+
+        thead.innerHTML = `
+            <tr>
+                <th>${t('colDate')}</th>
+                <th>${t('colDay')}</th>
+                <th>${t('beforeDisc')}</th>
+                <th>${t('discount')}</th>
+                <th>${t('afterDiscCol')}</th>
+                <th>${t('vat15')}</th>
+                <th>${t('netSalesExclVat')}</th>
+                <th>${t('cost')}</th>
+                <th>${t('netProfit')}</th>
+                <th>${t('marginCol')}</th>
+            </tr>
+        `;
+
+        tbody.innerHTML = tableRowsHTML;
+
+        const gProfit = gNet - gCost;
+        const gMargin = gNet !== 0 ? (gProfit / gNet) * 100 : 0;
+
+        tfoot.innerHTML = `
+            <tr>
+                <td colspan="2">${t('totalRow')}</td>
+                <td>${fmt(gBefore)}</td>
+                <td>${fmt(gDisc)}</td>
+                <td>${fmt(gAfter)}</td>
+                <td>${fmt(gVat)}</td>
+                <td>${fmt(gNet)}</td>
+                <td>${fmt(gCost)}</td>
+                <td>${fmt(gProfit)}</td>
+                <td>${gMargin.toFixed(2)}%</td>
+            </tr>
+        `;
+
+        updateSummary(gAfter, gNet, gCost, gProfit, gMargin);
+    }
+
+    function updateSummary(afterDisc, netSales, cost, profit, margin = 0) {
+        const cur = t('currency');
+        document.getElementById('sumSalesAfterDiscount').textContent = `${fmt(afterDisc)} ${cur}`;
+        document.getElementById('sumNetSales').textContent = `${fmt(netSales)} ${cur}`;
+        document.getElementById('sumTotalCost').textContent = `${fmt(cost)} ${cur}`;
+        document.getElementById('sumGrossProfit').textContent = `${fmt(profit)} ${cur} (${margin.toFixed(1)}%)`;
+    }
+</script>
+</body>
+</html>
