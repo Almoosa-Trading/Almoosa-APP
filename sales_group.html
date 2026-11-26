@@ -4,177 +4,197 @@
     <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title data-i18n="sales_group_title">مبيعات المجموعات - الموسى التجارية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <title data-i18n="sales_group_title">مبيعات المجموعات - الموسى ERP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=2026.8">
+    <link rel="stylesheet" href="style.css?v=2026.20">
     <style>
-        .mobile-container {
-            width: 100%;
-            max-width: 1350px;
-            margin: 0 auto;
-            padding: 0 15px;
+        :root {
+          --navy-sidebar: #0f172a;
+          --navy-topbar: #0b1120;
+          --blue-primary: #1d4ed8;
+          --blue-accent: #2563eb;
+          --bg-body: #f1f5f9;
+          --bg-card: #ffffff;
+          --text-main: #0f172a;
+          --text-muted: #64748b;
+          --border: #e2e8f0;
+          --radius: 14px;
+          --shadow: 0 4px 14px rgba(15,23,42,0.05);
+          --accent: #2563eb;
+          --accent-light: #eff6ff;
+          --accent-border: #bfdbfe;
         }
+        [data-theme="dark"] {
+          --bg-body: #0b1120;
+          --bg-card: #1e293b;
+          --text-main: #f8fafc;
+          --text-muted: #94a3b8;
+          --border: #334155;
+          --accent-light: rgba(37, 99, 235, 0.15);
+          --accent-border: #1e3a8a;
+        }
+        body {
+          font-family: 'Cairo', 'Inter', 'Noto Sans Devanagari', 'Noto Nastaliq Urdu', sans-serif;
+          background: var(--bg-body);
+          color: var(--text-main);
+          margin: 0;
+          padding: 0;
+          overflow-x: hidden;
+          transition: background 0.3s, color 0.3s;
+        }
+        .app-layout { display: flex; min-height: 100vh; }
+        .sidebar {
+          position: fixed; top: 0; bottom: 0; inset-inline-start: 0; width: 250px;
+          background: var(--navy-sidebar); color: #cbd5e1; z-index: 110; display: flex; flex-direction: column;
+          border-inline-end: 1px solid rgba(255,255,255,0.07); transition: transform 0.25s ease;
+        }
+        .sidebar-brand-header {
+          height: 60px; padding: 0 18px; display: flex; align-items: center; gap: 11px;
+          background: var(--navy-topbar); border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;
+        }
+        .brand-fogo-icon {
+          width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg,#2563eb 0%,#4f46e5 100%);
+          color: #ffffff; display: grid; place-items: center; font-size: 15px; flex-shrink: 0;
+        }
+        .brand-text-group .brand-name { font-size: 15px; font-weight: 800; color: #ffffff; display: block; line-height: 1.15; }
+        .brand-text-group .brand-sub { font-size: 10.5px; font-weight: 700; color: #60a5fa; display: block; }
+        .sidebar-scroll-area { flex: 1; overflow-y: auto; padding: 12px; }
+        .sidebar-scroll-area::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 4px; }
+        .nav-section-caption { font-size: 10.5px; font-weight: 700; color: #64748b; padding: 12px 12px 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+        .nav-item { margin-bottom: 4px; }
+        .nav-link-btn, .nav-accordion-btn {
+          width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 9.5px 12px;
+          border-radius: 9px; border: 1px solid transparent; background: transparent; color: #cbd5e1;
+          font-family: inherit; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.15s ease;
+        }
+        .nav-left { display: flex; align-items: center; gap: 10px; }
+        .nav-left i { width: 18px; text-align: center; font-size: 13.5px; color: #94a3b8; }
+        .nav-link-btn:hover, .nav-accordion-btn:hover { background: rgba(255,255,255,0.07); color: #ffffff; }
+        .nav-link-btn.active { background: #2563eb; color: #ffffff; box-shadow: 0 4px 12px rgba(37,99,235,0.35); }
+        .nav-link-btn.active .nav-left i { color: #ffffff; }
+        .chevron-icon { font-size: 10px; color: #94a3b8; transition: transform 0.2s ease; }
+        .nav-item.open > .nav-accordion-btn .chevron-icon { transform: rotate(-90deg); }
+        html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: rotate(90deg); }
+        .submenu { display: none; flex-direction: column; gap: 2px; margin-top: 3px; margin-bottom: 6px; padding-inline-start: 14px; border-inline-start: 1.5px solid rgba(255,255,255,0.12); margin-inline-start: 16px; }
+        .nav-item.open > .submenu { display: flex; }
+        .submenu a { display: flex; align-items: center; gap: 9px; padding: 6.5px 10px; border-radius: 7px; color: #94a3b8; text-decoration: none; font-size: 12px; font-weight: 600; }
+        .submenu a:hover { background: rgba(37,99,235,0.22); color: #ffffff; }
+        .submenu a.active { color: #38bdf8; background: rgba(56,189,248,0.1); }
+        .submenu a i { font-size: 5px; color: #60a5fa; }
 
-        .view-hidden {
-            display: none !important;
+        /* Topbar Styling with Action Buttons */
+        .app-topbar {
+          position: fixed; top: 0; inset-inline-start: 250px; inset-inline-end: 0; height: 60px;
+          background: var(--navy-topbar); color: #ffffff; display: flex; align-items: center; justify-content: space-between;
+          padding-inline: 20px; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.08);
         }
+        .topbar-right-actions { display: flex; align-items: center; gap: 10px; }
+        .topbar-btn {
+          width: 36px; height: 36px; border-radius: 9px; background: rgba(255,255,255,0.08);
+          border: 1px solid rgba(255,255,255,0.14); color: #e2e8f0; display: grid; place-items: center; cursor: pointer; transition: 0.2s;
+        }
+        .topbar-btn:hover { background: #2563eb; color: #fff; border-color: #2563eb; }
+        .lang-select-top {
+          background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #ffffff;
+          height: 36px; padding-inline: 10px; border-radius: 9px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; outline: none;
+        }
+        .lang-select-top option { background: #0f172a; color: #ffffff; }
 
-        header {
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            flex-wrap: nowrap !important;
-            gap: 6px !important;
-            margin-bottom: 20px !important;
-            padding: 12px 14px !important;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
-            color: #ffffff !important;
-            border-radius: 14px !important;
-            box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
-            border: 2px solid #38bdf8 !important;
-            position: relative;
-            overflow: hidden;
-        }
+        .app-main-content { flex-grow: 1; margin-inline-start: 250px; margin-top: 60px; padding: 22px; background: var(--bg-body); overflow-y: auto; min-width: 0; }
+        .mobile-container { width: 100%; max-width: 1350px; margin: 0 auto; }
+        .view-hidden { display: none !important; }
 
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
-        }
-
-        .header-title-box {
-            flex: 1 1 auto !important;
-            min-width: 0 !important;
-        }
-
-        .header-title-box h1 {
-            font-size: 14px !important;
-            color: #ffffff !important;
-            font-weight: 800;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-            margin: 0 !important;
-            line-height: 1.3;
-        }
-
-        .header-title-box p {
-            font-size: 9.5px !important;
-            color: #bae6fd !important;
-            margin: 0 !important;
-            font-weight: 600;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-        }
-
-        .header-left-group {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            flex-wrap: nowrap !important;
-            gap: 4px !important;
-            flex-shrink: 0 !important;
-            width: auto !important;
-        }
-
-        .update-btn {
-            background: rgba(255, 255, 255, 0.15) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            width: 32px !important;
-            height: 32px !important;
-            min-width: 32px !important;
-            max-width: 32px !important;
-            border-radius: 8px !important;
-            cursor: pointer;
-            font-size: 13px !important;
-            color: #ffffff !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            text-decoration: none;
-            padding: 0 !important;
-            margin: 0 !important;
-            flex-shrink: 0 !important;
-            transition: all 0.25s;
-        }
-        .update-btn:hover {
-            background: rgba(255, 255, 255, 0.25) !important;
-            border-color: #ffffff !important;
-            transform: translateY(-2px);
-        }
-
-        .lang-select {
-            background: rgba(255, 255, 255, 0.15) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            padding: 0 4px !important;
-            border-radius: 8px !important;
-            font-size: 10px !important;
-            font-weight: 700;
-            color: #ffffff !important;
-            height: 32px !important;
-            outline: none;
-            cursor: pointer;
-            margin: 0 !important;
-            flex-shrink: 0 !important;
-            width: auto !important;
-        }
-        .lang-select option {
-            background: #1e293b;
-            color: #ffffff;
-        }
-
-        .filter-panel {
-            background: var(--bg-card);
-            padding: 24px;
-            border-radius: 18px;
-            box-shadow: var(--shadow);
+        /* Hero Summary Card Design (Top Section with embedded Date Presets & Branch Filter) */
+        .hero-summary-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 22px;
             margin-bottom: 25px;
+            box-shadow: 0 15px 35px -8px rgba(2, 132, 199, 0.45);
+            border: 2px solid #38bdf8;
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            border: 2px solid var(--border);
+            gap: 18px;
         }
 
-        .controls-row {
+        .hero-filters-top {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .period-chips {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        @media (min-width: 768px) {
+            .period-chips { grid-template-columns: repeat(6, 1fr); }
+        }
+
+        .chip {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            padding: 9px 6px;
+            border-radius: 12px;
+            font-size: 11.5px;
+            font-weight: 700;
+            text-align: center;
+            cursor: pointer;
+            color: #e2e8f0;
+            transition: all 0.2s;
+        }
+        .chip:hover { background: rgba(255, 255, 255, 0.18); color: #fff; }
+        .chip.active {
+            background: #2563eb;
+            color: white;
+            border-color: #60a5fa;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .hero-controls-row {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 14px;
+            gap: 12px;
+            position: relative;
+        }
+        @media (min-width: 768px) {
+            .hero-controls-row { grid-template-columns: repeat(2, 1fr); }
         }
 
-        .control-group {
+        .hero-control-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
             position: relative;
         }
 
-        .control-label {
-            font-size: 12px;
+        .hero-control-label {
+            font-size: 11px;
+            color: #bae6fd;
             font-weight: 700;
-            color: var(--text-muted);
         }
 
-        .date-toggle-btn, .multi-select-btn {
-            background: var(--bg-body);
-            border: 2px solid var(--border);
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 12px;
+        .multi-select-btn {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 11.5px;
             font-weight: 700;
-            color: var(--text-main);
+            color: #fff;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            height: 44px;
+            height: 38px;
             width: 100%;
+            box-sizing: border-box;
         }
 
         .multi-select-dropdown {
@@ -185,17 +205,18 @@
         .multi-select-content {
             display: none;
             position: absolute;
-            top: 50px;
-            right: 0;
+            top: 44px;
+            inset-inline-start: 0;
             width: 100%;
             background: var(--bg-card);
             border: 2px solid var(--border);
             border-radius: 14px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.25);
             max-height: 220px;
             overflow-y: auto;
-            z-index: 100;
+            z-index: 1000;
             padding: 10px;
+            color: var(--text-main);
         }
         .multi-select-content.open { display: block; }
 
@@ -219,12 +240,13 @@
             background: var(--bg-card);
             display: none;
             position: absolute;
-            top: 50px;
-            right: 0;
+            top: 44px;
+            inset-inline-start: 0;
             width: 100%;
-            max-width: 350px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
+            max-width: 330px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.25);
             z-index: 1000;
+            color: var(--text-main);
         }
         .calendar-container.open { display: block; }
         .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 800; color: var(--text-main); }
@@ -232,46 +254,24 @@
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
         .calendar-day-name { font-size: 11px; color: var(--text-muted); font-weight: 800; }
         .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--bg-body); border-radius: 8px; cursor: pointer; color: var(--text-main); border: 1px solid var(--border); }
-        .calendar-day.selected { background: var(--accent); color: white; border-color: var(--accent); }
-        .calendar-day.in-range { background: var(--accent-light); color: var(--accent); }
+        .calendar-day.selected { background: var(--blue-accent); color: white; border-color: var(--blue-accent); }
+        .calendar-day.in-range { background: #bfdbfe; color: var(--blue-primary); }
 
-        .period-chips {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-
-        .chip {
-            background: var(--accent-light);
-            border: 2px solid var(--accent-border);
-            padding: 10px 6px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
-            text-align: center;
-            cursor: pointer;
-            color: var(--accent);
-        }
-        .chip.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-
-        .hero-summary-card {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%);
-            color: white;
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 25px;
-            box-shadow: 0 15px 35px -8px rgba(2, 132, 199, 0.45);
+        .hero-stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            border: 2px solid #38bdf8;
+            gap: 12px;
+        }
+        @media (min-width: 992px) {
+            .hero-stats-grid { grid-template-columns: repeat(5, 1fr); }
         }
 
         .hero-stat-box {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -284,9 +284,10 @@
         }
 
         .hero-stat-box span {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
             letter-spacing: -0.5px;
+            color: #ffffff;
         }
 
         .report-section {
@@ -344,7 +345,7 @@
         }
 
         .view-mode-btn.active {
-            background: var(--accent);
+            background: var(--blue-accent);
             color: #ffffff;
             box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
         }
@@ -378,16 +379,9 @@
             text-align: right;
             font-weight: 800;
             position: sticky;
-            right: 0;
+            inset-inline-start: 0;
             background: var(--bg-card);
             z-index: 2;
-        }
-
-        [dir="ltr"] .daily-grid-table th:first-child,
-        [dir="ltr"] .daily-grid-table td:first-child {
-            text-align: left;
-            right: auto;
-            left: 0;
         }
 
         .daily-grid-table thead th {
@@ -435,16 +429,9 @@
 
         .daily-grid-table tbody tr.sub-row td:first-child {
             background: var(--bg-body);
-            padding-right: 30px;
+            padding-inline-start: 30px;
             font-weight: 800;
-            border-right: 3px solid #0284c7;
-        }
-
-        [dir="ltr"] .daily-grid-table tbody tr.sub-row td:first-child {
-            padding-right: 14px;
-            padding-left: 30px;
-            border-right: none;
-            border-left: 3px solid #0284c7;
+            border-inline-start: 3px solid #0284c7;
         }
 
         .daily-grid-table tbody tr.leaf-row td {
@@ -457,17 +444,10 @@
 
         .daily-grid-table tbody tr.leaf-row td:first-child {
             background: var(--bg-card);
-            padding-right: 48px;
+            padding-inline-start: 48px;
             color: var(--text-main);
             font-weight: 700;
-            border-right: 3px solid #10b981;
-        }
-
-        [dir="ltr"] .daily-grid-table tbody tr.leaf-row td:first-child {
-            padding-right: 14px;
-            padding-left: 48px;
-            border-right: none;
-            border-left: 3px solid #10b981;
+            border-inline-start: 3px solid #10b981;
         }
 
         .tbl-pill-sales {
@@ -487,14 +467,9 @@
             align-items: center;
             justify-content: center;
             width: 18px;
-            margin-left: 6px;
+            margin-inline-end: 6px;
             color: #0284c7;
             font-size: 11px;
-        }
-
-        [dir="ltr"] .row-caret {
-            margin-left: 0;
-            margin-right: 6px;
         }
 
         .daily-grid-table tfoot td {
@@ -560,7 +535,7 @@
             transition: all 0.25s ease;
         }
         .group-card:hover {
-            border-color: var(--accent);
+            border-color: var(--blue-accent);
             box-shadow: 0 10px 25px rgba(37, 99, 235, 0.12);
         }
 
@@ -589,7 +564,7 @@
 
         .group-qty-badge {
             background: rgba(37, 99, 235, 0.1);
-            color: var(--accent);
+            color: var(--blue-accent);
             border: 1px solid var(--accent-border);
             padding: 3px 10px;
             border-radius: 20px;
@@ -679,7 +654,7 @@
             transition: all 0.2s;
         }
         .supplier-item-card:hover {
-            border-color: var(--accent);
+            border-color: var(--blue-accent);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
         }
 
@@ -732,171 +707,457 @@
         }
 
         @media (min-width: 768px) {
-            header {
-                padding: 20px 28px !important;
-            }
-            .header-title-box h1 {
-                font-size: 18px !important;
-            }
-            .header-title-box p {
-                font-size: 11.5px !important;
-            }
-            .update-btn {
-                width: 44px !important;
-                height: 44px !important;
-                min-width: 44px !important;
-                font-size: 16px !important;
-                border-radius: 14px !important;
-            }
-            .lang-select {
-                height: 44px !important;
-                font-size: 12px !important;
-                padding: 0 14px !important;
-                border-radius: 14px !important;
-            }
-            .header-left-group {
-                gap: 10px !important;
-            }
             .mobile-container {
                 max-width: 1400px !important;
                 padding: 0 20px;
             }
-            .filter-panel .period-chips { grid-template-columns: repeat(6, 1fr) !important; }
-            .controls-row { grid-template-columns: repeat(2, 1fr) !important; }
             .analytics-container:not(.view-hidden) { 
                 grid-template-columns: repeat(3, 1fr) !important; 
                 gap: 20px !important; 
             }
-            .hero-summary-card { grid-template-columns: repeat(5, 1fr) !important; }
             .suppliers-grid-box { grid-template-columns: repeat(1, 1fr) !important; }
         }
     </style>
     <script src="app.js" defer></script>
 </head>
 <body data-theme="light">
+<div class="app-layout">
+  <!-- القائمة الجانبية الموحدة والمترجمة بالكامل -->
+  <aside class="sidebar" id="sidebarMenu">
+    <div class="sidebar-brand-header">
+      <div class="brand-fogo-icon"><i class="fa-solid fa-chart-simple"></i></div>
+      <div class="brand-text-group">
+        <span class="brand-name" data-i18n="brand_name">الموسى ERP</span>
+        <span class="brand-sub" data-i18n="brand_sub">Financial & Retail</span>
+      </div>
+    </div>
+    <div class="sidebar-scroll-area">
+      <div class="nav-section-caption" data-i18n="menu_caption">القائمة الرئيسية</div>
+      
+      <div class="nav-item">
+        <a href="./index.html" class="nav-link-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-table-cells-large"></i>
+            <span data-i18n="nav_dashboard">لوحة التحكم</span>
+          </span>
+        </a>
+      </div>
 
-<div class="mobile-container">
-    <header>
-        <div class="header-title-box">
-            <h1 data-i18n="header_title_group">الموسى التجارية</h1>
-            <p data-i18n="header_subtitle_group">تقرير مبيعات المجموعات الاحترافي</p>
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span data-i18n="nav_sales">المبيعات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./Sales.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_summary">ملخص المبيعات</span></a>
+          <a href="./sales_group.html" class="active"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_group">المبيعات حسب المجموعة</span></a>
+          <a href="./supplier_sales.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_supplier">المبيعات حسب المورد</span></a>
+          <a href="./sales_per_day.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_per_day">المبيعات اليومية</span></a>
         </div>
-        <div class="header-left-group">
-            <button class="update-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
-                <i class="fa-solid fa-moon" id="themeIcon"></i>
-            </button>
-            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
-                <option value="ar">العربية</option>
-                <option value="en">English</option>
-                <option value="hi">हिन्दी</option>
-                <option value="ur">اردو</option>
-            </select>
-            <button class="update-btn" onclick="loadGroupSalesData()" title="تحديث">
-                <i class="fa-solid fa-rotate"></i>
-            </button>
-            <a href="sales.html" class="update-btn" title="الرجوع للمبيعات">
-                <i class="fa-solid fa-arrow-right"></i>
-            </a>
-        </div>
-    </header>
+      </div>
 
-    <div class="filter-panel">
-        <div class="period-chips">
-            <div class="chip" data-preset="today" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
-            <div class="chip" data-preset="yesterday" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
-            <div class="chip" data-preset="week" onclick="setPreset('week', this)" data-i18n="chip_week">الأسبوع</div>
-            <div class="chip" data-preset="month" onclick="setPreset('month', this)" data-i18n="chip_month">الشهر</div>
-            <div class="chip" data-preset="year" onclick="setPreset('year', this)" data-i18n="chip_year">السنة</div>
-            <div class="chip" data-preset="custom" onclick="toggleCalendar()" data-i18n="chip_custom">📅 مخصص</div>
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span data-i18n="nav_purchase">المشتريات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./purchases.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_purchases_list">قوائم المشتريات</span></a>
+          <a href="./purchase_comparieso.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_purchase_comparison">تحليل المشتريات والمبيعات</span></a>
         </div>
+      </div>
 
-        <div class="controls-row">
-            <div class="control-group">
-                <span class="control-label" data-i18n="label_time_range">النطاق الزمني:</span>
-                <div class="date-toggle-btn" onclick="toggleCalendar()">
-                    <span id="dateButtonText" data-i18n="btn_choose_range">اختر النطاق...</span>
-                    <span>▼</span>
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-warehouse"></i>
+            <span data-i18n="nav_warehouse">إدارة المستودعات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./warhouse.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_warehouse_staff">أداء موظفي المستودع</span></a>
+        </div>
+      </div>
+
+      <div class="nav-section-caption" data-i18n="support_caption">الحساب والنظام</div>
+      <div class="nav-item">
+        <button type="button" class="nav-link-btn" id="logoutBtn">
+          <span class="nav-left">
+            <i class="fa-solid fa-power-off" style="color:#f87171;"></i>
+            <span data-i18n="nav_logout">تسجيل الخروج</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- شريط العلوي (TopBar) يحتوي على أزرار التحديث، الوضع الليلي، واختيار اللغات -->
+  <header class="app-topbar">
+    <div style="font-size: 16px; font-weight: 800;" data-i18n="nav_sales_group">المبيعات حسب المجموعة</div>
+    <div class="topbar-right-actions">
+      <!-- زر تحديث البيانات -->
+      <button type="button" class="topbar-btn" id="refreshBtn" onclick="loadGroupSalesData()" data-i18n-title="title_refresh" title="تحديث البيانات">
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+      <!-- قائمة اختيار اللغة (عربي، إنجليزي، هندي، أوردو) -->
+      <select id="langSelect" class="lang-select-top" onchange="applyLanguageUI(this.value)" aria-label="Language Selector">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="ur">اردو</option>
+      </select>
+      <!-- زر الوضع الليلي -->
+      <button type="button" class="topbar-btn" id="darkModeToggleBtn" onclick="toggleTheme()" data-i18n-title="title_darkmode" title="الوضع الليلي">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+      </button>
+      <!-- زر ملء الشاشة -->
+      <button type="button" class="topbar-btn" id="fullscreenBtn" data-i18n-title="title_fullscreen" title="ملء الشاشة">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-main-content">
+    <div class="mobile-container">
+
+        <!-- Hero Summary Card (مدمج في الأعلى: فلاتر التاريخ، اختيار الفرع، ومؤشرات المبيعات) -->
+        <div class="hero-summary-card">
+            <div class="hero-filters-top">
+                <div class="period-chips">
+                    <div class="chip" data-preset="today" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
+                    <div class="chip" data-preset="yesterday" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
+                    <div class="chip" data-preset="week" onclick="setPreset('week', this)" data-i18n="chip_week">الأسبوع</div>
+                    <div class="chip" data-preset="month" onclick="setPreset('month', this)" data-i18n="chip_month">الشهر</div>
+                    <div class="chip" data-preset="year" onclick="setPreset('year', this)" data-i18n="chip_year">السنة</div>
+                    <div class="chip" data-preset="custom" onclick="toggleCalendar()" data-i18n="chip_custom">📅 مخصص</div>
                 </div>
-                <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
-                    <div class="calendar-header">
-                        <button onclick="changeMonth(-1)">&#9664;</button>
-                        <span id="calendarTitle">أكتوبر 2026</span>
-                        <button onclick="changeMonth(1)">&#9654;</button>
+
+                <div class="hero-controls-row">
+                    <div class="hero-control-group">
+                        <span class="hero-control-label" data-i18n="label_time_range">النطاق الزمني:</span>
+                        <div class="multi-select-btn" onclick="toggleCalendar()">
+                            <span id="dateButtonText" data-i18n="btn_choose_range">اختر التاريخ...</span>
+                            <span>▼</span>
+                        </div>
+                        <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
+                            <div class="calendar-header">
+                                <button onclick="changeMonth(-1)">&#9664;</button>
+                                <span id="calendarTitle">أكتوبر 2026</span>
+                                <button onclick="changeMonth(1)">&#9654;</button>
+                            </div>
+                            <div class="calendar-grid" id="calendarDaysGrid"></div>
+                        </div>
                     </div>
-                    <div class="calendar-grid" id="calendarDaysGrid"></div>
-                </div>
-            </div>
 
-            <div class="control-group">
-                <span class="control-label" data-i18n="label_branch">الفرع (Branch):</span>
-                <div class="multi-select-dropdown">
-                    <div class="multi-select-btn" onclick="toggleDropdown('branchContent')">
-                        <span id="branchBtnText" data-i18n="all_branches_selected">الكل مختار</span>
-                        <span>▼</span>
+                    <div class="hero-control-group">
+                        <span class="hero-control-label" data-i18n="label_branch">الفرع (Branch):</span>
+                        <div class="multi-select-dropdown">
+                            <div class="multi-select-btn" onclick="toggleDropdown('branchContent')">
+                                <span id="branchBtnText" data-i18n="all_branches_selected">الكل مختار</span>
+                                <span>▼</span>
+                            </div>
+                            <div class="multi-select-content" id="branchContent"></div>
+                        </div>
                     </div>
-                    <div class="multi-select-content" id="branchContent"></div>
+                </div>
+            </div>
+
+            <div class="hero-stats-grid">
+                <div class="hero-stat-box">
+                    <label data-i18n="kpi_total_sales">إجمالي المبيعات</label>
+                    <span id="kpiTotalSales">0.00 SAR</span>
+                </div>
+                <div class="hero-stat-box">
+                    <label data-i18n="kpi_without_vat">بدون ضريبة (Excl. VAT)</label>
+                    <span id="kpiWithoutVat">0.00 SAR</span>
+                </div>
+                <div class="hero-stat-box">
+                    <label data-i18n="kpi_total_cost">إجمالي التكلفة (Cost)</label>
+                    <span id="kpiTotalCost">0.00 SAR</span>
+                </div>
+                <div class="hero-stat-box">
+                    <label data-i18n="kpi_margin">هامش الربح (Margin)</label>
+                    <span id="kpiMargin">0.00%</span>
+                </div>
+                <div class="hero-stat-box">
+                    <label data-i18n="kpi_total_qty">إجمالي القطع</label>
+                    <span id="kpiTotalQty">0 Pcs</span>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="hero-summary-card">
-        <div class="hero-stat-box">
-            <label data-i18n="kpi_total_sales">إجمالي المبيعات</label>
-            <span id="kpiTotalSales">0.00 SAR</span>
-        </div>
-        <div class="hero-stat-box">
-            <label data-i18n="kpi_without_vat">بدون ضريبة (Excl. VAT)</label>
-            <span id="kpiWithoutVat">0.00 SAR</span>
-        </div>
-        <div class="hero-stat-box">
-            <label data-i18n="kpi_total_cost">إجمالي التكلفة (Cost)</label>
-            <span id="kpiTotalCost">0.00 SAR</span>
-        </div>
-        <div class="hero-stat-box">
-            <label data-i18n="kpi_margin">هامش الربح (Margin)</label>
-            <span id="kpiMargin">0.00%</span>
-        </div>
-        <div class="hero-stat-box">
-            <label data-i18n="kpi_total_qty">إجمالي القطع</label>
-            <span id="kpiTotalQty">0 Pcs</span>
-        </div>
-    </div>
-
-    <div class="report-section">
-        <div class="section-header-row">
-            <div class="section-title" data-i18n="section_title_groups">
-                <i class="fa-solid fa-layer-group" style="color: var(--accent);"></i> تفصيل المبيعات حسب المجموعات والموردين (3 أقسام رئيسية)
+        <div class="report-section">
+            <div class="section-header-row">
+                <div class="section-title" data-i18n="section_title_groups">
+                    <i class="fa-solid fa-layer-group" style="color: var(--blue-accent);"></i> تفصيل المبيعات حسب المجموعات والموردين (3 أقسام رئيسية)
+                </div>
+                <div class="view-toggle-group" role="group" aria-label="View Mode">
+                    <button type="button" class="view-mode-btn active" id="btnViewCards" onclick="setViewMode('cards')">
+                        <i class="fa-solid fa-border-all"></i>
+                        <span id="txtViewCards">مربعات</span>
+                    </button>
+                    <button type="button" class="view-mode-btn" id="btnViewTable" onclick="setViewMode('table')">
+                        <i class="fa-solid fa-table"></i>
+                        <span id="txtViewTable">صفوف وأعمدة</span>
+                    </button>
+                </div>
             </div>
-            <div class="view-toggle-group" role="group" aria-label="View Mode">
-                <button type="button" class="view-mode-btn active" id="btnViewCards" onclick="setViewMode('cards')">
-                    <i class="fa-solid fa-border-all"></i>
-                    <span id="txtViewCards">مربعات</span>
-                </button>
-                <button type="button" class="view-mode-btn" id="btnViewTable" onclick="setViewMode('table')">
-                    <i class="fa-solid fa-table"></i>
-                    <span id="txtViewTable">صفوف وأعمدة</span>
-                </button>
+
+            <div class="analytics-container" id="groupAnalyticsContainer">
+                <div class="status-msg" data-i18n="status_loading">جاري تحميل البيانات وتحليل المجموعات...</div>
+            </div>
+
+            <div class="table-view-card view-hidden" id="groupTableContainer">
+                <table class="daily-grid-table">
+                    <thead id="groupTableHead"></thead>
+                    <tbody id="groupTableBody"></tbody>
+                    <tfoot id="groupTableFoot"></tfoot>
+                </table>
             </div>
         </div>
 
-        <div class="analytics-container" id="groupAnalyticsContainer">
-            <div class="status-msg" data-i18n="status_loading">جاري تحميل البيانات وتحليل المجموعات...</div>
-        </div>
-
-        <div class="table-view-card view-hidden" id="groupTableContainer">
-            <table class="daily-grid-table">
-                <thead id="groupTableHead"></thead>
-                <tbody id="groupTableBody"></tbody>
-                <tfoot id="groupTableFoot"></tfoot>
-            </table>
-        </div>
     </div>
+  </main>
 </div>
 
 <script>
+    /* نظام الترجمات المتكامل والمدعوم للغات الأربع (ar, en, hi, ur) */
+    const TRANSLATIONS = {
+      ar: {
+        sales_group_title: "مبيعات المجموعات - الموسى ERP",
+        brand_name: "الموسى ERP",
+        brand_sub: "Financial & Retail",
+        menu_caption: "القائمة الرئيسية",
+        support_caption: "الحساب والنظام",
+        nav_dashboard: "لوحة التحكم",
+        nav_sales: "المبيعات",
+        nav_sales_summary: "ملخص المبيعات",
+        nav_sales_group: "المبيعات حسب المجموعة",
+        nav_sales_supplier: "المبيعات حسب المورد",
+        nav_sales_per_day: "المبيعات اليومية",
+        nav_purchase: "المشتريات",
+        nav_purchases_list: "قوائم المشتريات",
+        nav_purchase_comparison: "تحليل المشتريات والمبيعات",
+        nav_warehouse: "إدارة المستودعات",
+        nav_warehouse_staff: "أداء موظفي المستودع",
+        nav_logout: "تسجيل الخروج",
+        chip_today: "اليوم",
+        chip_yesterday: "أمس",
+        chip_week: "الأسبوع",
+        chip_month: "الشهر",
+        chip_year: "السنة",
+        chip_custom: "📅 مخصص",
+        label_time_range: "النطاق الزمني:",
+        btn_choose_range: "اختر التاريخ...",
+        label_branch: "الفرع (Branch):",
+        all_branches_selected: "الكل مختار",
+        selected_count: "مختار",
+        select_all: "تحديد الكل",
+        kpi_total_sales: "إجمالي المبيعات",
+        kpi_without_vat: "بدون ضريبة (Excl. VAT)",
+        kpi_total_cost: "إجمالي التكلفة (Cost)",
+        kpi_margin: "هامش الربح (Margin)",
+        kpi_total_qty: "إجمالي القطع",
+        section_title_groups: "تفصيل المبيعات حسب المجموعات والموردين (3 أقسام رئيسية)",
+        status_loading: "جاري تحميل البيانات وتحليل المجموعات...",
+        status_no_data: "لا توجد مبيعات مسجلة في هذه الفترة",
+        qty_label: "الكمية",
+        title_refresh: "تحديث البيانات",
+        title_darkmode: "الوضع الليلي",
+        title_fullscreen: "ملء الشاشة"
+      },
+      en: {
+        sales_group_title: "Group Sales - Almoosa ERP",
+        brand_name: "Almoosa ERP",
+        brand_sub: "Financial & Retail",
+        menu_caption: "Main Menu",
+        support_caption: "Account & System",
+        nav_dashboard: "Dashboard",
+        nav_sales: "Sales",
+        nav_sales_summary: "Sales Summary",
+        nav_sales_group: "Sales by Group",
+        nav_sales_supplier: "Sales per Supplier",
+        nav_sales_per_day: "Sales per Day",
+        nav_purchase: "Purchases",
+        nav_purchases_list: "Purchases List",
+        nav_purchase_comparison: "Purchase & Sales Analysis",
+        nav_warehouse: "Warehouse Management",
+        nav_warehouse_staff: "Warehouse Staff Performance",
+        nav_logout: "Logout",
+        chip_today: "Today",
+        chip_yesterday: "Yesterday",
+        chip_week: "Week",
+        chip_month: "Month",
+        chip_year: "Year",
+        chip_custom: "📅 Custom",
+        label_time_range: "Time Range:",
+        btn_choose_range: "Choose Date...",
+        label_branch: "Branch:",
+        all_branches_selected: "All Selected",
+        selected_count: "Selected",
+        select_all: "Select All",
+        kpi_total_sales: "Total Sales",
+        kpi_without_vat: "Excl. VAT",
+        kpi_total_cost: "Total Cost",
+        kpi_margin: "Profit Margin",
+        kpi_total_qty: "Total Qty",
+        section_title_groups: "Sales Breakdown by Groups and Suppliers (3 Main Sections)",
+        status_loading: "Loading data and analyzing groups...",
+        status_no_data: "No sales recorded in this period",
+        qty_label: "Qty",
+        title_refresh: "Refresh Data",
+        title_darkmode: "Dark Mode",
+        title_fullscreen: "Toggle Fullscreen"
+      },
+      hi: {
+        sales_group_title: "समूह बिक्री - अलमूसा ERP",
+        brand_name: "अलमूसा ERP",
+        brand_sub: "Financial & Retail",
+        menu_caption: "मुख्य मेनू",
+        support_caption: "खाता और सिस्टम",
+        nav_dashboard: "डैशबोर्ड",
+        nav_sales: "बिक्री",
+        nav_sales_summary: "बिक्री सारांश",
+        nav_sales_group: "समूह द्वारा बिक्री",
+        nav_sales_supplier: "आपूर्तिकर्ता द्वारा बिक्री",
+        nav_sales_per_day: "दैनिक बिक्री",
+        nav_purchase: "खरीद",
+        nav_purchases_list: "खरीद सूची",
+        nav_purchase_comparison: "खरीद और बिक्री विश्लेषण",
+        nav_warehouse: "गोदाम प्रबंधन",
+        nav_warehouse_staff: "गोदाम स्टाफ प्रदर्शन",
+        nav_logout: "लॉग आउट",
+        chip_today: "आज",
+        chip_yesterday: "कल",
+        chip_week: "सप्ताह",
+        chip_month: "महीना",
+        chip_year: "वर्ष",
+        chip_custom: "📅 कस्टम",
+        label_time_range: "समय सीमा:",
+        btn_choose_range: "तारीख चुनें...",
+        label_branch: "शाखा:",
+        all_branches_selected: "सभी चयनित",
+        selected_count: "चयनित",
+        select_all: "सभी चुनें",
+        kpi_total_sales: "कुल बिक्री",
+        kpi_without_vat: "कर के बिना",
+        kpi_total_cost: "कुल लागत",
+        kpi_margin: "लाभ मार्जिन",
+        kpi_total_qty: "कुल मात्रा",
+        section_title_groups: "समूहों और आपूर्तिकर्ताओं द्वारा बिक्री विवरण",
+        status_loading: "डेटा लोड हो रहा है...",
+        status_no_data: "इस अवधि में कोई बिक्री नहीं",
+        qty_label: "मात्रा",
+        title_refresh: "डेटा रीफ्रेश करें",
+        title_darkmode: "डार्क मोड",
+        title_fullscreen: "फुल स्क्रीन"
+      },
+      ur: {
+        sales_group_title: "گروپ سیلز - الموسیٰ ERP",
+        brand_name: "الموسیٰ ERP",
+        brand_sub: "Financial & Retail",
+        menu_caption: "مین مینو",
+        support_caption: "اکاؤنٹ اور سسٹم",
+        nav_dashboard: "ڈیش بورڈ",
+        nav_sales: "فروخت",
+        nav_sales_summary: "فروخت کا خلاصہ",
+        nav_sales_group: "گروپ کے لحاظ سے فروخت",
+        nav_sales_supplier: "سپلائر کے لحاظ سے فروخت",
+        nav_sales_per_day: "یومیہ فروخت",
+        nav_purchase: "خریداری",
+        nav_purchases_list: "خریداری کی فہرست",
+        nav_purchase_comparison: "خرید و فروخت کا تجزیہ",
+        nav_warehouse: "گودام مینجمنٹ",
+        nav_warehouse_staff: "گودام عملے کی کارکردگی",
+        nav_logout: "لاگ آؤٹ",
+        chip_today: "آج",
+        chip_yesterday: "گزشتہ روز",
+        chip_week: "ہفتہ",
+        chip_month: "مہینہ",
+        chip_year: "سال",
+        chip_custom: "📅 حسب ضرورت",
+        label_time_range: "وقت کی حد:",
+        btn_choose_range: "تاریخ منتخب کریں...",
+        label_branch: "برانچ:",
+        all_branches_selected: "سب منتخب",
+        selected_count: "منتخب",
+        select_all: "سب کو منتخب کریں",
+        kpi_total_sales: "کل فروخت",
+        kpi_without_vat: "بغیر ٹیکس",
+        kpi_total_cost: "کل لاگت",
+        kpi_margin: "منافع کا مارجن",
+        kpi_total_qty: "کل مقدار",
+        section_title_groups: "گروپس اور سپلائرز کے لحاظ سے فروخت کی تفصیل",
+        status_loading: "ڈیٹا لوڈ ہو رہا ہے...",
+        status_no_data: "اس مدت میں کوئی فروخت نہیں",
+        qty_label: "مقدار",
+        title_refresh: "ڈیٹا تازہ کریں",
+        title_darkmode: "ڈارک موڈ",
+        title_fullscreen: "فل سکرین"
+      }
+    };
+
+    /* وظيفة تطبيق الترجمة الفورية وتحديث اتجاه الصفحة RTL/LTR تلقائياً */
+    function applyLanguageUI(lang) {
+      const selectedLang = TRANSLATIONS[lang] ? lang : 'ar';
+      localStorage.setItem('app_lang', selectedLang);
+      
+      const htmlRoot = document.getElementById('htmlRoot');
+      htmlRoot.lang = selectedLang;
+      htmlRoot.dir = (selectedLang === 'ar' || selectedLang === 'ur') ? 'rtl' : 'ltr';
+
+      const langSelect = document.getElementById('langSelect');
+      if (langSelect && langSelect.value !== selectedLang) {
+        langSelect.value = selectedLang;
+      }
+
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (TRANSLATIONS[selectedLang] && TRANSLATIONS[selectedLang][key]) {
+          el.textContent = TRANSLATIONS[selectedLang][key];
+        }
+      });
+
+      document.querySelectorAll('[data-i18n-title]').forEach((el) => {
+        const key = el.getAttribute('data-i18n-title');
+        if (TRANSLATIONS[selectedLang] && TRANSLATIONS[selectedLang][key]) {
+          el.title = TRANSLATIONS[selectedLang][key];
+        }
+      });
+
+      updateViewModeTexts();
+      processAndRenderGroups();
+    }
+
+    function getActiveLang() { 
+      return localStorage.getItem('app_lang') || 'ar'; 
+    }
+
+    /* وظيفة تبديل الوضع الليلي / النهارى وتحديث الأيقونة */
+    function toggleTheme() {
+      const currentTheme = document.body.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('app_theme', newTheme);
+      updateThemeIcon(newTheme);
+    }
+
+    function updateThemeIcon(theme) {
+      const icon = document.getElementById('themeIcon');
+      if (icon) {
+        icon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+      }
+    }
+
     const CONFIG = {
-        serverUrl: "https://87-237-225-155.nip.io/",
+        serverUrl: "https://87-237-225-155.nip.io",
         apiKey: "6f039a5a6130b79",
         apiSecret: "9e6d920a8fda252"
     };
@@ -910,10 +1171,6 @@
 
     let expandedTableGroups = new Set();
     let expandedTableGroupGenders = new Set();
-
-    function getActiveLang() {
-        return (typeof currentLang !== 'undefined' && currentLang) || localStorage.getItem('app_lang') || document.documentElement.getAttribute('lang') || 'ar';
-    }
 
     function updateViewModeTexts() {
         const lang = getActiveLang();
@@ -977,6 +1234,21 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('app_lang') || 'ar';
+        applyLanguageUI(savedLang);
+
+        const savedTheme = localStorage.getItem('app_theme') || 'light';
+        document.body.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        document.getElementById('fullscreenBtn').addEventListener('click', () => {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+          } else {
+            document.exitFullscreen().catch(() => {});
+          }
+        });
+
         currentViewMode = 'cards';
         syncViewModeUI();
         updateViewModeTexts();
@@ -984,7 +1256,7 @@
         renderCalendar();
 
         window.onclick = function(event) {
-            if (!event.target.closest('.control-group') && !event.target.closest('.period-chips') && !event.target.closest('.multi-select-dropdown')) {
+            if (!event.target.closest('.hero-control-group') && !event.target.closest('.period-chips') && !event.target.closest('.multi-select-dropdown')) {
                 document.getElementById('calendarContainer').classList.remove('open');
                 document.querySelectorAll('.multi-select-content').forEach(el => el.classList.remove('open'));
             }
@@ -1143,7 +1415,7 @@
         const lang = getActiveLang();
         const container = document.getElementById('groupAnalyticsContainer');
         const tbody = document.getElementById('groupTableBody');
-        const loadingText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].status_loading) ? translations[lang].status_loading : "جاري تحميل البيانات...";
+        const loadingText = TRANSLATIONS[lang].status_loading || "جاري تحميل البيانات وتحليل المجموعات...";
         container.innerHTML = `<div class="status-msg"><i class="fa-solid fa-spinner fa-spin"></i> ${loadingText}</div>`;
         if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px;">${loadingText}</td></tr>`;
         rawGroupData = [];
@@ -1207,7 +1479,7 @@
         const container = document.getElementById('branchContent');
         container.innerHTML = '';
         
-        const selectAllText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].select_all) ? translations[lang].select_all : "تحديد الكل";
+        const selectAllText = TRANSLATIONS[lang].select_all || "تحديد الكل";
 
         const allDiv = document.createElement('label');
         allDiv.className = 'checkbox-item';
@@ -1234,8 +1506,8 @@
         const checkboxes = document.querySelectorAll('#branchContent input[type="checkbox"]');
         const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
         const btnText = document.getElementById('branchBtnText');
-        const allSelectedText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].all_branches_selected) ? translations[lang].all_branches_selected : "الكل مختار";
-        const selectedCountText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].selected_count) ? translations[lang].selected_count : "مختار";
+        const allSelectedText = TRANSLATIONS[lang].all_branches_selected || "الكل مختار";
+        const selectedCountText = TRANSLATIONS[lang].selected_count || "مختار";
 
         if (checked.length === 0 || checked.length === checkboxes.length - 1) {
             btnText.textContent = allSelectedText;
@@ -1318,7 +1590,7 @@
 
         const sortedGroups = Object.keys(groupMap).sort((a, b) => groupMap[b].totalSales - groupMap[a].totalSales);
 
-        const noDataText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].status_no_data) ? translations[lang].status_no_data : "لا توجد مبيعات مسجلة في هذه الفترة";
+        const noDataText = TRANSLATIONS[lang].status_no_data || "لا توجد مبيعات مسجلة في هذه الفترة";
 
         if (sortedGroups.length === 0) {
             container.innerHTML = `<div class="status-msg">${noDataText}</div>`;
@@ -1328,11 +1600,11 @@
             return;
         }
 
-        const tTotalSales = (typeof translations !== 'undefined' && translations[lang] && translations[lang].kpi_total_sales) ? translations[lang].kpi_total_sales : "إجمالي المبيعات";
-        const tWithoutVatLbl = (typeof translations !== 'undefined' && translations[lang] && translations[lang].kpi_without_vat) ? translations[lang].kpi_without_vat : "بدون ضريبة";
-        const tCostLbl = (typeof translations !== 'undefined' && translations[lang] && translations[lang].kpi_total_cost) ? translations[lang].kpi_total_cost : "التكلفة";
+        const tTotalSales = TRANSLATIONS[lang].kpi_total_sales || "إجمالي المبيعات";
+        const tWithoutVatLbl = TRANSLATIONS[lang].kpi_without_vat || "بدون ضريبة";
+        const tCostLbl = TRANSLATIONS[lang].kpi_total_cost || "التكلفة";
         const tMarginLbl = "Margin";
-        const tQtyLbl = (typeof translations !== 'undefined' && translations[lang] && translations[lang].qty_label) ? translations[lang].qty_label : "الكمية";
+        const tQtyLbl = TRANSLATIONS[lang].qty_label || "الكمية";
 
         let tableRowsHTML = '';
 
@@ -1345,7 +1617,7 @@
                 <tr class="expandable-row ${isGrpExpanded ? 'is-open' : ''}" onclick="toggleTableGroup('${encodeURIComponent(grp)}')">
                     <td>
                         <span class="row-caret"><i class="fa-solid ${isGrpExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}"></i></span>
-                        <i class="fa-solid fa-folder" style="color:var(--accent); margin-left:4px;"></i> ${grp}
+                        <i class="fa-solid fa-folder" style="color:var(--blue-accent); margin-inline-end:4px;"></i> ${grp}
                     </td>
                     <td>${gData.totalQty.toLocaleString('en-US')} Pcs</td>
                     <td class="tbl-pill-sales">${gData.totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
@@ -1385,7 +1657,7 @@
                             <tr class="expandable-row sub-row ${isGenExpanded ? 'is-open' : ''}" onclick="toggleTableGroupGender('${encodeURIComponent(genderCompoundKey)}')">
                                 <td>
                                     <span class="row-caret"><i class="fa-solid ${isGenExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}"></i></span>
-                                    <i class="fa-solid fa-user" style="color:var(--accent); margin-left:4px;"></i> ${gLabelAr}
+                                    <i class="fa-solid fa-user" style="color:var(--blue-accent); margin-inline-end:4px;"></i> ${gLabelAr}
                                 </td>
                                 <td>${supTotalQty.toLocaleString('en-US')} Pcs</td>
                                 <td class="tbl-pill-sales">${supTotalSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
@@ -1403,8 +1675,8 @@
                         suppliersCardsHTML += `
                             <div class="supplier-item-card">
                                 <div class="supplier-card-header">
-                                    <span><i class="fa-solid fa-truck-fast" style="color:var(--accent); margin-left:4px;"></i> ${sup}</span>
-                                    <span style="color:var(--accent); font-size:12px;">${rowData.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</span>
+                                    <span><i class="fa-solid fa-truck-fast" style="color:var(--blue-accent); margin-inline-end:4px;"></i> ${sup}</span>
+                                    <span style="color:var(--blue-accent); font-size:12px;">${rowData.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</span>
                                 </div>
                                 <div class="supplier-card-metrics">
                                     <div class="metric-cell m-cost">
@@ -1426,7 +1698,7 @@
                         if (isGrpExpanded && isGenExpanded) {
                             tableRowsHTML += `
                                 <tr class="leaf-row">
-                                    <td><i class="fa-solid fa-truck-fast" style="color:var(--accent); margin-left:4px;"></i> ${sup}</td>
+                                    <td><i class="fa-solid fa-truck-fast" style="color:var(--blue-accent); margin-inline-end:4px;"></i> ${sup}</td>
                                     <td>${rowData.qty.toLocaleString('en-US')} Pcs</td>
                                     <td class="tbl-pill-sales">${rowData.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
                                     <td>${rowData.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
@@ -1460,7 +1732,7 @@
                 <div class="group-card">
                     <div class="group-header" onclick="toggleGroupAccordion(this)">
                         <div class="group-title-row">
-                            <span><i class="fa-solid fa-folder" style="color: var(--accent); margin-left: 6px;"></i> ${grp}</span>
+                            <span><i class="fa-solid fa-folder" style="color: var(--blue-accent); margin-inline-end: 6px;"></i> ${grp}</span>
                             <div style="display:flex; align-items:center; gap:8px;">
                                 <span class="group-qty-badge">${gData.totalQty} Pcs</span>
                                 <i class="fa-solid fa-chevron-down" style="font-size:11px; color:var(--text-muted);"></i>
@@ -1537,6 +1809,15 @@
             body.style.display = acc.classList.contains('open') ? 'flex' : 'none';
         }
     }
+</script>
+<script>
+document.addEventListener("click", function(e) {
+  var anchor = e.target.closest("a");
+  if (anchor && anchor.href) {
+    var targetUrl = new URL(anchor.href, window.location.href);
+    if (targetUrl.origin === window.location.origin && anchor.target !== "_blank") { e.preventDefault(); window.location.assign(anchor.href); }
+  }
+}, true);
 </script>
 </body>
 </html>

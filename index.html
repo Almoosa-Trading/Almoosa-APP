@@ -1,1066 +1,1470 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl" id="htmlRoot">
-<head>
-    <link rel="manifest" href="./manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Almoosa Trading">
-
-    <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png">
-    <link rel="shortcut icon" href="https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png">
-
-    <title data-i18n="main_title">لوحة التحكم الاحترافية - الموسى التجارية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="style.css?v=2026.5">
-    <script src="app.js" defer></script>
-
-    <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-        }
-
-        /* ✨ خلفية احترافية مستوحاة من الصورة المرفقة */
-        .login-gate {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 18px;
-            background-color: #0b0d10;
-            background-image:
-                radial-gradient(ellipse 65% 55% at 14% 6%, rgba(86, 130, 168, 0.24) 0%, rgba(11, 13, 16, 0) 70%),
-                radial-gradient(ellipse 55% 75% at 88% 36%, rgba(212, 152, 68, 0.34) 0%, rgba(145, 92, 28, 0.14) 48%, rgba(11, 13, 16, 0) 78%),
-                radial-gradient(ellipse 70% 60% at 76% 85%, rgba(196, 134, 48, 0.22) 0%, rgba(11, 13, 16, 0) 75%),
-                linear-gradient(125deg, #11161d 0%, #0b0d10 48%, #16110a 100%);
-            overflow-y: auto;
-        }
-
-        /* خيوط ضوئية ذهبية ناعمة على الخلفية */
-        .login-gate::before {
-            content: '';
-            position: fixed;
-            inset: -10%;
-            pointer-events: none;
-            background:
-                linear-gradient(112deg, transparent 58%, rgba(250, 204, 21, 0.22) 58.3%, transparent 59%),
-                linear-gradient(106deg, transparent 66%, rgba(245, 158, 11, 0.28) 66.3%, transparent 67.1%),
-                linear-gradient(118deg, transparent 74%, rgba(254, 240, 138, 0.16) 74.2%, transparent 74.8%),
-                linear-gradient(101deg, transparent 81%, rgba(217, 119, 6, 0.24) 81.2%, transparent 81.9%);
-            filter: blur(0.6px);
-            z-index: 0;
-        }
-
-        .login-gate.hidden {
-            display: none !important;
-        }
-
-        .login-card {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: 400px;
-            background: rgba(14, 15, 18, 0.86);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: #f8fafc;
-            border-radius: 26px;
-            padding: 26px 24px 22px;
-            border: 2px solid #eab308;
-            box-shadow:
-                0 24px 55px rgba(0, 0, 0, 0.72),
-                0 0 28px rgba(234, 179, 8, 0.14),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        }
-
-        .login-brand {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .login-logo-ring {
-            width: 82px;
-            height: 82px;
-            border-radius: 22px;
-            padding: 6px;
-            background: rgba(24, 24, 27, 0.9);
-            border: 2px solid #facc15;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-
-        .login-logo-ring img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 16px;
-        }
-
-        .login-brand h2 {
-            margin: 0;
-            font-size: 21px;
-            font-weight: 900;
-            color: #facc15;
-            letter-spacing: 0.2px;
-        }
-
-        .login-brand p {
-            margin: 4px 0 0;
-            font-size: 11.5px;
-            font-weight: 700;
-            color: #cbd5e1;
-        }
-
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .input-group-box {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .input-group-box label {
-            font-size: 12px;
-            font-weight: 800;
-            color: #facc15;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .input-field-wrap {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .login-input {
-            width: 100%;
-            padding: 11px 14px 11px 40px;
-            border-radius: 12px;
-            border: 1.8px solid #facc15;
-            background: #ffffff;
-            color: #111827;
-            font-family: inherit;
-            font-size: 13px;
-            font-weight: 700;
-            outline: none;
-            transition: box-shadow 0.2s, transform 0.15s;
-            box-sizing: border-box;
-            text-align: left;
-            direction: ltr;
-        }
-
-        .login-input::placeholder {
-            color: #6b7280;
-            font-weight: 600;
-        }
-
-        .login-input:focus {
-            box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.35);
-        }
-
-        /* مقترحات الحسابات المحفوظة سابقاً */
-        .suggestions-box {
-            display: none;
-            flex-direction: column;
-            gap: 6px;
-            margin-top: 2px;
-        }
-
-        .suggestions-box.has-items {
-            display: flex;
-        }
-
-        .suggestions-label {
-            font-size: 10.5px;
-            font-weight: 800;
-            color: #fde047;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .suggestions-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .suggestion-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 10px;
-            border-radius: 999px;
-            background: rgba(250, 204, 21, 0.12);
-            border: 1px solid rgba(250, 204, 21, 0.45);
-            color: #fef08a;
-            font-family: inherit;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.18s ease;
-            direction: ltr;
-        }
-
-        .suggestion-chip:hover {
-            background: rgba(250, 204, 21, 0.25);
-            border-color: #facc15;
-            transform: translateY(-1px);
-        }
-
-        .suggestion-chip .remove-acc {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background: rgba(239, 68, 68, 0.25);
-            color: #fca5a5;
-            font-size: 10px;
-            line-height: 1;
-        }
-
-        .suggestion-chip .remove-acc:hover {
-            background: #ef4444;
-            color: #ffffff;
-        }
-
-        .toggle-pass-btn {
-            position: absolute;
-            left: 10px;
-            background: transparent;
-            border: none;
-            color: #4b5563;
-            cursor: pointer;
-            padding: 5px;
-            font-size: 14px;
-            border-radius: 8px;
-            transition: color 0.2s, background 0.2s;
-        }
-
-        .toggle-pass-btn:hover {
-            color: #b45309;
-            background: rgba(234, 179, 8, 0.12);
-        }
-
-        .login-alert {
-            display: none;
-            padding: 10px 12px;
-            border-radius: 11px;
-            font-size: 12px;
-            font-weight: 800;
-            line-height: 1.45;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .login-alert.show {
-            display: flex;
-        }
-
-        .login-alert.error {
-            background: rgba(220, 38, 38, 0.2);
-            color: #fecaca;
-            border: 1.5px solid rgba(248, 113, 113, 0.65);
-        }
-
-        .login-submit-btn {
-            margin-top: 4px;
-            width: 100%;
-            padding: 12px 18px;
-            border: 2px solid #facc15;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #facc15 0%, #eab308 100%);
-            color: #111827;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 900;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            box-shadow: 0 10px 24px rgba(234, 179, 8, 0.28);
-            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-        }
-
-        .login-submit-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 28px rgba(234, 179, 8, 0.4);
-        }
-
-        .login-submit-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .login-footer-note {
-            margin-top: 16px;
-            padding-top: 12px;
-            border-top: 1px dashed rgba(250, 204, 21, 0.28);
-            text-align: center;
-            font-size: 10.5px;
-            font-weight: 700;
-            color: #94a3b8;
-        }
-
-        .dashboard-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 10px;
-        }
-
-        .dashboard-container.locked {
-            display: none !important;
-        }
-
-        /* 📱 هيدر مرتب وصارم يمنع تمدد الأزرار ويجعلها في سطر واحد */
-        header {
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            flex-wrap: nowrap !important;
-            gap: 6px !important;
-            margin-bottom: 20px !important;
-            padding: 12px 14px !important;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
-            color: #ffffff !important;
-            border-radius: 14px !important;
-            box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
-            border: 2px solid #38bdf8 !important;
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
-        }
-
-        .header-title-box {
-            flex: 1 1 auto !important;
-            min-width: 0 !important;
-        }
-
-        .header-title-box h1 {
-            font-size: 14px !important;
-            color: #ffffff !important;
-            font-weight: 800;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-            margin: 0 !important;
-            line-height: 1.3;
-        }
-
-        .header-title-box p {
-            font-size: 10px !important;
-            color: #fde047 !important;
-            margin: 2px 0 0 !important;
-            font-weight: 800;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-        }
-
-        .header-left-group {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            flex-wrap: nowrap !important;
-            gap: 4px !important;
-            flex-shrink: 0 !important;
-            width: auto !important;
-        }
-
-        .action-btn-icon {
-            background: rgba(255, 255, 255, 0.15) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            width: 32px !important;
-            height: 32px !important;
-            min-width: 32px !important;
-            max-width: 32px !important;
-            border-radius: 8px !important;
-            cursor: pointer;
-            font-size: 13px !important;
-            color: #ffffff !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            text-decoration: none;
-            padding: 0 !important;
-            margin: 0 !important;
-            flex-shrink: 0 !important;
-            transition: all 0.25s;
-        }
-
-        .action-btn-icon:hover {
-            background: rgba(255, 255, 255, 0.25) !important;
-            border-color: #ffffff !important;
-            transform: translateY(-2px);
-        }
-
-        .action-btn-icon.logout-btn:hover {
-            background: rgba(239, 68, 68, 0.8) !important;
-            border-color: #fca5a5 !important;
-        }
-
-        .lang-select {
-            background: rgba(255, 255, 255, 0.15) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            padding: 0 4px !important;
-            border-radius: 8px !important;
-            font-size: 10px !important;
-            font-weight: 700;
-            color: #ffffff !important;
-            height: 32px !important;
-            outline: none;
-            cursor: pointer;
-            margin: 0 !important;
-            flex-shrink: 0 !important;
-            width: auto !important;
-        }
-
-        .lang-select option {
-            background: #1e293b;
-            color: #ffffff;
-        }
-
-        /* 🎴 شبكة أودو المصغرة */
-        .odoo-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            padding: 5px 0;
-        }
-
-        .odoo-app-card {
-            background: transparent;
-            border: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            text-decoration: none;
-            color: var(--text-main);
-            transition: transform 0.2s ease;
-            position: relative;
-            cursor: pointer;
-            padding: 6px;
-        }
-
-        .odoo-app-card:hover:not(.disabled) {
-            transform: translateY(-4px);
-        }
-
-        .odoo-app-card.disabled {
-            opacity: 0.55;
-            cursor: not-allowed;
-        }
-
-        .odoo-icon-box {
-            width: 58px;
-            height: 58px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 6px;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-        }
-
-        .ic-sales { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); color: white; }
-        .ic-purchase-analytics { background: linear-gradient(135deg, #10b981 0%, #047857 100%); color: white; }
-        .ic-warehouse { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; }
-        
-        .ic-stock, .ic-purchase, .ic-transfer, .ic-receive, .ic-contract, .ic-water, .ic-electricity {
-            background: var(--bg-card); 
-            color: var(--text-muted); 
-            border: 1.5px solid var(--border);
-        }
-
-        .odoo-title {
-            font-size: 11.5px;
-            font-weight: 800;
-            color: var(--text-main);
-        }
-
-        .badge-orange {
-            position: absolute;
-            top: 0;
-            right: calc(50% - 28px);
-            background: #f59e0b;
-            color: white;
-            font-size: 8px;
-            font-weight: 850;
-            padding: 1px 4px;
-            border-radius: 4px;
-            z-index: 2;
-        }
-
-        @media (min-width: 640px) {
-            .odoo-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
-            header { padding: 20px 28px !important; }
-            .header-title-box h1 { font-size: 18px !important; }
-            .header-title-box p { font-size: 12px !important; }
-            .action-btn-icon { width: 44px !important; height: 44px !important; min-width: 44px !important; font-size: 16px !important; border-radius: 14px !important; }
-            .lang-select { height: 44px !important; font-size: 12px !important; padding: 0 14px !important; border-radius: 14px !important; }
-        }
-
-        @media (min-width: 900px) {
-            .odoo-grid { grid-template-columns: repeat(6, 1fr); gap: 24px; }
-            .dashboard-container { max-width: 1350px !important; padding: 0 20px; }
-        }
-    </style>
-</head>
-<body data-theme="light">
-
-<!-- 🔐 شاشة تسجيل الدخول -->
-<div class="login-gate" id="loginGate">
-    <div class="login-card">
-        <div class="login-brand">
-            <div class="login-logo-ring">
-                <img src="https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png" alt="Almoosa Trading Logo">
-            </div>
-            <h2>الموسى التجارية</h2>
-            <p>النظام الإداري الموحد • تسجيل الدخول</p>
-        </div>
-
-        <form class="login-form" id="erpLoginForm" autocomplete="on" onsubmit="handleErpLogin(event)">
-            <div class="input-group-box">
-                <label for="erpUsername">
-                    <i class="fa-solid fa-user"></i>
-                    <span>اسم المستخدم</span>
-                </label>
-                <div class="input-field-wrap">
-                    <input
-                        type="text"
-                        id="erpUsername"
-                        name="username"
-                        class="login-input"
-                        list="savedUsersDatalist"
-                        placeholder="Enter username"
-                        autocomplete="username"
-                        oninput="onUsernameInputChange(this.value)"
-                        required
-                    >
-                    <datalist id="savedUsersDatalist"></datalist>
-                </div>
-
-                <div class="suggestions-box" id="savedSuggestionsBox">
-                    <div class="suggestions-label">
-                        <i class="fa-solid fa-clock-rotate-left"></i>
-                        <span>الحسابات المسجلة سابقاً (اضغط للملء التلقائي):</span>
-                    </div>
-                    <div class="suggestions-list" id="savedSuggestionsList"></div>
-                </div>
-            </div>
-
-            <div class="input-group-box">
-                <label for="erpPassword">
-                    <i class="fa-solid fa-lock"></i>
-                    <span>كلمة المرور</span>
-                </label>
-                <div class="input-field-wrap">
-                    <input
-                        type="password"
-                        id="erpPassword"
-                        name="password"
-                        class="login-input"
-                        placeholder="Enter password"
-                        autocomplete="current-password"
-                        required
-                    >
-                    <button type="button" class="toggle-pass-btn" onclick="togglePasswordVisibility()" title="إظهار / إخفاء كلمة المرور">
-                        <i class="fa-solid fa-eye" id="passEyeIcon"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="login-alert error" id="loginAlertBox" role="alert">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                <span id="loginAlertText"></span>
-            </div>
-
-            <button type="submit" class="login-submit-btn" id="loginSubmitBtn">
-                <i class="fa-solid fa-right-to-bracket" id="loginBtnIcon"></i>
-                <span id="loginBtnText">تسجيل الدخول</span>
-            </button>
-        </form>
-
-        <div class="login-footer-note">
-            نظام الموسى التجارية الاحترافي © 2026
-        </div>
+<!DOCTYPE html><html lang="ar" dir="rtl" id="htmlRoot"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title data-i18n="page_title">الموسى ERP — لوحة التحكم</title><link rel="manifest" href="./manifest.json" /><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" /><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script><script src="./app.js" defer></script><style>:root{--navy-sidebar:#0f172a;--navy-topbar:#0b1120;--blue-primary:#1d4ed8;--blue-accent:#2563eb;--indigo-accent:#4338ca;--slate-dark:#1e293b;--slate-muted:#64748b;--bg-canvas:#f1f5f9;--card-bg:#ffffff;--text-main:#0f172a;--text-secondary:#334155;--border-card:#e2e8f0;--border-subtle:#f1f5f9;--shadow-xs:0 1px 3px rgba(15,23,42,0.04);--shadow-sm:0 4px 14px rgba(15,23,42,0.05);--shadow-md:0 10px 25px rgba(15,23,42,0.08);--radius-lg:14px;--radius-md:11px;--sidebar-w:245px;--topbar-h:60px}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Cairo','Inter','Noto Sans Devanagari','Noto Nastaliq Urdu',sans-serif;background:var(--bg-canvas);color:var(--text-main);min-height:100vh;overflow-x:hidden}.hidden{display:none !important}#loginGate{min-height:100vh;width:100%;background:radial-gradient(circle at 20% 20%,rgba(37,99,235,0.25),transparent 45%),radial-gradient(circle at 80% 80%,rgba(79,70,229,0.18),transparent 40%),#0b1120;display:flex;align-items:center;justify-content:center;padding:20px}.login-card{width:100%;max-width:420px;background:#ffffff;border:1px solid #e2e8f0;border-radius:18px;padding:32px 28px;box-shadow:0 24px 60px rgba(0,0,0,0.35);color:#0f172a}.login-brand{display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid #f1f5f9}.login-logo-box{width:44px;height:44px;border-radius:11px;background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);display:grid;place-items:center;font-size:19px;color:#ffffff;font-weight:800}.login-brand h1{font-size:18px;font-weight:800;color:#0f172a}.login-brand p{font-size:12px;color:#64748b}.form-group{margin-bottom:15px}.form-group label{display:block;font-size:12.5px;font-weight:700;color:#334155;margin-bottom:6px}.input-wrap{position:relative;display:flex;align-items:center}.input-wrap i.prefix-icon{position:absolute;inset-inline-start:12px;color:#94a3b8;font-size:14px}.input-wrap input{width:100%;height:43px;padding-inline:38px;border-radius:10px;border:1.5px solid #cbd5e1;background:#f8fafc;color:#0f172a;font-family:inherit;font-size:13.5px;outline:none;transition:all 0.2s ease}.input-wrap input:focus{border-color:#2563eb;background:#ffffff;box-shadow:0 0 0 3px rgba(37,99,235,0.14)}.toggle-pass-btn{position:absolute;inset-inline-end:10px;background:transparent;border:none;color:#64748b;cursor:pointer;padding:4px}.remember-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;font-size:12px;color:#475569}.remember-label{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none;font-weight:600}.remember-label input[type="checkbox"]{width:15px;height:15px;accent-color:#2563eb;cursor:pointer}.login-submit-btn{width:100%;height:44px;border:none;border-radius:10px;background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);color:#ffffff;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}.login-error{margin-top:12px;padding:10px 12px;border-radius:9px;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-size:12.5px;font-weight:600}.recent-accounts{margin-top:18px;padding-top:14px;border-top:1px solid #f1f5f9}.recent-accounts-title{font-size:11.5px;color:#64748b;margin-bottom:8px}.recent-chips{display:flex;flex-wrap:wrap;gap:7px}.recent-chip{background:#f1f5f9;border:1px solid #e2e8f0;color:#334155;font-family:inherit;font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:20px;cursor:pointer}.recent-chip:hover{background:#2563eb;color:#ffffff;border-color:#2563eb}#dashboardShell.locked{display:none}.app-layout{display:flex;min-height:100vh;width:100%}.sidebar{position:fixed;top:0;bottom:0;inset-inline-start:0;width:var(--sidebar-w);background:var(--navy-sidebar);color:#cbd5e1;z-index:110;display:flex;flex-direction:column;border-inline-end:1px solid rgba(255,255,255,0.07);transition:transform 0.25s ease}body.sidebar-hidden .sidebar{transform:translateX(100%)}html[dir="ltr"] body.sidebar-hidden .sidebar{transform:translateX(-100%)}body.sidebar-hidden .topbar{inset-inline-start:0}body.sidebar-hidden .main-content{margin-inline-start:0}.sidebar-brand-header{height:var(--topbar-h);padding:0 18px;display:flex;align-items:center;gap:11px;background:var(--navy-topbar);border-bottom:1px solid rgba(255,255,255,0.07);flex-shrink:0}.brand-fogo-icon{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%);color:#ffffff;display:grid;place-items:center;font-size:15px;flex-shrink:0}.brand-text-group .brand-name{font-size:15px;font-weight:800;color:#ffffff;display:block;line-height:1.15}.brand-text-group .brand-sub{font-size:10.5px;font-weight:700;color:#60a5fa;display:block}.sidebar-scroll-area{flex:1;overflow-y:auto;padding:12px}.sidebar-scroll-area::-webkit-scrollbar{width:4px}.sidebar-scroll-area::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:4px}.nav-section-caption{font-size:10.5px;font-weight:700;color:#64748b;padding:12px 12px 6px;text-transform:uppercase;letter-spacing:0.4px}.nav-item{margin-bottom:4px}.nav-link-btn,.nav-accordion-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:9.5px 12px;border-radius:9px;border:1px solid transparent;background:transparent;color:#cbd5e1;font-family:inherit;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;transition:all 0.15s ease}.nav-left{display:flex;align-items:center;gap:10px}.nav-left i{width:18px;text-align:center;font-size:13.5px;color:#94a3b8}.nav-link-btn:hover,.nav-accordion-btn:hover{background:rgba(255,255,255,0.07);color:#ffffff}.nav-link-btn:hover .nav-left i,.nav-accordion-btn:hover .nav-left i{color:#60a5fa}.nav-link-btn.active{background:#2563eb;color:#ffffff;box-shadow:0 4px 12px rgba(37,99,235,0.35)}.nav-link-btn.active .nav-left i{color:#ffffff}.chevron-icon{font-size:10px;color:#94a3b8;transition:transform 0.2s ease}.nav-item.open > .nav-accordion-btn .chevron-icon{transform:rotate(-90deg)}html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon{transform:rotate(90deg)}.submenu{display:none;flex-direction:column;gap:2px;margin-top:3px;margin-bottom:6px;padding-inline-start:14px;border-inline-start:1.5px solid rgba(255,255,255,0.12);margin-inline-start:16px}.nav-item.open > .submenu{display:flex}.submenu a{display:flex;align-items:center;gap:9px;padding:6.5px 10px;border-radius:7px;color:#94a3b8;text-decoration:none;font-size:12px;font-weight:600}.submenu a:hover{background:rgba(37,99,235,0.22);color:#ffffff}.submenu a i{font-size:5px;color:#60a5fa}.sidebar-blue-promo-card{margin:10px 12px 14px;background:rgba(30,41,59,0.85);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px 14px;color:#ffffff;flex-shrink:0}.sidebar-promo-head{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;font-weight:800;color:#60a5fa;margin-bottom:8px}.sidebar-stat-row{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.07)}.sidebar-stat-row:last-of-type{border-bottom:none}.sidebar-stat-row .s-label{color:#cbd5e1}.sidebar-stat-row .s-val{font-weight:800;color:#93c5fd}.sidebar-updated-note{margin-top:6px;font-size:10px;color:#94a3b8}.topbar{position:fixed;top:0;inset-inline-start:var(--sidebar-w);inset-inline-end:0;height:var(--topbar-h);background:var(--navy-topbar);color:#ffffff;display:flex;align-items:center;justify-content:space-between;padding-inline:20px 24px;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08);transition:inset-inline-start 0.25s ease}.topbar-left{display:flex;align-items:center;gap:12px}.sidebar-toggle-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);color:#ffffff;width:35px;height:35px;border-radius:9px;cursor:pointer;display:grid;place-items:center;flex-shrink:0}.sidebar-toggle-btn:hover{background:#2563eb;border-color:#2563eb}.topbar-page-heading{font-size:17.5px;font-weight:800;color:#ffffff}.topbar-page-heading span{font-weight:500;color:#94a3b8}.topbar-right{display:flex;align-items:center;gap:9px}.topbar-search{width:225px;position:relative}.topbar-search input{width:100%;height:35px;border-radius:9px;border:1px solid rgba(255,255,255,0.14);background:rgba(255,255,255,0.08);color:#ffffff;padding-inline:34px 12px;font-family:inherit;font-size:12px;outline:none}.topbar-search input::placeholder{color:#94a3b8}.topbar-search input:focus{border-color:#60a5fa;background:rgba(255,255,255,0.12)}.topbar-search i{position:absolute;inset-inline-start:11px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:12px}.date-pill{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);color:#ffffff;height:35px;padding-inline:11px;border-radius:9px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700}.date-pill i{color:#60a5fa}.date-pill input[type="date"]{background:transparent;border:none;color:#ffffff;font-family:inherit;font-size:12px;font-weight:700;outline:none;color-scheme:dark}.lang-select-top{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);color:#ffffff;height:35px;padding-inline:10px;border-radius:9px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;outline:none}.lang-select-top option{background:#0f172a;color:#ffffff}.icon-action-btn{width:35px;height:35px;border-radius:9px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);color:#e2e8f0;display:grid;place-items:center;cursor:pointer}.icon-action-btn:hover{background:#2563eb;border-color:#2563eb;color:#ffffff}.user-pill-top{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);height:35px;padding-inline:7px 12px;border-radius:20px}.user-avatar{width:25px;height:25px;border-radius:50%;background:#2563eb;color:#ffffff;display:grid;place-items:center;font-weight:800;font-size:11px}.u-name{font-size:12px;font-weight:700;color:#ffffff}.main-content{flex:1;margin-top:var(--topbar-h);margin-inline-start:var(--sidebar-w);padding:18px 24px 38px;min-width:0;transition:margin 0.25s ease}.top-cards-split-grid{display:grid;grid-template-columns:repeat(6,minmax(140px,1fr));gap:10px;margin-bottom:18px;align-items:stretch;overflow-x:auto}.kpi-group-box{background:#ffffff;border-radius:var(--radius-lg);padding:10px;box-shadow:var(--shadow-sm);border:1px solid var(--border-card);display:flex;flex-direction:column}.sales-group-box{border-top:3px solid #2563eb}.purchase-group-box{border-top:3px solid #334155}.stock-group-box{border-top:3px solid #94a3b8}.kpi-group-cards-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;height:100%}.fogo-tile{background:#f8fafc;border-radius:var(--radius-md);padding:13px 14px 11px;color:#0f172a;position:relative;cursor:pointer;transition:all 0.2s ease;display:flex;flex-direction:column;justify-content:space-between;min-height:118px;height:100%;border:1px solid #e2e8f0;border-inline-start:3.5px solid #3b82f6}#kpiTodayCard{border-inline-start-color:#2563eb}#kpiYesterdayCard{border-inline-start-color:#1e3a8a}#kpiWeekCard{border-inline-start-color:#4f46e5}#kpiMonthCard{border-inline-start-color:#0284c7}.purchase-group-box .fogo-tile{border-inline-start-color:#334155}#kpiCurrentStockCard{border-inline-start-color:#94a3b8}.fogo-tile:hover{background:#ffffff;border-color:#93c5fd;box-shadow:0 8px 20px rgba(15,23,42,0.06);transform:translateY(-2px)}.fogo-tile.active-filter-card{background:linear-gradient(135deg,#1e3a8a 0%,#2563eb 100%);color:#ffffff;border-color:#1d4ed8;border-inline-start-color:#60a5fa;box-shadow:0 10px 22px rgba(29,78,216,0.25)}.fogo-tile-top{display:flex;align-items:center;justify-content:space-between;gap:6px;padding-bottom:4px}.fogo-tile-title{font-size:12px;font-weight:700;color:#475569;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fogo-tile.active-filter-card .fogo-tile-title{color:#dbeafe}.fogo-tile-icons{display:flex;align-items:center;gap:5px;flex-shrink:0}.fogo-circle-icon{width:30px;height:30px;border-radius:8px;background:#eff6ff;color:#1d4ed8;display:grid;place-items:center;font-size:13px;flex-shrink:0}.fogo-tile.active-filter-card .fogo-circle-icon{background:rgba(255,255,255,0.18);color:#ffffff}.kpi-drill-link{width:24px;height:24px;border-radius:7px;background:#ffffff;border:1px solid #cbd5e1;color:#334155;display:grid;place-items:center;font-size:9.5px;text-decoration:none}.kpi-drill-link:hover{background:#1d4ed8;color:#ffffff;border-color:#1d4ed8}.fogo-tile.active-filter-card .kpi-drill-link{background:rgba(255,255,255,0.16);border-color:rgba(255,255,255,0.25);color:#ffffff}.fogo-tile-value{font-size:17.5px;font-weight:800;color:#0f172a;margin:5px 0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:right}html[dir="ltr"] .fogo-tile-value{text-align:left}.fogo-tile.active-filter-card .fogo-tile-value{color:#ffffff}.fogo-tile-footer{display:flex;align-items:center;justify-content:space-between;gap:6px}.fogo-badge-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:7px;background:#e2e8f0;color:#334155;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fogo-tile.active-filter-card .fogo-badge-pill{background:rgba(255,255,255,0.18);color:#ffffff}.fogo-tile.is-pending-feature .fogo-badge-pill{background:#f1f5f9;color:#64748b}.kpi-spark-wrap{width:52px;height:20px;flex-shrink:0}.blue-summary-report-card{background:#ffffff;border:1px solid var(--border-card);border-radius:var(--radius-lg);padding:18px 20px 20px;margin-bottom:18px;box-shadow:var(--shadow-sm)}.blue-report-controls-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid var(--border-subtle)}.blue-report-title-side{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.blue-report-brand{display:flex;flex-direction:column;line-height:1.15;padding-inline-end:12px;border-inline-end:1.5px solid #e2e8f0}.blue-report-brand strong{font-size:13.5px;font-weight:800;color:#0f172a}.blue-report-brand span{font-size:10px;font-weight:800;color:#2563eb;text-transform:uppercase}.blue-report-red-heading{font-size:15.5px;font-weight:800;color:#0f172a}.blue-report-picker-wrap{position:relative;display:flex;align-items:center;gap:8px}.blue-report-range-badge{font-size:11.5px;font-weight:700;color:#1e3a8a;background:#eff6ff;border:1px solid #bfdbfe;padding:5px 12px;border-radius:8px;direction:ltr}.blue-report-mini-btn{background:#1e3a8a;color:#ffffff;border:none;height:34px;padding-inline:14px;border-radius:9px;font-family:inherit;font-size:11.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px}.blue-report-mini-btn:hover{background:#2563eb}.blue-report-popover{position:absolute;top:calc(100% + 6px);inset-inline-end:0;width:280px;background:#ffffff;border:1px solid var(--border-card);border-radius:12px;padding:14px;box-shadow:0 16px 36px rgba(15,23,42,0.16);z-index:60}.popover-presets{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:10px}.popover-preset-btn{background:#f8fafc;border:1px solid #e2e8f0;color:var(--text-main);font-family:inherit;font-size:11.5px;font-weight:700;padding:6px 8px;border-radius:8px;cursor:pointer}.popover-preset-btn.active,.popover-preset-btn:hover{background:#1d4ed8;color:#ffffff;border-color:#1d4ed8}.popover-custom-dates{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.popover-custom-dates label{display:block;font-size:10.5px;font-weight:700;color:var(--slate-muted);margin-bottom:3px}.popover-custom-dates input[type="date"]{width:100%;height:31px;border:1px solid #e2e8f0;border-radius:7px;padding-inline:6px;font-size:11px;font-family:inherit}.popover-apply-btn{width:100%;height:33px;background:#1d4ed8;color:#ffffff;border:none;border-radius:8px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer}.blue-report-ltr-body{direction:ltr;text-align:left;font-family:'Inter',Arial,sans-serif;color:#1e293b}.blue-report-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}.blue-report-row:last-child{margin-bottom:0}.blue-report-left{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}.blue-report-right{width:210px;flex-shrink:0}.excel-table-scroll{width:100%;overflow-x:auto;border-radius:9px;border:1px solid #cbd5e1}.excel-blue-table{width:100%;border-collapse:collapse;font-size:11px;text-align:center}.excel-blue-table th,.excel-blue-table td{border:1px solid #e2e8f0;padding:6px 7px;white-space:nowrap;font-weight:700}.excel-blue-table th{background-color:#0f172a;color:#ffffff}.excel-blue-table td{background-color:#ffffff;color:#0f172a}.excel-blue-table th:first-child,.excel-blue-table td:first-child{background-color:#eff6ff;color:#1e3a8a;width:58px;font-weight:800}.blue-chart-frame{border:1px solid #e2e8f0;border-radius:11px;background:#f8fafc;padding:10px 12px}.blue-chart-caption{text-align:center;font-size:11.5px;font-weight:800;color:#334155;margin-bottom:4px}.blue-chart-canvas-wrap{position:relative;height:155px;width:100%}.grand-total-navy-box{border:1px solid #cbd5e1;border-radius:12px;overflow:hidden;width:100%;text-align:center;background:#ffffff;box-shadow:var(--shadow-xs)}.grand-total-navy-head{background:#0f172a;color:#ffffff;padding:10px 6px;font-size:12px;font-weight:700}.grand-total-navy-val{padding:14px 6px;font-size:20px;font-weight:800;color:#1e3a8a}.grid-2-charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:18px}.panel-card{background:var(--card-bg);border:1px solid var(--border-card);border-radius:var(--radius-lg);padding:18px 20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;justify-content:space-between;min-width:0}.panel-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border-subtle)}.panel-title{font-size:14.5px;font-weight:800;color:#0f172a}.panel-badge-sync{font-size:11px;font-weight:700;color:#1e3a8a;background:#eff6ff;border:1px solid #bfdbfe;padding:3.5px 10px;border-radius:8px;direction:ltr;white-space:nowrap}.donut-chart-box{position:relative;height:220px;width:100%}.mini-stat-boxes-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;padding-top:10px;border-top:1px solid var(--border-subtle)}.mini-two-line-box{flex:1 1 calc(33.333% - 8px);min-width:115px;background:#f8fafc;border:1px solid #e2e8f0;border-inline-start:4px solid var(--box-accent,#1e3a8a);border-radius:10px;padding:8px 11px;line-height:1.4}.mini-box-line1{font-size:11.5px;font-weight:800;color:#0f172a;direction:ltr;text-align:start;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mini-box-line2{font-size:10.5px;font-weight:700;color:#475569;direction:ltr;text-align:start;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.saudi-map-section-grid{display:grid;grid-template-columns:1.38fr 1.16fr;gap:16px;margin-bottom:20px}.saudi-map-card{background:#ffffff;border:1px solid var(--border-card);border-radius:var(--radius-lg);padding:18px 20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;justify-content:space-between;position:relative}.saudi-map-canvas-area{position:relative;width:100%;height:495px;background:radial-gradient(circle at 50% 45%,#f8fafc 0%,#e2e8f0 100%);border-radius:14px;border:1px solid #cbd5e1;display:flex;align-items:center;justify-content:center;overflow:hidden;margin:8px 0 14px}.saudi-svg-map{width:96%;height:96%;max-height:475px;z-index:2}.ksa-sea-text{font-family:'Cairo','Inter',sans-serif;font-size:11px;font-weight:800;fill:#64748b;opacity:0.65;letter-spacing:1px;pointer-events:none}.ksa-neighbor-land{fill:#e2e8f0;stroke:#cbd5e1;stroke-width:1;opacity:0.6;pointer-events:none}.ksa-neighbor-label{font-family:'Inter',sans-serif;font-size:9px;font-weight:700;fill:#94a3b8;pointer-events:none}.ksa-region-path{fill:#60a5fa;stroke:#ffffff;stroke-width:1.5;stroke-linejoin:round;cursor:pointer;transition:fill 0.22s ease,filter 0.22s ease,stroke-width 0.18s ease}.ksa-region-path:hover,.ksa-region-path.is-hovered{fill:#0f172a !important;stroke:#ffffff;stroke-width:2.5;filter:drop-shadow(0 6px 14px rgba(15,23,42,0.35))}.ksa-region-path.inactive-region{fill:#cbd5e1;stroke:#ffffff;stroke-width:1.2;cursor:default;opacity:0.85}.ksa-region-path.inactive-region:hover{fill:#94a3b8 !important;stroke:#ffffff;stroke-width:1.4;filter:none}.ksa-province-subtext{font-family:'Cairo',sans-serif;font-size:9px;font-weight:700;fill:#475569;opacity:0.75;pointer-events:none}@keyframes pulseRing{0%{transform:scale(0.9);opacity:0.85}75%{transform:scale(2.2);opacity:0}100%{transform:scale(2.2);opacity:0}}.ksa-pin-pulse{fill:#2563eb;transform-box:fill-box;transform-origin:center;animation:pulseRing 2.2s infinite ease-out;pointer-events:none}.ksa-city-pin{cursor:pointer;transition:transform 0.2s ease}.ksa-city-pin:hover{transform:scale(1.13)}.ksa-pin-badge-bg{fill:#0f172a;stroke:#ffffff;stroke-width:1.3;rx:7}.ksa-pin-label{font-family:'Cairo',sans-serif;font-size:10.5px;font-weight:800;fill:#ffffff;pointer-events:none}.map-compass-badge{position:absolute;top:12px;inset-inline-end:12px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.94);border:1px solid #cbd5e1;color:#0f172a;display:grid;place-items:center;font-size:13px;z-index:12}.map-intensity-legend{position:absolute;bottom:12px;inset-inline-end:12px;background:rgba(255,255,255,0.96);color:#0f172a;border:1px solid #cbd5e1;border-radius:9px;padding:5px 10px;font-size:10.5px;font-weight:700;display:flex;align-items:center;gap:7px;z-index:15}.legend-gradient-bar{width:64px;height:7px;border-radius:4px;background:linear-gradient(to left,#1e3a8a,#2563eb,#60a5fa,#bfdbfe)}.map-hover-tooltip{position:absolute;top:14px;inset-inline-start:14px;min-width:240px;background:rgba(15,23,42,0.96);color:#ffffff;border:1.5px solid #60a5fa;border-radius:12px;padding:12px 14px;box-shadow:0 14px 32px rgba(15,23,42,0.25);z-index:25;pointer-events:none}.map-tooltip-header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:6px;margin-bottom:7px;border-bottom:1px solid rgba(255,255,255,0.14)}.map-tooltip-title{font-size:14px;font-weight:800;color:#ffffff}.map-tooltip-code{font-size:10.5px;font-weight:800;color:#0f172a;background:#93c5fd;padding:2px 7px;border-radius:6px;direction:ltr}.map-tooltip-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;padding:3px 0}.map-tooltip-row span:first-child{color:#cbd5e1;font-weight:600}.map-tooltip-row strong{color:#93c5fd;font-weight:800;direction:ltr}.map-bottom-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding-top:12px;border-top:1px solid var(--border-subtle)}.map-metric-item{background:#f8fafc;border-radius:10px;padding:9px 11px;border:1px solid #e2e8f0}.map-metric-item span{display:block;font-size:10.5px;color:var(--slate-muted);font-weight:700}.map-metric-item strong{display:block;font-size:12.5px;font-weight:800;color:#1e3a8a;margin-top:2px}.region-sales-side-card{background:#ffffff;border:1px solid var(--border-card);border-radius:var(--radius-lg);padding:18px 20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;justify-content:space-between}.region-list-stack{display:flex;flex-direction:column;gap:11px}.region-progress-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:11px;padding:10px 12px;cursor:pointer;transition:all 0.18s ease}.region-progress-item:hover,.region-progress-item.is-active{border-color:#2563eb;background:#eff6ff;transform:translateX(-2px)}html[dir="ltr"] .region-progress-item:hover,html[dir="ltr"] .region-progress-item.is-active{transform:translateX(2px)}.region-prog-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px}.region-prog-name{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800;color:#0f172a}.region-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}.region-prog-val{font-size:13px;font-weight:800;color:#1e3a8a;direction:ltr}.region-prog-bar-bg{width:100%;height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-bottom:5px}.region-prog-bar-fill{height:100%;border-radius:99px;transition:width 0.35s ease}.region-prog-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#64748b;font-weight:700}.sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(11,17,32,0.55);z-index:105}@media (max-width:1400px){.top-cards-split-grid{grid-template-columns:1fr}.kpi-group-cards-row{grid-template-columns:repeat(4,minmax(0,1fr))}}@media (max-width:1200px){.saudi-map-section-grid{grid-template-columns:1fr}}@media (max-width:960px){.kpi-group-cards-row{grid-template-columns:repeat(2,minmax(0,1fr))}.blue-report-row{flex-direction:column;align-items:stretch}.blue-report-right{width:100%}.grid-2-charts{grid-template-columns:1fr}}@media (max-width:900px){.topbar{inset-inline-start:0}.topbar-search{width:180px}.date-pill{display:none}.sidebar{transform:translateX(100%)}html[dir="ltr"] .sidebar{transform:translateX(-100%)}body.sidebar-open .sidebar{transform:translateX(0)}body.sidebar-open .sidebar-backdrop{display:block}.main-content{margin-inline-start:0;padding:14px}}@media (max-width:640px){.kpi-group-cards-row{grid-template-columns:1fr}.topbar-search,.topbar-page-heading span{display:none}.map-bottom-metrics{grid-template-columns:1fr}}</style></head><body><section id="loginGate"><div class="login-card"><div class="login-brand"><div class="login-logo-box"><i class="fa-solid fa-layer-group"></i></div><div><h1 data-i18n="login_title">نظام الموسى ERP</h1><p data-i18n="login_subtitle">تسجيل الدخول إلى لوحة التحكم الإدارية</p></div></div><form id="loginForm" autocomplete="on"><div class="form-group"><label for="loginUser" data-i18n="login_user_label">اسم المستخدم أو البريد الإلكتروني</label><div class="input-wrap"><i class="fa-solid fa-user prefix-icon"></i><input type="text" id="loginUser" name="usr" required placeholder="Administrator" /></div></div><div class="form-group"><label for="loginPass" data-i18n="login_pass_label">كلمة المرور</label><div class="input-wrap"><i class="fa-solid fa-lock prefix-icon"></i><input type="password" id="loginPass" name="pwd" required placeholder="••••••••" /><button type="button" class="toggle-pass-btn" id="togglePassBtn"><i class="fa-regular fa-eye"></i></button></div></div><div class="remember-row"><label class="remember-label" for="rememberPassCheck"><input type="checkbox" id="rememberPassCheck" checked /><span data-i18n="remember_password">حفظ كلمة المرور</span></label></div><button type="submit" class="login-submit-btn" id="loginSubmitBtn"><i class="fa-solid fa-right-to-bracket"></i><span data-i18n="login_btn">دخول إلى النظام</span></button><div id="loginError" class="login-error hidden"></div></form><div class="recent-accounts hidden" id="recentAccountsBox"><div class="recent-accounts-title" data-i18n="recent_accounts">الحسابات المستخدمة مؤخراً:</div><div class="recent-chips" id="recentAccountsList"></div></div></div></section><div id="dashboardShell" class="locked"><div class="sidebar-backdrop" id="sidebarBackdrop"></div><aside class="sidebar" id="sidebarMenu"><div class="sidebar-brand-header"><div class="brand-fogo-icon"><i class="fa-solid fa-chart-simple"></i></div><div class="brand-text-group"><span class="brand-name" data-i18n="brand_name">الموسى ERP</span><span class="brand-sub" data-i18n="brand_sub">Financial & Retail</span></div></div><div class="sidebar-scroll-area"><div class="nav-section-caption" data-i18n="menu_caption">القائمة الرئيسية</div><div class="nav-item"><a href="./index.html" class="nav-link-btn active"><span class="nav-left"><i class="fa-solid fa-table-cells-large"></i><span data-i18n="nav_dashboard">لوحة التحكم</span></span></a></div><div class="nav-item open"><button type="button" class="nav-accordion-btn"><span class="nav-left"><i class="fa-solid fa-cart-shopping"></i><span data-i18n="nav_sales">المبيعات</span></span><i class="fa-solid fa-chevron-left chevron-icon"></i></button><div class="submenu"><a href="./Sales.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_summary">ملخص المبيعات</span></a><a href="./sales_group.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_group">المبيعات حسب المجموعة</span></a><a href="./supplier_sales.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_supplier">المبيعات حسب المورد</span></a><a href="./sales_per_day.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_per_day">المبيعات اليومية</span></a></div></div><div class="nav-item open"><button type="button" class="nav-accordion-btn"><span class="nav-left"><i class="fa-solid fa-bag-shopping"></i><span data-i18n="nav_purchase">المشتريات</span></span><i class="fa-solid fa-chevron-left chevron-icon"></i></button><div class="submenu"><a href="./purchases.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_purchases_list">قوائم المشتريات</span></a><a href="./purchase_comparieso.html"><i class="fa-solid fa-circle"></i><span>تحليل المشتريات والمبيعات</span></a></div></div><div class="nav-item open"><button type="button" class="nav-accordion-btn"><span class="nav-left"><i class="fa-solid fa-warehouse"></i><span data-i18n="nav_warehouse">إدارة المستودعات</span></span><i class="fa-solid fa-chevron-left chevron-icon"></i></button><div class="submenu"><a href="./warhouse.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_warehouse_staff">أداء موظفي المستودع</span></a></div></div><div class="nav-section-caption" data-i18n="support_caption">الحساب والنظام</div><div class="nav-item"><button type="button" class="nav-link-btn" id="logoutBtn"><span class="nav-left"><i class="fa-solid fa-power-off" style="color:#f87171;"></i><span data-i18n="nav_logout">تسجيل الخروج</span></span></button></div></div><div class="sidebar-blue-promo-card"><div class="sidebar-promo-head"><span><i class="fa-solid fa-bolt"></i><span data-i18n="pos_live_sync">المزامنة الحية POS</span></span></div><div class="sidebar-stat-row"><span class="s-label" data-i18n="today_vs_yesterday">اليوم مقابل أمس</span><span class="s-val" id="sideVsYesterday">--</span></div><div class="sidebar-stat-row"><span class="s-label" data-i18n="month_invoices">فواتير الشهر</span><span class="s-val" id="sideMonthInvoices">--</span></div><div class="sidebar-updated-note" id="lastSyncTime">آخر تحديث: --:--</div></div></aside><header class="topbar"><div class="topbar-left"><button type="button" class="sidebar-toggle-btn" id="sidebarToggleBtn" data-i18n-title="toggle_sidebar" title="إخفاء / إظهار القائمة"><i class="fa-solid fa-bars"></i></button><h1 class="topbar-page-heading"><strong data-i18n="brand_ar">الموسى التجارية</strong><span data-i18n="dash_sub_title"> / لوحة التحكم</span></h1></div><div class="topbar-right"><div class="topbar-search"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="globalSearchInput" data-i18n-placeholder="search_placeholder" placeholder="بحث سريع في الفروع..." /></div><div class="date-pill"><i class="fa-regular fa-calendar"></i><input type="date" id="dashDateFilter" /></div><button type="button" class="icon-action-btn" id="refreshDashBtn" data-i18n-title="title_refresh" title="تحديث البيانات"><i class="fa-solid fa-rotate"></i></button><select id="langSelect" class="lang-select-top" aria-label="Language Selector"><option value="ar">العربية</option><option value="en">English</option><option value="hi">हिन्दी</option><option value="ur">اردو</option></select><button type="button" class="icon-action-btn" id="fullscreenBtn" data-i18n-title="title_fullscreen" title="ملء الشاشة"><i class="fa-solid fa-expand"></i></button><div class="user-pill-top"><div class="user-avatar" id="headerUserAvatar">A</div><span class="u-name" id="headerUserName">Admin</span></div></div></header><div class="app-layout"><main class="main-content"><section class="top-cards-split-grid">
+  <div class="fogo-tile" id="kpiTodayCard" data-filter-preset="today" data-i18n-title="filter_card_hint" title="اضغط لفلترة البيانات بالأسفل حسب اليوم">
+    <div class="fogo-tile-top">
+      <span class="fogo-tile-title" data-i18n="kpi_today">مبيعات اليوم</span>
+      <div class="fogo-tile-icons">
+        <a href="./sales_per_day.html" class="kpi-drill-link" onclick="event.stopPropagation()" data-i18n-title="open_page_hint" title="فتح التقرير التفصيلي"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        <div class="fogo-circle-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+      </div>
     </div>
-</div>
-
-<div class="dashboard-container locked" id="dashboardContainer">
-    <header>
-        <div class="header-title-box">
-            <h1 data-i18n="dash_header">لوحة التحكم</h1>
-            <p id="activeUserSubheader"></p>
-        </div>
-        <div class="header-left-group">
-            <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
-                <i class="fa-solid fa-moon" id="themeIcon"></i>
-            </button>
-            <button class="action-btn-icon" onclick="checkForUpdates(this)" title="تحميل التحديثات الأخيرة">
-                <i class="fa-solid fa-rotate"></i>
-            </button>
-            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
-                <option value="ar">العربية</option>
-                <option value="en">English</option>
-                <option value="hi">हिन्दी</option>
-                <option value="ur">اردو</option>
-            </select>
-            <button type="button" class="action-btn-icon logout-btn" onclick="handleErpLogout()" title="تسجيل الخروج">
-                <i class="fa-solid fa-right-from-bracket"></i>
-            </button>
-        </div>
-    </header>
-
-    <div class="odoo-grid">
-        <a href="sales.html" class="odoo-app-card">
-            <div class="odoo-icon-box ic-sales"><i class="fa-solid fa-chart-line"></i></div>
-            <div class="odoo-title" data-i18n="menu_sales">المبيعات</div>
-        </a>
-
-        <a href="purchases.html" class="odoo-app-card">
-            <div class="odoo-icon-box ic-purchase-analytics"><i class="fa-solid fa-chart-pie"></i></div>
-            <div class="odoo-title" data-i18n="menu_purchases_analysis">تحليل المشتريات</div>
-        </a>
-
-        <a href="warehouse.html" class="odoo-app-card">
-            <div class="odoo-icon-box ic-warehouse"><i class="fa-solid fa-warehouse"></i></div>
-            <div class="odoo-title" data-i18n="menu_warehouse">إدارة المستودع</div>
-        </a>
-
-        <div class="odoo-app-card disabled">
-            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
-            <div class="odoo-icon-box ic-stock"><i class="fa-solid fa-boxes-stacked"></i></div>
-            <div class="odoo-title" data-i18n="menu_stock">المخزون</div>
-        </div>
-
-        <div class="odoo-app-card disabled">
-            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
-            <div class="odoo-icon-box ic-purchase"><i class="fa-solid fa-cart-shopping"></i></div>
-            <div class="odoo-title" data-i18n="menu_purchases">المشتريات</div>
-        </div>
-
-        <div class="odoo-app-card disabled">
-            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
-            <div class="odoo-icon-box ic-transfer"><i class="fa-solid fa-right-left"></i></div>
-            <div class="odoo-title" data-i18n="menu_transfers">التحويلات</div>
-        </div>
-
-        <div class="odoo-app-card disabled">
-            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
-            <div class="odoo-icon-box ic-receive"><i class="fa-solid fa-box-open"></i></div>
-            <div class="odoo-title" data-i18n="menu_receipts">الاستلامات</div>
-        </div>
-
-        <div class="odoo-app-card disabled">
-            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
-            <div class="odoo-icon-box ic-contract"><i class="fa-solid fa-file-contract"></i></div>
-            <div class="odoo-title" data-i18n="menu_contracts">عقود الإيجار</div>
-        </div>
-
-        <div class="odoo-app-card disabled">
-            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
-            <div class="odoo-icon-box ic-water"><i class="fa-solid fa-droplet"></i></div>
-            <div class="odoo-title" data-i18n="menu_water">فواتير المياه</div>
-        </div>
-
-        <div class="odoo-app-card disabled">
-            <span class="badge-orange" data-i18n="under_construction">قريباً</span>
-            <div class="odoo-icon-box ic-electricity"><i class="fa-solid fa-bolt"></i></div>
-            <div class="odoo-title" data-i18n="menu_electricity">فواتير الكهرباء</div>
-        </div>
+    <div class="fogo-tile-value" id="kpiTodaySales">جاري التحميل...</div>
+    <div class="fogo-tile-footer">
+      <span class="fogo-badge-pill" id="kpiTodaySalesSub">--</span>
+      <div class="kpi-spark-wrap"><canvas id="spark1"></canvas></div>
     </div>
+  </div>
 
-    <footer data-i18n="footer_text" style="text-align: center; margin-top: 30px; font-size: 11px; font-weight: 700; color: var(--text-muted);">
-        نظام الموسى التجارية الاحترافي © 2026
-    </footer>
-</div>
+  <div class="fogo-tile active-filter-card" id="kpiYesterdayCard" data-filter-preset="yesterday" data-i18n-title="filter_card_hint" title="اضغط لفلترة البيانات بالأسفل حسب أمس">
+    <div class="fogo-tile-top">
+      <span class="fogo-tile-title" data-i18n="kpi_yesterday">مبيعات أمس</span>
+      <div class="fogo-tile-icons">
+        <a href="./sales_per_day.html" class="kpi-drill-link" onclick="event.stopPropagation()" data-i18n-title="open_page_hint" title="فتح التقرير التفصيلي"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        <div class="fogo-circle-icon"><i class="fa-solid fa-calendar-day"></i></div>
+      </div>
+    </div>
+    <div class="fogo-tile-value" id="kpiYesterdaySales">جاري التحميل...</div>
+    <div class="fogo-tile-footer">
+      <span class="fogo-badge-pill" id="kpiYesterdaySalesSub">--</span>
+      <div class="kpi-spark-wrap"><canvas id="spark2"></canvas></div>
+    </div>
+  </div>
 
-<script>
-    const ERP_AUTH_CONFIG = {
-        serverUrl: "https://87-237-225-155.nip.io",
-        sessionKey: "almoosa_erp_session_v1",
-        historyKey: "almoosa_erp_saved_accounts_v1",
-        allowedUsers: [
-            "isspecialist@almoosa.com.sa",
-            "arshad@almoosa.com.sa",
-            "ibrahim@almoosa.com.sa",
-            "kashif@almoosa.com.sa",
-            "mohd@almoosa.com.sa"
-        ]
-    };
+  <div class="fogo-tile" id="kpiWeekCard" data-filter-preset="week" data-i18n-title="filter_card_hint" title="اضغط لفلترة البيانات بالأسفل حسب هذا الأسبوع">
+    <div class="fogo-tile-top">
+      <span class="fogo-tile-title" data-i18n="kpi_week">مبيعات هذا الأسبوع</span>
+      <div class="fogo-tile-icons">
+        <a href="./Sales.html" class="kpi-drill-link" onclick="event.stopPropagation()" data-i18n-title="open_page_hint" title="فتح التقرير التفصيلي"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        <div class="fogo-circle-icon"><i class="fa-solid fa-calendar-week"></i></div>
+      </div>
+    </div>
+    <div class="fogo-tile-value" id="kpiWeekSales">جاري التحميل...</div>
+    <div class="fogo-tile-footer">
+      <span class="fogo-badge-pill" id="kpiWeekSalesSub">--</span>
+      <div class="kpi-spark-wrap"><canvas id="spark3"></canvas></div>
+    </div>
+  </div>
 
-    function normalizeUser(val) {
-        return String(val || "").trim().toLowerCase();
-    }
+  <div class="fogo-tile" id="kpiMonthCard" data-filter-preset="month" data-i18n-title="filter_card_hint" title="اضغط لفلترة البيانات بالأسفل حسب هذا الشهر">
+    <div class="fogo-tile-top">
+      <span class="fogo-tile-title" data-i18n="kpi_month">مبيعات هذا الشهر</span>
+      <div class="fogo-tile-icons">
+        <a href="./Sales.html" class="kpi-drill-link" onclick="event.stopPropagation()" data-i18n-title="open_page_hint" title="فتح التقرير التفصيلي"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        <div class="fogo-circle-icon"><i class="fa-solid fa-chart-line"></i></div>
+      </div>
+    </div>
+    <div class="fogo-tile-value" id="kpiMonthSales">جاري التحميل...</div>
+    <div class="fogo-tile-footer">
+      <span class="fogo-badge-pill" id="kpiMonthSalesSub">--</span>
+      <div class="kpi-spark-wrap"><canvas id="spark4"></canvas></div>
+    </div>
+  </div>
 
-    function isUserAllowed(usernameOrEmail) {
-        const clean = normalizeUser(usernameOrEmail);
-        return ERP_AUTH_CONFIG.allowedUsers.map(normalizeUser).includes(clean);
-    }
+  <div class="fogo-tile" onclick="location.href='./purchases.html'">
+    <div class="fogo-tile-top">
+      <span class="fogo-tile-title" data-i18n="kpi_month_purchase">مشتريات الشهر</span>
+      <div class="fogo-tile-icons">
+        <div class="fogo-circle-icon"><i class="fa-solid fa-truck-fast"></i></div>
+      </div>
+    </div>
+    <div class="fogo-tile-value" id="kpiMonthPurchase">جاري التحميل...</div>
+    <div class="fogo-tile-footer">
+      <span class="fogo-badge-pill" id="kpiMonthPurchaseSub">--</span>
+      <div class="kpi-spark-wrap"><canvas id="spark5"></canvas></div>
+    </div>
+  </div>
 
-    function extractDisplayNameOnly(rawName, emailOrUser) {
-        const cleaned = String(rawName || "").trim();
-        if (cleaned && !cleaned.includes("@") && cleaned.toLowerCase() !== "guest") {
-            return cleaned;
-        }
-        const source = cleaned || String(emailOrUser || "").trim();
-        if (source.includes("@")) {
-            const prefix = source.split("@")[0].trim();
-            return prefix.charAt(0).toUpperCase() + prefix.slice(1);
-        }
-        return source;
-    }
-
-    function getSavedAccounts() {
-        try {
-            const list = JSON.parse(localStorage.getItem(ERP_AUTH_CONFIG.historyKey) || "[]");
-            return Array.isArray(list) ? list : [];
-        } catch (_) {
-            return [];
-        }
-    }
-
-    function saveAccountToHistory(user, password, displayName) {
-        const cleanUser = String(user || "").trim();
-        if (!cleanUser) return;
-
-        const current = getSavedAccounts().filter(
-            item => normalizeUser(item.user) !== normalizeUser(cleanUser)
-        );
-
-        current.unshift({
-            user: cleanUser,
-            password: password || "",
-            displayName: displayName || extractDisplayNameOnly("", cleanUser),
-            lastUsed: Date.now()
-        });
-
-        localStorage.setItem(ERP_AUTH_CONFIG.historyKey, JSON.stringify(current.slice(0, 8)));
-        renderSavedSuggestions();
-    }
-
-    function removeSavedAccount(userToRemove, event) {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        const updated = getSavedAccounts().filter(
-            item => normalizeUser(item.user) !== normalizeUser(userToRemove)
-        );
-        localStorage.setItem(ERP_AUTH_CONFIG.historyKey, JSON.stringify(updated));
-        renderSavedSuggestions();
-    }
-
-    function applySavedAccount(accountObj) {
-        const usrInput = document.getElementById("erpUsername");
-        const pwdInput = document.getElementById("erpPassword");
-        if (usrInput) usrInput.value = accountObj.user || "";
-        if (pwdInput && typeof accountObj.password === "string") {
-            pwdInput.value = accountObj.password;
-        }
-        hideLoginAlert();
-    }
-
-    function onUsernameInputChange(value) {
-        const cleanVal = normalizeUser(value);
-        if (!cleanVal) return;
-        const match = getSavedAccounts().find(acc => normalizeUser(acc.user) === cleanVal);
-        if (match && match.password) {
-            const pwdInput = document.getElementById("erpPassword");
-            if (pwdInput && !pwdInput.value) {
-                pwdInput.value = match.password;
-            }
-        }
-    }
-
-    function renderSavedSuggestions() {
-        const datalist = document.getElementById("savedUsersDatalist");
-        const box = document.getElementById("savedSuggestionsBox");
-        const listEl = document.getElementById("savedSuggestionsList");
-        const accounts = getSavedAccounts();
-
-        if (datalist) {
-            datalist.innerHTML = accounts
-                .map(acc => `<option value="${acc.user.replace(/"/g, "&quot;")}"></option>`)
-                .join("");
-        }
-
-        if (!box || !listEl) return;
-
-        if (!accounts.length) {
-            box.classList.remove("has-items");
-            listEl.innerHTML = "";
-            return;
-        }
-
-        box.classList.add("has-items");
-        listEl.innerHTML = "";
-
-        accounts.forEach(acc => {
-            const chip = document.createElement("button");
-            chip.type = "button";
-            chip.className = "suggestion-chip";
-            chip.title = `ملء بيانات ${acc.user}`;
-
-            const labelSpan = document.createElement("span");
-            labelSpan.textContent = acc.user;
-            chip.appendChild(labelSpan);
-
-            const delSpan = document.createElement("span");
-            delSpan.className = "remove-acc";
-            delSpan.title = "حذف الحساب المقترح";
-            delSpan.textContent = "×";
-            delSpan.onclick = (e) => removeSavedAccount(acc.user, e);
-            chip.appendChild(delSpan);
-
-            chip.onclick = () => applySavedAccount(acc);
-            listEl.appendChild(chip);
-        });
-    }
-
-    function showLoginAlert(message) {
-        const box = document.getElementById("loginAlertBox");
-        const txt = document.getElementById("loginAlertText");
-        if (!box || !txt) return;
-        txt.textContent = message;
-        box.classList.add("show");
-    }
-
-    function hideLoginAlert() {
-        const box = document.getElementById("loginAlertBox");
-        if (box) box.classList.remove("show");
-    }
-
-    function setLoginLoading(loading) {
-        const btn = document.getElementById("loginSubmitBtn");
-        const icon = document.getElementById("loginBtnIcon");
-        const text = document.getElementById("loginBtnText");
-        if (!btn || !icon || !text) return;
-
-        btn.disabled = loading;
-        if (loading) {
-            icon.className = "fa-solid fa-spinner fa-spin";
-            text.textContent = "جاري التحقق...";
-        } else {
-            icon.className = "fa-solid fa-right-to-bracket";
-            text.textContent = "تسجيل الدخول";
-        }
-    }
-
-    function togglePasswordVisibility() {
-        const passInput = document.getElementById("erpPassword");
-        const eyeIcon = document.getElementById("passEyeIcon");
-        if (!passInput || !eyeIcon) return;
-
-        if (passInput.type === "password") {
-            passInput.type = "text";
-            eyeIcon.className = "fa-solid fa-eye-slash";
-        } else {
-            passInput.type = "password";
-            eyeIcon.className = "fa-solid fa-eye";
-        }
-    }
-
-    function unlockDashboard(displayNameOnly) {
-        const gate = document.getElementById("loginGate");
-        const dash = document.getElementById("dashboardContainer");
-        const sub = document.getElementById("activeUserSubheader");
-
-        if (gate) gate.classList.add("hidden");
-        if (dash) dash.classList.remove("locked");
-        if (sub) sub.textContent = displayNameOnly || "";
-    }
-
-    async function verifyErpCredentials(usr, pwd) {
-        const response = await fetch(`${ERP_AUTH_CONFIG.serverUrl}/api/method/login`, {
-            method: "POST",
-            credentials: "include",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-                "Accept": "application/json"
-            },
-            body: new URLSearchParams({
-                usr: usr,
-                pwd: pwd
-            }).toString()
-        });
-
-        let data = {};
-        try {
-            data = await response.json();
-        } catch (_) {
-            data = {};
-        }
-
-        if (!response.ok || data.message === "No App" || data.exc_type === "AuthenticationError") {
-            throw new Error(data.message || "اسم المستخدم أو كلمة المرور غير صحيحة");
-        }
-
-        let loggedUser = usr;
-        try {
-            const meRes = await fetch(`${ERP_AUTH_CONFIG.serverUrl}/api/method/frappe.auth.get_logged_user`, {
-                method: "GET",
-                credentials: "include",
-                headers: { "Accept": "application/json" }
-            });
-            if (meRes.ok) {
-                const meData = await meRes.json();
-                if (meData.message && meData.message !== "Guest") {
-                    loggedUser = meData.message;
-                }
-            }
-        } catch (_) {}
-
-        return {
-            user: loggedUser,
-            fullName: data.full_name || ""
-        };
-    }
-
-    async function handleErpLogin(event) {
-        event.preventDefault();
-        hideLoginAlert();
-
-        const usrInput = document.getElementById("erpUsername");
-        const pwdInput = document.getElementById("erpPassword");
-        const usr = (usrInput?.value || "").trim();
-        const pwd = pwdInput?.value || "";
-
-        if (!usr || !pwd) {
-            showLoginAlert("يرجى إدخال اسم المستخدم وكلمة المرور.");
-            return;
-        }
-
-        setLoginLoading(true);
-        try {
-            const authResult = await verifyErpCredentials(usr, pwd);
-            const verifiedUser = authResult.user || usr;
-
-            if (!isUserAllowed(verifiedUser) && !isUserAllowed(usr)) {
-                try {
-                    await fetch(`${ERP_AUTH_CONFIG.serverUrl}/api/method/logout`, {
-                        method: "GET",
-                        credentials: "include"
-                    });
-                } catch (_) {}
-                localStorage.removeItem(ERP_AUTH_CONFIG.sessionKey);
-                showLoginAlert("ليس لديك صلاحيات للدخول");
-                return;
-            }
-
-            const finalEmail = isUserAllowed(verifiedUser) ? verifiedUser : usr;
-            const displayName = extractDisplayNameOnly(authResult.fullName, finalEmail);
-
-            saveAccountToHistory(finalEmail, pwd, displayName);
-
-            localStorage.setItem(
-                ERP_AUTH_CONFIG.sessionKey,
-                JSON.stringify({
-                    user: finalEmail,
-                    displayName: displayName,
-                    loggedAt: Date.now()
-                })
-            );
-
-            unlockDashboard(displayName);
-        } catch (err) {
-            showLoginAlert(err.message || "اسم المستخدم أو كلمة المرور غير صحيحة");
-        } finally {
-            setLoginLoading(false);
-        }
-    }
-
-    async function handleErpLogout() {
-        localStorage.removeItem(ERP_AUTH_CONFIG.sessionKey);
-        try {
-            await fetch(`${ERP_AUTH_CONFIG.serverUrl}/api/method/logout`, {
-                method: "GET",
-                credentials: "include"
-            });
-        } catch (_) {}
-
-        const gate = document.getElementById("loginGate");
-        const dash = document.getElementById("dashboardContainer");
-        const usrInput = document.getElementById("erpUsername");
-        const pwdInput = document.getElementById("erpPassword");
-
-        renderSavedSuggestions();
-        const savedAccounts = getSavedAccounts();
-        if (savedAccounts.length > 0) {
-            if (usrInput) usrInput.value = savedAccounts[0].user || "";
-            if (pwdInput) pwdInput.value = savedAccounts[0].password || "";
-        } else if (pwdInput) {
-            pwdInput.value = "";
-        }
-
-        hideLoginAlert();
-        if (dash) dash.classList.add("locked");
-        if (gate) gate.classList.remove("hidden");
-    }
-
-    (function restoreSessionImmediately() {
-        try {
-            const saved = JSON.parse(localStorage.getItem(ERP_AUTH_CONFIG.sessionKey) || "null");
-            if (saved && saved.user && isUserAllowed(saved.user)) {
-                const displayName = extractDisplayNameOnly(saved.displayName, saved.user);
-                const applyNow = () => unlockDashboard(displayName);
-                if (document.readyState === "loading") {
-                    document.addEventListener("DOMContentLoaded", applyNow);
-                } else {
-                    applyNow();
-                }
-            }
-        } catch (_) {}
-    })();
-
-    document.addEventListener("DOMContentLoaded", () => {
-        renderSavedSuggestions();
-        const usrInput = document.getElementById("erpUsername");
-        const pwdInput = document.getElementById("erpPassword");
-        const accounts = getSavedAccounts();
-        if (accounts.length > 0 && usrInput && !usrInput.value) {
-            usrInput.value = accounts[0].user || "";
-            if (pwdInput && !pwdInput.value && accounts[0].password) {
-                pwdInput.value = accounts[0].password;
-            }
-        }
-    });
-</script>
-
-</body>
-</html>
+  <div class="fogo-tile is-pending-feature" id="kpiCurrentStockCard" data-i18n-title="stock_pending_title" title="سيتم تفعيل قيمة المخزون الحالي عند إضافة كود المخزون">
+    <div class="fogo-tile-top">
+      <span class="fogo-tile-title" data-i18n="kpi_stock_value">قيمة المخزون الحالي</span>
+      <div class="fogo-tile-icons">
+        <div class="fogo-circle-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+      </div>
+    </div>
+    <div class="fogo-tile-value" id="kpiCurrentStock">--</div>
+    <div class="fogo-tile-footer">
+      <span class="fogo-badge-pill" id="kpiCurrentStockSub" data-i18n="stock_pending_sub">قيد التفعيل لاحقاً</span>
+      <div class="kpi-spark-wrap"><canvas id="spark6"></canvas></div>
+    </div>
+  </div>
+</section><section class="blue-summary-report-card" id="blueSummaryReportSection"><div class="blue-report-controls-bar"><div class="blue-report-title-side"><div class="blue-report-brand"><strong data-i18n="brand_ar">الموسى التجارية</strong><span>almoosa trading</span></div><span class="blue-report-red-heading" data-i18n="blue_report_heading">تقرير ملخص المبيعات اليومي بالرسم البياني</span></div><div class="blue-report-picker-wrap"><span class="blue-report-range-badge" id="blueReportRangeLabel">Yesterday</span><button type="button" class="blue-report-mini-btn" id="blueReportPickerBtn" data-i18n-title="picker_btn_title" title="اختيار اليوم أو الفترة"><i class="fa-regular fa-calendar-days"></i><span data-i18n="picker_btn_label">اختر اليوم / الفترة</span><i class="fa-solid fa-caret-down"></i></button><div class="blue-report-popover hidden" id="blueReportPopover"><div class="popover-presets"><button type="button" class="popover-preset-btn active" data-preset="yesterday" data-i18n="preset_yesterday">أمس (الافتراضي)</button><button type="button" class="popover-preset-btn" data-preset="today" data-i18n="preset_today">اليوم</button><button type="button" class="popover-preset-btn" data-preset="week" data-i18n="preset_week">هذا الأسبوع</button><button type="button" class="popover-preset-btn" data-preset="month" data-i18n="preset_month">هذا الشهر</button></div><div class="popover-custom-dates"><div><label for="blueReportFromInput" data-i18n="from_date">من تاريخ</label><input type="date" id="blueReportFromInput" /></div><div><label for="blueReportToInput" data-i18n="to_date">إلى تاريخ</label><input type="date" id="blueReportToInput" /></div></div><button type="button" class="popover-apply-btn" id="blueReportApplyBtn" data-i18n="apply_filter_btn">عرض البيانات</button></div></div></div><div class="blue-report-ltr-body"><div class="blue-report-row"><div class="blue-report-left"><div class="excel-table-scroll"><table class="excel-blue-table" id="blueQtyTable"><thead><tr><th>SHOP</th><th>...</th></tr></thead><tbody><tr><td>QTY</td><td>0</td></tr></tbody></table></div><div class="blue-chart-frame"><div class="blue-chart-caption" data-i18n="chart_cap_qty">إجمالي الكميات المباعة لجميع الفروع</div><div class="blue-chart-canvas-wrap"><canvas id="blueQtyBarChart"></canvas></div></div></div><div class="blue-report-right"><div class="grand-total-navy-box"><div class="grand-total-navy-head" data-i18n="grand_total_qty">إجمالي الكميات المباعة</div><div class="grand-total-navy-val" id="blueGrandTotalQty">0</div></div></div></div><div class="blue-report-row"><div class="blue-report-left"><div class="excel-table-scroll"><table class="excel-blue-table" id="blueSalesTable"><thead><tr><th>SHOP</th><th>...</th></tr></thead><tbody><tr><td>SALES</td><td>0</td></tr></tbody></table></div><div class="blue-chart-frame"><div class="blue-chart-caption" data-i18n="chart_cap_sales">إجمالي المبيعات لجميع الفروع</div><div class="blue-chart-canvas-wrap"><canvas id="blueSalesBarChart"></canvas></div></div></div><div class="blue-report-right"><div class="grand-total-navy-box"><div class="grand-total-navy-head" data-i18n="grand_total_sales">الإجمالي العام للمبيعات</div><div class="grand-total-navy-val" id="blueGrandTotalSales">0</div></div></div></div></div></section><section class="grid-2-charts" id="analyticsCategoryCharts"><div class="panel-card"><div><div class="panel-header"><span class="panel-title" data-i18n="panel_gender">مبيعات حسب النوع والفئة</span><span class="panel-badge-sync filter-sync-label">Yesterday</span></div><div class="donut-chart-box"><canvas id="genderSalesPieChart"></canvas></div></div><div class="mini-stat-boxes-row" id="genderMiniBoxes"></div></div><div class="panel-card"><div><div class="panel-header"><span class="panel-title" data-i18n="panel_dept">مبيعات الأقسام (ملابس، أحذية، حقائب، إكسسوارات)</span><span class="panel-badge-sync filter-sync-label">Yesterday</span></div><div class="donut-chart-box"><canvas id="categorySalesPieChart"></canvas></div></div><div class="mini-stat-boxes-row" id="categoryMiniBoxes"></div></div></section><section class="saudi-map-section-grid" id="saudiRegionMapSection"><div class="saudi-map-card"><div class="panel-header"><span class="panel-title"><i class="fa-solid fa-map-location-dot" style="color:#1d4ed8; margin-inline-end:6px;"></i><span data-i18n="ksa_map_title">المبيعات حسب مناطق المملكة العربية السعودية</span></span><span class="panel-badge-sync filter-sync-label">Yesterday</span></div><div class="saudi-map-canvas-area" id="ksaMapContainer"><div class="map-hover-tooltip hidden" id="ksaMapTooltip"><div class="map-tooltip-header"><span class="map-tooltip-title" id="ttRegionName">عنيزة</span><span class="map-tooltip-code" id="ttRegionBranches">019, 002, 001</span></div><div class="map-tooltip-row"><span data-i18n="tt_sales_label">إجمالي المبيعات:</span><strong id="ttRegionSales">SAR 0</strong></div><div class="map-tooltip-row"><span data-i18n="tt_qty_label">الكمية المباعة:</span><strong id="ttRegionQty">0 pcs</strong></div><div class="map-tooltip-row"><span data-i18n="tt_share_label">نسبة المساهمة:</span><strong id="ttRegionShare">0%</strong></div></div><div class="map-intensity-legend"><span data-i18n="legend_low">أقل</span><div class="legend-gradient-bar"></div><span data-i18n="legend_high">أعلى مبيعاً</span></div><div class="map-compass-badge" title="North"><i class="fa-regular fa-compass"></i></div><svg class="saudi-svg-map" viewBox="0 0 860 700" xmlns="http://www.w3.org/2000/svg"><defs><filter id="ksaRealShadow" x="-12%" y="-12%" width="124%" height="124%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.2" /></filter><pattern id="seaGrid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M 24 0 L 0 0 0 24" fill="none" stroke="#93c5fd" stroke-width="0.6" opacity="0.45"/></pattern></defs><rect x="0" y="0" width="860" height="700" fill="url(#seaGrid)"/><path class="ksa-neighbor-land" d="M60,30 L215,30 L195,95 L145,105 L105,128 L60,115 Z" /><path class="ksa-neighbor-land" d="M215,30 L520,30 L515,175 L465,192 L410,165 L355,120 L275,92 L195,95 Z" /><path class="ksa-neighbor-land" d="M605,315 L635,310 L642,348 L608,352 Z" /><path class="ksa-neighbor-land" d="M665,375 L780,355 L825,445 L755,585 L685,565 L745,455 L695,392 Z" /><path class="ksa-neighbor-land" d="M295,638 L365,595 L465,602 L585,575 L685,565 L710,675 L285,675 Z" /><text class="ksa-neighbor-label" x="125" y="72">JORDAN</text><text class="ksa-neighbor-label" x="355" y="75">IRAQ</text><text class="ksa-neighbor-label" x="488" y="152">KUWAIT</text><text class="ksa-neighbor-label" x="615" y="336">QATAR</text><text class="ksa-neighbor-label" x="725" y="405">UAE</text><text class="ksa-neighbor-label" x="752" y="510">OMAN</text><text class="ksa-neighbor-label" x="465" y="645">YEMEN</text><text class="ksa-sea-text" x="115" y="455" transform="rotate(62 115,455)">البحر الأحمر • RED SEA</text><text class="ksa-sea-text" x="625" y="220" transform="rotate(38 625,220)">الخليج العربي • ARABIAN GULF</text><g filter="url(#ksaRealShadow)"><path class="ksa-region-path inactive-region" d="M165,98 L195,95 L235,78 L275,92 L355,120 L410,165 L465,192 L435,212 L378,185 L318,162 L255,152 L212,135 L182,118 Z" /><text class="ksa-province-subtext" x="305" y="138" text-anchor="middle">الحدود الشمالية والجوف</text><path id="map-reg-tabuk" class="ksa-region-path" data-region-key="reg_tabuk" d="M84,132 L105,128 L145,105 L165,98 L182,118 L212,135 L224,182 L202,248 L168,282 L144,258 L124,218 L104,182 L92,152 Z" /><path id="map-reg-hail" class="ksa-region-path" data-region-key="reg_hail" d="M212,135 L255,152 L318,162 L378,185 L392,232 L354,268 L286,272 L242,246 L224,182 Z" /><path id="map-reg-buraidah" class="ksa-region-path" data-region-key="reg_buraidah_rass" d="M286,272 L354,268 L398,286 L404,324 L356,348 L304,338 L282,304 Z" /><path id="map-reg-unaizah" class="ksa-region-path" data-region-key="reg_unaizah" d="M356,348 L404,324 L436,344 L424,378 L372,374 Z" /><path class="ksa-region-path inactive-region" d="M168,282 L202,248 L242,246 L286,272 L282,304 L304,338 L278,392 L222,398 L184,358 L158,316 Z" /><text class="ksa-province-subtext" x="228" y="332" text-anchor="middle">المدينة المنورة</text><path class="ksa-region-path inactive-region" d="M304,338 L356,348 L372,374 L424,378 L478,352 L518,396 L544,475 L472,510 L388,498 L338,455 L298,405 Z" /><text class="ksa-province-subtext" x="425" y="435" text-anchor="middle">منطقة الرياض</text><path id="map-reg-eastern" class="ksa-region-path" data-region-key="reg_eastern" d="M435,212 L465,192 L505,182 L522,222 L568,274 L602,315 L608,352 L642,348 L665,375 L695,392 L745,455 L685,565 L585,575 L498,556 L472,510 L544,475 L518,396 L478,352 L436,344 L404,324 L398,286 L392,232 L378,185 Z" /><path id="map-reg-jeddah" class="ksa-region-path" data-region-key="reg_jeddah" d="M184,358 L222,398 L278,392 L298,405 L338,455 L312,508 L266,522 L232,482 L202,424 Z" /><path class="ksa-region-path inactive-region" d="M232,482 L266,522 L312,508 L338,455 L388,498 L472,510 L498,556 L465,602 L365,595 L295,638 L268,614 L252,554 Z" /><text class="ksa-province-subtext" x="355" y="558" text-anchor="middle">عسير وجازان ونجران</text></g><g class="ksa-city-pin" data-region-key="reg_tabuk" transform="translate(154, 184)"><circle class="ksa-pin-pulse" r="14"></circle><circle r="7" fill="#132240" stroke="#ffffff" stroke-width="2.2"></circle><rect class="ksa-pin-badge-bg" x="-26" y="-30" width="52" height="20"></rect><text class="ksa-pin-label" x="0" y="-16" text-anchor="middle">تبوك</text></g><g class="ksa-city-pin" data-region-key="reg_hail" transform="translate(302, 216)"><circle class="ksa-pin-pulse" r="14"></circle><circle r="7" fill="#132240" stroke="#ffffff" stroke-width="2.2"></circle><rect class="ksa-pin-badge-bg" x="-26" y="-30" width="52" height="20"></rect><text class="ksa-pin-label" x="0" y="-16" text-anchor="middle">حائل</text></g><g class="ksa-city-pin" data-region-key="reg_buraidah_rass" transform="translate(342, 304)"><circle class="ksa-pin-pulse" r="14"></circle><circle r="7" fill="#132240" stroke="#ffffff" stroke-width="2.2"></circle><rect class="ksa-pin-badge-bg" x="-42" y="-30" width="84" height="20"></rect><text class="ksa-pin-label" x="0" y="-16" text-anchor="middle">بريدة والرس</text></g><g class="ksa-city-pin" data-region-key="reg_unaizah" transform="translate(402, 354)"><circle class="ksa-pin-pulse" r="15"></circle><circle r="7.5" fill="#2563eb" stroke="#ffffff" stroke-width="2.5"></circle><rect class="ksa-pin-badge-bg" x="12" y="-10" width="54" height="20"></rect><text class="ksa-pin-label" x="39" y="4" text-anchor="middle">عنيزة</text></g><g class="ksa-city-pin" data-region-key="reg_eastern" transform="translate(556, 318)"><circle class="ksa-pin-pulse" r="14"></circle><circle r="7.5" fill="#132240" stroke="#ffffff" stroke-width="2.2"></circle><rect class="ksa-pin-badge-bg" x="-34" y="-30" width="68" height="20"></rect><text class="ksa-pin-label" x="0" y="-16" text-anchor="middle">الشرقية</text></g><g class="ksa-city-pin" data-region-key="reg_jeddah" transform="translate(248, 442)"><circle class="ksa-pin-pulse" r="14"></circle><circle r="7.5" fill="#132240" stroke="#ffffff" stroke-width="2.2"></circle><rect class="ksa-pin-badge-bg" x="-38" y="-30" width="76" height="20"></rect><text class="ksa-pin-label" x="0" y="-16" text-anchor="middle">منطقة جدة</text></g></svg></div><div class="map-bottom-metrics"><div class="map-metric-item"><span data-i18n="map_top_sales">الأعلى مبيعاً</span><strong id="mapTopSalesRegion">--</strong></div><div class="map-metric-item"><span data-i18n="map_top_qty">الأكثر كمية مباعة</span><strong id="mapTopQtyRegion">--</strong></div><div class="map-metric-item"><span data-i18n="map_active_regions">المناطق النشطة</span><strong id="mapActiveRegionsCount">6 مناطق</strong></div></div></div><div class="region-sales-side-card"><div><div class="panel-header"><span class="panel-title" data-i18n="panel_regions">مبيعات المناطق والكميات</span><span class="panel-badge-sync filter-sync-label">Yesterday</span></div><div class="region-list-stack" id="regionSalesListContainer"></div></div></div></section></main></div></div><script>(function () {
+if (window.ChartDataLabels) {
+Chart.register(ChartDataLabels);
+}
+const SESSION_KEY = 'almoosa_erp_session_v1';
+const RECENT_USERS_KEY = 'almoosa_recent_users_v1';
+const SAVED_CREDS_KEY = 'almoosa_saved_credentials_v1';
+const LANG_STORAGE_KEY = 'app_lang';
+const SIDEBAR_HIDDEN_KEY = 'almoosa_sidebar_hidden_v1';
+const allowedUsers = ['Administrator', 'admin', 'manager', 'ahmed'];
+const POS_CONFIG = {
+serverUrl: 'https://87-237-225-155.nip.io',
+apiKey: '6f039a5a6130b79',
+apiSecret: '9e6d920a8fda252'
+};
+const TRANSLATIONS = {
+ar: {
+page_title: 'الموسى ERP — لوحة التحكم',
+login_title: 'نظام الموسى ERP',
+login_subtitle: 'تسجيل الدخول إلى لوحة التحكم الإدارية',
+login_user_label: 'اسم المستخدم أو البريد الإلكتروني',
+login_pass_label: 'كلمة المرور',
+remember_password: 'حفظ كلمة المرور',
+login_btn: 'دخول إلى النظام',
+recent_accounts: 'الحسابات المستخدمة مؤخراً:',
+brand_name: 'الموسى ERP',
+brand_sub: 'Financial & Retail',
+menu_caption: 'القائمة الرئيسية',
+support_caption: 'الحساب والنظام',
+dash_sub_title: ' / لوحة التحكم',
+toggle_sidebar: 'إخفاء / إظهار القائمة',
+search_placeholder: 'بحث سريع في الفروع أو المناطق...',
+title_refresh: 'تحديث البيانات من السيرفر',
+title_fullscreen: 'ملء الشاشة',
+nav_dashboard: 'لوحة التحكم',
+nav_sales: 'المبيعات',
+nav_sales_summary: 'ملخص المبيعات',
+nav_sales_group: 'المبيعات حسب المجموعة',
+nav_sales_supplier: 'المبيعات حسب المورد',
+nav_sales_per_day: 'المبيعات اليومية',
+nav_purchase: 'المشتريات',
+nav_purchases_list: 'قوائم المشتريات',
+nav_warehouse: 'إدارة المستودعات',
+nav_warehouse_staff: 'أداء موظفي المستودع',
+nav_logout: 'تسجيل الخروج',
+pos_live_sync: 'المزامنة الحية POS',
+today_vs_yesterday: 'اليوم مقابل أمس',
+month_invoices: 'فواتير الشهر',
+kpi_today: 'مبيعات اليوم',
+kpi_yesterday: 'مبيعات أمس',
+kpi_week: 'مبيعات هذا الأسبوع',
+kpi_month: 'مبيعات هذا الشهر',
+kpi_month_purchase: 'مشتريات الشهر',
+kpi_stock_value: 'قيمة المخزون الحالي',
+stock_pending_title: 'سيتم تفعيل قيمة المخزون الحالي عند إضافة كود المخزون',
+stock_pending_sub: 'قيد التفعيل لاحقاً',
+filter_card_hint: 'اضغط لفلترة البيانات بالأسفل حسب هذه الفترة',
+open_page_hint: 'فتح التقرير التفصيلي',
+brand_ar: 'الموسى التجارية',
+blue_report_heading: 'تقرير ملخص المبيعات اليومي بالرسم البياني',
+picker_btn_title: 'اختيار اليوم أو الفترة',
+picker_btn_label: 'اختر اليوم / الفترة',
+preset_yesterday: 'أمس (الافتراضي)',
+preset_today: 'اليوم',
+preset_week: 'هذا الأسبوع',
+preset_month: 'هذا الشهر',
+from_date: 'من تاريخ',
+to_date: 'إلى تاريخ',
+apply_filter_btn: 'عرض البيانات',
+chart_cap_qty: 'إجمالي الكميات المباعة لجميع الفروع',
+chart_cap_sales: 'إجمالي المبيعات لجميع الفروع',
+grand_total_qty: 'إجمالي الكميات المباعة',
+grand_total_sales: 'الإجمالي العام للمبيعات',
+ksa_map_title: 'المبيعات حسب مناطق المملكة العربية السعودية',
+legend_low: 'أقل',
+legend_high: 'أعلى مبيعاً',
+tt_sales_label: 'إجمالي المبيعات:',
+tt_qty_label: 'الكمية المباعة:',
+tt_share_label: 'نسبة المساهمة:',
+map_top_sales: 'الأعلى مبيعاً',
+map_top_qty: 'الأكثر كمية مباعة',
+map_active_regions: 'المناطق النشطة',
+panel_regions: 'مبيعات المناطق والكميات',
+panel_gender: 'مبيعات حسب النوع والفئة',
+panel_dept: 'مبيعات الأقسام (ملابس، أحذية، حقائب، إكسسوارات)',
+loading_txt: 'جاري التحميل...',
+fetching_txt: 'جاري الجلب...',
+invoices_word: 'فاتورة',
+from_to_prefix: 'من',
+to_word: 'إلى',
+month_purchase_sub: 'مشتريات الشهر',
+last_sync_prefix: 'آخر تحديث:',
+reg_unaizah: 'عنيزة',
+reg_buraidah_rass: 'بريدة والرس',
+reg_hail: 'حائل',
+reg_tabuk: 'تبوك',
+reg_eastern: 'المنطقة الشرقية',
+reg_jeddah: 'منطقة جدة',
+reg_other: 'أخرى',
+gen_men: 'رجالي',
+gen_wmn: 'نسائي',
+gen_usx: 'مشترك / أطفال',
+dept_apparel: 'ملابس',
+dept_footwear: 'أحذية',
+dept_bags: 'حقائب',
+dept_accessories: 'إكسسوارات'
+},
+en: {
+page_title: 'Almoosa ERP — Dashboard',
+login_title: 'Almoosa ERP System',
+login_subtitle: 'Sign in to the Administrative Dashboard',
+login_user_label: 'Username or Email',
+login_pass_label: 'Password',
+remember_password: 'Remember Password',
+login_btn: 'Sign In',
+recent_accounts: 'Recently used accounts:',
+brand_name: 'Almoosa ERP',
+brand_sub: 'Financial & Retail',
+menu_caption: 'Menu',
+support_caption: 'System',
+dash_sub_title: ' / Dashboard',
+toggle_sidebar: 'Toggle Sidebar',
+search_placeholder: 'Quick search in branches or regions...',
+title_refresh: 'Refresh data from server',
+title_fullscreen: 'Toggle fullscreen',
+nav_dashboard: 'Dashboard',
+nav_sales: 'Sales',
+nav_sales_summary: 'Sales Summary',
+nav_sales_group: 'Sales by Group',
+nav_sales_supplier: 'Sales per Supplier',
+nav_sales_per_day: 'Sales per Day',
+nav_purchase: 'Purchase',
+nav_purchases_list: 'Purchases List',
+nav_warehouse: 'Warehouse Management',
+nav_warehouse_staff: 'Warehouse Staff Performance',
+nav_logout: 'Logout',
+pos_live_sync: 'POS Live Sync',
+today_vs_yesterday: 'Today vs Yesterday',
+month_invoices: 'Month Invoices',
+kpi_today: 'Today Sales',
+kpi_yesterday: 'Yesterday Sales',
+kpi_week: 'This Week Sales',
+kpi_month: 'This Month Sales',
+kpi_month_purchase: 'Month Purchase',
+kpi_stock_value: 'Current Stock Value',
+stock_pending_title: 'Current stock value will be enabled when inventory script is added',
+stock_pending_sub: 'Coming soon',
+filter_card_hint: 'Click to filter lower reports by this period',
+open_page_hint: 'Open detailed report',
+brand_ar: 'Almoosa Trading',
+blue_report_heading: 'Daily Sales Summary Report with Chart',
+picker_btn_title: 'Select day or date range',
+picker_btn_label: 'Select Day / Range',
+preset_yesterday: 'Yesterday (Default)',
+preset_today: 'Today',
+preset_week: 'This Week',
+preset_month: 'This Month',
+from_date: 'From Date',
+to_date: 'To Date',
+apply_filter_btn: 'Apply Filter',
+chart_cap_qty: 'TOTAL SOLD QTY of ALL SHOP',
+chart_cap_sales: 'TOTAL SALES of ALL SHOP',
+grand_total_qty: 'Grand Total Sold Qty',
+grand_total_sales: 'Grand Total Sales',
+ksa_map_title: 'Sales by Region — Saudi Arabia',
+legend_low: 'Low',
+legend_high: 'Top Sales',
+tt_sales_label: 'Total Sales:',
+tt_qty_label: 'Sold Qty:',
+tt_share_label: 'Share:',
+map_top_sales: 'Top-Selling Region',
+map_top_qty: 'Most Items Sold',
+map_active_regions: 'Active Regions',
+panel_regions: 'Regions Sales & Qty',
+panel_gender: 'Sales by Gender & Category',
+panel_dept: 'Department Sales (Apparel, Footwear, Bags, Accessories)',
+loading_txt: 'Loading...',
+fetching_txt: 'Fetching...',
+invoices_word: 'Invoices',
+from_to_prefix: 'From',
+to_word: 'to',
+month_purchase_sub: 'Monthly Purchases',
+last_sync_prefix: 'Last Sync:',
+reg_unaizah: 'Unaizah',
+reg_buraidah_rass: 'Buraidah & Rass',
+reg_hail: 'Hail',
+reg_tabuk: 'Tabuk',
+reg_eastern: 'Eastern Province',
+reg_jeddah: 'Jeddah Region',
+reg_other: 'Other',
+gen_men: 'MEN',
+gen_wmn: 'WMN',
+gen_usx: 'USX',
+dept_apparel: 'Apparel',
+dept_footwear: 'Footwear',
+dept_bags: 'Bags',
+dept_accessories: 'Accessories'
+},
+hi: {
+page_title: 'अलमूसा ERP — डैशबोर्ड',
+login_title: 'अलमूसा ERP सिस्टम',
+login_subtitle: 'प्रशासनिक डैशबोर्ड में लॉगिन करें',
+login_user_label: 'उपयोगकर्ता नाम या ईमेल',
+login_pass_label: 'पासवर्ड',
+remember_password: 'पासवर्ड याद रखें',
+login_btn: 'सिस्टम में प्रवेश करें',
+recent_accounts: 'हाल ही में उपयोग किए गए खाते:',
+brand_name: 'अलमूसा ERP',
+brand_sub: 'Financial & Retail',
+menu_caption: 'मुख्य मेनू',
+support_caption: 'सिस्टम',
+dash_sub_title: ' / डैशबोर्ड',
+toggle_sidebar: 'साइडबार दिखाएं / छुपाएं',
+search_placeholder: 'शाखाओं या क्षेत्रों में त्वरित खोज...',
+title_refresh: 'सर्वर से डेटा रीफ़्रेश करें',
+title_fullscreen: 'पूर्ण स्क्रीन',
+nav_dashboard: 'डैशबोर्ड',
+nav_sales: 'बिक्री',
+nav_sales_summary: 'बिक्री सारांश',
+nav_sales_group: 'समूह के अनुसार बिक्री',
+nav_sales_supplier: 'आपूर्तिकर्ता के अनुसार बिक्री',
+nav_sales_per_day: 'प्रतिदिन बिक्री',
+nav_purchase: 'खरीद',
+nav_purchases_list: 'खरीद सूचियाँ',
+nav_warehouse: 'गोदाम प्रबंधन',
+nav_warehouse_staff: 'गोदाम कर्मचारी प्रदर्शन',
+nav_logout: 'लॉगआउट',
+pos_live_sync: 'POS लाइव सिंक',
+today_vs_yesterday: 'आज बनाम कल',
+month_invoices: 'मासिक चालान',
+kpi_today: 'आज की बिक्री (Today)',
+kpi_yesterday: 'कल की बिक्री (Yesterday)',
+kpi_week: 'इस सप्ताह की बिक्री',
+kpi_month: 'इस महीने की बिक्री',
+kpi_month_purchase: 'मासिक खरीद',
+kpi_stock_value: 'वर्तमान स्टॉक मूल्य',
+stock_pending_title: 'इन्वेंट्री कोड जुड़ने पर वर्तमान स्टॉक मूल्य सक्रिय होगा',
+stock_pending_sub: 'शीघ्र उपलब्ध',
+filter_card_hint: 'नीचे के डेटा को इस अवधि के अनुसार फ़िल्टर करने के लिए क्लिक करें',
+open_page_hint: 'विस्तृत रिपोर्ट खोलें',
+brand_ar: 'अलमूसा ट्रेडिंग',
+blue_report_heading: 'चार्ट के साथ दैनिक बिक्री सारांश रिपोर्ट',
+picker_btn_title: 'दिन या अवधि चुनें',
+picker_btn_label: 'दिन / अवधि चुनें',
+preset_yesterday: 'कल (Default)',
+preset_today: 'आज',
+preset_week: 'इस सप्ताह',
+preset_month: 'इस महीना',
+from_date: 'तिथि से',
+to_date: 'तिथि तक',
+apply_filter_btn: 'डेटा दिखाएं',
+chart_cap_qty: 'TOTAL SOLD QTY of ALL SHOP',
+chart_cap_sales: 'TOTAL SALES of ALL SHOP',
+grand_total_qty: 'Grand Total Sold Qty',
+grand_total_sales: 'Grand Total Sales',
+ksa_map_title: 'सऊदी अरब के क्षेत्रों के अनुसार बिक्री',
+legend_low: 'कम',
+legend_high: 'अधिकतम',
+tt_sales_label: 'कुल बिक्री:',
+tt_qty_label: 'मात्रा:',
+tt_share_label: 'हिस्सेदारी:',
+map_top_sales: 'शीर्ष बिक्री क्षेत्र',
+map_top_qty: 'अधिकतम मात्रा',
+map_active_regions: 'सक्रिय क्षेत्र',
+panel_regions: 'क्षेत्रों की बिक्री और मात्रा',
+panel_gender: 'श्रेणी के अनुसार बिक्री',
+panel_dept: 'विभाग बिक्री (Apparel, Footwear, Bags, Accessories)',
+loading_txt: 'लोड हो रहा है...',
+fetching_txt: 'लाया जा रहा है...',
+invoices_word: 'चालान',
+from_to_prefix: 'से',
+to_word: 'तक',
+month_purchase_sub: 'मासिक खरीदारी',
+last_sync_prefix: 'अंतिम सिंक:',
+reg_unaizah: 'उनाइज़ा',
+reg_buraidah_rass: 'बुरैदाह और रस',
+reg_hail: 'हैल',
+reg_tabuk: 'तबूक',
+reg_eastern: 'पूर्वी प्रांत',
+reg_jeddah: 'जेद्दाह क्षेत्र',
+reg_other: 'अन्य',
+gen_men: 'MEN',
+gen_wmn: 'WMN',
+gen_usx: 'USX',
+dept_apparel: 'Apparel',
+dept_footwear: 'Footwear',
+dept_bags: 'Bags',
+dept_accessories: 'Accessories'
+},
+ur: {
+page_title: 'الموسیٰ ERP — ڈیش بورڈ',
+login_title: 'الموسیٰ ERP سسٹم',
+login_subtitle: 'ایڈمن ڈیش بورڈ میں لاگ ان کریں',
+login_user_label: 'صارف نام یا ای میل',
+login_pass_label: 'پاس ورڈ',
+remember_password: 'پاس ورڈ محفوظ کریں',
+login_btn: 'سسٹم میں داخل ہوں',
+recent_accounts: 'حال ہی میں استعمال شدہ اکاؤنٹس:',
+brand_name: 'الموسیٰ ERP',
+brand_sub: 'Financial & Retail',
+menu_caption: 'مین مینو',
+support_caption: 'سسٹم',
+dash_sub_title: ' / ڈیش بورڈ',
+toggle_sidebar: 'سائیڈبار چھپائیں / دکھائیں',
+search_placeholder: 'برانچز یا علاقوں میں فوری تلاش...',
+title_refresh: 'سرور سے ڈیٹا تازہ کریں',
+title_fullscreen: 'مکمل اسکرین',
+nav_dashboard: 'ڈیش بورڈ',
+nav_sales: 'فروخت',
+nav_sales_summary: 'فروخت کا خلاصہ',
+nav_sales_group: 'گروپ کے لحاظ سے فروخت',
+nav_sales_supplier: 'سپلائر کے لحاظ سے فروخت',
+nav_sales_per_day: 'یومیہ فروخت',
+nav_purchase: 'خریداری',
+nav_purchases_list: 'خریداری کی فہرستیں',
+nav_warehouse: 'گودام مینجمنٹ',
+nav_warehouse_staff: 'گودام عملے کی کارکردگی',
+nav_logout: 'لاگ آؤٹ',
+pos_live_sync: 'POS لائیو سنک',
+today_vs_yesterday: 'آج بمقابلہ کل',
+month_invoices: 'ماہانہ انوائسز',
+kpi_today: 'آج کی فروخت (Today)',
+kpi_yesterday: 'گزشتہ روز کی فروخت',
+kpi_week: 'اس ہفتے کی فروخت',
+kpi_month: 'اس مہینے کی فروخت',
+kpi_month_purchase: 'ماہانہ خریداری',
+kpi_stock_value: 'موجودہ اسٹاک کی مالیت',
+stock_pending_title: 'اسٹاک کوڈ شامل کرنے پر موجودہ اسٹاک کی مالیت فعال ہوگی',
+stock_pending_sub: 'جلد آرہا ہے',
+filter_card_hint: 'نیچے کا ڈیٹا اس مدت کے مطابق فلٹر کرنے کے لیے کلک کریں',
+open_page_hint: 'تفصیلی رپورٹ کھولیں',
+brand_ar: 'الموسیٰ ٹریڈنگ',
+blue_report_heading: 'چارٹ کے ساتھ یومیہ فروخت کی خلاصہ رپورٹ',
+picker_btn_title: 'دن یا مدت منتخب کریں',
+picker_btn_label: 'دن / مدت منتخب کریں',
+preset_yesterday: 'کل (Default)',
+preset_today: 'آج',
+preset_week: 'اس ہفتہ',
+preset_month: 'اس مہینہ',
+from_date: 'تاریخ سے',
+to_date: 'تاریخ تک',
+apply_filter_btn: 'ڈیٹا دکھائیں',
+chart_cap_qty: 'TOTAL SOLD QTY of ALL SHOP',
+chart_cap_sales: 'TOTAL SALES of ALL SHOP',
+grand_total_qty: 'Grand Total Sold Qty',
+grand_total_sales: 'Grand Total Sales',
+ksa_map_title: 'سعودی عرب کے علاقوں کے لحاظ سے فروخت',
+legend_low: 'کم',
+legend_high: 'زیادہ فروخت',
+tt_sales_label: 'کل فروخت:',
+tt_qty_label: 'مقدار:',
+tt_share_label: 'حصہ:',
+map_top_sales: 'سب سے زیادہ فروخت',
+map_top_qty: 'سب سے زیادہ مقدار',
+map_active_regions: 'فعال علاقے',
+panel_regions: 'علاقوں کی فروخت اور مقدار',
+panel_gender: 'کیٹیگری کے لحاظ سے فروخت',
+panel_dept: 'شعبہ جات کی فروخت (Apparel, Footwear, Bags, Accessories)',
+loading_txt: 'لوڈ ہو رہا ہے...',
+fetching_txt: 'لایا جا رہا ہے...',
+invoices_word: 'انوائسز',
+from_to_prefix: 'از',
+to_word: 'تا',
+month_purchase_sub: 'ماہانہ خریداری',
+last_sync_prefix: 'آخری اپ ڈیٹ:',
+reg_unaizah: 'عنيزة',
+reg_buraidah_rass: 'بریدہ اور رس',
+reg_hail: 'حائل',
+reg_tabuk: 'تبوک',
+reg_eastern: 'مشرقی صوبہ',
+reg_jeddah: 'جدہ ریجن',
+reg_other: 'دیگر',
+gen_men: 'MEN',
+gen_wmn: 'WMN',
+gen_usx: 'USX',
+dept_apparel: 'Apparel',
+dept_footwear: 'Footwear',
+dept_bags: 'Bags',
+dept_accessories: 'Accessories'
+}
+};
+const REGION_RULES = [
+{ key: 'reg_unaizah',       branches: ['019', '002', '001'], color: '#1e3a8a', svgId: 'map-reg-unaizah' },
+{ key: 'reg_buraidah_rass', branches: ['007', '028', '004'], color: '#2b6ef2', svgId: 'map-reg-buraidah' },
+{ key: 'reg_hail',          branches: ['011', '035'],        color: '#2563eb', svgId: 'map-reg-hail' },
+{ key: 'reg_tabuk',         branches: ['031'],               color: '#60a5fa', svgId: 'map-reg-tabuk' },
+{ key: 'reg_eastern',       branches: ['036', '006'],      color: '#0369a1', svgId: 'map-reg-eastern' },
+{ key: 'reg_jeddah',        branches: ['034', '037'],        color: '#0284c7', svgId: 'map-reg-jeddah' }
+];
+let currentRegionStatsMap = {};
+let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || 'ar';
+if (!TRANSLATIONS[currentLang]) currentLang = 'ar';
+function t(key) {
+return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS.ar[key] || key;
+}
+function applyLanguageUI(lang) {
+currentLang = TRANSLATIONS[lang] ? lang : 'ar';
+localStorage.setItem(LANG_STORAGE_KEY, currentLang);
+const htmlRoot = document.getElementById('htmlRoot');
+htmlRoot.lang = currentLang;
+htmlRoot.dir = (currentLang === 'ar' || currentLang === 'ur') ? 'rtl' : 'ltr';
+const langSelect = document.getElementById('langSelect');
+if (langSelect && langSelect.value !== currentLang) {
+langSelect.value = currentLang;
+}
+document.querySelectorAll('[data-i18n]').forEach((el) => {
+const k = el.getAttribute('data-i18n');
+if (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][k]) {
+el.textContent = TRANSLATIONS[currentLang][k];
+}
+});
+document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+const k = el.getAttribute('data-i18n-placeholder');
+if (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][k]) {
+el.placeholder = TRANSLATIONS[currentLang][k];
+}
+});
+document.querySelectorAll('[data-i18n-title]').forEach((el) => {
+const k = el.getAttribute('data-i18n-title');
+if (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][k]) {
+el.title = TRANSLATIONS[currentLang][k];
+}
+});
+}
+function getRegionRuleByCode(code) {
+const c = String(code || '').trim().padStart(3, '0');
+return REGION_RULES.find((r) => r.branches.some((b) => b === c)) || null;
+}
+function detectGender(rawStr) {
+const s = String(rawStr || '').toUpperCase();
+if (s.includes('WMN') || s.includes('WOMEN') || s.includes('LADIES') || s.includes('نسائي')) {
+return 'WMN';
+}
+if (s.includes('USX') || s.includes('UNISEX') || s.includes('KIDS') || s.includes('مشترك')) {
+return 'USX';
+}
+return 'MEN';
+}
+function detectDeptCategory(rawStr) {
+const s = String(rawStr || '').toUpperCase();
+if (s.includes('FOOTWEAR') || s.includes('SHOES') || s.includes('SANDAL') || s.includes('أحذية')) {
+return 'Footwear';
+}
+if (s.includes('BAGS') || s.includes('BAG') || s.includes('BACKPACK') || s.includes('حقائب')) {
+return 'Bags';
+}
+if (s.includes('ACCESSOR') || s.includes('BELT') || s.includes('CAP') || s.includes('SOCK') || s.includes('إكسسوار')) {
+return 'Accessories';
+}
+return 'Apparel';
+}
+const loginGate = document.getElementById('loginGate');
+const dashboardShell = document.getElementById('dashboardShell');
+const loginForm = document.getElementById('loginForm');
+const loginUser = document.getElementById('loginUser');
+const loginPass = document.getElementById('loginPass');
+const rememberPassCheck = document.getElementById('rememberPassCheck');
+const loginError = document.getElementById('loginError');
+const recentAccountsBox = document.getElementById('recentAccountsBox');
+const recentAccountsList = document.getElementById('recentAccountsList');
+const dateInput = document.getElementById('dashDateFilter');
+const bluePickerBtn = document.getElementById('blueReportPickerBtn');
+const bluePopover = document.getElementById('blueReportPopover');
+const blueFromInput = document.getElementById('blueReportFromInput');
+const blueToInput = document.getElementById('blueReportToInput');
+const blueApplyBtn = document.getElementById('blueReportApplyBtn');
+const blueRangeLabel = document.getElementById('blueReportRangeLabel');
+let blueReportState = {
+mode: 'yesterday',
+from: '',
+to: ''
+};
+let lastLoadedSnapshot = {
+rows: [],
+itemsBreakdown: [],
+labelText: 'Yesterday',
+todaySummary: null,
+yestSummary: null,
+weekSummary: null,
+monthSummary: null,
+monthPurchaseVal: 0,
+todayStr: '',
+yestStr: '',
+weekStartStr: '',
+monthStartStr: '',
+lastSyncTimeStr: '--:--'
+};
+let graphs = {};
+function toYMD(dateObj) {
+const y = dateObj.getFullYear();
+const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+const d = String(dateObj.getDate()).padStart(2, '0');
+return `${y}-${m}-${d}`;
+}
+function getShortBranchCode(branchName) {
+if (!branchName) return '000';
+const match = String(branchName).match(/\d{3}/);
+if (match) return match[0];
+return String(branchName).substring(0, 3);
+}
+if (dateInput) {
+dateInput.value = toYMD(new Date());
+}
+document.getElementById('togglePassBtn').addEventListener('click', () => {
+loginPass.type = loginPass.type === 'password' ? 'text' : 'password';
+});
+function getSavedCredentialsMap() {
+try {
+return JSON.parse(localStorage.getItem(SAVED_CREDS_KEY) || '{}');
+} catch (_) {
+return {};
+}
+}
+function saveCredentialsIfRequested(username, password) {
+try {
+const credsMap = getSavedCredentialsMap();
+if (rememberPassCheck && rememberPassCheck.checked) {
+credsMap[username] = password;
+localStorage.setItem(SAVED_CREDS_KEY, JSON.stringify(credsMap));
+} else {
+delete credsMap[username];
+localStorage.setItem(SAVED_CREDS_KEY, JSON.stringify(credsMap));
+}
+} catch (_) {}
+}
+function loadSavedCredentialsToForm() {
+try {
+const credsMap = getSavedCredentialsMap();
+const list = JSON.parse(localStorage.getItem(RECENT_USERS_KEY) || '[]');
+const targetUser = list[0] || Object.keys(credsMap)[0] || '';
+if (targetUser) {
+loginUser.value = targetUser;
+if (credsMap[targetUser]) {
+loginPass.value = credsMap[targetUser];
+if (rememberPassCheck) rememberPassCheck.checked = true;
+}
+}
+} catch (_) {}
+}
+loginUser.addEventListener('input', () => {
+const credsMap = getSavedCredentialsMap();
+const u = loginUser.value.trim();
+if (u && credsMap[u]) {
+loginPass.value = credsMap[u];
+if (rememberPassCheck) rememberPassCheck.checked = true;
+}
+});
+function renderRecentAccounts() {
+try {
+const list = JSON.parse(localStorage.getItem(RECENT_USERS_KEY) || '[]');
+const credsMap = getSavedCredentialsMap();
+if (!list.length) {
+recentAccountsBox.classList.add('hidden');
+return;
+}
+recentAccountsBox.classList.remove('hidden');
+recentAccountsList.innerHTML = '';
+list.forEach((u) => {
+const chip = document.createElement('button');
+chip.type = 'button';
+chip.className = 'recent-chip';
+chip.textContent = u;
+chip.addEventListener('click', () => {
+loginUser.value = u;
+if (credsMap[u]) {
+loginPass.value = credsMap[u];
+if (rememberPassCheck) rememberPassCheck.checked = true;
+} else {
+loginPass.focus();
+}
+});
+recentAccountsList.appendChild(chip);
+});
+} catch (_) {}
+}
+function saveRecentAccount(username) {
+try {
+const prev = JSON.parse(localStorage.getItem(RECENT_USERS_KEY) || '[]');
+const updated = [username, ...prev.filter((x) => x !== username)].slice(0, 4);
+localStorage.setItem(RECENT_USERS_KEY, JSON.stringify(updated));
+} catch (_) {}
+}
+function showLoginError(msg) {
+loginError.textContent = msg;
+loginError.classList.remove('hidden');
+}
+function hideLoginError() {
+loginError.textContent = '';
+loginError.classList.add('hidden');
+}
+function unlockDashboard(sessionData) {
+loginGate.classList.add('hidden');
+dashboardShell.classList.remove('locked');
+const uname = sessionData.user || 'Admin';
+document.getElementById('headerUserName').textContent = uname;
+document.getElementById('headerUserAvatar').textContent = uname.charAt(0).toUpperCase();
+applyLanguageUI(currentLang);
+const isSidebarHidden = localStorage.getItem(SIDEBAR_HIDDEN_KEY) === '1';
+if (window.innerWidth > 900) {
+document.body.classList.toggle('sidebar-hidden', isSidebarHidden);
+}
+initGraphs();
+bindSaudiMapInteractions();
+loadSalesDashboardData();
+}
+function checkExistingSession() {
+applyLanguageUI(currentLang);
+loadSavedCredentialsToForm();
+renderRecentAccounts();
+try {
+const raw = localStorage.getItem(SESSION_KEY);
+if (!raw) return;
+const sess = JSON.parse(raw);
+if (sess && sess.user && (!sess.expiresAt || Date.now() < sess.expiresAt)) {
+unlockDashboard(sess);
+}
+} catch (_) {}
+}
+loginForm.addEventListener('submit', async (e) => {
+e.preventDefault();
+hideLoginError();
+const usr = loginUser.value.trim();
+const pwd = loginPass.value;
+if (!usr || !pwd) {
+showLoginError('يرجى إدخال اسم المستخدم وكلمة المرور.');
+return;
+}
+const submitBtn = document.getElementById('loginSubmitBtn');
+submitBtn.disabled = true;
+try {
+const res = await fetch(`${POS_CONFIG.serverUrl}/api/method/login`, {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+credentials: 'include',
+body: JSON.stringify({ usr, pwd })
+});
+const data = await res.json().catch(() => ({}));
+const fullName = data.full_name || usr;
+const isAllowed =
+allowedUsers.map((x) => x.toLowerCase()).includes(usr.toLowerCase()) ||
+res.ok;
+if (!res.ok || data.message === 'Invalid Login' || !isAllowed) {
+showLoginError('بيانات الدخول غير صحيحة أو الحساب غير مصرح له.');
+submitBtn.disabled = false;
+return;
+}
+saveCredentialsIfRequested(usr, pwd);
+const sessionObj = {
+user: fullName,
+username: usr,
+loggedAt: Date.now(),
+expiresAt: Date.now() + 1000 * 60 * 60 * 12
+};
+localStorage.setItem(SESSION_KEY, JSON.stringify(sessionObj));
+saveRecentAccount(usr);
+unlockDashboard(sessionObj);
+} catch (err) {
+showLoginError('تعذر الاتصال بالخادم.');
+} finally {
+submitBtn.disabled = false;
+}
+});
+document.getElementById('logoutBtn').addEventListener('click', () => {
+localStorage.removeItem(SESSION_KEY);
+dashboardShell.classList.add('locked');
+loginGate.classList.remove('hidden');
+loadSavedCredentialsToForm();
+renderRecentAccounts();
+});
+document.querySelectorAll('.nav-accordion-btn').forEach((btn) => {
+btn.addEventListener('click', () => {
+btn.closest('.nav-item').classList.toggle('open');
+});
+});
+document.getElementById('sidebarToggleBtn').addEventListener('click', () => {
+if (window.innerWidth <= 900) {
+document.body.classList.toggle('sidebar-open');
+return;
+}
+const nextHidden = !document.body.classList.contains('sidebar-hidden');
+document.body.classList.toggle('sidebar-hidden', nextHidden);
+localStorage.setItem(SIDEBAR_HIDDEN_KEY, nextHidden ? '1' : '0');
+});
+document.getElementById('sidebarBackdrop').addEventListener('click', () => {
+document.body.classList.remove('sidebar-open');
+});
+document.getElementById('fullscreenBtn').addEventListener('click', () => {
+if (!document.fullscreenElement) {
+document.documentElement.requestFullscreen().catch(() => {});
+} else {
+document.exitFullscreen().catch(() => {});
+}
+});
+document.getElementById('langSelect').addEventListener('change', (e) => {
+applyLanguageUI(e.target.value);
+if (lastLoadedSnapshot.todaySummary) {
+updateKpiTextsFromSnapshot();
+}
+document.getElementById('lastSyncTime').textContent =
+`${t('last_sync_prefix')} ${lastLoadedSnapshot.lastSyncTimeStr}`;
+if (lastLoadedSnapshot.rows.length || lastLoadedSnapshot.labelText) {
+renderAllFilteredVisuals(
+lastLoadedSnapshot.rows,
+lastLoadedSnapshot.itemsBreakdown,
+lastLoadedSnapshot.labelText
+);
+}
+});
+function fmtSAR(val) {
+const num = Number(val || 0);
+return 'SAR ' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+async function fetchBranchSalesSummary(fromDate, toDate) {
+const url = `${POS_CONFIG.serverUrl}/api/method/get_branch_sales_cost_summary?from_date=${fromDate}&to_date=${toDate}`;
+const res = await fetch(url, {
+method: 'GET',
+headers: {
+'Authorization': `token ${POS_CONFIG.apiKey}:${POS_CONFIG.apiSecret}`,
+'X-Frappe-Site-Name': window.location.hostname
+}
+});
+if (!res.ok) return { totalSales: 0, totalInvoices: 0, totalQty: 0, rows: [] };
+const jsonRes = await res.json();
+const rows = Array.isArray(jsonRes.message?.data)
+? jsonRes.message.data
+: (Array.isArray(jsonRes.message) ? jsonRes.message : []);
+let totalSales = 0;
+let totalInvoices = 0;
+let totalQty = 0;
+rows.forEach((r) => {
+totalSales += parseFloat(r.Total_Sales || 0);
+totalInvoices += parseInt(r.Invoice_Count || 0, 10);
+totalQty += parseFloat(r.Total_Qty || 0);
+});
+return { totalSales, totalInvoices, totalQty, rows };
+}
+async function fetchInvoiceItemsBreakdown(fromDate, toDate) {
+try {
+const invRes = await fetch(`${POS_CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'Authorization': `token ${POS_CONFIG.apiKey}:${POS_CONFIG.apiSecret}`
+},
+body: JSON.stringify({
+doctype: 'POS Invoice',
+fields: ['name'],
+filters: [
+['posting_date', '>=', fromDate],
+['posting_date', '<=', toDate],
+['docstatus', '=', 1]
+],
+limit_page_length: 500
+})
+});
+if (!invRes.ok) return [];
+const invJson = await invRes.json();
+const invNames = (Array.isArray(invJson.message) ? invJson.message : []).map((x) => x.name);
+if (!invNames.length) return [];
+const itemsRes = await fetch(`${POS_CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'Authorization': `token ${POS_CONFIG.apiKey}:${POS_CONFIG.apiSecret}`
+},
+body: JSON.stringify({
+doctype: 'POS Invoice Item',
+fields: ['item_code', 'item_group', 'qty', 'amount'],
+filters: [['parent', 'in', invNames]],
+limit_page_length: 0
+})
+});
+if (!itemsRes.ok) return [];
+const itemsJson = await itemsRes.json();
+return Array.isArray(itemsJson.message) ? itemsJson.message : [];
+} catch (_) {
+return [];
+}
+}
+async function fetchMonthPurchaseValue() {
+return 0;
+}
+function initCurrentStockPlaceholder() {
+document.getElementById('kpiCurrentStock').textContent = '--';
+document.getElementById('kpiCurrentStockSub').textContent = t('stock_pending_sub');
+}
+function highlightActiveFilterCard(presetMode) {
+document.querySelectorAll('.fogo-tile[data-filter-preset]').forEach((card) => {
+card.classList.toggle('active-filter-card', card.getAttribute('data-filter-preset') === presetMode);
+});
+document.querySelectorAll('.popover-preset-btn').forEach((btn) => {
+btn.classList.toggle('active', btn.getAttribute('data-preset') === presetMode);
+});
+}
+function computePresetDates(preset) {
+const baseDateStr = dateInput.value || toYMD(new Date());
+const baseDate = new Date(baseDateStr + 'T00:00:00');
+let f = baseDateStr;
+let tDate = baseDateStr;
+let lbl = baseDateStr;
+if (preset === 'yesterday') {
+const y = new Date(baseDate);
+y.setDate(baseDate.getDate() - 1);
+f = tDate = toYMD(y);
+lbl = `${t('preset_yesterday').split(' ')[0]} (${f})`;
+} else if (preset === 'today') {
+f = tDate = baseDateStr;
+lbl = `${t('preset_today')} (${f})`;
+} else if (preset === 'week') {
+const ws = new Date(baseDate);
+const diffToSat = (baseDate.getDay() + 1) % 7;
+ws.setDate(baseDate.getDate() - diffToSat);
+f = toYMD(ws);
+tDate = baseDateStr;
+lbl = `${f} → ${tDate}`;
+} else if (preset === 'month') {
+const ms = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1);
+f = toYMD(ms);
+tDate = baseDateStr;
+lbl = `${f} → ${tDate}`;
+}
+return { f, t: tDate, lbl };
+}
+async function applyPresetFilter(preset) {
+const { f, t: tDate, lbl } = computePresetDates(preset);
+blueReportState = { mode: preset, from: f, to: tDate };
+blueFromInput.value = f;
+blueToInput.value = tDate;
+highlightActiveFilterCard(preset);
+await loadFilteredSections(f, tDate, lbl);
+}
+document.querySelectorAll('.fogo-tile[data-filter-preset]').forEach((card) => {
+card.addEventListener('click', async () => {
+const preset = card.getAttribute('data-filter-preset');
+if (!preset) return;
+await applyPresetFilter(preset);
+});
+});
+function showRegionTooltip(regionKey) {
+const stat = currentRegionStatsMap[regionKey];
+const tooltip = document.getElementById('ksaMapTooltip');
+if (!stat || !tooltip) return;
+document.getElementById('ttRegionName').textContent = stat.label;
+document.getElementById('ttRegionBranches').textContent = stat.branches.join(', ');
+document.getElementById('ttRegionSales').textContent =
+`SAR ${Math.round(stat.sales).toLocaleString('en-US')}`;
+document.getElementById('ttRegionQty').textContent =
+`${Math.round(stat.qty).toLocaleString('en-US')} pcs`;
+document.getElementById('ttRegionShare').textContent = `${stat.sharePct}%`;
+tooltip.classList.remove('hidden');
+document.querySelectorAll('.ksa-region-path').forEach((p) => {
+p.classList.toggle('is-hovered', p.getAttribute('data-region-key') === regionKey);
+});
+document.querySelectorAll('.region-progress-item').forEach((item) => {
+item.classList.toggle('is-active', item.getAttribute('data-region-key') === regionKey);
+});
+}
+function hideRegionTooltip() {
+const tooltip = document.getElementById('ksaMapTooltip');
+if (tooltip) tooltip.classList.add('hidden');
+document.querySelectorAll('.ksa-region-path').forEach((p) => p.classList.remove('is-hovered'));
+document.querySelectorAll('.region-progress-item').forEach((item) => item.classList.remove('is-active'));
+}
+function bindSaudiMapInteractions() {
+document.querySelectorAll('[data-region-key]').forEach((el) => {
+el.addEventListener('mouseenter', () => {
+const key = el.getAttribute('data-region-key');
+if (key) showRegionTooltip(key);
+});
+el.addEventListener('click', () => {
+const key = el.getAttribute('data-region-key');
+if (key) showRegionTooltip(key);
+});
+});
+const mapArea = document.getElementById('ksaMapContainer');
+if (mapArea) {
+mapArea.addEventListener('mouseleave', hideRegionTooltip);
+}
+}
+function renderCompactTwoLineBoxes(containerId, items) {
+const el = document.getElementById(containerId);
+if (!el) return;
+el.innerHTML = items.map((it) => {
+const salesNum = Math.round(Number(it.sales) || 0);
+const qtyNum = Math.round(Number(it.qty) || 0);
+return `
+<div class="mini-two-line-box" style="--box-accent:${it.color};" title="${it.label}"><div class="mini-box-line1">${it.label}: SAR ${salesNum.toLocaleString('en-US')}</div><div class="mini-box-line2">Qty: ${qtyNum.toLocaleString('en-US')} pcs</div></div>
+`;
+}).join('');
+}
+function createPieDatalabelsConfig() {
+return {
+color: '#ffffff',
+textAlign: 'center',
+textStrokeColor: 'rgba(15, 23, 42, 0.55)',
+textStrokeWidth: 2.5,
+font: { family: 'Cairo', size: 11.5, weight: '800' },
+formatter: (value, ctx) => {
+const arr = ctx.dataset.data || [];
+const total = arr.reduce((a, b) => a + b, 0) || 1;
+const pct = (value / total) * 100;
+if (pct < 3.5) return '';
+return `${pct.toFixed(1)}%`;
+}
+};
+}
+function initGraphs() {
+if (graphs.initialized) return;
+graphs.initialized = true;
+['spark1', 'spark2', 'spark3', 'spark4', 'spark5', 'spark6'].forEach((id) => {
+const ctx = document.getElementById(id);
+if (!ctx) return;
+new Chart(ctx, {
+type: 'line',
+data: {
+labels: [1, 2, 3, 4, 5, 6],
+datasets: [{
+data: [12, 16, 14, 20, 18, 24],
+borderColor: '#ffffff',
+backgroundColor: 'rgba(255, 255, 255, 0.25)',
+borderWidth: 2,
+pointRadius: 0,
+fill: true,
+tension: 0.35
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: { legend: { display: false }, datalabels: { display: false } },
+scales: { x: { display: false }, y: { display: false } }
+}
+});
+});
+graphs.blueQtyBar = new Chart(document.getElementById('blueQtyBarChart'), {
+type: 'bar',
+data: {
+labels: [],
+datasets: [{
+label: 'QTY',
+data: [],
+backgroundColor: '#2b6ef2',
+borderColor: '#1e3a8a',
+borderWidth: 1,
+barPercentage: 0.55,
+categoryPercentage: 0.8
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: {
+datalabels: { display: false },
+legend: {
+display: true,
+position: 'right',
+labels: { boxWidth: 10, font: { size: 10, weight: 'bold' }, color: '#0f172a' }
+}
+},
+scales: {
+y: {
+beginAtZero: true,
+grid: { color: '#cbd5e1' },
+ticks: { font: { size: 10, weight: 'bold' }, color: '#0f172a' }
+},
+x: {
+grid: { display: false },
+ticks: { font: { size: 10, weight: 'bold' }, color: '#0f172a' }
+}
+}
+}
+});
+graphs.blueSalesBar = new Chart(document.getElementById('blueSalesBarChart'), {
+type: 'bar',
+data: {
+labels: [],
+datasets: [{
+label: 'SALES',
+data: [],
+backgroundColor: '#2b6ef2',
+borderColor: '#1e3a8a',
+borderWidth: 1,
+barPercentage: 0.55,
+categoryPercentage: 0.8
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: {
+datalabels: { display: false },
+legend: {
+display: true,
+position: 'right',
+labels: { boxWidth: 10, font: { size: 10, weight: 'bold' }, color: '#0f172a' }
+}
+},
+scales: {
+y: {
+beginAtZero: true,
+grid: { color: '#cbd5e1' },
+ticks: {
+font: { size: 10, weight: 'bold' },
+color: '#0f172a',
+callback: (v) => v.toLocaleString('en-US')
+}
+},
+x: {
+grid: { display: false },
+ticks: { font: { size: 10, weight: 'bold' }, color: '#0f172a' }
+}
+}
+}
+});
+graphs.genderSalesPie = new Chart(document.getElementById('genderSalesPieChart'), {
+type: 'pie',
+data: {
+labels: [],
+qtys: [],
+datasets: [{
+data: [],
+backgroundColor: ['#1e3a8a', '#2b6ef2', '#60a5fa'],
+borderColor: '#ffffff',
+borderWidth: 2
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+layout: { padding: 8 },
+plugins: {
+legend: { display: false },
+tooltip: {
+callbacks: {
+label: (ctx) => {
+const sales = Number(ctx.parsed || 0);
+const qty = Number(ctx.chart.data.qtys[ctx.dataIndex] || 0);
+return ` ${ctx.label}: SAR ${sales.toLocaleString('en-US')} | ${qty.toLocaleString('en-US')} pcs`;
+}
+}
+},
+datalabels: createPieDatalabelsConfig()
+}
+}
+});
+graphs.categorySalesPie = new Chart(document.getElementById('categorySalesPieChart'), {
+type: 'pie',
+data: {
+labels: [t('dept_apparel'), t('dept_footwear'), t('dept_bags'), t('dept_accessories')],
+qtys: [0, 0, 0, 0],
+datasets: [{
+data: [0, 0, 0, 0],
+backgroundColor: ['#1e3a8a', '#2b6ef2', '#0284c7', '#60a5fa'],
+borderColor: '#ffffff',
+borderWidth: 2
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+layout: { padding: 8 },
+plugins: {
+legend: { display: false },
+tooltip: {
+callbacks: {
+label: (ctx) => {
+const sales = Number(ctx.parsed || 0);
+const qty = Number(ctx.chart.data.qtys[ctx.dataIndex] || 0);
+return ` ${ctx.label}: SAR ${sales.toLocaleString('en-US')} | ${qty.toLocaleString('en-US')} pcs`;
+}
+}
+},
+datalabels: createPieDatalabelsConfig()
+}
+}
+});
+}
+function renderAllFilteredVisuals(rows, itemsBreakdown, labelText) {
+lastLoadedSnapshot.rows = rows || [];
+lastLoadedSnapshot.itemsBreakdown = itemsBreakdown || [];
+lastLoadedSnapshot.labelText = labelText;
+blueRangeLabel.textContent = labelText;
+document.querySelectorAll('.filter-sync-label').forEach((el) => {
+el.textContent = labelText;
+});
+const branchMap = {};
+(rows || []).forEach((r) => {
+const code = getShortBranchCode(r.Branch);
+if (!branchMap[code]) branchMap[code] = { qty: 0, sales: 0 };
+branchMap[code].qty += parseFloat(r.Total_Qty || 0);
+branchMap[code].sales += parseFloat(r.Total_Sales || 0);
+});
+const qtyList = Object.keys(branchMap)
+.map((code) => ({ code, qty: branchMap[code].qty }))
+.sort((a, b) => b.qty - a.qty);
+const salesList = Object.keys(branchMap)
+.map((code) => ({ code, sales: branchMap[code].sales }))
+.sort((a, b) => b.sales - a.sales);
+const totalQty = qtyList.reduce((acc, item) => acc + item.qty, 0);
+const totalSales = salesList.reduce((acc, item) => acc + item.sales, 0);
+document.getElementById('blueGrandTotalQty').textContent =
+Math.round(totalQty).toLocaleString('en-US');
+document.getElementById('blueGrandTotalSales').textContent =
+Math.round(totalSales).toLocaleString('en-US');
+const qtyTable = document.getElementById('blueQtyTable');
+qtyTable.innerHTML = qtyList.length
+? `<thead><tr><th>SHOP</th>${qtyList.map((i) => `<th>${i.code}</th>`).join('')}</tr></thead><tbody><tr><td>QTY</td>${qtyList.map((i) => `<td>${Math.round(i.qty).toLocaleString('en-US')}</td>`).join('')}</tr></tbody>`
+: '<thead><tr><th>SHOP</th><th>-</th></tr></thead><tbody><tr><td>QTY</td><td>0</td></tr></tbody>';
+const salesTable = document.getElementById('blueSalesTable');
+salesTable.innerHTML = salesList.length
+? `<thead><tr><th>SHOP</th>${salesList.map((i) => `<th>${i.code}</th>`).join('')}</tr></thead><tbody><tr><td>SALES</td>${salesList.map((i) => `<td>${Math.round(i.sales).toLocaleString('en-US')}</td>`).join('')}</tr></tbody>`
+: '<thead><tr><th>SHOP</th><th>-</th></tr></thead><tbody><tr><td>SALES</td><td>0</td></tr></tbody>';
+if (graphs.blueQtyBar) {
+graphs.blueQtyBar.data.labels = qtyList.length ? qtyList.map((i) => i.code) : ['000'];
+graphs.blueQtyBar.data.datasets[0].data = qtyList.length ? qtyList.map((i) => Math.round(i.qty)) : [0];
+graphs.blueQtyBar.update();
+}
+if (graphs.blueSalesBar) {
+graphs.blueSalesBar.data.labels = salesList.length ? salesList.map((i) => i.code) : ['000'];
+graphs.blueSalesBar.data.datasets[0].data = salesList.length ? salesList.map((i) => Math.round(i.sales)) : [0];
+graphs.blueSalesBar.update();
+}
+const regionStats = {};
+REGION_RULES.forEach((rule) => {
+regionStats[rule.key] = {
+key: rule.key,
+label: t(rule.key),
+branches: rule.branches,
+color: rule.color,
+svgId: rule.svgId,
+sales: 0,
+qty: 0,
+sharePct: '0.0'
+};
+});
+Object.entries(branchMap).forEach(([code, vals]) => {
+const rule = getRegionRuleByCode(code);
+if (rule && regionStats[rule.key]) {
+regionStats[rule.key].sales += vals.sales;
+regionStats[rule.key].qty += vals.qty;
+}
+});
+const regionArr = Object.values(regionStats);
+const totalRegionsSales = regionArr.reduce((s, r) => s + r.sales, 0) || 1;
+const maxRegionSales = Math.max(...regionArr.map((r) => r.sales), 1);
+regionArr.forEach((r) => {
+r.sharePct = ((r.sales / totalRegionsSales) * 100).toFixed(1);
+const svgEl = document.getElementById(r.svgId);
+if (svgEl) {
+if (r.sales <= 0) {
+svgEl.style.fill = '#bfdbfe';
+} else {
+const intensity = r.sales / maxRegionSales;
+if (intensity > 0.7) svgEl.style.fill = '#1e3a8a';
+else if (intensity > 0.4) svgEl.style.fill = '#2b6ef2';
+else if (intensity > 0.15) svgEl.style.fill = '#2563eb';
+else svgEl.style.fill = '#60a5fa';
+}
+}
+});
+currentRegionStatsMap = regionStats;
+const sortedRegions = [...regionArr].sort((a, b) => b.sales - a.sales);
+const topSalesReg = sortedRegions[0];
+const topQtyReg = [...regionArr].sort((a, b) => b.qty - a.qty)[0];
+document.getElementById('mapTopSalesRegion').textContent =
+topSalesReg && topSalesReg.sales > 0
+? `${topSalesReg.label} (SAR ${Math.round(topSalesReg.sales).toLocaleString('en-US')})`
+: '--';
+document.getElementById('mapTopQtyRegion').textContent =
+topQtyReg && topQtyReg.qty > 0
+? `${topQtyReg.label} (${Math.round(topQtyReg.qty).toLocaleString('en-US')} pcs)`
+: '--';
+const activeRegCount = regionArr.filter((r) => r.sales > 0).length;
+document.getElementById('mapActiveRegionsCount').textContent =
+`${activeRegCount} / ${regionArr.length}`;
+const listContainer = document.getElementById('regionSalesListContainer');
+if (listContainer) {
+listContainer.innerHTML = sortedRegions.map((reg) => {
+const barWidth = Math.max(4, Math.round((reg.sales / maxRegionSales) * 100));
+return `
+<div class="region-progress-item" data-region-key="${reg.key}"
+onmouseenter="window.__hoverKsaRegion && window.__hoverKsaRegion('${reg.key}')"
+onmouseleave="window.__leaveKsaRegion && window.__leaveKsaRegion()"><div class="region-prog-top"><span class="region-prog-name"><span class="region-dot" style="background:${reg.color};"></span><span>${reg.label}</span></span><span class="region-prog-val">SAR ${Math.round(reg.sales).toLocaleString('en-US')}</span></div><div class="region-prog-bar-bg"><div class="region-prog-bar-fill" style="width:${reg.sales > 0 ? barWidth : 0}%; background:${reg.color};"></div></div><div class="region-prog-meta"><span>Qty: ${Math.round(reg.qty).toLocaleString('en-US')} pcs</span><span>${reg.sharePct}%</span></div></div>
+`;
+}).join('');
+}
+const genderBuckets = {
+'MEN': { label: t('gen_men'), color: '#1e3a8a', sales: 0, qty: 0 },
+'WMN': { label: t('gen_wmn'), color: '#2b6ef2', sales: 0, qty: 0 },
+'USX': { label: t('gen_usx'), color: '#60a5fa', sales: 0, qty: 0 }
+};
+const deptBuckets = {
+'Apparel':     { label: t('dept_apparel'),     color: '#1e3a8a', sales: 0, qty: 0 },
+'Footwear':    { label: t('dept_footwear'),    color: '#2b6ef2', sales: 0, qty: 0 },
+'Bags':        { label: t('dept_bags'),        color: '#0284c7', sales: 0, qty: 0 },
+'Accessories': { label: t('dept_accessories'), color: '#60a5fa', sales: 0, qty: 0 }
+};
+if (Array.isArray(itemsBreakdown) && itemsBreakdown.length) {
+itemsBreakdown.forEach((row) => {
+const amt = parseFloat(row.amount || 0);
+const q = parseFloat(row.qty || 0);
+const combinedText = `${row.item_group || ''} ${row.item_code || ''}`;
+const gKey = detectGender(combinedText);
+genderBuckets[gKey].sales += amt;
+genderBuckets[gKey].qty += q;
+const dKey = detectDeptCategory(combinedText);
+deptBuckets[dKey].sales += amt;
+deptBuckets[dKey].qty += q;
+});
+} else {
+deptBuckets['Apparel'].sales = totalSales * 0.55;
+deptBuckets['Apparel'].qty = totalQty * 0.55;
+deptBuckets['Footwear'].sales = totalSales * 0.25;
+deptBuckets['Footwear'].qty = totalQty * 0.25;
+deptBuckets['Bags'].sales = totalSales * 0.12;
+deptBuckets['Bags'].qty = totalQty * 0.12;
+deptBuckets['Accessories'].sales = totalSales * 0.08;
+deptBuckets['Accessories'].qty = totalQty * 0.08;
+genderBuckets['MEN'].sales = totalSales * 0.55;
+genderBuckets['MEN'].qty = totalQty * 0.55;
+genderBuckets['WMN'].sales = totalSales * 0.30;
+genderBuckets['WMN'].qty = totalQty * 0.30;
+genderBuckets['USX'].sales = totalSales * 0.15;
+genderBuckets['USX'].qty = totalQty * 0.15;
+}
+const genderArr = Object.values(genderBuckets);
+if (graphs.genderSalesPie) {
+graphs.genderSalesPie.data.labels = genderArr.map((g) => g.label);
+graphs.genderSalesPie.data.qtys = genderArr.map((g) => Math.round(g.qty));
+graphs.genderSalesPie.data.datasets[0].data = genderArr.map((g) => Math.round(g.sales));
+graphs.genderSalesPie.data.datasets[0].backgroundColor = genderArr.map((g) => g.color);
+graphs.genderSalesPie.update();
+}
+renderCompactTwoLineBoxes('genderMiniBoxes', genderArr);
+const deptArr = Object.values(deptBuckets);
+if (graphs.categorySalesPie) {
+graphs.categorySalesPie.data.labels = deptArr.map((d) => d.label);
+graphs.categorySalesPie.data.qtys = deptArr.map((d) => Math.round(d.qty));
+graphs.categorySalesPie.data.datasets[0].data = deptArr.map((d) => Math.round(d.sales));
+graphs.categorySalesPie.data.datasets[0].backgroundColor = deptArr.map((d) => d.color);
+graphs.categorySalesPie.update();
+}
+renderCompactTwoLineBoxes('categoryMiniBoxes', deptArr);
+}
+window.__hoverKsaRegion = showRegionTooltip;
+window.__leaveKsaRegion = hideRegionTooltip;
+async function loadFilteredSections(fromDate, toDate, labelText) {
+blueRangeLabel.textContent = t('loading_txt');
+const [summaryRes, itemsRes] = await Promise.all([
+fetchBranchSalesSummary(fromDate, toDate),
+fetchInvoiceItemsBreakdown(fromDate, toDate)
+]);
+renderAllFilteredVisuals(summaryRes.rows, itemsRes, labelText);
+}
+bluePickerBtn.addEventListener('click', (e) => {
+e.stopPropagation();
+bluePopover.classList.toggle('hidden');
+});
+bluePopover.addEventListener('click', (e) => e.stopPropagation());
+document.addEventListener('click', () => bluePopover.classList.add('hidden'));
+document.querySelectorAll('.popover-preset-btn').forEach((btn) => {
+btn.addEventListener('click', async () => {
+const preset = btn.getAttribute('data-preset');
+bluePopover.classList.add('hidden');
+await applyPresetFilter(preset);
+});
+});
+blueApplyBtn.addEventListener('click', async () => {
+const f = blueFromInput.value;
+const tDate = blueToInput.value || f;
+if (!f) return;
+document.querySelectorAll('.fogo-tile[data-filter-preset]').forEach((c) => c.classList.remove('active-filter-card'));
+document.querySelectorAll('.popover-preset-btn').forEach((b) => b.classList.remove('active'));
+blueReportState = { mode: 'custom', from: f, to: tDate };
+const lbl = f === tDate ? f : `${f} → ${tDate}`;
+bluePopover.classList.add('hidden');
+await loadFilteredSections(f, tDate, lbl);
+});
+function updateKpiTextsFromSnapshot() {
+const {
+todaySummary,
+yestSummary,
+weekSummary,
+monthSummary,
+monthPurchaseVal,
+todayStr,
+yestStr,
+weekStartStr,
+monthStartStr
+} = lastLoadedSnapshot;
+if (!todaySummary) return;
+document.getElementById('kpiTodaySales').textContent = fmtSAR(todaySummary.totalSales);
+document.getElementById('kpiTodaySalesSub').textContent = `${todaySummary.totalInvoices} ${t('invoices_word')} (${todayStr})`;
+document.getElementById('kpiYesterdaySales').textContent = fmtSAR(yestSummary.totalSales);
+document.getElementById('kpiYesterdaySalesSub').textContent = `${yestSummary.totalInvoices} ${t('invoices_word')} (${yestStr})`;
+document.getElementById('kpiWeekSales').textContent = fmtSAR(weekSummary.totalSales);
+document.getElementById('kpiWeekSalesSub').textContent = `${t('from_to_prefix')} ${weekStartStr} ${t('to_word')} ${todayStr}`;
+document.getElementById('kpiMonthSales').textContent = fmtSAR(monthSummary.totalSales);
+document.getElementById('kpiMonthSalesSub').textContent = `${t('from_to_prefix')} ${monthStartStr} ${t('to_word')} ${todayStr}`;
+document.getElementById('kpiMonthPurchase').textContent = fmtSAR(monthPurchaseVal);
+document.getElementById('kpiMonthPurchaseSub').textContent = t('month_purchase_sub');
+initCurrentStockPlaceholder();
+}
+async function loadSalesDashboardData() {
+const baseDateStr = dateInput.value || toYMD(new Date());
+const baseDate = new Date(baseDateStr + 'T00:00:00');
+const todayStr = toYMD(baseDate);
+const yestDate = new Date(baseDate);
+yestDate.setDate(baseDate.getDate() - 1);
+const yestStr = toYMD(yestDate);
+const weekStart = new Date(baseDate);
+const diffToSat = (baseDate.getDay() + 1) % 7;
+weekStart.setDate(baseDate.getDate() - diffToSat);
+const weekStartStr = toYMD(weekStart);
+const monthStart = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1);
+const monthStartStr = toYMD(monthStart);
+if (blueReportState.mode === 'yesterday') {
+blueReportState.from = yestStr;
+blueReportState.to = yestStr;
+blueFromInput.value = yestStr;
+blueToInput.value = yestStr;
+}
+highlightActiveFilterCard(blueReportState.mode);
+['kpiTodaySales', 'kpiYesterdaySales', 'kpiWeekSales', 'kpiMonthSales', 'kpiMonthPurchase'].forEach((id) => {
+document.getElementById(id).textContent = t('fetching_txt');
+});
+initCurrentStockPlaceholder();
+try {
+const [
+todaySummary,
+yestSummary,
+weekSummary,
+monthSummary,
+monthPurchaseVal
+] = await Promise.all([
+fetchBranchSalesSummary(todayStr, todayStr),
+fetchBranchSalesSummary(yestStr, yestStr),
+fetchBranchSalesSummary(weekStartStr, todayStr),
+fetchBranchSalesSummary(monthStartStr, todayStr),
+fetchMonthPurchaseValue()
+]);
+const syncTimeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+lastLoadedSnapshot = {
+...lastLoadedSnapshot,
+todaySummary,
+yestSummary,
+weekSummary,
+monthSummary,
+monthPurchaseVal,
+todayStr,
+yestStr,
+weekStartStr,
+monthStartStr,
+lastSyncTimeStr: syncTimeNow
+};
+updateKpiTextsFromSnapshot();
+if (blueReportState.mode === 'yesterday') {
+const yestItems = await fetchInvoiceItemsBreakdown(yestStr, yestStr);
+const yestLabel = `${t('preset_yesterday').split(' ')[0]} (${yestStr})`;
+renderAllFilteredVisuals(yestSummary.rows, yestItems, yestLabel);
+} else {
+const lbl = blueReportState.from === blueReportState.to
+? blueReportState.from
+: `${blueReportState.from} → ${blueReportState.to}`;
+await loadFilteredSections(blueReportState.from, blueReportState.to, lbl);
+}
+if (yestSummary.totalSales > 0) {
+const diffPct = (((todaySummary.totalSales - yestSummary.totalSales) / yestSummary.totalSales) * 100).toFixed(1);
+document.getElementById('sideVsYesterday').textContent = diffPct >= 0 ? `+${diffPct}%` : `${diffPct}%`;
+} else {
+document.getElementById('sideVsYesterday').textContent = 'N/A';
+}
+document.getElementById('sideMonthInvoices').textContent = monthSummary.totalInvoices.toLocaleString('en-US');
+document.getElementById('lastSyncTime').textContent = `${t('last_sync_prefix')} ${syncTimeNow}`;
+} catch (err) {
+console.error('Dashboard Sales Load Error:', err);
+}
+}
+document.getElementById('refreshDashBtn').addEventListener('click', loadSalesDashboardData);
+dateInput.addEventListener('change', loadSalesDashboardData);
+window.addEventListener('DOMContentLoaded', checkExistingSession);
+})();</script></body></html>

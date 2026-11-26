@@ -1,1622 +1,1408 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" id="htmlRoot">
 <head>
-    <link rel="manifest" href="./manifest.json">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title data-i18n="page_title">مبيعات الموردين - الموسى التجارية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="stylesheet" href="style.css?v=2026.5">
-    <script src="app.js" defer></script>
-
-    <style>
-        .main-container {
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        .view-hidden {
-            display: none !important;
-        }
-
-        /* 📱 ترويسة ثابتة وموحدة تضمن بقاء الأزرار في سطر واحد على الجوال */
-        header {
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            flex-wrap: nowrap !important;
-            gap: 6px !important;
-            margin-bottom: 20px !important;
-            padding: 12px 14px !important;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
-            color: #ffffff !important;
-            border-radius: 14px !important;
-            box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
-            border: 2px solid #38bdf8 !important;
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
-        }
-
-        .header-title-box {
-            flex: 1 1 auto !important;
-            min-width: 0 !important;
-        }
-
-        .header-title-box h1 {
-            font-size: 14px !important;
-            color: #ffffff !important;
-            font-weight: 800;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-            margin: 0 !important;
-            line-height: 1.3;
-        }
-
-        .header-title-box p {
-            font-size: 9.5px !important;
-            color: #bae6fd !important;
-            margin: 0 !important;
-            font-weight: 600;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-        }
-
-        .header-left-group {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            flex-wrap: nowrap !important;
-            gap: 4px !important;
-            flex-shrink: 0 !important;
-            width: auto !important;
-        }
-
-        .action-btn {
-            background: rgba(255, 255, 255, 0.15) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            width: 32px !important;
-            height: 32px !important;
-            min-width: 32px !important;
-            max-width: 32px !important;
-            border-radius: 8px !important;
-            cursor: pointer;
-            font-size: 13px !important;
-            color: #ffffff !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            text-decoration: none;
-            padding: 0 !important;
-            margin: 0 !important;
-            flex-shrink: 0 !important;
-            transition: all 0.25s;
-        }
-        .action-btn:hover {
-            background: rgba(255, 255, 255, 0.25) !important;
-            border-color: #ffffff !important;
-            transform: translateY(-2px);
-        }
-
-        .lang-select {
-            background: rgba(255, 255, 255, 0.15) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            padding: 0 4px !important;
-            border-radius: 8px !important;
-            font-size: 10px !important;
-            font-weight: 700;
-            color: #ffffff !important;
-            height: 32px !important;
-            outline: none;
-            cursor: pointer;
-            margin: 0 !important;
-            flex-shrink: 0 !important;
-            width: auto !important;
-        }
-        .lang-select option {
-            background: #1e293b;
-            color: #ffffff;
-        }
-
-        .filter-panel {
-            background: var(--bg-card);
-            padding: 24px;
-            border-radius: 18px;
-            box-shadow: var(--shadow);
-            margin-bottom: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            border: 2px solid var(--border);
-        }
-
-        .controls-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 14px;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            position: relative;
-        }
-
-        .control-label {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-muted);
-        }
-
-        .date-toggle-btn, .multi-select-btn {
-            background: var(--bg-body);
-            border: 2px solid var(--border);
-            padding: 10px 14px;
-            border-radius: 14px;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-main);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            height: 44px;
-            width: 100%;
-            transition: border-color 0.2s;
-        }
-        .date-toggle-btn:hover, .multi-select-btn:hover { border-color: var(--accent); }
-
-        .multi-select-dropdown {
-            position: relative;
-            width: 100%;
-        }
-
-        .multi-select-content {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 0;
-            width: 100%;
-            background: var(--bg-card);
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
-            max-height: 220px;
-            overflow-y: auto;
-            z-index: 100;
-            padding: 10px;
-        }
-        .multi-select-content.open { display: block; }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 10px;
-            font-size: 11.5px;
-            font-weight: 700;
-            cursor: pointer;
-            border-radius: 8px;
-            color: var(--text-main);
-            transition: background 0.15s;
-        }
-        .checkbox-item:hover { background: var(--bg-body); }
-
-        .period-chips {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-
-        .chip {
-            background: var(--accent-light);
-            border: 2px solid var(--accent-border);
-            padding: 10px 6px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
-            text-align: center;
-            cursor: pointer;
-            color: var(--accent);
-            transition: all 0.2s;
-        }
-        .chip.active {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-        }
-
-        .calendar-container {
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            padding: 14px;
-            background: var(--bg-card);
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 0;
-            width: 100%;
-            max-width: 350px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
-            z-index: 1000;
-        }
-        .calendar-container.open { display: block; }
-        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 800; color: var(--text-main); }
-        .calendar-header button { background: none; border: 2px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; color: var(--text-main); font-weight: 700; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
-        .calendar-day-name { font-size: 11px; color: var(--text-muted); font-weight: 800; }
-        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--bg-body); border-radius: 8px; cursor: pointer; color: var(--text-main); border: 1.5px solid var(--border); }
-        .calendar-day.selected { background: var(--accent); color: white; border-color: var(--accent); }
-        .calendar-day.in-range { background: var(--accent-light); color: var(--accent); }
-
-        .hero-summary-card {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%);
-            color: white;
-            border-radius: 20px;
-            padding: 24px;
-            margin-bottom: 25px;
-            box-shadow: 0 15px 35px -8px rgba(2, 132, 199, 0.45);
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            border: 2px solid #38bdf8;
-        }
-
-        .hero-stat-box {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .hero-stat-box label {
-            font-size: 11px;
-            color: #bae6fd;
-            font-weight: 700;
-        }
-
-        .hero-stat-box span {
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        .report-section {
-            background: var(--bg-card);
-            border-radius: 18px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-            margin-bottom: 25px;
-            border: 2px solid var(--border);
-        }
-
-        .section-header-row {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .view-toggle-group {
-            display: inline-flex;
-            align-items: center;
-            background: var(--bg-body);
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            padding: 4px;
-            gap: 4px;
-        }
-
-        .view-mode-btn {
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            font-family: 'Cairo', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 7px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-
-        .view-mode-btn.active {
-            background: var(--accent);
-            color: #ffffff;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-        }
-
-        /* 📊 جدول صفوف وأعمدة باحترافية وهوية مبيعات المبيعات */
-        .table-view-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            border: 2px solid var(--border);
-            overflow-x: auto;
-            box-shadow: var(--shadow);
-        }
-
-        .daily-grid-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-            white-space: nowrap;
-        }
-
-        .daily-grid-table th,
-        .daily-grid-table td {
-            padding: 12px 14px;
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .daily-grid-table th:first-child,
-        .daily-grid-table td:first-child {
-            text-align: right;
-            font-weight: 800;
-            position: sticky;
-            right: 0;
-            background: var(--bg-card);
-            z-index: 2;
-        }
-
-        [dir="ltr"] .daily-grid-table th:first-child,
-        [dir="ltr"] .daily-grid-table td:first-child {
-            text-align: left;
-            right: auto;
-            left: 0;
-        }
-
-        .daily-grid-table thead th {
-            background: linear-gradient(135deg, rgba(2, 132, 199, 0.14), rgba(37, 99, 235, 0.14));
-            color: var(--accent);
-            font-weight: 800;
-            border-bottom: 2px solid var(--accent-border);
-        }
-
-        .daily-grid-table thead th:first-child {
-            background: linear-gradient(135deg, rgba(2, 132, 199, 0.16), rgba(37, 99, 235, 0.16));
-            z-index: 3;
-        }
-
-        .daily-grid-table tbody tr.expandable-row {
-            cursor: pointer;
-            transition: background 0.15s ease;
-        }
-
-        .daily-grid-table tbody tr.expandable-row.is-open td {
-            background: rgba(2, 132, 199, 0.06);
-        }
-
-        .daily-grid-table tbody tr.expandable-row.is-open td:first-child {
-            background: var(--accent-light);
-            color: var(--accent);
-        }
-
-        .daily-grid-table tbody tr.expandable-row:hover td {
-            background: rgba(2, 132, 199, 0.09);
-        }
-
-        .daily-grid-table tbody tr.expandable-row:hover td:first-child {
-            background: var(--bg-body);
-        }
-
-        .daily-grid-table tbody tr.sub-row td {
-            background: var(--bg-body);
-            font-size: 11.5px;
-            padding-top: 10px;
-            padding-bottom: 10px;
-        }
-
-        .daily-grid-table tbody tr.sub-row td:first-child {
-            background: var(--bg-body);
-            padding-right: 30px;
-            font-weight: 800;
-            border-right: 3px solid var(--accent);
-        }
-
-        [dir="ltr"] .daily-grid-table tbody tr.sub-row td:first-child {
-            padding-right: 14px;
-            padding-left: 30px;
-            border-right: none;
-            border-left: 3px solid var(--accent);
-        }
-
-        .daily-grid-table tbody tr.leaf-row td {
-            background: var(--bg-card);
-            font-size: 11px;
-            color: var(--text-muted);
-            padding-top: 9px;
-            padding-bottom: 9px;
-        }
-
-        .daily-grid-table tbody tr.leaf-row td:first-child {
-            background: var(--bg-card);
-            padding-right: 48px;
-            color: var(--text-main);
-            font-weight: 700;
-            border-right: 3px solid #10b981;
-        }
-
-        [dir="ltr"] .daily-grid-table tbody tr.leaf-row td:first-child {
-            padding-right: 14px;
-            padding-left: 48px;
-            border-right: none;
-            border-left: 3px solid #10b981;
-        }
-
-        .tbl-pill-sales {
-            color: #1d4ed8;
-            font-weight: 900;
-        }
-        .tbl-pill-margin {
-            background: rgba(16, 185, 129, 0.1);
-            color: #047857;
-            padding: 3px 8px;
-            border-radius: 8px;
-            font-weight: 800;
-        }
-
-        .row-caret {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 18px;
-            margin-left: 6px;
-            color: var(--accent);
-            font-size: 11px;
-            transition: transform 0.2s;
-        }
-
-        [dir="ltr"] .row-caret {
-            margin-left: 0;
-            margin-right: 6px;
-        }
-
-        .daily-grid-table tfoot td {
-            background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(37, 99, 235, 0.12));
-            font-weight: 900;
-            border-top: 2px solid var(--accent-border);
-            border-bottom: none;
-            color: var(--accent);
-            padding: 13px 14px;
-        }
-
-        .daily-grid-table tfoot td:first-child {
-            background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(37, 99, 235, 0.15));
-        }
-
-        .status-msg {
-            text-align: center;
-            padding: 30px;
-            color: var(--text-muted);
-            font-size: 13px;
-            font-weight: 700;
-            grid-column: 1 / -1;
-        }
-
-        /* 🌲 هيكل الشجرة (مغلقة افتراضياً وتفتح عند الضغط) */
-        .tree-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .tree-supplier-card {
-            background: var(--bg-card);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: all 0.25s;
-        }
-        .tree-supplier-card.open {
-            border-color: var(--accent);
-            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.15);
-        }
-
-        .tree-supplier-header {
-            padding: 16px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            cursor: pointer;
-            background: var(--bg-card);
-            user-select: none;
-        }
-        .tree-supplier-card.open .tree-supplier-header {
-            border-bottom: 1px solid var(--border);
-        }
-
-        .tree-supplier-top-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .tree-supplier-title {
-            font-size: 15px;
-            font-weight: 900;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .tree-supplier-title i { color: var(--accent); font-size: 16px; }
-
-        .metrics-badge-grid {
-            font-size: 11px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 6px;
-            width: 100%;
-        }
-
-        .metrics-badge-grid span {
-            padding: 6px 10px;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            font-weight: 700;
-            border: 1px solid transparent;
-        }
-        .metrics-badge-grid span.box-sales { background: rgba(37, 99, 235, 0.08); color: #1d4ed8; border-color: rgba(37, 99, 235, 0.2); }
-        .metrics-badge-grid span.box-novat { background: rgba(14, 165, 233, 0.08); color: #0369a1; border-color: rgba(14, 165, 233, 0.2); }
-        .metrics-badge-grid span.box-cost { background: rgba(234, 88, 12, 0.08); color: #c2410c; border-color: rgba(234, 88, 12, 0.2); }
-        .metrics-badge-grid span.box-margin { background: rgba(16, 185, 129, 0.08); color: #047857; border-color: rgba(16, 185, 129, 0.2); }
-
-        .metrics-badge-grid span label { font-size: 9.5px; opacity: 0.85; }
-        .metrics-badge-grid span b { font-size: 12px; font-weight: 900; }
-
-        .tree-supplier-body {
-            display: none;
-            padding: 16px 20px 20px 20px;
-            background: rgba(0, 0, 0, 0.015);
-        }
-        .tree-supplier-card.open .tree-supplier-body { display: block; }
-
-        .gender-accordion {
-            background: var(--bg-body);
-            border: 1.5px solid var(--border);
-            border-radius: 14px;
-            margin-bottom: 12px;
-            overflow: hidden;
-            transition: border-color 0.2s;
-        }
-        .gender-accordion:last-child { margin-bottom: 0; }
-        .gender-accordion.open { border-color: var(--accent); }
-
-        .gender-header {
-            padding: 14px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 800;
-            color: var(--text-main);
-            background: var(--bg-card);
-            user-select: none;
-        }
-        .gender-title { display: flex; align-items: center; gap: 8px; }
-        
-        .gender-body {
-            display: none;
-            padding: 14px;
-            background: var(--bg-body);
-            border-top: 1px solid var(--border);
-        }
-        .gender-accordion.open .gender-body { display: block; }
-
-        .groups-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .group-node {
-            background: var(--bg-card);
-            border: 1.5px solid var(--border);
-            border-radius: 12px;
-            padding: 12px 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-main);
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-        }
-        .group-node:hover {
-            transform: translateY(-2px);
-            border-color: var(--accent);
-            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.1);
-        }
-        .group-name { display: flex; justify-content: space-between; align-items: center; color: var(--text-main); font-weight: 800; }
-        .group-name i { color: var(--accent); font-size: 11px; margin-left: 6px; }
-        
-        .group-node-metrics {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-        }
-
-        .metric-cell {
-            border-radius: 6px;
-            padding: 6px 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            border: 1px solid transparent;
-        }
-        .metric-cell.m-cost { background: rgba(234, 88, 12, 0.06); border-color: rgba(234, 88, 12, 0.15); color: #c2410c; }
-        .metric-cell.m-margin { background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.15); color: #047857; }
-        .metric-cell.m-qty { background: rgba(37, 99, 235, 0.06); border-color: rgba(37, 99, 235, 0.15); color: #1d4ed8; }
-
-        .metric-cell label { font-size: 9px; opacity: 0.85; font-weight: 700; }
-        .metric-cell span { font-size: 11px; font-weight: 900; }
-
-        /* 💻 3 مربعات في الصف على الشاشات الكبيرة */
-        @media (min-width: 768px) {
-            header {
-                padding: 20px 28px !important;
-            }
-            .header-title-box h1 {
-                font-size: 18px !important;
-            }
-            .header-title-box p {
-                font-size: 11.5px !important;
-            }
-            .action-btn {
-                width: 44px !important;
-                height: 44px !important;
-                min-width: 44px !important;
-                font-size: 16px !important;
-                border-radius: 14px !important;
-            }
-            .lang-select {
-                height: 44px !important;
-                font-size: 12px !important;
-                padding: 0 14px !important;
-                border-radius: 14px !important;
-            }
-            .header-left-group {
-                gap: 10px !important;
-            }
-            .main-container {
-                max-width: 1400px !important;
-                padding: 0 20px;
-            }
-            .filter-panel .period-chips {
-                grid-template-columns: repeat(6, 1fr) !important;
-            }
-            .controls-row {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 16px !important;
-            }
-            .hero-summary-card { grid-template-columns: repeat(5, 1fr) !important; }
-            .tree-container:not(.view-hidden) {
-                display: grid !important;
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 20px !important;
-                align-items: start;
-            }
-            .groups-grid {
-                grid-template-columns: repeat(1, 1fr) !important;
-                gap: 12px !important;
-            }
-            .metrics-badge-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-        }
-    </style>
+<link rel="manifest" href="./manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title data-i18n="page_title">مبيعات الموردين - الموسى ERP</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css?v=2026.25">
+<script src="app.js" defer></script>
+<style>
+:root {
+  --navy-sidebar: #0f172a;
+  --navy-topbar: #0b1120;
+  --blue-primary: #1d4ed8;
+  --blue-accent: #2563eb;
+  --bg-body: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 14px;
+  --shadow: 0 4px 14px rgba(15,23,42,0.05);
+}
+[data-theme="dark"] {
+  --bg-body: #0b1120;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: #334155;
+}
+body {
+  font-family: 'Cairo', 'Inter', 'Noto Sans Devanagari', 'Noto Nastaliq Urdu', sans-serif;
+  background: var(--bg-body);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+.app-layout { display: flex; min-height: 100vh; }
+.sidebar {
+  position: fixed; top: 0; bottom: 0; inset-inline-start: 0; width: 250px;
+  background: var(--navy-sidebar); color: #cbd5e1; z-index: 110; display: flex; flex-direction: column;
+  border-inline-end: 1px solid rgba(255,255,255,0.07); transition: transform 0.25s ease;
+}
+.sidebar-brand-header {
+  height: 60px; padding: 0 18px; display: flex; align-items: center; gap: 11px;
+  background: var(--navy-topbar); border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;
+}
+.brand-fogo-icon {
+  width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg,#2563eb 0%,#4f46e5 100%);
+  color: #ffffff; display: grid; place-items: center; font-size: 15px; flex-shrink: 0;
+}
+.brand-text-group .brand-name { font-size: 15px; font-weight: 800; color: #ffffff; display: block; line-height: 1.15; }
+.brand-text-group .brand-sub { font-size: 10.5px; font-weight: 700; color: #60a5fa; display: block; }
+.sidebar-scroll-area { flex: 1; overflow-y: auto; padding: 12px; }
+.sidebar-scroll-area::-webkit-scrollbar { width: 4px; }
+.sidebar-scroll-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 4px; }
+.nav-section-caption { font-size: 10.5px; font-weight: 700; color: #64748b; padding: 12px 12px 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+.nav-item { margin-bottom: 4px; }
+.nav-link-btn, .nav-accordion-btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 9.5px 12px;
+  border-radius: 9px; border: 1px solid transparent; background: transparent; color: #cbd5e1;
+  font-family: inherit; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.15s ease;
+}
+.nav-left { display: flex; align-items: center; gap: 10px; }
+.nav-left i { width: 18px; text-align: center; font-size: 13.5px; color: #94a3b8; }
+.nav-link-btn:hover, .nav-accordion-btn:hover { background: rgba(255,255,255,0.07); color: #ffffff; }
+.nav-link-btn.active { background: #2563eb; color: #ffffff; box-shadow: 0 4px 12px rgba(37,99,235,0.35); }
+.nav-link-btn.active .nav-left i { color: #ffffff; }
+.chevron-icon { font-size: 10px; color: #94a3b8; transition: transform 0.2s ease; }
+.nav-item.open > .nav-accordion-btn .chevron-icon { transform: rotate(-90deg); }
+html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: rotate(90deg); }
+.submenu { display: none; flex-direction: column; gap: 2px; margin-top: 3px; margin-bottom: 6px; padding-inline-start: 14px; border-inline-start: 1.5px solid rgba(255,255,255,0.12); margin-inline-start: 16px; }
+.nav-item.open > .submenu { display: flex; }
+.submenu a { display: flex; align-items: center; gap: 9px; padding: 6.5px 10px; border-radius: 7px; color: #94a3b8; text-decoration: none; font-size: 12px; font-weight: 600; }
+.submenu a:hover { background: rgba(37,99,235,0.22); color: #ffffff; }
+.submenu a.active { color: #38bdf8; background: rgba(56,189,248,0.1); }
+.submenu a i { font-size: 5px; color: #60a5fa; }
+
+/* Topbar Styling */
+.app-topbar {
+  position: fixed; top: 0; inset-inline-start: 250px; inset-inline-end: 0; height: 60px;
+  background: var(--navy-topbar); color: #ffffff; display: flex; align-items: center; justify-content: space-between;
+  padding-inline: 20px; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.topbar-right-actions { display: flex; align-items: center; gap: 10px; }
+.topbar-btn {
+  width: 36px; height: 36px; border-radius: 9px; background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14); color: #e2e8f0; display: grid; place-items: center; cursor: pointer; transition: 0.2s;
+}
+.topbar-btn:hover { background: #2563eb; color: #fff; border-color: #2563eb; }
+.lang-select-top {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #ffffff;
+  height: 36px; padding-inline: 10px; border-radius: 9px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; outline: none;
+}
+.lang-select-top option { background: #0f172a; color: #ffffff; }
+
+.app-main-content { flex-grow: 1; margin-inline-start: 250px; margin-top: 60px; padding: 22px; background: var(--bg-body); overflow-y: auto; min-width: 0; }
+.main-container { width: 100%; max-width: 1400px; margin: 0 auto; }
+.view-hidden { display: none !important; }
+
+/* Hero Card Modern Redesign (Contains Filters inside) */
+.hero-card {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1d4ed8 100%);
+  color: white; border-radius: 20px; padding: 22px; margin-bottom: 25px;
+  box-shadow: 0 15px 35px -8px rgba(29, 78, 216, 0.45); border: 2px solid #3b82f6; position: relative;
+}
+.hero-embedded-controls {
+  display: flex; flex-direction: column; gap: 14px; padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15); margin-bottom: 18px;
+}
+.period-chips {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%;
+}
+@media (min-width: 768px) {
+  .period-chips { grid-template-columns: repeat(6, 1fr); }
+}
+.chip {
+  background: rgba(255, 255, 255, 0.08); border: 1.5px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 6px; border-radius: 10px; font-size: 11.5px; font-weight: 700; text-align: center;
+  cursor: pointer; color: #e2e8f0; transition: all 0.2s;
+}
+.chip:hover { background: rgba(255, 255, 255, 0.18); color: #fff; }
+.chip.active {
+  background: #2563eb; color: white; border-color: #60a5fa;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.controls-row {
+  display: grid; grid-template-columns: 1fr; gap: 12px; width: 100%;
+}
+@media(min-width: 768px) {
+  .controls-row { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+}
+@media(min-width: 1200px) {
+  .controls-row { grid-template-columns: repeat(5, 1fr); }
+}
+
+.control-group { display: flex; flex-direction: column; gap: 5px; position: relative; width: 100%; }
+.control-label { font-size: 11px; color: #94a3b8; font-weight: 700; }
+.date-toggle-btn, .multi-select-btn {
+  background: rgba(15, 23, 42, 0.7); border: 1.5px solid rgba(255, 255, 255, 0.2); color: #fff;
+  padding: 8px 12px; border-radius: 10px; font-size: 11.5px; font-weight: 700; outline: none;
+  cursor: pointer; height: 38px; width: 100%; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;
+}
+
+.multi-select-dropdown { position: relative; width: 100%; }
+.multi-select-content {
+  display: none; position: absolute; top: calc(100% + 4px); inset-inline-start: 0; width: 100%;
+  background: #1e293b; border: 1.5px solid rgba(255, 255, 255, 0.2); border-radius: 12px;
+  box-shadow: 0 15px 25px -5px rgba(0,0,0,0.3); max-height: 220px; overflow-y: auto; z-index: 100; padding: 8px; color: #fff;
+}
+.multi-select-content.open { display: block; }
+.checkbox-item {
+  display: flex; align-items: center; gap: 8px; padding: 7px 10px; font-size: 11.5px; font-weight: 700;
+  cursor: pointer; border-radius: 8px; color: #e2e8f0; transition: background 0.15s;
+}
+.checkbox-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+.calendar-container {
+  border: 1.5px solid rgba(255, 255, 255, 0.2); border-radius: 14px; padding: 14px; background: #1e293b;
+  display: none; position: absolute; top: calc(100% + 4px); inset-inline-start: 0; z-index: 1000; width: 310px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.3); color: #fff;
+}
+.calendar-container.open { display: block; }
+.calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 800; color: #fff; }
+.calendar-header button { background: none; border: 1.5px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 12px; color: #fff; font-weight: 700; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
+.calendar-day-name { font-size: 11px; color: #94a3b8; font-weight: 800; padding-bottom: 6px; }
+.calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: rgba(15, 23, 42, 0.5); color: #fff; border-radius: 8px; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.1); }
+.calendar-day.selected { background: var(--blue-accent); color: white; border-color: var(--blue-accent); }
+.calendar-day.in-range { background: rgba(37, 99, 235, 0.3); color: #93c5fd; }
+
+/* Hero Summary Stats Cards (Inside Hero Card) */
+.hero-summary-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+}
+@media(min-width: 768px) {
+  .hero-summary-grid { grid-template-columns: repeat(5, 1fr); }
+}
+.hero-stat-box { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); padding: 12px 14px; border-radius: 12px; border: 1.5px solid rgba(255, 255, 255, 0.15); }
+.hero-stat-box label { font-size: 11px; color: #cbd5e1; display: block; margin-bottom: 4px; font-weight: 700; }
+.hero-stat-box span { font-size: 15px; font-weight: 800; color: #ffffff; }
+
+/* Report Section & Switcher */
+.report-section { background: var(--bg-card); border-radius: 18px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 30px; border: 2px solid var(--border); }
+.section-header-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; }
+.section-title { font-size: 15px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+
+.view-toggle-group { display: flex; background: var(--bg-body); border: 2px solid var(--border); border-radius: 10px; padding: 3px; gap: 3px; }
+.view-mode-btn { background: transparent; border: none; padding: 6px 12px; border-radius: 8px; font-size: 11.5px; font-weight: 800; color: var(--text-muted); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.view-mode-btn.active { background: var(--blue-accent); color: white; box-shadow: 0 2px 8px rgba(37,99,235,0.25); }
+
+/* Table View */
+.table-view-card { background: var(--bg-card); border-radius: 16px; border: 2px solid var(--border); overflow-x: auto; box-shadow: var(--shadow); }
+.daily-grid-table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; }
+.daily-grid-table th, .daily-grid-table td { border-bottom: 1px solid var(--border); padding: 12px 10px; font-weight: 700; white-space: nowrap; color: var(--text-main); }
+.daily-grid-table th { background: var(--navy-sidebar); color: white; font-weight: 800; }
+.daily-grid-table th:first-child, .daily-grid-table td:first-child { text-align: start; position: sticky; inset-inline-start: 0; background: var(--bg-card); z-index: 2; }
+.daily-grid-table thead th:first-child { z-index: 3; background: var(--navy-sidebar); }
+.sub-row td { background: rgba(2, 132, 199, 0.04) !important; font-size: 11.5px !important; }
+.leaf-row td { background: var(--bg-body) !important; font-size: 11px !important; color: var(--text-muted) !important; }
+.tbl-pill-sales { color: #1d4ed8; font-weight: 900; }
+.tbl-pill-margin { background: rgba(16, 185, 129, 0.1); color: #047857; padding: 3px 8px; border-radius: 8px; font-weight: 800; }
+.row-caret { display: inline-flex; align-items: center; justify-content: center; width: 18px; margin-inline-end: 6px; color: var(--blue-accent); font-size: 11px; }
+
+/* Tree Cards Layout */
+.tree-container { display: grid; grid-template-columns: 1fr; gap: 15px; }
+@media(min-width: 992px) {
+  .tree-container:not(.view-hidden) { grid-template-columns: repeat(3, 1fr) !important; align-items: start; }
+}
+.tree-supplier-card { background: var(--bg-card); border: 2px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: 0.2s; }
+.tree-supplier-card.open { border-color: var(--blue-accent); }
+.tree-supplier-header { padding: 16px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; user-select: none; }
+.tree-supplier-card.open .tree-supplier-header { border-bottom: 1px solid var(--border); }
+.tree-supplier-top-row { display: flex; justify-content: space-between; align-items: center; }
+.tree-supplier-title { font-size: 14.5px; font-weight: 900; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+.tree-supplier-title i { color: var(--blue-accent); }
+
+.metrics-badge-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.metrics-badge-grid span { padding: 6px 10px; border-radius: 8px; display: flex; flex-direction: column; gap: 2px; font-weight: 700; border: 1px solid transparent; font-size: 11px; }
+.metrics-badge-grid span.box-sales { background: rgba(37, 99, 235, 0.08); color: #1d4ed8; border-color: rgba(37, 99, 235, 0.2); }
+.metrics-badge-grid span.box-novat { background: rgba(14, 165, 233, 0.08); color: #0369a1; border-color: rgba(14, 165, 233, 0.2); }
+.metrics-badge-grid span.box-cost { background: rgba(234, 88, 12, 0.08); color: #c2410c; border-color: rgba(234, 88, 12, 0.2); }
+.metrics-badge-grid span.box-margin { background: rgba(16, 185, 129, 0.08); color: #047857; border-color: rgba(16, 185, 129, 0.2); }
+.metrics-badge-grid span label { font-size: 9.5px; opacity: 0.85; }
+.metrics-badge-grid span b { font-size: 11.5px; font-weight: 900; }
+
+.tree-supplier-body { display: none; padding: 14px; background: var(--bg-body); }
+.tree-supplier-card.open .tree-supplier-body { display: flex; flex-direction: column; gap: 10px; }
+
+.gender-accordion { background: var(--bg-card); border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+.gender-header { padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-size: 12px; font-weight: 800; color: var(--text-main); user-select: none; }
+.gender-title { display: flex; align-items: center; gap: 8px; }
+.gender-body { display: none; padding: 12px; background: var(--bg-body); border-top: 1px solid var(--border); }
+.gender-accordion.open .gender-body { display: flex; flex-direction: column; gap: 8px; }
+
+.group-node { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px; font-size: 11.5px; font-weight: 700; }
+.group-name { display: flex; justify-content: space-between; align-items: center; color: var(--text-main); font-weight: 800; }
+.group-node-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.metric-cell { border-radius: 6px; padding: 5px 6px; display: flex; flex-direction: column; gap: 2px; border: 1px solid transparent; text-align: center; }
+.metric-cell.m-cost { background: rgba(234, 88, 12, 0.06); border-color: rgba(234, 88, 12, 0.15); color: #c2410c; }
+.metric-cell.m-margin { background: rgba(16, 185, 129, 0.06); border-color: rgba(16, 185, 129, 0.15); color: #047857; }
+.metric-cell.m-qty { background: rgba(37, 99, 235, 0.06); border-color: rgba(37, 99, 235, 0.15); color: #1d4ed8; }
+.metric-cell label { font-size: 9px; opacity: 0.85; font-weight: 700; }
+.metric-cell span { font-size: 10.5px; font-weight: 900; }
+
+.status-msg { text-align: center; padding: 30px; color: var(--text-muted); font-size: 13px; font-weight: 700; grid-column: 1 / -1; }
+</style>
 </head>
 <body data-theme="light">
+<div class="app-layout">
+  <!-- القائمة الجانبية الموحدة والمترجمة بالكامل -->
+  <aside class="sidebar" id="sidebarMenu">
+    <div class="sidebar-brand-header">
+      <div class="brand-fogo-icon"><i class="fa-solid fa-chart-simple"></i></div>
+      <div class="brand-text-group">
+        <span class="brand-name" data-i18n="brand_name">الموسى ERP</span>
+        <span class="brand-sub" data-i18n="brand_sub">Financial & Retail</span>
+      </div>
+    </div>
+    <div class="sidebar-scroll-area">
+      <div class="nav-section-caption" data-i18n="menu_caption">القائمة الرئيسية</div>
+      
+      <div class="nav-item">
+        <a href="./index.html" class="nav-link-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-table-cells-large"></i>
+            <span data-i18n="nav_dashboard">لوحة التحكم</span>
+          </span>
+        </a>
+      </div>
 
-<div class="main-container">
-    <header>
-        <div class="header-title-box">
-            <h1 data-i18n="header_title">الموسى التجارية</h1>
-            <p data-i18n="header_subtitle">إدارة مبيعات الموردين</p>
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span data-i18n="nav_sales">المبيعات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./Sales.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_summary">ملخص المبيعات</span></a>
+          <a href="./sales_group.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_group">المبيعات حسب المجموعة</span></a>
+          <a href="./supplier_sales.html" class="active"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_supplier">المبيعات حسب المورد</span></a>
+          <a href="./sales_per_day.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_per_day">المبيعات اليومية</span></a>
         </div>
-        <div class="header-left-group">
-            <button class="action-btn" id="themeToggleBtn" onclick="toggleTheme()" title="تغيير المظهر">
-                <i class="fa-solid fa-moon" id="themeIcon"></i>
-            </button>
-            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
-                <option value="ar">العربية</option>
-                <option value="en">English</option>
-                <option value="hi">हिन्दी</option>
-                <option value="ur">اردو</option>
-            </select>
-            <button class="action-btn" onclick="loadSupplierSalesData()" title="تحديث">
-                <i class="fa-solid fa-rotate"></i>
-            </button>
-            <a href="sales.html" class="action-btn" title="رجوع">
-                <i class="fa-solid fa-arrow-right"></i>
-            </a>
-            <a href="index.html" class="action-btn" title="الرئيسية">
-                <i class="fa-solid fa-house"></i>
-            </a>
-        </div>
-    </header>
+      </div>
 
-    <div class="filter-panel">
-        <div class="period-chips">
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span data-i18n="nav_purchase">المشتريات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./purchases.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_purchases_list">قوائم المشتريات</span></a>
+          <a href="./purchase_comparieso.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_purchase_comparison">تحليل المشتريات والمبيعات</span></a>
+        </div>
+      </div>
+
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-warehouse"></i>
+            <span data-i18n="nav_warehouse">إدارة المستودعات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./warhouse.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_warehouse_staff">أداء موظفي المستودع</span></a>
+        </div>
+      </div>
+
+      <div class="nav-section-caption" data-i18n="support_caption">الحساب والنظام</div>
+      <div class="nav-item">
+        <button type="button" class="nav-link-btn" id="logoutBtn">
+          <span class="nav-left">
+            <i class="fa-solid fa-power-off" style="color:#f87171;"></i>
+            <span data-i18n="nav_logout">تسجيل الخروج</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- شريط العلوي (TopBar) -->
+  <header class="app-topbar">
+    <div style="font-size: 16px; font-weight: 800;" data-i18n="nav_sales_supplier">المبيعات حسب المورد</div>
+    <div class="topbar-right-actions">
+      <button type="button" class="topbar-btn" id="refreshBtn" data-i18n-title="title_refresh" title="تحديث البيانات" onclick="loadSupplierSalesData()">
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+      <select id="langSelect" class="lang-select-top" onchange="changeLanguage(this.value)" aria-label="Language Selector">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="ur">اردو</option>
+      </select>
+      <button type="button" class="topbar-btn" id="darkModeToggleBtn" data-i18n-title="title_darkmode" title="الوضع الليلي">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <button type="button" class="topbar-btn" id="fullscreenBtn" data-i18n-title="title_fullscreen" title="ملء الشاشة">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-main-content">
+    <div class="main-container">
+
+      <!-- المربع الأزرق الكبير (Hero Card) والذي يضم الفلاتر في الأعلى ومؤشرات المبيعات في الأسفل داهله تماماً -->
+      <div class="hero-card">
+        
+        <!-- جزء الفلاتر والأزرار داخل المربع الأزرق -->
+        <div class="hero-embedded-controls">
+          <div class="period-chips">
             <div class="chip" data-preset="today" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
             <div class="chip" data-preset="yesterday" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
             <div class="chip" data-preset="week" onclick="setPreset('week', this)" data-i18n="chip_week">الأسبوع</div>
             <div class="chip" data-preset="month" onclick="setPreset('month', this)" data-i18n="chip_month">الشهر</div>
             <div class="chip" data-preset="year" onclick="setPreset('year', this)" data-i18n="chip_year">السنة</div>
             <div class="chip" data-preset="custom" onclick="toggleCalendar()" data-i18n="chip_custom">📅 مخصص</div>
+          </div>
+
+          <div class="controls-row">
+            <div class="control-group">
+              <span class="control-label" data-i18n="label_time_range">النطاق الزمني:</span>
+              <div class="date-toggle-btn" onclick="toggleCalendar()">
+                <span id="dateButtonText" data-i18n="btn_choose_range">اختر النطاق...</span>
+                <span>▼</span>
+              </div>
+              <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
+                <div class="calendar-header">
+                  <button type="button" onclick="changeMonth(-1)">&#9664;</button>
+                  <span id="calendarTitle">نوفمبر 2026</span>
+                  <button type="button" onclick="changeMonth(1)">&#9654;</button>
+                </div>
+                <div class="calendar-grid" id="calendarDaysGrid"></div>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label" data-i18n="label_branch">الفرع:</span>
+              <div class="multi-select-dropdown">
+                <div class="multi-select-btn" onclick="toggleDropdown('branchContent')">
+                  <span id="branchBtnText" data-i18n="text_all_selected">الكل مختار</span>
+                  <span>▼</span>
+                </div>
+                <div class="multi-select-content" id="branchContent"></div>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label" data-i18n="label_gender">الجنس:</span>
+              <div class="multi-select-dropdown">
+                <div class="multi-select-btn" onclick="toggleDropdown('level2Content')">
+                  <span id="level2BtnText" data-i18n="text_all_selected">الكل مختار</span>
+                  <span>▼</span>
+                </div>
+                <div class="multi-select-content" id="level2Content"></div>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label" data-i18n="label_category">الفئة:</span>
+              <div class="multi-select-dropdown">
+                <div class="multi-select-btn" onclick="toggleDropdown('level3Content')">
+                  <span id="level3BtnText" data-i18n="text_all_selected">الكل مختار</span>
+                  <span>▼</span>
+                </div>
+                <div class="multi-select-content" id="level3Content"></div>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label" data-i18n="label_group">المجموعة:</span>
+              <div class="multi-select-dropdown">
+                <div class="multi-select-btn" onclick="toggleDropdown('level4Content')">
+                  <span id="level4BtnText" data-i18n="text_all_selected">الكل مختار</span>
+                  <span>▼</span>
+                </div>
+                <div class="multi-select-content" id="level4Content"></div>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <span class="control-label" data-i18n="label_brand">الماركة:</span>
+              <div class="multi-select-dropdown">
+                <div class="multi-select-btn" onclick="toggleDropdown('brandContent')">
+                  <span id="brandBtnText" data-i18n="text_all_selected">الكل مختار</span>
+                  <span>▼</span>
+                </div>
+                <div class="multi-select-content" id="brandContent"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="controls-row">
-            <div class="control-group">
-                <span class="control-label" data-i18n="label_time_range">النطاق الزمني:</span>
-                <div class="date-toggle-btn" onclick="toggleCalendar()">
-                    <span id="dateButtonText" data-i18n="btn_choose_range">اختر النطاق...</span>
-                    <span>▼</span>
-                </div>
-                <div class="calendar-container" id="calendarContainer">
-                    <div class="calendar-header">
-                        <button onclick="changeMonth(-1)">&#9664;</button>
-                        <span id="calendarTitle">نوفمبر 2026</span>
-                        <button onclick="changeMonth(1)">&#9654;</button>
-                    </div>
-                    <div class="calendar-grid" id="calendarDaysGrid"></div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <span class="control-label" data-i18n="label_branch">الفرع (Branch):</span>
-                <div class="multi-select-dropdown">
-                    <div class="multi-select-btn" onclick="toggleDropdown('branchContent')">
-                        <span id="branchBtnText" data-i18n="text_all_selected">الكل مختار</span>
-                        <span>▼</span>
-                    </div>
-                    <div class="multi-select-content" id="branchContent"></div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <span class="control-label" data-i18n="label_gender">الجنس (Gender):</span>
-                <div class="multi-select-dropdown">
-                    <div class="multi-select-btn" onclick="toggleDropdown('level2Content')">
-                        <span id="level2BtnText" data-i18n="text_all_selected">الكل مختار</span>
-                        <span>▼</span>
-                    </div>
-                    <div class="multi-select-content" id="level2Content"></div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <span class="control-label" data-i18n="label_category">الفئة (Category):</span>
-                <div class="multi-select-dropdown">
-                    <div class="multi-select-btn" onclick="toggleDropdown('level3Content')">
-                        <span id="level3BtnText" data-i18n="text_all_selected">الكل مختار</span>
-                        <span>▼</span>
-                    </div>
-                    <div class="multi-select-content" id="level3Content"></div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <span class="control-label" data-i18n="label_group">المجموعة (Group):</span>
-                <div class="multi-select-dropdown">
-                    <div class="multi-select-btn" onclick="toggleDropdown('level4Content')">
-                        <span id="level4BtnText" data-i18n="text_all_selected">الكل مختار</span>
-                        <span>▼</span>
-                    </div>
-                    <div class="multi-select-content" id="level4Content"></div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <span class="control-label" data-i18n="label_product_year">سنة المنتج (Product Year):</span>
-                <div class="multi-select-dropdown">
-                    <div class="multi-select-btn" onclick="toggleDropdown('yearContent')">
-                        <span id="yearBtnText" data-i18n="text_all_selected">الكل مختار</span>
-                        <span>▼</span>
-                    </div>
-                    <div class="multi-select-content" id="yearContent"></div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <span class="control-label" data-i18n="label_brand">الماركة (Brand Filter):</span>
-                <div class="multi-select-dropdown">
-                    <div class="multi-select-btn" onclick="toggleDropdown('brandContent')">
-                        <span id="brandBtnText" data-i18n="text_all_selected">الكل مختار</span>
-                        <span>▼</span>
-                    </div>
-                    <div class="multi-select-content" id="brandContent"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="hero-summary-card">
-        <div class="hero-stat-box">
+        <!-- جزء مؤشرات المبيعات العليا (داخلياً أسفل الفلاتر في نفس المربع الأزرق) -->
+        <div class="hero-summary-grid">
+          <div class="hero-stat-box">
             <label data-i18n="kpi_total_sales">إجمالي المبيعات</label>
             <span id="kpiTotalSales">0.00 SAR</span>
-        </div>
-        <div class="hero-stat-box">
+          </div>
+          <div class="hero-stat-box">
             <label data-i18n="kpi_without_vat">بدون ضريبة (Excl. VAT)</label>
             <span id="kpiWithoutVat">0.00 SAR</span>
-        </div>
-        <div class="hero-stat-box">
+          </div>
+          <div class="hero-stat-box">
             <label data-i18n="kpi_total_cost">إجمالي التكلفة (Cost)</label>
             <span id="kpiTotalCost">0.00 SAR</span>
-        </div>
-        <div class="hero-stat-box">
+          </div>
+          <div class="hero-stat-box">
             <label data-i18n="kpi_margin">هامش الربح (Margin)</label>
             <span id="kpiMargin">0.00%</span>
-        </div>
-        <div class="hero-stat-box">
+          </div>
+          <div class="hero-stat-box">
             <label data-i18n="kpi_total_qty">إجمالي القطع</label>
             <span id="kpiTotalQty">0 Pcs</span>
+          </div>
         </div>
-    </div>
 
-    <div class="report-section">
+      </div>
+
+      <!-- 3. قسم التقرير مع أزرار تبديل العرض (مربعات / صفوف وأعمدة) -->
+      <div class="report-section">
         <div class="section-header-row">
-            <div class="section-title" data-i18n="section_supplier_summary">
-                <i class="fa-solid fa-folder-tree" style="color: var(--accent);"></i> تقرير مبيعات الموردين (Supplier Sales Tree)
-            </div>
-            <div class="view-toggle-group" role="group" aria-label="View Mode">
-                <button type="button" class="view-mode-btn active" id="btnViewCards" onclick="setViewMode('cards')">
-                    <i class="fa-solid fa-border-all"></i>
-                    <span id="txtViewCards">مربعات</span>
-                </button>
-                <button type="button" class="view-mode-btn" id="btnViewTable" onclick="setViewMode('table')">
-                    <i class="fa-solid fa-table"></i>
-                    <span id="txtViewTable">صفوف وأعمدة</span>
-                </button>
-            </div>
+          <div class="section-title" data-i18n="section_supplier_summary">
+            <i class="fa-solid fa-folder-tree" style="color: var(--blue-accent);"></i> تقرير مبيعات الموردين (Supplier Sales Tree)
+          </div>
+          <div class="view-toggle-group" role="group" aria-label="View Mode">
+            <button type="button" class="view-mode-btn active" id="btnViewCards" onclick="setViewMode('cards')">
+              <i class="fa-solid fa-border-all"></i>
+              <span id="txtViewCards">مربعات</span>
+            </button>
+            <button type="button" class="view-mode-btn" id="btnViewTable" onclick="setViewMode('table')">
+              <i class="fa-solid fa-table"></i>
+              <span id="txtViewTable">صفوف وأعمدة</span>
+            </button>
+          </div>
         </div>
 
         <div class="tree-container" id="treeContainer">
-            <div class="status-msg" data-i18n="status_loading">جاري تحضير البيانات...</div>
+          <div class="status-msg" data-i18n="status_loading">جاري تحضير البيانات...</div>
         </div>
 
         <div class="table-view-card view-hidden" id="supplierTableContainer">
-            <table class="daily-grid-table">
-                <thead id="supplierTableHead"></thead>
-                <tbody id="supplierTableBody"></tbody>
-                <tfoot id="supplierTableFoot"></tfoot>
-            </table>
+          <table class="daily-grid-table">
+            <thead id="supplierTableHead"></thead>
+            <tbody id="supplierTableBody"></tbody>
+            <tfoot id="supplierTableFoot"></tfoot>
+          </table>
         </div>
+      </div>
+
     </div>
+  </main>
 </div>
 
 <script>
-    const CONFIG = {
-        serverUrl: "https://87-237-225-155.nip.io/",
-        apiKey: "6f039a5a6130b79",
-        apiSecret: "9e6d920a8fda252"
-    };
+const CONFIG = {
+    serverUrl: "https://87-237-225-155.nip.io",
+    apiKey: "6f039a5a6130b79",
+    apiSecret: "9e6d920a8fda252"
+};
 
-    let rawSupplierData = [];
-    let currentQueryFrom = '';
-    let currentQueryTo = '';
-    let selectionState = { startDate: null, endDate: null };
-    let viewDate = new Date();
-    let currentViewMode = 'cards';
-
-    let expandedTableSuppliers = new Set();
-    let expandedTableGenders = new Set();
-
-    function getActiveLang() {
-        return (typeof currentLang !== 'undefined' && currentLang) || localStorage.getItem('app_lang') || document.documentElement.getAttribute('lang') || 'ar';
+const I18N = {
+    ar: {
+        dir: "rtl",
+        lang: "ar",
+        page_title: "مبيعات الموردين - الموسى ERP",
+        brand_name: "الموسى ERP",
+        brand_sub: "Financial & Retail",
+        menu_caption: "القائمة الرئيسية",
+        support_caption: "الحساب والنظام",
+        nav_dashboard: "لوحة التحكم",
+        nav_sales: "المبيعات",
+        nav_sales_summary: "ملخص المبيعات",
+        nav_sales_group: "المبيعات حسب المجموعة",
+        nav_sales_supplier: "المبيعات حسب المورد",
+        nav_sales_per_day: "المبيعات اليومية",
+        nav_purchase: "المشتريات",
+        nav_purchases_list: "قوائم المشتريات",
+        nav_purchase_comparison: "تحليل المشتريات والمبيعات",
+        nav_warehouse: "إدارة المستودعات",
+        nav_warehouse_staff: "أداء موظفي المستودع",
+        nav_logout: "تسجيل الخروج",
+        chip_today: "اليوم",
+        chip_yesterday: "أمس",
+        chip_week: "الأسبوع",
+        chip_month: "الشهر",
+        chip_year: "السنة",
+        chip_custom: "📅 مخصص",
+        label_time_range: "النطاق الزمني:",
+        btn_choose_range: "اختر النطاق...",
+        label_branch: "الفرع:",
+        label_gender: "الجنس:",
+        label_category: "الفئة:",
+        label_group: "المجموعة:",
+        label_brand: "الماركة:",
+        text_all_selected: "الكل مختار",
+        text_selected_count: "مختار",
+        text_select_all: "تحديد الكل",
+        kpi_total_sales: "إجمالي المبيعات",
+        kpi_without_vat: "بدون ضريبة (Excl. VAT)",
+        kpi_total_cost: "إجمالي التكلفة (Cost)",
+        kpi_margin: "هامش الربح (Margin)",
+        kpi_total_qty: "إجمالي القطع",
+        section_supplier_summary: "تقرير مبيعات الموردين (Supplier Sales Tree)",
+        status_loading: "جاري تحضير البيانات...",
+        status_no_data: "لا توجد مبيعات مسجلة في هذه الفترة",
+        title_refresh: "تحديث البيانات",
+        title_darkmode: "الوضع الليلي",
+        title_fullscreen: "ملء الشاشة"
+    },
+    en: {
+        dir: "ltr",
+        lang: "en",
+        page_title: "Supplier Sales - Almoosa ERP",
+        brand_name: "Almoosa ERP",
+        brand_sub: "Financial & Retail",
+        menu_caption: "Main Menu",
+        support_caption: "Account & System",
+        nav_dashboard: "Dashboard",
+        nav_sales: "Sales",
+        nav_sales_summary: "Sales Summary",
+        nav_sales_group: "Sales by Group",
+        nav_sales_supplier: "Sales per Supplier",
+        nav_sales_per_day: "Sales per Day",
+        nav_purchase: "Purchases",
+        nav_purchases_list: "Purchases List",
+        nav_purchase_comparison: "Purchase & Sales Analysis",
+        nav_warehouse: "Warehouse Management",
+        nav_warehouse_staff: "Warehouse Staff Performance",
+        nav_logout: "Logout",
+        chip_today: "Today",
+        chip_yesterday: "Yesterday",
+        chip_week: "Week",
+        chip_month: "Month",
+        chip_year: "Year",
+        chip_custom: "📅 Custom",
+        label_time_range: "Date Range:",
+        btn_choose_range: "Choose Date...",
+        label_branch: "Branch:",
+        label_gender: "Gender:",
+        label_category: "Category:",
+        label_group: "Group:",
+        label_brand: "Brand:",
+        text_all_selected: "All Selected",
+        text_selected_count: "Selected",
+        text_select_all: "Select All",
+        kpi_total_sales: "Total Sales",
+        kpi_without_vat: "Excl. VAT",
+        kpi_total_cost: "Total Cost",
+        kpi_margin: "Margin",
+        kpi_total_qty: "Total Qty",
+        section_supplier_summary: "Supplier Sales Tree Report",
+        status_loading: "Loading data...",
+        status_no_data: "No sales recorded in this period",
+        title_refresh: "Refresh Data",
+        title_darkmode: "Dark Mode",
+        title_fullscreen: "Toggle Fullscreen"
+    },
+    hi: {
+        dir: "ltr",
+        lang: "hi",
+        page_title: "आपूर्तिकर्ता बिक्री - अलमूसा ERP",
+        brand_name: "अलमूसा ERP",
+        brand_sub: "Financial & Retail",
+        menu_caption: "मुख्य मेनू",
+        support_caption: "खाता और सिस्टम",
+        nav_dashboard: "डैशबोर्ड",
+        nav_sales: "बिक्री",
+        nav_sales_summary: "बिक्री सारांश",
+        nav_sales_group: "समूह द्वारा बिक्री",
+        nav_sales_supplier: "आपूर्तिकर्ता द्वारा बिक्री",
+        nav_sales_per_day: "दैनिक बिक्री",
+        nav_purchase: "खरीद",
+        nav_purchases_list: "खरीद सूची",
+        nav_purchase_comparison: "खरीद और बिक्री विश्लेषण",
+        nav_warehouse: "गोदाम प्रबंधन",
+        nav_warehouse_staff: "गोदाम स्टाफ प्रदर्शन",
+        nav_logout: "लॉग आउट",
+        chip_today: "आज",
+        chip_yesterday: "कल",
+        chip_week: "सप्ताह",
+        chip_month: "महीना",
+        chip_year: "वर्ष",
+        chip_custom: "📅 कस्टम",
+        label_time_range: "समय सीमा:",
+        btn_choose_range: "तारीख चुनें...",
+        label_branch: "शाखा:",
+        label_gender: "लिंग:",
+        label_category: "श्रेणी:",
+        label_group: "समूह:",
+        label_brand: "ब्रांड:",
+        text_all_selected: "सभी चयनित",
+        text_selected_count: "चयनित",
+        text_select_all: "सभी चुनें",
+        kpi_total_sales: "कुल बिक्री",
+        kpi_without_vat: "कर के बिना",
+        kpi_total_cost: "कुल लागत",
+        kpi_margin: "मार्जिन",
+        kpi_total_qty: "कुल मात्रा",
+        section_supplier_summary: "आपूर्तिकर्ता बिक्री रिपोर्ट",
+        status_loading: "डेटा लोड हो रहा है...",
+        status_no_data: "इस अवधि में कोई बिक्री नहीं",
+        title_refresh: "डेटा रीफ्रेश करें",
+        title_darkmode: "डार्क मोड",
+        title_fullscreen: "फुल स्क्रीन"
+    },
+    ur: {
+        dir: "rtl",
+        lang: "ur",
+        page_title: "سپلائر سیلز - الموسیٰ ERP",
+        brand_name: "الموسیٰ ERP",
+        brand_sub: "Financial & Retail",
+        menu_caption: "مین مینو",
+        support_caption: "اکاؤنٹ اور سسٹم",
+        nav_dashboard: "ڈیش بورڈ",
+        nav_sales: "فروخت",
+        nav_sales_summary: "فروخت کا خلاصہ",
+        nav_sales_group: "گروپ کے لحاظ سے فروخت",
+        nav_sales_supplier: "سپلائر کے لحاظ سے فروخت",
+        nav_sales_per_day: "یومیہ فروخت",
+        nav_purchase: "خریداری",
+        nav_purchases_list: "خریداری کی فہرست",
+        nav_purchase_comparison: "خرید و فروخت کا تجزیہ",
+        nav_warehouse: "گودام مینجمنٹ",
+        nav_warehouse_staff: "گودام عملے کی کارکردگی",
+        nav_logout: "لاگ آؤٹ",
+        chip_today: "آج",
+        chip_yesterday: "گزشتہ روز",
+        chip_week: "ہفتہ",
+        chip_month: "مہینہ",
+        chip_year: "سال",
+        chip_custom: "📅 حسب ضرورت",
+        label_time_range: "وقت کی حد:",
+        btn_choose_range: "تاریخ منتخب کریں...",
+        label_branch: "برانچ:",
+        label_gender: "صنف:",
+        label_category: "کیٹیگری:",
+        label_group: "گروپ:",
+        label_brand: "برانڈ:",
+        text_all_selected: "سب منتخب",
+        text_selected_count: "منتخب",
+        text_select_all: "سب منتخب کریں",
+        kpi_total_sales: "کل فروخت",
+        kpi_without_vat: "بغیر ٹیکس",
+        kpi_total_cost: "کل لاگت",
+        kpi_margin: "مارجن",
+        kpi_total_qty: "کل مقدار",
+        section_supplier_summary: "سپلائر سیلز ٹری رپورٹ",
+        status_loading: "ڈیٹا لوڈ ہو رہا ہے...",
+        status_no_data: "اس مدت میں کوئی فروخت درج نہیں",
+        title_refresh: "ڈیٹا تازہ کریں",
+        title_darkmode: "ڈارک موڈ",
+        title_fullscreen: "فل سکرین"
     }
+};
 
-    function updateViewModeTexts() {
-        const lang = getActiveLang();
-        const labels = {
-            ar: { cards: 'مربعات', table: 'صفوف وأعمدة' },
-            en: { cards: 'Cards', table: 'Rows & Columns' },
-            hi: { cards: 'कार्ड', table: 'पंक्ति और कॉलम' },
-            ur: { cards: 'کارڈز', table: 'قطاریں اور کالم' }
-        };
-        const current = labels[lang] || labels.ar;
-        const txtCards = document.getElementById('txtViewCards');
-        const txtTable = document.getElementById('txtViewTable');
-        if (txtCards) txtCards.textContent = current.cards;
-        if (txtTable) txtTable.textContent = current.table;
-    }
+let currentLang = localStorage.getItem('app_lang') || 'ar';
+let rawSupplierData = [];
+let currentQueryFrom = '';
+let currentQueryTo = '';
+let selectionState = { startDate: null, endDate: null };
+let viewDate = new Date();
+let currentViewMode = 'cards';
+let expandedTableSuppliers = new Set();
+let expandedTableGenders = new Set();
 
-    function syncViewModeUI() {
-        const btnCards = document.getElementById('btnViewCards');
-        const btnTable = document.getElementById('btnViewTable');
-        const cardsBox = document.getElementById('treeContainer');
-        const tableBox = document.getElementById('supplierTableContainer');
+function t(key) {
+    return (I18N[currentLang] && I18N[currentLang][key]) || I18N.ar[key] || key;
+}
 
-        if (!btnCards || !btnTable || !cardsBox || !tableBox) return;
+function changeLanguage(lang) {
+    currentLang = I18N[lang] ? lang : 'ar';
+    localStorage.setItem('app_lang', currentLang);
 
-        const isTable = currentViewMode === 'table';
+    const htmlRoot = document.getElementById('htmlRoot');
+    htmlRoot.lang = currentLang;
+    htmlRoot.dir = (currentLang === 'ar' || currentLang === 'ur') ? 'rtl' : 'ltr';
 
-        btnCards.classList.toggle('active', !isTable);
-        btnTable.classList.toggle('active', isTable);
+    const langSelect = document.getElementById('langSelect');
+    if (langSelect && langSelect.value !== currentLang) langSelect.value = currentLang;
 
-        cardsBox.classList.toggle('view-hidden', isTable);
-        tableBox.classList.toggle('view-hidden', !isTable);
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[currentLang][key]) el.textContent = I18N[currentLang][key];
+    });
 
-        cardsBox.style.setProperty('display', isTable ? 'none' : 'grid', 'important');
-        tableBox.style.setProperty('display', isTable ? 'block' : 'none', 'important');
-    }
+    document.querySelectorAll('[data-i18n-title]').forEach((el) => {
+        const key = el.getAttribute('data-i18n-title');
+        if (I18N[currentLang][key]) el.title = I18N[currentLang][key];
+    });
 
-    function setViewMode(mode) {
-        currentViewMode = mode === 'table' ? 'table' : 'cards';
-        syncViewModeUI();
-        updateViewModeTexts();
-    }
+    updateViewModeTexts();
+    renderCalendar();
+    if (rawSupplierData.length > 0) renderReports();
+}
 
-    function toggleTableSupplier(encodedSup) {
-        const sup = decodeURIComponent(encodedSup);
-        if (expandedTableSuppliers.has(sup)) {
-            expandedTableSuppliers.delete(sup);
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('app_lang') || 'ar';
+    changeLanguage(savedLang);
+
+    const savedTheme = localStorage.getItem('app_theme') || 'light';
+    document.body.setAttribute('data-theme', savedTheme);
+
+    document.getElementById('darkModeToggleBtn').addEventListener('click', () => {
+        const currentTheme = document.body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('app_theme', newTheme);
+    });
+
+    document.getElementById('fullscreenBtn').addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
         } else {
-            expandedTableSuppliers.add(sup);
-        }
-        renderReports();
-    }
-
-    function toggleTableGender(encodedKey) {
-        const key = decodeURIComponent(encodedKey);
-        if (expandedTableGenders.has(key)) {
-            expandedTableGenders.delete(key);
-        } else {
-            expandedTableGenders.add(key);
-        }
-        renderReports();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        currentViewMode = 'cards';
-        syncViewModeUI();
-        updateViewModeTexts();
-        syncWithSalesPageFilter();
-        renderCalendar();
-        
-        window.onclick = function(event) {
-            if (!event.target.closest('.multi-select-dropdown') && !event.target.closest('.control-group')) {
-                document.querySelectorAll('.multi-select-content').forEach(el => el.classList.remove('open'));
-                document.getElementById('calendarContainer').classList.remove('open');
-            }
+            document.exitFullscreen().catch(() => {});
         }
     });
 
-    function syncWithSalesPageFilter() {
-        const salesPreset = localStorage.getItem('sales_filter_preset');
-        const salesFrom = localStorage.getItem('sales_filter_from');
-        const salesTo = localStorage.getItem('sales_filter_to');
+    currentViewMode = 'cards';
+    syncViewModeUI();
+    updateViewModeTexts();
+    syncWithSalesPageFilter();
+    renderCalendar();
 
-        if (salesPreset && salesPreset !== 'custom') {
-            const targetChip = document.querySelector(`.chip[data-preset="${salesPreset}"]`);
-            setPreset(salesPreset, targetChip, false);
-        } else if (salesFrom && salesTo) {
-            currentQueryFrom = salesFrom;
-            currentQueryTo = salesTo;
-            selectionState.startDate = salesFrom;
-            selectionState.endDate = salesTo;
-            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-            const customChip = document.querySelector('.chip[data-preset="custom"]');
-            if (customChip) customChip.classList.add('active');
-            document.getElementById('dateButtonText').textContent = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} إلى ${currentQueryTo}`;
-            loadSupplierSalesData();
-        } else {
-            setPreset('today', document.querySelector('.chip[data-preset="today"]'), false);
+    window.onclick = function(event) {
+        if (!event.target.closest('.multi-select-dropdown') && !event.target.closest('.control-group')) {
+            document.querySelectorAll('.multi-select-content').forEach(el => el.classList.remove('open'));
+            document.getElementById('calendarContainer').classList.remove('open');
         }
-    }
+    };
+});
 
-    function toggleDropdown(id) {
-        document.querySelectorAll('.multi-select-content').forEach(el => {
-            if (el.id !== id) el.classList.remove('open');
-        });
-        document.getElementById(id).classList.toggle('open');
-    }
+function updateViewModeTexts() {
+    const labels = {
+        ar: { cards: 'مربعات', table: 'صفوف وأعمدة' },
+        en: { cards: 'Cards', table: 'Rows & Columns' },
+        hi: { cards: 'कार्ड', table: 'पंक्ति और कॉलम' },
+        ur: { cards: 'کارڈز', table: 'قطاریں اور کالم' }
+    };
+    const current = labels[currentLang] || labels.ar;
+    const txtCards = document.getElementById('txtViewCards');
+    const txtTable = document.getElementById('txtViewTable');
+    if (txtCards) txtCards.textContent = current.cards;
+    if (txtTable) txtTable.textContent = current.table;
+}
 
-    function toggleCalendar() {
-        document.getElementById('calendarContainer').classList.toggle('open');
-    }
+function syncViewModeUI() {
+    const btnCards = document.getElementById('btnViewCards');
+    const btnTable = document.getElementById('btnViewTable');
+    const cardsBox = document.getElementById('treeContainer');
+    const tableBox = document.getElementById('supplierTableContainer');
+    if (!btnCards || !btnTable || !cardsBox || !tableBox) return;
 
-    function changeMonth(direction) {
-        viewDate.setMonth(viewDate.getMonth() + direction);
-        renderCalendar();
-    }
+    const isTable = currentViewMode === 'table';
+    btnCards.classList.toggle('active', !isTable);
+    btnTable.classList.toggle('active', isTable);
+    cardsBox.classList.toggle('view-hidden', isTable);
+    tableBox.classList.toggle('view-hidden', !isTable);
+    cardsBox.style.setProperty('display', isTable ? 'none' : 'grid', 'important');
+    tableBox.style.setProperty('display', isTable ? 'block' : 'none', 'important');
+}
 
-    function renderCalendar() {
-        const grid = document.getElementById('calendarDaysGrid');
-        const titleEl = document.getElementById('calendarTitle');
-        if (!grid || !titleEl) return;
-        grid.innerHTML = '';
-        const year = viewDate.getFullYear();
-        const month = viewDate.getMonth();
-        const arMonths = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-        titleEl.textContent = `${arMonths[month]} ${year}`;
+function setViewMode(mode) {
+    currentViewMode = mode === 'table' ? 'table' : 'cards';
+    syncViewModeUI();
+    updateViewModeTexts();
+}
 
-        const daysShort = ['أحد', 'إثن', 'ثلا', 'أرب', 'خميس', 'جمع', 'سبت'];
-        daysShort.forEach(d => {
-            const div = document.createElement('div');
-            div.className = 'calendar-day-name';
-            div.textContent = d;
-            grid.appendChild(div);
-        });
+function toggleTableSupplier(encodedSup) {
+    const sup = decodeURIComponent(encodedSup);
+    if (expandedTableSuppliers.has(sup)) expandedTableSuppliers.delete(sup);
+    else expandedTableSuppliers.add(sup);
+    renderReports();
+}
 
-        const firstDayIndex = new Date(year, month, 1).getDay();
-        const totalDays = new Date(year, month + 1, 0).getDate();
+function toggleTableGender(encodedKey) {
+    const key = decodeURIComponent(encodedKey);
+    if (expandedTableGenders.has(key)) expandedTableGenders.delete(key);
+    else expandedTableGenders.add(key);
+    renderReports();
+}
 
-        for (let i = 0; i < firstDayIndex; i++) {
-            grid.appendChild(document.createElement('div'));
-        }
+function syncWithSalesPageFilter() {
+    const salesPreset = localStorage.getItem('sales_filter_preset');
+    const salesFrom = localStorage.getItem('sales_filter_from');
+    const salesTo = localStorage.getItem('sales_filter_to');
 
-        for (let day = 1; day <= totalDays; day++) {
-            const dayDiv = document.createElement('div');
-            dayDiv.className = 'calendar-day';
-            dayDiv.textContent = day;
-            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            
-            if (selectionState.startDate && dateStr === selectionState.startDate) {
-                dayDiv.classList.add('selected');
-            }
-            if (selectionState.endDate && dateStr === selectionState.endDate) {
-                dayDiv.classList.add('selected');
-            }
-            if (selectionState.startDate && selectionState.endDate && dateStr > selectionState.startDate && dateStr < selectionState.endDate) {
-                dayDiv.classList.add('in-range');
-            }
-
-            dayDiv.onclick = () => onCalendarDayClick(dateStr);
-            grid.appendChild(dayDiv);
-        }
-    }
-
-    function onCalendarDayClick(dateStr) {
+    if (salesPreset && salesPreset !== 'custom') {
+        const targetChip = document.querySelector(`.chip[data-preset="${salesPreset}"]`);
+        setPreset(salesPreset, targetChip, false);
+    } else if (salesFrom && salesTo) {
+        currentQueryFrom = salesFrom;
+        currentQueryTo = salesTo;
+        selectionState.startDate = salesFrom;
+        selectionState.endDate = salesTo;
         document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
         const customChip = document.querySelector('.chip[data-preset="custom"]');
         if (customChip) customChip.classList.add('active');
+        document.getElementById('dateButtonText').textContent = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} إلى ${currentQueryTo}`;
+        loadSupplierSalesData();
+    } else {
+        setPreset('today', document.querySelector('.chip[data-preset="today"]'), false);
+    }
+}
 
-        if (!selectionState.startDate || (selectionState.startDate && selectionState.endDate)) {
+function toggleDropdown(id) {
+    document.querySelectorAll('.multi-select-content').forEach(el => {
+        if (el.id !== id) el.classList.remove('open');
+    });
+    document.getElementById(id).classList.toggle('open');
+}
+
+function toggleCalendar() {
+    document.getElementById('calendarContainer').classList.toggle('open');
+}
+
+function changeMonth(direction) {
+    viewDate.setMonth(viewDate.getMonth() + direction);
+    renderCalendar();
+}
+
+function renderCalendar() {
+    const grid = document.getElementById('calendarDaysGrid');
+    const titleEl = document.getElementById('calendarTitle');
+    if (!grid || !titleEl) return;
+    grid.innerHTML = '';
+    const year = viewDate.getFullYear();
+    const month = viewDate.getMonth();
+    const arMonths = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+    titleEl.textContent = `${arMonths[month]} ${year}`;
+
+    const daysShort = ['أحد', 'إثن', 'ثلا', 'أرب', 'خميس', 'جمع', 'سبت'];
+    daysShort.forEach(d => {
+        const div = document.createElement('div');
+        div.className = 'calendar-day-name';
+        div.textContent = d;
+        grid.appendChild(div);
+    });
+
+    const firstDayIndex = new Date(year, month, 1).getDay();
+    const totalDays = new Date(year, month + 1, 0).getDate();
+
+    for (let i = 0; i < firstDayIndex; i++) {
+        grid.appendChild(document.createElement('div'));
+    }
+
+    for (let day = 1; day <= totalDays; day++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'calendar-day';
+        dayDiv.textContent = day;
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        
+        if (selectionState.startDate && dateStr === selectionState.startDate) dayDiv.classList.add('selected');
+        if (selectionState.endDate && dateStr === selectionState.endDate) dayDiv.classList.add('selected');
+        if (selectionState.startDate && selectionState.endDate && dateStr > selectionState.startDate && dateStr < selectionState.endDate) {
+            dayDiv.classList.add('in-range');
+        }
+
+        dayDiv.onclick = () => onCalendarDayClick(dateStr);
+        grid.appendChild(dayDiv);
+    }
+}
+
+function onCalendarDayClick(dateStr) {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    const customChip = document.querySelector('.chip[data-preset="custom"]');
+    if (customChip) customChip.classList.add('active');
+
+    if (!selectionState.startDate || (selectionState.startDate && selectionState.endDate)) {
+        selectionState.startDate = dateStr;
+        selectionState.endDate = null;
+        currentQueryFrom = dateStr;
+        currentQueryTo = '';
+        document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
+        renderCalendar();
+    } else {
+        if (dateStr < selectionState.startDate) {
             selectionState.startDate = dateStr;
-            selectionState.endDate = null;
             currentQueryFrom = dateStr;
             currentQueryTo = '';
             document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
             renderCalendar();
         } else {
-            if (dateStr < selectionState.startDate) {
-                selectionState.startDate = dateStr;
-                currentQueryFrom = dateStr;
-                currentQueryTo = '';
-                document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
-                renderCalendar();
-            } else {
-                selectionState.endDate = dateStr;
-                currentQueryTo = dateStr;
-                
-                localStorage.setItem('sales_filter_preset', 'custom');
-                localStorage.setItem('sales_filter_from', currentQueryFrom);
-                localStorage.setItem('sales_filter_to', currentQueryTo);
-
-                document.getElementById('dateButtonText').textContent = `${currentQueryFrom} إلى ${currentQueryTo}`;
-                renderCalendar();
-                loadSupplierSalesData();
-                toggleCalendar();
-            }
-        }
-    }
-
-    function setPreset(type, element, updateLocalStorage = true) {
-        if (element) {
-            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-            element.classList.add('active');
-        }
-        const today = new Date();
-        let start = new Date(), end = new Date();
-        if (type === 'today') { start = new Date(today); end = new Date(today); }
-        else if (type === 'yesterday') { start = new Date(today); start.setDate(today.getDate() - 1); end = new Date(start); }
-        else if (type === 'week') { start = new Date(today); start.setDate(today.getDate() - 6); end = new Date(today); }
-        else if (type === 'month') { start = new Date(today.getFullYear(), today.getMonth(), 1); end = new Date(today); }
-        else if (type === 'year') { start = new Date(today.getFullYear(), 0, 1); end = new Date(today); }
-
-        currentQueryFrom = formatDateStr(start);
-        currentQueryTo = formatDateStr(end);
-        selectionState.startDate = currentQueryFrom;
-        selectionState.endDate = currentQueryTo;
-        viewDate = new Date(end);
-
-        if (updateLocalStorage) {
-            localStorage.setItem('sales_filter_preset', type);
+            selectionState.endDate = dateStr;
+            currentQueryTo = dateStr;
+            
+            localStorage.setItem('sales_filter_preset', 'custom');
             localStorage.setItem('sales_filter_from', currentQueryFrom);
             localStorage.setItem('sales_filter_to', currentQueryTo);
+
+            document.getElementById('dateButtonText').textContent = `${currentQueryFrom} إلى ${currentQueryTo}`;
+            renderCalendar();
+            loadSupplierSalesData();
+            toggleCalendar();
         }
+    }
+}
 
-        document.getElementById('dateButtonText').textContent = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} إلى ${currentQueryTo}`;
-        renderCalendar();
-        loadSupplierSalesData();
+function setPreset(type, element, updateLocalStorage = true) {
+    if (element) {
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+        element.classList.add('active');
+    }
+    const today = new Date();
+    let start = new Date(), end = new Date();
+    if (type === 'today') { start = new Date(today); end = new Date(today); }
+    else if (type === 'yesterday') { start = new Date(today); start.setDate(today.getDate() - 1); end = new Date(start); }
+    else if (type === 'week') { start = new Date(today); start.setDate(today.getDate() - 6); end = new Date(today); }
+    else if (type === 'month') { start = new Date(today.getFullYear(), today.getMonth(), 1); end = new Date(today); }
+    else if (type === 'year') { start = new Date(today.getFullYear(), 0, 1); end = new Date(today); }
+
+    currentQueryFrom = formatDateStr(start);
+    currentQueryTo = formatDateStr(end);
+    selectionState.startDate = currentQueryFrom;
+    selectionState.endDate = currentQueryTo;
+    viewDate = new Date(end);
+
+    if (updateLocalStorage) {
+        localStorage.setItem('sales_filter_preset', type);
+        localStorage.setItem('sales_filter_from', currentQueryFrom);
+        localStorage.setItem('sales_filter_to', currentQueryTo);
     }
 
-    function formatDateStr(d) {
-        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
+    document.getElementById('dateButtonText').textContent = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} إلى ${currentQueryTo}`;
+    renderCalendar();
+    loadSupplierSalesData();
+}
 
-    async function loadSupplierSalesData() {
-        const lang = getActiveLang();
-        const treeContainer = document.getElementById('treeContainer');
-        const tbody = document.getElementById('supplierTableBody');
-        const loadingText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].status_loading) ? translations[lang].status_loading : "جاري تحضير البيانات...";
-        treeContainer.innerHTML = `<div class="status-msg">${loadingText}</div>`;
-        if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px;">${loadingText}</td></tr>`;
-        rawSupplierData = [];
+function formatDateStr(d) {
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
 
-        try {
-            const res = await fetch(`${CONFIG.serverUrl}/api/method/get_supplier_sales_summary?from_date=${currentQueryFrom}&to_date=${currentQueryTo}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`,
-                    "X-Frappe-Site-Name": window.location.hostname
-                }
-            });
+async function loadSupplierSalesData() {
+    const treeContainer = document.getElementById('treeContainer');
+    const tbody = document.getElementById('supplierTableBody');
+    treeContainer.innerHTML = `<div class="status-msg">${t('status_loading')}</div>`;
+    if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px;">${t('status_loading')}</td></tr>`;
+    rawSupplierData = [];
 
-            if (res.ok) {
-                const jsonRes = await res.json();
-                const fetchedRows = jsonRes.message?.data || jsonRes.message || [];
+    try {
+        const res = await fetch(`${CONFIG.serverUrl}/api/method/get_supplier_sales_summary?from_date=${currentQueryFrom}&to_date=${currentQueryTo}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`,
+                "X-Frappe-Site-Name": window.location.hostname
+            }
+        });
+
+        if (res.ok) {
+            const jsonRes = await res.json();
+            const fetchedRows = jsonRes.message?.data || jsonRes.message || [];
+            
+            rawSupplierData = fetchedRows.map(row => {
+                const itemGrp = row.item_group || "";
+                const parts = itemGrp.split('.');
                 
-                rawSupplierData = fetchedRows.map(row => {
-                    const itemGrp = row.item_group || "";
-                    const parts = itemGrp.split('.');
-                    
-                    let rawGender = row.gender || row.Gender || "";
-                    if (!rawGender && parts.length > 0) {
-                        rawGender = parts.length > 3 ? parts[1] : parts[0];
-                    }
-
-                    let category = row.category || row.Category || (parts.length >= 3 ? parts[2] : "N/A");
-                    let group = row.group || row.Group || (parts.length >= 4 ? parts[3] : (parts.length > 0 ? parts[parts.length - 1] : "N/A"));
-
-                    const totalSales = parseFloat(row.total_sales || row.Total_Sales || row.sales || 0);
-                    const salesWithoutVat = row.sales_without_vat !== undefined ? parseFloat(row.sales_without_vat) : (totalSales / 1.15);
-                    
-                    let cost = parseFloat(row.total_cost || row.Total_Cost || row.cost || row.Cost || 0);
-                    if (cost === 0 && salesWithoutVat > 0) {
-                        cost = salesWithoutVat * 0.60;
-                    }
-
-                    return {
-                        supplier: row.supplier || "مورد غير محدد",
-                        branch: row.branch || row.warehouse || row.pos_profile || "فرع رئيسي",
-                        brand: row.brand || "عام",
-                        product_year: row.product_year || "غير محدد",
-                        gender: rawGender || "N/A",
-                        category: category,
-                        group: group,
-                        dcs_code: row.dcs_code || row.DCS_Code || "",
-                        item_group: itemGrp,
-                        total_sales: totalSales,
-                        sales_without_vat: salesWithoutVat,
-                        total_cost: cost,
-                        total_qty: parseFloat(row.total_qty || row.Total_Qty || row.qty || 0)
-                    };
-                });
-            }
-        } catch (err) {
-            console.error("API Error:", err);
-        }
-
-        populateDropdowns();
-        renderReports();
-    }
-
-    function populateDropdowns() {
-        const sets = { branch: new Set(), gender: new Set(), category: new Set(), group: new Set(), year: new Set(), brand: new Set() };
-
-        rawSupplierData.forEach(row => {
-            if (row.branch) sets.branch.add(row.branch);
-            if (row.gender) sets.gender.add(row.gender);
-            if (row.category) sets.category.add(row.category);
-            if (row.group) sets.group.add(row.group);
-            if (row.product_year) sets.year.add(row.product_year);
-            if (row.brand) sets.brand.add(row.brand);
-        });
-
-        buildCheckboxes('branchContent', sets.branch, 'branchBtnText');
-        buildCheckboxes('level2Content', sets.gender, 'level2BtnText');
-        buildCheckboxes('level3Content', sets.category, 'level3BtnText');
-        buildCheckboxes('level4Content', sets.group, 'level4BtnText');
-        buildCheckboxes('yearContent', sets.year, 'yearBtnText');
-        buildCheckboxes('brandContent', sets.brand, 'brandBtnText');
-    }
-
-    function buildCheckboxes(containerId, dataSet, btnTextId) {
-        const lang = getActiveLang();
-        const container = document.getElementById(containerId);
-        container.innerHTML = '';
-        
-        const selectAllText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].text_select_all) ? translations[lang].text_select_all : "تحديد الكل";
-        const allDiv = document.createElement('label');
-        allDiv.className = 'checkbox-item';
-        allDiv.innerHTML = `<input type="checkbox" checked onchange="toggleSelectAll(this, '${containerId}')"> <b>${selectAllText}</b>`;
-        container.appendChild(allDiv);
-
-        Array.from(dataSet).sort().forEach(val => {
-            const lbl = document.createElement('label');
-            lbl.className = 'checkbox-item';
-            lbl.innerHTML = `<input type="checkbox" value="${val}" checked onchange="updateButtonText('${containerId}', '${btnTextId}')"> ${val}`;
-            container.appendChild(lbl);
-        });
-        updateButtonText(containerId, btnTextId);
-    }
-
-    function toggleSelectAll(masterCheckbox, containerId) {
-        const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]`);
-        checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
-        updateButtonText(containerId, containerId.replace('Content', 'BtnText'));
-        renderReports();
-    }
-
-    function updateButtonText(containerId, btnTextId) {
-        const lang = getActiveLang();
-        const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]`);
-        const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
-        const btnText = document.getElementById(btnTextId);
-
-        const allSelectedText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].text_all_selected) ? translations[lang].text_all_selected : "الكل مختار";
-        const selectedCountText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].text_selected_count) ? translations[lang].text_selected_count : "مختار";
-
-        if (checked.length === 0 || checked.length === checkboxes.length - 1) {
-            btnText.textContent = allSelectedText;
-        } else {
-            btnText.textContent = `${selectedCountText} (${checked.length})`;
-        }
-        renderReports();
-    }
-
-    function getSelectedValues(containerId) {
-        const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]`);
-        const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
-        return checked.map(cb => cb.value);
-    }
-
-    function formatGenderName(gRaw, itemGroupStr, dcsStr) {
-        const strCheck = `${gRaw} ${itemGroupStr} ${dcsStr}`.toUpperCase();
-        if (strCheck.includes('UNISEX') || strCheck.includes('USX') || strCheck.includes('UNI')) {
-            return { label: 'مشترك (Unisex)', icon: 'fa-genderless', color: '#059669' };
-        } else if (strCheck.includes('WOMAN') || strCheck.includes('WOMEN') || strCheck.includes('WMN') || strCheck.includes('GIRL') || strCheck.includes('FEMALE') || strCheck.includes('WMS')) {
-            return { label: 'حريمي (Women)', icon: 'fa-venus', color: '#db2777' };
-        } else if (strCheck.includes('MAN') || strCheck.includes('MEN') || strCheck.includes('BOY') || strCheck.includes('MENS') || strCheck.includes('MALE')) {
-            return { label: 'رجالي (Men)', icon: 'fa-mars', color: '#2563eb' };
-        }
-        return { label: gRaw || 'عام', icon: 'fa-user', color: 'var(--accent)' };
-    }
-
-    function renderReports() {
-        syncViewModeUI();
-        updateViewModeTexts();
-
-        const lang = getActiveLang();
-        const selBranches = getSelectedValues('branchContent');
-        const selGender = getSelectedValues('level2Content');
-        const selCategory = getSelectedValues('level3Content');
-        const selGroup = getSelectedValues('level4Content');
-        const selYears = getSelectedValues('yearContent');
-        const selBrands = getSelectedValues('brandContent');
-
-        let filtered = rawSupplierData.filter(row => {
-            return (selBranches.length === 0 || selBranches.includes(row.branch)) &&
-                   (selGender.length === 0 || selGender.includes(row.gender)) &&
-                   (selCategory.length === 0 || selCategory.includes(row.category)) &&
-                   (selGroup.length === 0 || selGroup.includes(row.group)) &&
-                   (selYears.length === 0 || selYears.includes(row.product_year)) &&
-                   (selBrands.length === 0 || selBrands.includes(row.brand));
-        });
-
-        let treeData = {};
-        let grandSales = 0, grandWithoutVat = 0, grandCost = 0, grandQty = 0;
-
-        filtered.forEach(row => {
-            grandSales += row.total_sales;
-            grandWithoutVat += row.sales_without_vat;
-            grandCost += row.total_cost;
-            grandQty += row.total_qty;
-
-            const supName = row.supplier || "مورد غير محدد";
-            if (!treeData[supName]) {
-                treeData[supName] = { sales: 0, withoutVat: 0, cost: 0, qty: 0, genders: {} };
-            }
-            treeData[supName].sales += row.total_sales;
-            treeData[supName].withoutVat += row.sales_without_vat;
-            treeData[supName].cost += row.total_cost;
-            treeData[supName].qty += row.total_qty;
-
-            const gInfo = formatGenderName(row.gender, row.item_group, row.dcs_code);
-            const gKey = gInfo.label;
-
-            if (!treeData[supName].genders[gKey]) {
-                treeData[supName].genders[gKey] = { sales: 0, withoutVat: 0, cost: 0, qty: 0, icon: gInfo.icon, color: gInfo.color, groups: {} };
-            }
-            treeData[supName].genders[gKey].sales += row.total_sales;
-            treeData[supName].genders[gKey].withoutVat += row.sales_without_vat;
-            treeData[supName].genders[gKey].cost += row.total_cost;
-            treeData[supName].genders[gKey].qty += row.total_qty;
-
-            const grpName = row.group || "غير محدد";
-            if (!treeData[supName].genders[gKey].groups[grpName]) {
-                treeData[supName].genders[gKey].groups[grpName] = { sales: 0, withoutVat: 0, cost: 0, qty: 0 };
-            }
-            treeData[supName].genders[gKey].groups[grpName].sales += row.total_sales;
-            treeData[supName].genders[gKey].groups[grpName].withoutVat += row.sales_without_vat;
-            treeData[supName].genders[gKey].groups[grpName].cost += row.total_cost;
-            treeData[supName].genders[gKey].groups[grpName].qty += row.total_qty;
-        });
-
-        const grandMargin = grandWithoutVat > 0 ? ((grandWithoutVat - grandCost) / grandWithoutVat) * 100 : 0;
-
-        document.getElementById('kpiTotalSales').textContent = grandSales.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
-        document.getElementById('kpiWithoutVat').textContent = grandWithoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
-        document.getElementById('kpiTotalCost').textContent = grandCost.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
-        document.getElementById('kpiMargin').textContent = grandMargin.toFixed(2) + '%';
-        document.getElementById('kpiTotalQty').textContent = grandQty.toLocaleString('en-US') + ' Pcs';
-
-        const treeContainer = document.getElementById('treeContainer');
-        const thead = document.getElementById('supplierTableHead');
-        const tbody = document.getElementById('supplierTableBody');
-        const tfoot = document.getElementById('supplierTableFoot');
-        treeContainer.innerHTML = '';
-
-        const sortedSuppliers = Object.keys(treeData).sort((a, b) => treeData[b].sales - treeData[a].sales);
-        const noDataText = (typeof translations !== 'undefined' && translations[lang] && translations[lang].status_no_data) ? translations[lang].status_no_data : "لا توجد مبيعات مسجلة في هذه الفترة";
-
-        if (sortedSuppliers.length === 0) {
-            treeContainer.innerHTML = `<div class="status-msg">${noDataText}</div>`;
-            if (thead) thead.innerHTML = '';
-            if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px;">${noDataText}</td></tr>`;
-            if (tfoot) tfoot.innerHTML = '';
-            return;
-        }
-
-        const lblTotalSales = "إجمالي المبيعات";
-        const lblWithoutVat = "بدون ضريبة";
-        const lblCost = "التكلفة";
-        const lblMargin = "Margin";
-        const lblQty = "الكمية";
-
-        let tableRowsHTML = '';
-
-        sortedSuppliers.forEach(sup => {
-            const supItem = treeData[sup];
-            const supplierMargin = supItem.withoutVat > 0 ? ((supItem.withoutVat - supItem.cost) / supItem.withoutVat) * 100 : 0;
-
-            const isSupExpanded = expandedTableSuppliers.has(sup);
-            tableRowsHTML += `
-                <tr class="expandable-row ${isSupExpanded ? 'is-open' : ''}" onclick="toggleTableSupplier('${encodeURIComponent(sup)}')">
-                    <td>
-                        <span class="row-caret"><i class="fa-solid ${isSupExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}"></i></span>
-                        <i class="fa-solid fa-truck-fast" style="color:var(--accent); margin-left:4px;"></i> ${sup}
-                    </td>
-                    <td>${supItem.qty.toLocaleString('en-US')} Pcs</td>
-                    <td class="tbl-pill-sales">${supItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
-                    <td>${supItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                    <td>${supItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                    <td><span class="tbl-pill-margin">${supplierMargin.toFixed(2)}%</span></td>
-                </tr>
-            `;
-
-            let gendersHTML = '';
-            const sortedGenders = Object.keys(supItem.genders).sort((a, b) => supItem.genders[b].sales - supItem.genders[a].sales);
-
-            sortedGenders.forEach(gKey => {
-                const gItem = supItem.genders[gKey];
-                const genderMargin = gItem.withoutVat > 0 ? ((gItem.withoutVat - gItem.cost) / gItem.withoutVat) * 100 : 0;
-
-                const genderCompoundKey = `${sup}||${gKey}`;
-                const isGenExpanded = expandedTableGenders.has(genderCompoundKey);
-
-                if (isSupExpanded) {
-                    tableRowsHTML += `
-                        <tr class="expandable-row sub-row ${isGenExpanded ? 'is-open' : ''}" onclick="toggleTableGender('${encodeURIComponent(genderCompoundKey)}')">
-                            <td>
-                                <span class="row-caret"><i class="fa-solid ${isGenExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}"></i></span>
-                                <i class="fa-solid ${gItem.icon}" style="color:${gItem.color}; margin-left:4px;"></i> ${gKey}
-                            </td>
-                            <td>${gItem.qty.toLocaleString('en-US')} Pcs</td>
-                            <td class="tbl-pill-sales">${gItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
-                            <td>${gItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                            <td>${gItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                            <td><span class="tbl-pill-margin">${genderMargin.toFixed(2)}%</span></td>
-                        </tr>
-                    `;
+                let rawGender = row.gender || row.Gender || "";
+                if (!rawGender && parts.length > 0) {
+                    rawGender = parts.length > 3 ? parts[1] : parts[0];
                 }
 
-                let groupsHTML = '';
-                const sortedGroups = Object.keys(gItem.groups).sort((a, b) => gItem.groups[b].sales - gItem.groups[a].sales);
+                let category = row.category || row.Category || (parts.length >= 3 ? parts[2] : "N/A");
+                let group = row.group || row.Group || (parts.length >= 4 ? parts[3] : (parts.length > 0 ? parts[parts.length - 1] : "N/A"));
 
-                sortedGroups.forEach(grp => {
-                    const grpItem = gItem.groups[grp];
-                    const grpMargin = grpItem.withoutVat > 0 ? ((grpItem.withoutVat - grpItem.cost) / grpItem.withoutVat) * 100 : 0;
-                    
-                    groupsHTML += `
-                        <div class="group-node">
-                            <div class="group-name">
-                                <span><i class="fa-solid fa-folder-open"></i> ${grp}</span>
-                                <span style="color:var(--accent); font-size:12px;">${grpItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</span>
-                            </div>
-                            <div class="group-node-metrics">
-                                <div class="metric-cell m-cost">
-                                    <label>${lblCost}</label>
-                                    <span>${grpItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
-                                </div>
-                                <div class="metric-cell m-margin">
-                                    <label>${lblMargin}</label>
-                                    <span>${grpMargin.toFixed(2)}%</span>
-                                </div>
-                                <div class="metric-cell m-qty">
-                                    <label>${lblQty}</label>
-                                    <span>${grpItem.qty} Pcs</span>
-                                </div>
-                            </div>
+                const totalSales = parseFloat(row.total_sales || row.Total_Sales || row.sales || 0);
+                const salesWithoutVat = row.sales_without_vat !== undefined ? parseFloat(row.sales_without_vat) : (totalSales / 1.15);
+                
+                let cost = parseFloat(row.total_cost || row.Total_Cost || row.cost || row.Cost || 0);
+                if (cost === 0 && salesWithoutVat > 0) {
+                    cost = salesWithoutVat * 0.60;
+                }
+
+                return {
+                    supplier: row.supplier || "مورد غير محدد",
+                    branch: row.branch || row.warehouse || row.pos_profile || "فرع رئيسي",
+                    brand: row.brand || "عام",
+                    gender: rawGender || "N/A",
+                    category: category,
+                    group: group,
+                    dcs_code: row.dcs_code || row.DCS_Code || "",
+                    item_group: itemGrp,
+                    total_sales: totalSales,
+                    sales_without_vat: salesWithoutVat,
+                    total_cost: cost,
+                    total_qty: parseFloat(row.total_qty || row.Total_Qty || row.qty || 0)
+                };
+            });
+        }
+    } catch (err) {
+        console.error("API Error:", err);
+    }
+
+    populateDropdowns();
+    renderReports();
+}
+
+function populateDropdowns() {
+    const sets = { branch: new Set(), gender: new Set(), category: new Set(), group: new Set(), brand: new Set() };
+
+    rawSupplierData.forEach(row => {
+        if (row.branch) sets.branch.add(row.branch);
+        if (row.gender) sets.gender.add(row.gender);
+        if (row.category) sets.category.add(row.category);
+        if (row.group) sets.group.add(row.group);
+        if (row.brand) sets.brand.add(row.brand);
+    });
+
+    buildCheckboxes('branchContent', sets.branch, 'branchBtnText');
+    buildCheckboxes('level2Content', sets.gender, 'level2BtnText');
+    buildCheckboxes('level3Content', sets.category, 'level3BtnText');
+    buildCheckboxes('level4Content', sets.group, 'level4BtnText');
+    buildCheckboxes('brandContent', sets.brand, 'brandBtnText');
+}
+
+function buildCheckboxes(containerId, dataSet, btnTextId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    
+    const allDiv = document.createElement('label');
+    allDiv.className = 'checkbox-item';
+    allDiv.innerHTML = `<input type="checkbox" checked onchange="toggleSelectAll(this, '${containerId}')"> <b>${t('text_select_all')}</b>`;
+    container.appendChild(allDiv);
+
+    Array.from(dataSet).sort().forEach(val => {
+        const lbl = document.createElement('label');
+        lbl.className = 'checkbox-item';
+        lbl.innerHTML = `<input type="checkbox" value="${val}" checked onchange="updateButtonText('${containerId}', '${btnTextId}')"> ${val}`;
+        container.appendChild(lbl);
+    });
+    updateButtonText(containerId, btnTextId);
+}
+
+function toggleSelectAll(masterCheckbox, containerId) {
+    const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]`);
+    checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
+    updateButtonText(containerId, containerId.replace('Content', 'BtnText'));
+    renderReports();
+}
+
+function updateButtonText(containerId, btnTextId) {
+    const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]`);
+    const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
+    const btnText = document.getElementById(btnTextId);
+
+    if (checked.length === 0 || checked.length === checkboxes.length - 1) {
+        btnText.textContent = t('text_all_selected');
+    } else {
+        btnText.textContent = `${t('text_selected_count')} (${checked.length})`;
+    }
+    renderReports();
+}
+
+function getSelectedValues(containerId) {
+    const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]`);
+    const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
+    return checked.map(cb => cb.value);
+}
+
+function formatGenderName(gRaw, itemGroupStr, dcsStr) {
+    const strCheck = `${gRaw} ${itemGroupStr} ${dcsStr}`.toUpperCase();
+    if (strCheck.includes('UNISEX') || strCheck.includes('USX') || strCheck.includes('UNI')) {
+        return { label: 'مشترك (Unisex)', icon: 'fa-genderless', color: '#059669' };
+    } else if (strCheck.includes('WOMAN') || strCheck.includes('WOMEN') || strCheck.includes('WMN') || strCheck.includes('GIRL') || strCheck.includes('FEMALE') || strCheck.includes('WMS')) {
+        return { label: 'حريمي (Women)', icon: 'fa-venus', color: '#db2777' };
+    } else if (strCheck.includes('MAN') || strCheck.includes('MEN') || strCheck.includes('BOY') || strCheck.includes('MENS') || strCheck.includes('MALE')) {
+        return { label: 'رجالي (Men)', icon: 'fa-mars', color: '#2563eb' };
+    }
+    return { label: gRaw || 'عام', icon: 'fa-user', color: 'var(--blue-accent)' };
+}
+
+function renderReports() {
+    syncViewModeUI();
+    updateViewModeTexts();
+
+    const selBranches = getSelectedValues('branchContent');
+    const selGender = getSelectedValues('level2Content');
+    const selCategory = getSelectedValues('level3Content');
+    const selGroup = getSelectedValues('level4Content');
+    const selBrands = getSelectedValues('brandContent');
+
+    let filtered = rawSupplierData.filter(row => {
+        return (selBranches.length === 0 || selBranches.includes(row.branch)) &&
+               (selGender.length === 0 || selGender.includes(row.gender)) &&
+               (selCategory.length === 0 || selCategory.includes(row.category)) &&
+               (selGroup.length === 0 || selGroup.includes(row.group)) &&
+               (selBrands.length === 0 || selBrands.includes(row.brand));
+    });
+
+    let treeData = {};
+    let grandSales = 0, grandWithoutVat = 0, grandCost = 0, grandQty = 0;
+
+    filtered.forEach(row => {
+        grandSales += row.total_sales;
+        grandWithoutVat += row.sales_without_vat;
+        grandCost += row.total_cost;
+        grandQty += row.total_qty;
+
+        const supName = row.supplier || "مورد غير محدد";
+        if (!treeData[supName]) {
+            treeData[supName] = { sales: 0, withoutVat: 0, cost: 0, qty: 0, genders: {} };
+        }
+        treeData[supName].sales += row.total_sales;
+        treeData[supName].withoutVat += row.sales_without_vat;
+        treeData[supName].cost += row.total_cost;
+        treeData[supName].qty += row.total_qty;
+
+        const gInfo = formatGenderName(row.gender, row.item_group, row.dcs_code);
+        const gKey = gInfo.label;
+
+        if (!treeData[supName].genders[gKey]) {
+            treeData[supName].genders[gKey] = { sales: 0, withoutVat: 0, cost: 0, qty: 0, icon: gInfo.icon, color: gInfo.color, groups: {} };
+        }
+        treeData[supName].genders[gKey].sales += row.total_sales;
+        treeData[supName].genders[gKey].withoutVat += row.sales_without_vat;
+        treeData[supName].genders[gKey].cost += row.total_cost;
+        treeData[supName].genders[gKey].qty += row.total_qty;
+
+        const grpName = row.group || "غير محدد";
+        if (!treeData[supName].genders[gKey].groups[grpName]) {
+            treeData[supName].genders[gKey].groups[grpName] = { sales: 0, withoutVat: 0, cost: 0, qty: 0 };
+        }
+        treeData[supName].genders[gKey].groups[grpName].sales += row.total_sales;
+        treeData[supName].genders[gKey].groups[grpName].withoutVat += row.sales_without_vat;
+        treeData[supName].genders[gKey].groups[grpName].cost += row.total_cost;
+        treeData[supName].genders[gKey].groups[grpName].qty += row.total_qty;
+    });
+
+    const grandMargin = grandWithoutVat > 0 ? ((grandWithoutVat - grandCost) / grandWithoutVat) * 100 : 0;
+
+    document.getElementById('kpiTotalSales').textContent = grandSales.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+    document.getElementById('kpiWithoutVat').textContent = grandWithoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+    document.getElementById('kpiTotalCost').textContent = grandCost.toLocaleString('en-US', { minimumFractionDigits: 2 }) + ' SAR';
+    document.getElementById('kpiMargin').textContent = grandMargin.toFixed(2) + '%';
+    document.getElementById('kpiTotalQty').textContent = grandQty.toLocaleString('en-US') + ' Pcs';
+
+    const treeContainer = document.getElementById('treeContainer');
+    const thead = document.getElementById('supplierTableHead');
+    const tbody = document.getElementById('supplierTableBody');
+    const tfoot = document.getElementById('supplierTableFoot');
+    treeContainer.innerHTML = '';
+
+    const sortedSuppliers = Object.keys(treeData).sort((a, b) => treeData[b].sales - treeData[a].sales);
+    const noDataText = t('status_no_data');
+
+    if (sortedSuppliers.length === 0) {
+        treeContainer.innerHTML = `<div class="status-msg">${noDataText}</div>`;
+        if (thead) thead.innerHTML = '';
+        if (tbody) tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px;">${noDataText}</td></tr>`;
+        if (tfoot) tfoot.innerHTML = '';
+        return;
+    }
+
+    const lblTotalSales = t('kpi_total_sales');
+    const lblWithoutVat = t('kpi_without_vat');
+    const lblCost = t('kpi_total_cost');
+    const lblMargin = t('kpi_margin');
+    const lblQty = t('kpi_total_qty');
+
+    let tableRowsHTML = '';
+
+    sortedSuppliers.forEach(sup => {
+        const supItem = treeData[sup];
+        const supplierMargin = supItem.withoutVat > 0 ? ((supItem.withoutVat - supItem.cost) / supItem.withoutVat) * 100 : 0;
+
+        const isSupExpanded = expandedTableSuppliers.has(sup);
+        tableRowsHTML += `
+            <tr class="expandable-row ${isSupExpanded ? 'is-open' : ''}" onclick="toggleTableSupplier('${encodeURIComponent(sup)}')">
+                <td>
+                    <span class="row-caret"><i class="fa-solid ${isSupExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}"></i></span>
+                    <i class="fa-solid fa-truck-fast" style="color:var(--blue-accent); margin-inline-end:4px;"></i> ${sup}
+                </td>
+                <td>${supItem.qty.toLocaleString('en-US')} Pcs</td>
+                <td class="tbl-pill-sales">${supItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
+                <td>${supItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                <td>${supItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                <td><span class="tbl-pill-margin">${supplierMargin.toFixed(2)}%</span></td>
+            </tr>
+        `;
+
+        let gendersHTML = '';
+        const sortedGenders = Object.keys(supItem.genders).sort((a, b) => supItem.genders[b].sales - supItem.genders[a].sales);
+
+        sortedGenders.forEach(gKey => {
+            const gItem = supItem.genders[gKey];
+            const genderMargin = gItem.withoutVat > 0 ? ((gItem.withoutVat - gItem.cost) / gItem.withoutVat) * 100 : 0;
+            const genderCompoundKey = `${sup}||${gKey}`;
+            const isGenExpanded = expandedTableGenders.has(genderCompoundKey);
+
+            if (isSupExpanded) {
+                tableRowsHTML += `
+                    <tr class="expandable-row sub-row ${isGenExpanded ? 'is-open' : ''}" onclick="toggleTableGender('${encodeURIComponent(genderCompoundKey)}')">
+                        <td>
+                            <span class="row-caret"><i class="fa-solid ${isGenExpanded ? 'fa-chevron-down' : 'fa-chevron-left'}"></i></span>
+                            <i class="fa-solid ${gItem.icon}" style="color:${gItem.color}; margin-inline-end:4px;"></i> ${gKey}
+                        </td>
+                        <td>${gItem.qty.toLocaleString('en-US')} Pcs</td>
+                        <td class="tbl-pill-sales">${gItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
+                        <td>${gItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                        <td>${gItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                        <td><span class="tbl-pill-margin">${genderMargin.toFixed(2)}%</span></td>
+                    </tr>
+                `;
+            }
+
+            let groupsHTML = '';
+            const sortedGroups = Object.keys(gItem.groups).sort((a, b) => gItem.groups[b].sales - gItem.groups[a].sales);
+
+            sortedGroups.forEach(grp => {
+                const grpItem = gItem.groups[grp];
+                const grpMargin = grpItem.withoutVat > 0 ? ((grpItem.withoutVat - grpItem.cost) / grpItem.withoutVat) * 100 : 0;
+                
+                groupsHTML += `
+                    <div class="group-node">
+                        <div class="group-name">
+                            <span><i class="fa-solid fa-folder-open"></i> ${grp}</span>
+                            <span style="color:var(--blue-accent); font-size:12px;">${grpItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</span>
                         </div>
-                    `;
-
-                    if (isSupExpanded && isGenExpanded) {
-                        tableRowsHTML += `
-                            <tr class="leaf-row">
-                                <td><i class="fa-solid fa-folder-open" style="color:var(--accent); margin-left:4px;"></i> ${grp}</td>
-                                <td>${grpItem.qty.toLocaleString('en-US')} Pcs</td>
-                                <td class="tbl-pill-sales">${grpItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
-                                <td>${grpItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                                <td>${grpItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                                <td><span class="tbl-pill-margin">${grpMargin.toFixed(2)}%</span></td>
-                            </tr>
-                        `;
-                    }
-                });
-
-                gendersHTML += `
-                    <div class="gender-accordion">
-                        <div class="gender-header" onclick="toggleAccordion(this)">
-                            <div class="gender-title">
-                                <i class="fa-solid ${gItem.icon}" style="color:${gItem.color};"></i> ${gKey}
+                        <div class="group-node-metrics">
+                            <div class="metric-cell m-cost">
+                                <label>${lblCost}</label>
+                                <span>${grpItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                             </div>
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <span style="font-size:11.5px; font-weight:800;">${gItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR <small style="color:#047857;">(${lblMargin}: ${genderMargin.toFixed(2)}%)</small></span>
-                                <i class="fa-solid fa-chevron-down arrow-icon" style="font-size:10px;"></i>
+                            <div class="metric-cell m-margin">
+                                <label>${lblMargin}</label>
+                                <span>${grpMargin.toFixed(2)}%</span>
                             </div>
-                        </div>
-                        <div class="gender-body">
-                            <div class="groups-grid">
-                                ${groupsHTML}
+                            <div class="metric-cell m-qty">
+                                <label>${lblQty}</label>
+                                <span>${grpItem.qty} Pcs</span>
                             </div>
                         </div>
                     </div>
                 `;
+
+                if (isSupExpanded && isGenExpanded) {
+                    tableRowsHTML += `
+                        <tr class="leaf-row">
+                            <td><i class="fa-solid fa-folder-open" style="color:var(--blue-accent); margin-inline-end:4px;"></i> ${grp}</td>
+                            <td>${grpItem.qty.toLocaleString('en-US')} Pcs</td>
+                            <td class="tbl-pill-sales">${grpItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
+                            <td>${grpItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                            <td>${grpItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                            <td><span class="tbl-pill-margin">${grpMargin.toFixed(2)}%</span></td>
+                        </tr>
+                    `;
+                }
             });
 
-            treeContainer.innerHTML += `
-                <div class="tree-supplier-card">
-                    <div class="tree-supplier-header" onclick="toggleAccordion(this)">
-                        <div class="tree-supplier-top-row">
-                            <div class="tree-supplier-title">
-                                <i class="fa-solid fa-truck-fast"></i> ${sup}
-                            </div>
-                            <i class="fa-solid fa-chevron-down arrow-icon" style="font-size:12px; color:var(--text-muted);"></i>
+            gendersHTML += `
+                <div class="gender-accordion">
+                    <div class="gender-header" onclick="toggleAccordion(this)">
+                        <div class="gender-title">
+                            <i class="fa-solid ${gItem.icon}" style="color:${gItem.color};"></i> ${gKey}
                         </div>
-                        <div class="metrics-badge-grid">
-                            <span class="box-sales">
-                                <label>${lblTotalSales}</label>
-                                <b>${supItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</b>
-                            </span>
-                            <span class="box-novat">
-                                <label>${lblWithoutVat}</label>
-                                <b>${supItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
-                            </span>
-                            <span class="box-cost">
-                                <label>${lblCost}</label>
-                                <b>${supItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
-                            </span>
-                            <span class="box-margin">
-                                <label>${lblMargin}</label>
-                                <b>${supplierMargin.toFixed(2)}%</b>
-                            </span>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:11px; font-weight:800;">${gItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</span>
+                            <i class="fa-solid fa-chevron-down arrow-icon" style="font-size:10px;"></i>
                         </div>
                     </div>
-                    <div class="tree-supplier-body">
-                        ${gendersHTML}
+                    <div class="gender-body">
+                        ${groupsHTML}
                     </div>
                 </div>
             `;
         });
 
-        if (thead && tbody && tfoot) {
-            const colSupplier = lang === 'ar' ? 'المورد' : (lang === 'ur' ? 'سپلائر' : 'Supplier');
-            const colTotal = lang === 'ar' ? 'الإجمالي' : (lang === 'ur' ? 'کل' : 'Total');
+        treeContainer.innerHTML += `
+            <div class="tree-supplier-card">
+                <div class="tree-supplier-header" onclick="toggleAccordion(this)">
+                    <div class="tree-supplier-top-row">
+                        <div class="tree-supplier-title">
+                            <i class="fa-solid fa-truck-fast"></i> ${sup}
+                        </div>
+                        <i class="fa-solid fa-chevron-down arrow-icon" style="font-size:12px; color:var(--text-muted);"></i>
+                    </div>
+                    <div class="metrics-badge-grid">
+                        <span class="box-sales">
+                            <label>${lblTotalSales}</label>
+                            <b>${supItem.sales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</b>
+                        </span>
+                        <span class="box-novat">
+                            <label>${lblWithoutVat}</label>
+                            <b>${supItem.withoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
+                        </span>
+                        <span class="box-cost">
+                            <label>${lblCost}</label>
+                            <b>${supItem.cost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</b>
+                        </span>
+                        <span class="box-margin">
+                            <label>${lblMargin}</label>
+                            <b>${supplierMargin.toFixed(2)}%</b>
+                        </span>
+                    </div>
+                </div>
+                <div class="tree-supplier-body">
+                    ${gendersHTML}
+                </div>
+            </div>
+        `;
+    });
 
-            thead.innerHTML = `
-                <tr>
-                    <th>${colSupplier}</th>
-                    <th>${lblQty}</th>
-                    <th>${lblTotalSales}</th>
-                    <th>${lblWithoutVat}</th>
-                    <th>${lblCost}</th>
-                    <th>${lblMargin}</th>
-                </tr>
-            `;
+    if (thead && tbody && tfoot) {
+        const colSupplier = currentLang === 'ar' ? 'المورد' : (currentLang === 'ur' ? 'سپلائر' : 'Supplier');
+        const colTotal = currentLang === 'ar' ? 'الإجمالي' : (currentLang === 'ur' ? 'کل' : 'Total');
 
-            tbody.innerHTML = tableRowsHTML;
+        thead.innerHTML = `
+            <tr>
+                <th>${colSupplier}</th>
+                <th>${lblQty}</th>
+                <th>${lblTotalSales}</th>
+                <th>${lblWithoutVat}</th>
+                <th>${lblCost}</th>
+                <th>${lblMargin}</th>
+            </tr>
+        `;
+        tbody.innerHTML = tableRowsHTML;
+        tfoot.innerHTML = `
+            <tr>
+                <td>${colTotal}</td>
+                <td>${grandQty.toLocaleString('en-US')} Pcs</td>
+                <td>${grandSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
+                <td>${grandWithoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                <td>${grandCost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                <td>${grandMargin.toFixed(2)}%</td>
+            </tr>
+        `;
+    }
+}
 
-            tfoot.innerHTML = `
-                <tr>
-                    <td>${colTotal}</td>
-                    <td>${grandQty.toLocaleString('en-US')} Pcs</td>
-                    <td>${grandSales.toLocaleString('en-US', { minimumFractionDigits: 2 })} SAR</td>
-                    <td>${grandWithoutVat.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                    <td>${grandCost.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                    <td>${grandMargin.toFixed(2)}%</td>
-                </tr>
-            `;
+function toggleAccordion(headerEl) {
+    const parentCard = headerEl.parentElement;
+    const arrow = headerEl.querySelector('.arrow-icon');
+    
+    parentCard.classList.toggle('open');
+    const isOpen = parentCard.classList.contains('open');
+
+    if (parentCard.classList.contains('tree-supplier-card')) {
+        const body = parentCard.querySelector('.tree-supplier-body');
+        if (body) body.style.display = isOpen ? 'flex' : 'none';
+    } else if (parentCard.classList.contains('gender-accordion')) {
+        const body = parentCard.querySelector('.gender-body');
+        if (body) body.style.display = isOpen ? 'flex' : 'none';
+    }
+    
+    if (arrow) {
+        if (isOpen) {
+            arrow.classList.remove('fa-chevron-down');
+            arrow.classList.add('fa-chevron-up');
+        } else {
+            arrow.classList.remove('fa-chevron-up');
+            arrow.classList.add('fa-chevron-down');
         }
     }
-
-    function toggleAccordion(headerEl) {
-        const parentCard = headerEl.parentElement;
-        const arrow = headerEl.querySelector('.arrow-icon');
-        
-        parentCard.classList.toggle('open');
-        const isOpen = parentCard.classList.contains('open');
-
-        if (parentCard.classList.contains('tree-supplier-card')) {
-            const body = parentCard.querySelector('.tree-supplier-body');
-            if (body) body.style.display = isOpen ? 'block' : 'none';
-        } else if (parentCard.classList.contains('gender-accordion')) {
-            const body = parentCard.querySelector('.gender-body');
-            if (body) body.style.display = isOpen ? 'block' : 'none';
-        }
-        
-        if (arrow) {
-            if (isOpen) {
-                arrow.classList.remove('fa-chevron-down');
-                arrow.classList.add('fa-chevron-up');
-            } else {
-                arrow.classList.remove('fa-chevron-up');
-                arrow.classList.add('fa-chevron-down');
-            }
-        }
-    }
+}
 </script>
 </body>
 </html>

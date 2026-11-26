@@ -7,7 +7,7 @@
     <title data-i18n="page_title">قائمة شحنات الموردين والتحليل الموسمي - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=2026.13">
+    <link rel="stylesheet" href="style.css?v=2026.18">
 
     <style>
         .main-container {
@@ -17,7 +17,6 @@
             padding: 0 15px;
         }
 
-        /* Header */
         header {
             display: flex !important;
             flex-direction: row !important;
@@ -106,7 +105,6 @@
         }
         .lang-select option { background: #1e293b; color: #ffffff; }
 
-        /* Filter Bar & Season Pills */
         .filter-bar {
             background: var(--bg-card);
             border: 2px solid var(--border);
@@ -148,15 +146,15 @@
             border: 1.5px solid var(--border);
             background: var(--bg-body);
             color: var(--text-main);
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 50px;
             font-family: 'Cairo', sans-serif;
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 800;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 7px;
+            gap: 6px;
             transition: all 0.2s ease;
         }
 
@@ -172,17 +170,9 @@
             box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28);
         }
 
-        .season-pill .icon-sun { color: #f59e0b; }
-        .season-pill.active .icon-sun { color: #fde047; }
-        .season-pill .icon-snow { color: #38bdf8; }
-        .season-pill.active .icon-snow { color: #bae6fd; }
-        .season-pill .icon-all-season { color: #10b981; }
-        .season-pill.active .icon-all-season { color: #6ee7b7; }
-
-        /* KPI Summary Grid */
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
             gap: 14px;
             margin-bottom: 18px;
         }
@@ -207,28 +197,27 @@
             margin-bottom: 8px;
         }
         .kpi-title {
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: 800;
             color: var(--text-muted);
         }
         .kpi-icon {
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 15px;
+            font-size: 14px;
         }
         .kpi-value {
-            font-size: 20px;
+            font-size: 17px;
             font-weight: 900;
             color: var(--text-main);
             direction: ltr;
             text-align: inherit;
         }
 
-        /* Toolbar & Multi-Select */
         .print-toolbar {
             display: flex;
             justify-content: space-between;
@@ -318,7 +307,6 @@
             vertical-align: middle;
         }
 
-        /* Table Styles */
         .table-wrapper {
             background: var(--bg-card);
             border: 2px solid var(--border);
@@ -329,23 +317,44 @@
             margin-bottom: 30px;
         }
 
-        .table-header-info {
+        .table-header-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
             padding: 0 4px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .sorting-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .sort-select {
+            background: var(--bg-body);
+            border: 1.5px solid var(--border);
+            color: var(--text-main);
+            padding: 0 10px;
+            border-radius: 9px;
+            font-size: 11px;
+            font-weight: 700;
+            height: 36px;
+            outline: none;
+            cursor: pointer;
         }
 
         .report-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12.5px;
-            min-width: 900px;
+            font-size: 12px;
+            min-width: 1100px;
         }
 
         .report-table th, .report-table td {
-            padding: 12px 14px;
+            padding: 11px 12px;
             border-bottom: 1.5px solid var(--border);
             text-align: start;
             white-space: nowrap;
@@ -369,48 +378,40 @@
             background: rgba(2, 132, 199, 0.14) !important;
         }
 
-        .brand-badge {
-            background: rgba(15, 23, 42, 0.08);
-            color: var(--text-main);
-            border: 1.5px solid var(--border);
-            padding: 4px 11px;
-            border-radius: 8px;
-            font-weight: 900;
-            font-size: 11.5px;
-            display: inline-block;
-        }
-        [data-theme="dark"] .brand-badge {
-            background: rgba(255, 255, 255, 0.08);
-        }
-
         .shipment-no-badge {
             background: rgba(245, 158, 11, 0.15);
             color: #d97706;
             padding: 4px 10px;
             border-radius: 8px;
-            font-size: 11px;
-            font-weight: 850;
+            font-size: 11.5px;
+            font-weight: 900;
             border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .receipt-id-badge {
-            background: rgba(59, 130, 246, 0.15);
-            color: #2563eb;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 850;
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            display: inline-block;
         }
 
         .badge-qty {
             background: rgba(16, 185, 129, 0.15);
             color: #059669;
-            padding: 4px 10px;
+            padding: 4px 9px;
             border-radius: 8px;
             font-weight: 850;
-            font-size: 11.5px;
+            font-size: 11px;
             border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .badge-diff-qty {
+            background: rgba(239, 68, 68, 0.12);
+            color: #dc2626;
+            padding: 4px 9px;
+            border-radius: 8px;
+            font-weight: 850;
+            font-size: 11px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .badge-diff-qty.positive {
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+            border-color: rgba(16, 185, 129, 0.3);
         }
 
         .status-box {
@@ -421,7 +422,6 @@
             font-weight: 800;
         }
 
-        /* نافذة اختيار مستوى العرض والطباعة للشحنات المحددة */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -543,7 +543,6 @@
         </div>
     </header>
 
-    <!-- Filter Bar + Season Buttons -->
     <div class="filter-bar">
         <input type="text" id="searchInput" class="search-input" placeholder="بحث بالبراند، المورد، رقم الشحنة، التاريخ..." onkeyup="filterTable()" data-i18n-placeholder="search_placeholder">
         
@@ -553,25 +552,44 @@
                 <span data-i18n="btn_all">كل المشتريات</span>
             </button>
             <button class="season-pill" data-season="Summer" onclick="selectSeason('Summer', this)">
-                <i class="fa-solid fa-sun icon-sun"></i>
-                <span data-i18n="btn_summer">مشتريات الصيف</span>
+                <i class="fa-solid fa-sun" style="color:#f59e0b;"></i>
+                <span data-i18n="btn_summer">الصيف</span>
             </button>
             <button class="season-pill" data-season="Winter" onclick="selectSeason('Winter', this)">
-                <i class="fa-solid fa-snowflake icon-snow"></i>
-                <span data-i18n="btn_winter">مشتريات الشتاء</span>
+                <i class="fa-solid fa-snowflake" style="color:#38bdf8;"></i>
+                <span data-i18n="btn_winter">الشتاء</span>
             </button>
             <button class="season-pill" data-season="All-Season" onclick="selectSeason('All-Season', this)">
-                <i class="fa-solid fa-arrows-spin icon-all-season"></i>
-                <span data-i18n="btn_all_season">مشتريات لجميع الفصول</span>
+                <i class="fa-solid fa-arrows-spin" style="color:#10b981;"></i>
+                <span data-i18n="btn_all_season">جميع الفصول</span>
             </button>
         </div>
     </div>
 
-    <!-- KPI Summary Cards -->
     <div class="kpi-grid" id="kpiGrid">
         <div class="kpi-card">
             <div class="kpi-top">
-                <span class="kpi-title" data-i18n="kpi_cost">إجمالي تكلفة الشحنات</span>
+                <span class="kpi-title" data-i18n="kpi_received">صافي الكمية المستلمة</span>
+                <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+            </div>
+            <div class="kpi-value" id="kpiReceived">0 Pcs</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <span class="kpi-title" data-i18n="kpi_po_qty">إجمالي كمية PO</span>
+                <div class="kpi-icon" style="background: rgba(2, 132, 199, 0.12); color: #0284c7;">
+                    <i class="fa-solid fa-file-contract"></i>
+                </div>
+            </div>
+            <div class="kpi-value" id="kpiPoQty">0 Pcs</div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-top">
+                <span class="kpi-title" data-i18n="kpi_cost">صافي التكلفة (SAR)</span>
                 <div class="kpi-icon" style="background: rgba(59, 130, 246, 0.12); color: #2563eb;">
                     <i class="fa-solid fa-file-invoice-dollar"></i>
                 </div>
@@ -581,36 +599,15 @@
 
         <div class="kpi-card">
             <div class="kpi-top">
-                <span class="kpi-title" data-i18n="kpi_received">إجمالي الكمية المستلمة</span>
-                <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
-                    <i class="fa-solid fa-boxes-stacked"></i>
-                </div>
-            </div>
-            <div class="kpi-value" id="kpiReceived">0 Pcs</div>
-        </div>
-
-        <div class="kpi-card" id="kpiSoldCard" style="display: none;">
-            <div class="kpi-top">
-                <span class="kpi-title" data-i18n="kpi_sold">إجمالي الكمية المباعة</span>
+                <span class="kpi-title" data-i18n="kpi_po_cost">إجمالي تكلفة PO</span>
                 <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
-                    <i class="fa-solid fa-cart-shopping"></i>
+                    <i class="fa-solid fa-coins"></i>
                 </div>
             </div>
-            <div class="kpi-value" id="kpiSold">0 Pcs</div>
-        </div>
-
-        <div class="kpi-card" id="kpiSalesVolCard" style="display: none;">
-            <div class="kpi-top">
-                <span class="kpi-title" data-i18n="kpi_sales_vol">إجمالي حجم المبيعات</span>
-                <div class="kpi-icon" style="background: rgba(139, 92, 246, 0.12); color: #7c3aed;">
-                    <i class="fa-solid fa-chart-line"></i>
-                </div>
-            </div>
-            <div class="kpi-value" id="kpiSalesVol">0.00 SAR</div>
+            <div class="kpi-value" id="kpiPoCost">0.00 SAR</div>
         </div>
     </div>
 
-    <!-- Table Section -->
     <div class="table-wrapper">
         <div class="print-toolbar">
             <button class="btn-print-mode" id="btnStartPrintSelect" onclick="togglePrintSelectMode(true)">
@@ -635,9 +632,22 @@
             </div>
         </div>
 
-        <div class="table-header-info">
-            <span id="activeSeasonLabel" style="font-size: 13px; font-weight: 900; color: #0284c7;">كل المشتريات</span>
-            <span id="recordCount" style="font-size: 12px; color: var(--text-muted); font-weight: 800;">جاري التحميل...</span>
+        <div class="table-header-bar">
+            <div>
+                <span id="activeSeasonLabel" style="font-size: 13px; font-weight: 900; color: #0284c7; margin-inline-end: 12px;">كل المشتريات</span>
+                <span id="recordCount" style="font-size: 12px; color: var(--text-muted); font-weight: 800;">جاري التحميل...</span>
+            </div>
+            <div class="sorting-controls">
+                <select id="sortBy" class="sort-select" onchange="filterTable()">
+                    <option value="shipment" data-i18n="sort_shipment">ترتيب برقم الشحنة</option>
+                    <option value="date" data-i18n="sort_date">ترتيب بالتاريخ</option>
+                    <option value="supplier" data-i18n="sort_supplier">ترتيب باسم المورد</option>
+                </select>
+                <select id="sortOrder" class="sort-select" onchange="filterTable()">
+                    <option value="asc" data-i18n="sort_asc">تصاعدي (Asc)</option>
+                    <option value="desc" data-i18n="sort_desc">تنازلي (Desc)</option>
+                </select>
+            </div>
         </div>
 
         <div class="status-box" id="statusBox" data-i18n="status_loading">جاري تحميل البيانات...</div>
@@ -649,7 +659,6 @@
     </div>
 </div>
 
-<!-- نافذة اختيار مستوى العرض والطباعة -->
 <div class="modal-overlay" id="viewSelectionModal" onclick="if(event.target === this) closeViewModal()">
     <div class="modal-card">
         <div class="modal-title" data-i18n="modal_title">اختر مستوى عرض وطباعة المشتريات المحددة</div>
@@ -683,10 +692,15 @@
             title_theme: "تغيير المظهر",
             title_home: "الرئيسية",
             search_placeholder: "بحث بالبراند، المورد، رقم الشحنة، التاريخ...",
+            sort_shipment: "ترتيب برقم الشحنة",
+            sort_date: "ترتيب بالتاريخ",
+            sort_supplier: "ترتيب باسم المورد",
+            sort_asc: "تصاعدي (Asc)",
+            sort_desc: "تنازلي (Desc)",
             btn_all: "كل المشتريات",
-            btn_summer: "مشتريات الصيف",
-            btn_winter: "مشتريات الشتاء",
-            btn_all_season: "مشتريات لجميع الفصول",
+            btn_summer: "الصيف",
+            btn_winter: "الشتاء",
+            btn_all_season: "جميع الفصول",
             btn_select_mode: "تحديد الشحنات والموردين",
             selected_suppliers_label: "المحدد:",
             btn_view_purchases: "عرض المشتريات المحددة",
@@ -697,23 +711,26 @@
             opt_group: "على مستوى المجموعة (Sub Group)",
             opt_item: "على مستوى الصنف (Item)",
             btn_cancel_modal: "إلغاء الأمر",
-            kpi_cost: "إجمالي تكلفة الشحنات",
-            kpi_received: "إجمالي الكمية المستلمة",
-            kpi_sold: "إجمالي الكمية المباعة",
-            kpi_sales_vol: "إجمالي حجم المبيعات",
+            kpi_cost: "صافي التكلفة (SAR)",
+            kpi_received: "صافي الكمية المستلمة",
+            kpi_po_qty: "إجمالي كمية PO",
+            kpi_po_cost: "إجمالي تكلفة PO",
             status_loading: "جاري تحميل البيانات...",
             no_records: "لا توجد بيانات مطابقة لهذا الفلتر",
             error_server: "فشل جلب البيانات من السيرفر",
             error_connection: "تعذر الاتصال بالسيرفر",
             records_count: "عدد السجلات: ",
-            th_receipt_id: "رقم السند (ID)",
-            th_supplier: "المورد (Supplier)",
             th_shipment_no: "رقم الشحنة (Shipment No)",
-            th_date: "تاريخ الشحنة (Date)",
-            th_total_qty: "الكمية المستلمة (Received Qty)",
-            th_grand_total: "تكلفة الشحنة (Cost)",
-            th_status: "الحالة (Status)",
-            th_brand: "البراند (Brand)"
+            th_supplier: "المورد (Supplier)",
+            th_main_date: "التاريخ (Date)",
+            th_po_qty: "كمية أمر الشراء (PO Qty)",
+            th_received_qty: "الكمية المستلمة (Received Qty)",
+            th_diff_qty: "فرق الكمية (Qty Diff)",
+            th_po_cost: "تكلفة أمر الشراء (PO Cost)",
+            th_received_cost: "تكلفة الاستلام (Receipt Cost)",
+            th_diff_cost: "فرق التكلفة (Cost Diff)",
+            th_sold_qty: "الكمية المباعة (Sold Qty)",
+            th_sold_amount: "قيمة المبيعات (Sold Amount)"
         },
         en: {
             page_title: "Purchase Receipts & Seasonal Analytics - Almoosa Trading",
@@ -722,10 +739,15 @@
             title_theme: "Toggle Theme",
             title_home: "Home",
             search_placeholder: "Search by brand, supplier, shipment no, date...",
+            sort_shipment: "Sort by Shipment No",
+            sort_date: "Sort by Date",
+            sort_supplier: "Sort by Supplier",
+            sort_asc: "Ascending",
+            sort_desc: "Descending",
             btn_all: "All Purchases",
-            btn_summer: "Summer Purchases",
-            btn_winter: "Winter Purchases",
-            btn_all_season: "All-Season Purchases",
+            btn_summer: "Summer",
+            btn_winter: "Winter",
+            btn_all_season: "All-Season",
             btn_select_mode: "Select Shipments & Suppliers",
             selected_suppliers_label: "Selected:",
             btn_view_purchases: "View Selected Purchases",
@@ -736,23 +758,26 @@
             opt_group: "By Sub Group",
             opt_item: "By Item",
             btn_cancel_modal: "Cancel",
-            kpi_cost: "Total Shipment Cost",
-            kpi_received: "Total Received Qty",
-            kpi_sold: "Total Sold Qty",
-            kpi_sales_vol: "Total Sales Volume",
+            kpi_cost: "Net Cost (SAR)",
+            kpi_received: "Net Received Qty",
+            kpi_po_qty: "Total PO Qty",
+            kpi_po_cost: "Total PO Cost",
             status_loading: "Loading data...",
             no_records: "No records found for this filter",
             error_server: "Failed to fetch data from server",
             error_connection: "Server connection error",
             records_count: "Records: ",
-            th_receipt_id: "Receipt ID",
-            th_supplier: "Supplier",
             th_shipment_no: "Shipment No",
-            th_date: "Shipment Date",
-            th_total_qty: "Received Qty",
-            th_grand_total: "Shipment Cost",
-            th_status: "Status",
-            th_brand: "Brand"
+            th_supplier: "Supplier",
+            th_main_date: "Date",
+            th_po_qty: "PO Qty",
+            th_received_qty: "Received Qty",
+            th_diff_qty: "Qty Diff",
+            th_po_cost: "PO Cost",
+            th_received_cost: "Receipt Cost",
+            th_diff_cost: "Cost Diff",
+            th_sold_qty: "Sold Qty",
+            th_sold_amount: "Sold Amount"
         },
         hi: {
             page_title: "खरीद रसीद और मौसमी विश्लेषण - अलमूसा ट्रेडिंग",
@@ -761,10 +786,15 @@
             title_theme: "थीम बदलें",
             title_home: "होम",
             search_placeholder: "ब्रांड, आपूर्तिकर्ता, शिपमेंट नंबर द्वारा खोजें...",
+            sort_shipment: "शिपमेंट नंबर से क्रमबद्ध करें",
+            sort_date: "तारीख से क्रमबद्ध करें",
+            sort_supplier: "आपूर्तिकर्ता से क्रमबद्ध करें",
+            sort_asc: "आरोही (Asc)",
+            sort_desc: "अवरोही (Desc)",
             btn_all: "सभी खरीद",
-            btn_summer: "गर्मियों की खरीद",
-            btn_winter: "सर्दियों की खरीद",
-            btn_all_season: "सभी मौसम की खरीद",
+            btn_summer: "गर्मी",
+            btn_winter: "सर्दी",
+            btn_all_season: "सभी मौसम",
             btn_select_mode: "शिपमेंट चुनें",
             selected_suppliers_label: "चयनित:",
             btn_view_purchases: "चयनित खरीद देखें",
@@ -775,23 +805,26 @@
             opt_group: "सब ग्रुप के अनुसार",
             opt_item: "आइटम के अनुसार",
             btn_cancel_modal: "रद्द करें",
-            kpi_cost: "कुल शिपमेंट लागत",
-            kpi_received: "कुल प्राप्त मात्रा",
-            kpi_sold: "कुल बेची गई मात्रा",
-            kpi_sales_vol: "कुल बिक्री मात्रा",
+            kpi_cost: "शुद्ध लागत (SAR)",
+            kpi_received: "शुद्ध प्राप्त मात्रा",
+            kpi_po_qty: "कुल PO मात्रा",
+            kpi_po_cost: "कुल PO लागत",
             status_loading: "लोड हो रहा है...",
             no_records: "कोई रिकॉर्ड नहीं मिला",
             error_server: "सर्वर से डेटा लाने में विफल",
             error_connection: "कनेक्शन त्रुटि",
             records_count: "रिकॉर्ड: ",
-            th_receipt_id: "रसीद आईडी",
-            th_supplier: "आपूर्तिकर्ता",
             th_shipment_no: "शिपमेंट नंबर",
-            th_date: "तारीख",
-            th_total_qty: "प्राप्त मात्रा",
-            th_grand_total: "लागत",
-            th_status: "स्थिति",
-            th_brand: "ब्रांड"
+            th_supplier: "आपूर्तिकर्ता",
+            th_main_date: "तारीख",
+            th_po_qty: "PO मात्रा",
+            th_received_qty: "प्राप्त मात्रा",
+            th_diff_qty: "मात्रा अंतर",
+            th_po_cost: "PO लागत",
+            th_received_cost: "रसीद लागत",
+            th_diff_cost: "लागत अंतर",
+            th_sold_qty: "बेची गई मात्रा",
+            th_sold_amount: "बिक्री राशि"
         },
         ur: {
             page_title: "پرچیز ریسیٹس اور موسمی تجزیہ - الموسی ٹریڈنگ",
@@ -799,11 +832,16 @@
             header_subtitle: "الموسی ٹریڈنگ - سپلائر اور موسمی کارکردگی",
             title_theme: "تھیم تبدیل کریں",
             title_home: "ہوم",
-            search_placeholder: "برانڈ، سپلائر، شپमेंट نمبر تلاش کریں...",
+            search_placeholder: "برانڈ، سپلائر، شپمنٹ نمبر تلاش کریں...",
+            sort_shipment: "شپمنٹ نمبر کے لحاظ سے ترتیب",
+            sort_date: "تاریخ کے لحاظ سے ترتیب",
+            sort_supplier: "سپلائر کے نام سے ترتیب",
+            sort_asc: "صعودی (Asc)",
+            sort_desc: "نزولی (Desc)",
             btn_all: "تمام خریداریاں",
-            btn_summer: "گرمیوں کی خریداری",
-            btn_winter: "سردیوں کی خریداری",
-            btn_all_season: "تمام موسموں کی خریداری",
+            btn_summer: "گرمی",
+            btn_winter: "سردی",
+            btn_all_season: "تمام موسم",
             btn_select_mode: "شپمنٹس منتخب کریں",
             selected_suppliers_label: "منتخب کردہ:",
             btn_view_purchases: "منتخب خریداریاں دیکھیں",
@@ -814,23 +852,26 @@
             opt_group: "سب گروپ کے لحاظ سے",
             opt_item: "آئٹم کے لحاظ سے",
             btn_cancel_modal: "منسوخ کریں",
-            kpi_cost: "کل شپمنٹ لاگت",
-            kpi_received: "کل موصولہ مقدار",
-            kpi_sold: "کل فروخت شدہ مقدار",
-            kpi_sales_vol: "کل فروخت کا حجم",
+            kpi_cost: "خالص لاگت (SAR)",
+            kpi_received: "خالص موصولہ مقدار",
+            kpi_po_qty: "کل PO مقدار",
+            kpi_po_cost: "کل PO لاگت",
             status_loading: "ڈیٹا لوڈ ہو رہا ہے...",
             no_records: "کوئی ڈیٹا نہیں ملا",
             error_server: "سرور کی خرابی",
             error_connection: "کنکشن کی خرابی",
             records_count: "ریکارڈز: ",
-            th_receipt_id: "رسیید آئی ڈی",
-            th_supplier: "سپلائر",
             th_shipment_no: "شپمنٹ نمبر",
-            th_date: "تاریخ",
-            th_total_qty: "موصولہ مقدار",
-            th_grand_total: "لاگت",
-            th_status: "حالت",
-            th_brand: "برانڈ"
+            th_supplier: "سپلائر",
+            th_main_date: "تاریخ",
+            th_po_qty: "PO مقدار",
+            th_received_qty: "موصولہ مقدار",
+            th_diff_qty: "مقدار کا فرق",
+            th_po_cost: "PO لاگت",
+            th_received_cost: "وصولی لاگت",
+            th_diff_cost: "لاگت کا فرق",
+            th_sold_qty: "فروخت شدہ مقدار",
+            th_sold_amount: "فروخت کی رقم"
         }
     };
 
@@ -849,7 +890,7 @@
     let selectedRowKeys = new Set();
 
     function getUniqueRowKey(r, idx) {
-        return `${r.name || ''}|${r.receipt_id || ''}|${r.shipment_number || ''}|${r.supplier || ''}|${r.brand || ''}|${r.posting_date || ''}|${idx}`;
+        return `${r.shipment_number || ''}|${r.supplier || ''}|${r.posting_date || ''}|${idx}`;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -923,7 +964,7 @@
 
         if (rowsToPrint.length === 0) return;
 
-        const shipments = rowsToPrint.map(r => r.shipment_number || r.name || '').filter(Boolean).join(',');
+        const shipments = rowsToPrint.map(r => (r.shipment_number && r.shipment_number !== 'بدون رقم شحنة') ? r.shipment_number : '').filter(Boolean).join(',');
         const suppliers = rowsToPrint.map(r => r.supplier || r.supplier_name || '').filter(Boolean).join(',');
         const brand = rowsToPrint[0].brand || '';
 
@@ -937,7 +978,8 @@
     }
 
     function openSingleViewDirect(shipmentNo, supplier, brand, season) {
-        let targetUrl = `purchases-analytics.html?shipment=${encodeURIComponent(shipmentNo || '')}&supplier=${encodeURIComponent(supplier || '')}&view_type=variants`;
+        const cleanShip = (shipmentNo && shipmentNo !== 'بدون رقم شحنة') ? shipmentNo : '';
+        let targetUrl = `purchases-analytics.html?shipment=${encodeURIComponent(cleanShip)}&supplier=${encodeURIComponent(supplier || '')}&view_type=variants`;
         if (brand) targetUrl += `&brand=${encodeURIComponent(brand)}`;
         if (season) targetUrl += `&season=${encodeURIComponent(season)}`;
         window.location.href = targetUrl;
@@ -1035,22 +1077,44 @@
                 updateSelectedCountUI();
                 filterTable();
             } else {
-                statusBox.textContent = translations[currentLang].error_server;
+                const errorBody = await res.text();
+                statusBox.innerHTML = `خطأ من السيرفر (${res.status}): <pre dir="ltr" style="text-align:left; background:#fee2e2; padding:10px; border-radius:8px; margin-top:5px; font-size:11px; color:#991b1b; overflow:auto;">${errorBody}</pre>`;
+                console.error("Server Error details:", errorBody);
             }
         } catch (err) {
-            statusBox.textContent = translations[currentLang].error_connection;
+            statusBox.textContent = `${translations[currentLang].error_connection}: ${err.message}`;
         }
     }
 
     function filterTable() {
         const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const sortBy = document.getElementById('sortBy').value;
+        const sortOrder = document.getElementById('sortOrder').value;
+
         filteredData = currentData.filter(r => {
             const brand = (r.brand || '').toLowerCase();
             const supName = (r.supplier_name || r.supplier || '').toLowerCase();
             const shipNo = (r.shipment_number || '').toLowerCase();
-            const recId = (r.name || r.receipt_id || '').toLowerCase();
             const date = (r.posting_date || '').toLowerCase();
-            return brand.includes(query) || supName.includes(query) || shipNo.includes(query) || recId.includes(query) || date.includes(query);
+            return brand.includes(query) || supName.includes(query) || shipNo.includes(query) || date.includes(query);
+        });
+
+        filteredData.sort((a, b) => {
+            let valA, valB;
+            if (sortBy === 'shipment') {
+                valA = (a.shipment_number || '').toString().toLowerCase();
+                valB = (b.shipment_number || '').toString().toLowerCase();
+            } else if (sortBy === 'date') {
+                valA = a.posting_date || '';
+                valB = b.posting_date || '';
+            } else if (sortBy === 'supplier') {
+                valA = (a.supplier_name || a.supplier || '').toString().toLowerCase();
+                valB = (b.supplier_name || b.supplier || '').toString().toLowerCase();
+            }
+
+            if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+            if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+            return 0;
         });
 
         renderView(filteredData);
@@ -1065,28 +1129,21 @@
 
         document.getElementById('recordCount').textContent = `${t.records_count}${data.length}`;
 
-        let totalCost = 0, totalRec = 0, totalSold = 0, totalSalesVol = 0;
-        const isSeasonal = currentSeason !== 'all';
+        let totalRecQty = 0, totalPoQty = 0, totalCostSar = 0, totalPoCostSar = 0, totalSoldQty = 0, totalSoldAmount = 0;
 
         data.forEach(r => {
-            totalCost += parseFloat(isSeasonal ? (r.shipment_cost || 0) : (r.grand_total || 0));
-            totalRec += parseFloat(isSeasonal ? (r.received_qty || 0) : (r.total_qty || 0));
-            if (isSeasonal) {
-                totalSold += parseFloat(r.sold_qty || 0);
-                totalSalesVol += parseFloat(r.sales_volume || 0);
-            }
+            totalRecQty += parseFloat(r.net_qty || r.received_qty || 0);
+            totalPoQty += parseFloat(r.po_qty || 0);
+            totalCostSar += parseFloat(r.net_cost_sar || r.shipment_cost || 0);
+            totalPoCostSar += parseFloat(r.po_cost || 0);
+            totalSoldQty += parseFloat(r.sold_qty || 0);
+            totalSoldAmount += parseFloat(r.sold_amount || 0);
         });
 
-        document.getElementById('kpiCost').textContent = `${totalCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR`;
-        document.getElementById('kpiReceived').textContent = `${totalRec.toLocaleString('en-US')} Pcs`;
-
-        document.getElementById('kpiSoldCard').style.display = isSeasonal ? 'flex' : 'none';
-        document.getElementById('kpiSalesVolCard').style.display = isSeasonal ? 'flex' : 'none';
-
-        if (isSeasonal) {
-            document.getElementById('kpiSold').textContent = `${totalSold.toLocaleString('en-US')} Pcs`;
-            document.getElementById('kpiSalesVol').textContent = `${totalSalesVol.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR`;
-        }
+        document.getElementById('kpiReceived').textContent = `${totalRecQty.toLocaleString('en-US')} Pcs`;
+        document.getElementById('kpiPoQty').textContent = `${totalPoQty.toLocaleString('en-US')} Pcs`;
+        document.getElementById('kpiCost').textContent = `${totalCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR`;
+        document.getElementById('kpiPoCost').textContent = `${totalPoCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR`;
 
         if (data.length === 0) {
             table.style.display = 'none';
@@ -1102,115 +1159,104 @@
         const allSelected = data.length > 0 && data.every((r, idx) => selectedRowKeys.has(getUniqueRowKey(r, idx)));
         const checkboxHeader = isPrintSelectMode ? `<th style="width:42px; text-align:center;"><input type="checkbox" class="ship-checkbox" onchange="toggleSelectAllRows(this)" ${allSelected ? 'checked' : ''}></th>` : '';
 
-        if (!isSeasonal) {
+        // هل نحن في وضع فلاتر المواسم أم في وضع "كل المشتريات"؟
+        const isSeasonMode = (currentSeason !== 'all');
+
+        if (isSeasonMode) {
+            // أعمدة فلاتر المواسم (المطلوبة)
             thead.innerHTML = `
                 <tr>
                     ${checkboxHeader}
-                    <th>${t.th_receipt_id}</th>
-                    <th>${t.th_supplier}</th>
                     <th>${t.th_shipment_no}</th>
-                    <th>${t.th_date}</th>
-                    <th>${t.th_total_qty}</th>
-                    <th>${t.th_grand_total}</th>
-                    <th>${t.th_status}</th>
+                    <th>${t.th_supplier}</th>
+                    <th>${t.th_main_date}</th>
+                    <th>${t.th_received_qty}</th>
+                    <th>${t.th_received_cost}</th>
+                    <th>${t.th_sold_qty}</th>
+                    <th>${t.th_sold_amount}</th>
                 </tr>
             `;
-
-            data.forEach((r, idx) => {
-                const rowKey = getUniqueRowKey(r, idx);
-                const safeRowKey = rowKey.replace(/'/g, "\\'");
-                const supKey = r.supplier || r.supplier_name || '';
-                const shipKey = r.shipment_number || r.name || '';
-                const isChecked = selectedRowKeys.has(rowKey);
-                const tr = document.createElement('tr');
-                if (isChecked) tr.classList.add('selected-row');
-
-                tr.onclick = (e) => {
-                    if (isPrintSelectMode) {
-                        if (e.target.type !== 'checkbox') toggleRowSelection(rowKey);
-                    } else {
-                        openSingleViewDirect(shipKey, supKey, '', 'all');
-                    }
-                };
-
-                const cbCell = isPrintSelectMode ? `<td style="text-align:center;"><input type="checkbox" class="ship-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleRowSelection('${safeRowKey}', this)"></td>` : '';
-                tr.innerHTML = `
-                    ${cbCell}
-                    <td><span class="receipt-id-badge">${r.name}</span></td>
-                    <td><strong>${r.supplier_name || r.supplier}</strong></td>
-                    <td><span class="shipment-no-badge">${r.shipment_number || '-'}</span></td>
-                    <td>${r.posting_date || ''}</td>
-                    <td><span class="badge-qty">${parseFloat(r.total_qty || 0).toLocaleString('en-US')} Pcs</span></td>
-                    <td><strong>${parseFloat(r.grand_total || 0).toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</strong></td>
-                    <td><span style="color: #2563eb; font-weight: 850;">${r.status || 'Submitted'}</span></td>
-                `;
-                tbody.appendChild(tr);
-            });
-
         } else {
+            // أعمدة كل المشتريات الافتراضية الكاملة
             thead.innerHTML = `
                 <tr>
                     ${checkboxHeader}
-                    <th>${t.th_brand}</th>
+                    <th>${t.th_shipment_no}</th>
                     <th>${t.th_supplier}</th>
-                    <th>${t.th_date}</th>
-                    <th>${t.th_grand_total}</th>
-                    <th>${t.th_total_qty}</th>
-                    <th>${t.th_sold_qty}</th>
-                    <th>${t.th_sales_vol}</th>
+                    <th>${t.th_main_date}</th>
+                    <th>${t.th_po_qty}</th>
+                    <th>${t.th_received_qty}</th>
+                    <th>${t.th_diff_qty}</th>
+                    <th>${t.th_po_cost}</th>
+                    <th>${t.th_received_cost}</th>
+                    <th>${t.th_diff_cost}</th>
                 </tr>
             `;
+        }
 
-            data.forEach((r, idx) => {
-                const rowKey = getUniqueRowKey(r, idx);
-                const safeRowKey = rowKey.replace(/'/g, "\\'");
-                const supKey = r.supplier || r.supplier_name || '';
-                const shipKey = r.shipment_number || r.receipt_id || '';
-                const isChecked = selectedRowKeys.has(rowKey);
-                const recQty = parseFloat(r.received_qty || 0);
+        data.forEach((r, idx) => {
+            const rowKey = getUniqueRowKey(r, idx);
+            const safeRowKey = rowKey.replace(/'/g, "\\'");
+            const supKey = r.supplier || r.supplier_name || '';
+            const shipKey = r.shipment_number || '';
+            const isChecked = selectedRowKeys.has(rowKey);
+
+            const tr = document.createElement('tr');
+            if (isChecked) tr.classList.add('selected-row');
+
+            tr.onclick = (e) => {
+                if (isPrintSelectMode) {
+                    if (e.target.type !== 'checkbox') toggleRowSelection(rowKey);
+                } else {
+                    openSingleViewDirect(shipKey, supKey, r.brand || '', currentSeason);
+                }
+            };
+
+            const cbCell = isPrintSelectMode ? `<td style="text-align:center;"><input type="checkbox" class="ship-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleRowSelection('${safeRowKey}', this)"></td>` : '';
+
+            if (isSeasonMode) {
+                const recQty = parseFloat(r.net_qty || r.received_qty || 0);
+                const recCost = parseFloat(r.net_cost_sar || r.shipment_cost || 0);
                 const soldQty = parseFloat(r.sold_qty || 0);
-                const pct = recQty > 0 ? Math.min(100, Math.round((soldQty / recQty) * 100)) : 0;
-                const barColor = pct >= 70 ? '#10b981' : (pct >= 40 ? '#f59e0b' : '#ef4444');
-                const brandLabel = (!r.brand || r.brand === 'غير محدد') ? t.unspecified : r.brand;
+                const soldAmount = parseFloat(r.sold_amount || 0);
 
-                const tr = document.createElement('tr');
-                if (isChecked) tr.classList.add('selected-row');
-
-                tr.onclick = (e) => {
-                    if (isPrintSelectMode) {
-                        if (e.target.type !== 'checkbox') toggleRowSelection(rowKey);
-                    } else {
-                        openSingleViewDirect(shipKey, supKey, r.brand || '', currentSeason);
-                    }
-                };
-
-                const cbCell = isPrintSelectMode ? `<td style="text-align:center;"><input type="checkbox" class="ship-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleRowSelection('${safeRowKey}', this)"></td>` : '';
                 tr.innerHTML = `
                     ${cbCell}
-                    <td><span class="brand-badge">${brandLabel}</span></td>
-                    <td>
-                        <div style="font-weight: 800;">${r.supplier_name || r.supplier}</div>
-                        <div style="font-size: 10.5px; color: var(--text-muted);">${shipKey}</div>
-                    </td>
+                    <td><span class="shipment-no-badge">${shipKey || '-'}</span></td>
+                    <td><strong>${r.supplier_name || r.supplier}</strong></td>
                     <td>${r.posting_date || ''}</td>
-                    <td><strong>${parseFloat(r.shipment_cost || 0).toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</strong></td>
                     <td><span class="badge-qty">${recQty.toLocaleString('en-US')} Pcs</span></td>
-                    <td>
-                        <div class="sell-through-wrap">
-                            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:11.5px;">
-                                <span>${soldQty.toLocaleString('en-US')} Pcs</span>
-                                <span style="color:${barColor};">${pct}%</span>
-                            </div>
-                            <div class="sell-through-bar">
-                                <div class="sell-through-fill" style="width:${pct}%; background:${barColor};"></div>
-                            </div>
-                        </div>
-                    </td>
-                    <td><strong style="color: #7c3aed;">${parseFloat(r.sales_volume || 0).toLocaleString('en-US', {minimumFractionDigits: 2})} SAR</strong></td>
+                    <td><strong>${recCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</strong></td>
+                    <td><span class="badge-qty" style="background: rgba(59, 130, 246, 0.15); color: #2563eb; border-color: rgba(59, 130, 246, 0.3);">${soldQty.toLocaleString('en-US')} Pcs</span></td>
+                    <td><strong style="color: #059669;">${soldAmount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</strong></td>
                 `;
-                tbody.appendChild(tr);
-            });
-        }
+            } else {
+                const poQty = parseFloat(r.po_qty || 0);
+                const recQty = parseFloat(r.net_qty || r.received_qty || 0);
+                const qtyDiff = recQty - poQty;
+
+                const poCost = parseFloat(r.po_cost || 0);
+                const recCost = parseFloat(r.net_cost_sar || r.shipment_cost || 0);
+                const costDiff = recCost - poCost;
+
+                const qtyDiffClass = qtyDiff >= 0 ? 'badge-diff-qty positive' : 'badge-diff-qty';
+                const costDiffColor = costDiff <= 0 ? '#059669' : '#dc2626';
+
+                tr.innerHTML = `
+                    ${cbCell}
+                    <td><span class="shipment-no-badge">${shipKey || '-'}</span></td>
+                    <td><strong>${r.supplier_name || r.supplier}</strong></td>
+                    <td>${r.posting_date || ''}</td>
+                    <td><span class="badge-qty">${poQty.toLocaleString('en-US')} Pcs</span></td>
+                    <td><span class="badge-qty">${recQty.toLocaleString('en-US')} Pcs</span></td>
+                    <td><span class="${qtyDiffClass}">${qtyDiff > 0 ? '+' : ''}${qtyDiff.toLocaleString('en-US')} Pcs</span></td>
+                    <td><strong>${poCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</strong></td>
+                    <td><strong>${recCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</strong></td>
+                    <td><strong style="color: ${costDiffColor};">${costDiff > 0 ? '+' : ''}${costDiff.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</strong></td>
+                `;
+            }
+            tbody.appendChild(tr);
+        });
     }
 </script>
 
