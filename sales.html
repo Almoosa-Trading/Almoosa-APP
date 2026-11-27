@@ -138,10 +138,10 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
 /* سلوك الشاشات الكبيرة (الكمبيوتر: 992px فأعلى) */
 @media (min-width: 992px) {
   .app-layout.sidebar-collapsed .sidebar {
-    transform: translateX(calc(var(--sidebar-width) * -1));
+    transform: translateX(100%);
   }
   html[dir="ltr"] .app-layout.sidebar-collapsed .sidebar {
-    transform: translateX(calc(var(--sidebar-width) * -1));
+    transform: translateX(-100%);
   }
   .app-layout.sidebar-collapsed .app-topbar,
   .app-layout.sidebar-collapsed .app-main-content {
