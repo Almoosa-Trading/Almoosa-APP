@@ -24,6 +24,17 @@
   max-width: 100%;
 }
 
+
+.trend-pill{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:7px;direction:ltr;white-space:nowrap}
+.trend-pill.up{background:#dcfce7;color:#15803d;border:1px solid #bbf7d0}
+.trend-pill.down{background:#fee2e2;color:#b91c1c;border:1px solid #fecaca}
+.trend-pill.flat{background:#f1f5f9;color:#475569;border:1px solid #e2e8f0}
+.trend-pill.loading{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.fogo-tile.active-filter-card .trend-pill.up{background:rgba(34,197,94,0.25);color:#bbf7d0;border-color:rgba(134,239,172,0.4)}
+.fogo-tile.active-filter-card .trend-pill.down{background:rgba(239,68,68,0.28);color:#fecaca;border-color:rgba(252,165,165,0.4)}
+.fogo-tile.active-filter-card .trend-pill.flat,.fogo-tile.active-filter-card .trend-pill.loading{background:rgba(255,255,255,0.18);color:#ffffff;border-color:rgba(255,255,255,0.25)}
+.kpi-sub-meta{font-size:10px;font-weight:700;color:#64748b;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fogo-tile.active-filter-card .kpi-sub-meta{color:#dbeafe}
 </style></head><body><section id="loginGate"><div class="login-card"><div class="login-brand"><div class="login-logo-box"><i class="fa-solid fa-layer-group"></i></div><div><h1 data-i18n="login_title">نظام الموسى ERP</h1><p data-i18n="login_subtitle">تسجيل الدخول إلى لوحة التحكم الإدارية</p></div></div><form id="loginForm" autocomplete="on"><div class="form-group"><label for="loginUser" data-i18n="login_user_label">اسم المستخدم أو البريد الإلكتروني</label><div class="input-wrap"><i class="fa-solid fa-user prefix-icon"></i><input type="text" id="loginUser" name="usr" required placeholder="Administrator" /></div></div><div class="form-group"><label for="loginPass" data-i18n="login_pass_label">كلمة المرور</label><div class="input-wrap"><i class="fa-solid fa-lock prefix-icon"></i><input type="password" id="loginPass" name="pwd" required placeholder="••••••••" /><button type="button" class="toggle-pass-btn" id="togglePassBtn"><i class="fa-regular fa-eye"></i></button></div></div><div class="remember-row"><label class="remember-label" for="rememberPassCheck"><input type="checkbox" id="rememberPassCheck" checked /><span data-i18n="remember_password">حفظ كلمة المرور</span></label></div><button type="submit" class="login-submit-btn" id="loginSubmitBtn"><i class="fa-solid fa-right-to-bracket"></i><span data-i18n="login_btn">دخول إلى النظام</span></button><div id="loginError" class="login-error hidden"></div></form><div class="recent-accounts hidden" id="recentAccountsBox"><div class="recent-accounts-title" data-i18n="recent_accounts">الحسابات المستخدمة مؤخراً:</div><div class="recent-chips" id="recentAccountsList"></div></div></div></section><div id="dashboardShell" class="locked"><div class="sidebar-backdrop" id="sidebarBackdrop"></div><aside class="sidebar" id="sidebarMenu"><div class="sidebar-brand-header"><div class="brand-fogo-icon"><i class="fa-solid fa-chart-simple"></i></div><div class="brand-text-group"><span class="brand-name" data-i18n="brand_name">الموسى ERP</span><span class="brand-sub" data-i18n="brand_sub">Financial & Retail</span></div></div><div class="sidebar-scroll-area"><div class="nav-section-caption" data-i18n="menu_caption">القائمة الرئيسية</div><div class="nav-item"><a href="./index.html" class="nav-link-btn active"><span class="nav-left"><i class="fa-solid fa-table-cells-large"></i><span data-i18n="nav_dashboard">لوحة التحكم</span></span></a></div><div class="nav-item open"><button type="button" class="nav-accordion-btn"><span class="nav-left"><i class="fa-solid fa-cart-shopping"></i><span data-i18n="nav_sales">المبيعات</span></span><i class="fa-solid fa-chevron-left chevron-icon"></i></button><div class="submenu"><a href="./sales.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_summary">ملخص المبيعات</span></a><a href="./sales_group.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_group">المبيعات حسب المجموعة</span></a><a href="./supplier_sales.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_supplier">المبيعات حسب المورد</span></a><a href="./sales_per_day.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_per_day">المبيعات اليومية</span></a></div></div><div class="nav-item open"><button type="button" class="nav-accordion-btn"><span class="nav-left"><i class="fa-solid fa-bag-shopping"></i><span data-i18n="nav_purchase">المشتريات</span></span><i class="fa-solid fa-chevron-left chevron-icon"></i></button><div class="submenu"><a href="./purchases.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_purchases_list">قوائم المشتريات</span></a><a href="./purchase_comparieso.html"><i class="fa-solid fa-circle"></i><span>تحليل المشتريات والمبيعات</span></a></div></div><div class="nav-item open"><button type="button" class="nav-accordion-btn"><span class="nav-left"><i class="fa-solid fa-warehouse"></i><span data-i18n="nav_warehouse">إدارة المستودعات</span></span><i class="fa-solid fa-chevron-left chevron-icon"></i></button><div class="submenu"><a href="./warhouse.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_warehouse_staff">أداء موظفي المستودع</span></a></div></div><div class="nav-section-caption" data-i18n="support_caption">الحساب والنظام</div><div class="nav-item"><button type="button" class="nav-link-btn" id="logoutBtn"><span class="nav-left"><i class="fa-solid fa-power-off" style="color:#f87171;"></i><span data-i18n="nav_logout">تسجيل الخروج</span></span></button></div></div><div class="sidebar-blue-promo-card"><div class="sidebar-promo-head"><span><i class="fa-solid fa-bolt"></i><span data-i18n="pos_live_sync">المزامنة الحية POS</span></span></div><div class="sidebar-stat-row"><span class="s-label" data-i18n="today_vs_yesterday">اليوم مقابل أمس</span><span class="s-val" id="sideVsYesterday">--</span></div><div class="sidebar-stat-row"><span class="s-label" data-i18n="month_invoices">فواتير الشهر</span><span class="s-val" id="sideMonthInvoices">--</span></div><div class="sidebar-updated-note" id="lastSyncTime">آخر تحديث: --:--</div></div></aside><header class="topbar"><div class="topbar-left"><button type="button" class="sidebar-toggle-btn" id="sidebarToggleBtn" data-i18n-title="toggle_sidebar" title="إخفاء / إظهار القائمة"><i class="fa-solid fa-bars"></i></button><h1 class="topbar-page-heading"><strong data-i18n="brand_ar">الموسى التجارية</strong><span data-i18n="dash_sub_title"> / لوحة التحكم</span></h1></div><div class="topbar-right"><div class="topbar-search"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="globalSearchInput" data-i18n-placeholder="search_placeholder" placeholder="بحث سريع في الفروع..." /></div><div class="date-pill"><i class="fa-regular fa-calendar"></i><input type="date" id="dashDateFilter" /></div><button type="button" class="icon-action-btn" id="refreshDashBtn" data-i18n-title="title_refresh" title="تحديث البيانات"><i class="fa-solid fa-rotate"></i></button><select id="langSelect" class="lang-select-top" aria-label="Language Selector"><option value="ar">العربية</option><option value="en">English</option><option value="hi">हिन्दी</option><option value="ur">اردو</option></select><button type="button" class="icon-action-btn" id="fullscreenBtn" data-i18n-title="title_fullscreen" title="ملء الشاشة"><i class="fa-solid fa-expand"></i></button><div class="user-pill-top"><div class="user-avatar" id="headerUserAvatar">A</div><span class="u-name" id="headerUserName">Admin</span></div></div></header><div class="app-layout"><main class="main-content"><section class="top-cards-split-grid">
   <div class="fogo-tile" id="kpiTodayCard" data-filter-preset="today" data-i18n-title="filter_card_hint" title="اضغط لفلترة البيانات بالأسفل حسب اليوم">
     <div class="fogo-tile-top">
@@ -35,8 +46,8 @@
     </div>
     <div class="fogo-tile-value" id="kpiTodaySales">جاري التحميل...</div>
     <div class="fogo-tile-footer">
-      <span class="fogo-badge-pill" id="kpiTodaySalesSub">--</span>
-      <div class="kpi-spark-wrap"><canvas id="spark1"></canvas></div>
+      <span class="trend-pill loading" id="kpiTodayTrend"><i class="fa-solid fa-spinner fa-spin"></i> --</span>
+      <span class="kpi-sub-meta" id="kpiTodaySalesSub">--</span>
     </div>
   </div>
 
@@ -50,8 +61,8 @@
     </div>
     <div class="fogo-tile-value" id="kpiYesterdaySales">جاري التحميل...</div>
     <div class="fogo-tile-footer">
-      <span class="fogo-badge-pill" id="kpiYesterdaySalesSub">--</span>
-      <div class="kpi-spark-wrap"><canvas id="spark2"></canvas></div>
+      <span class="trend-pill loading" id="kpiYesterdayTrend"><i class="fa-solid fa-spinner fa-spin"></i> --</span>
+      <span class="kpi-sub-meta" id="kpiYesterdaySalesSub">--</span>
     </div>
   </div>
 
@@ -65,8 +76,8 @@
     </div>
     <div class="fogo-tile-value" id="kpiWeekSales">جاري التحميل...</div>
     <div class="fogo-tile-footer">
-      <span class="fogo-badge-pill" id="kpiWeekSalesSub">--</span>
-      <div class="kpi-spark-wrap"><canvas id="spark3"></canvas></div>
+      <span class="trend-pill loading" id="kpiWeekTrend"><i class="fa-solid fa-spinner fa-spin"></i> --</span>
+      <span class="kpi-sub-meta" id="kpiWeekSalesSub">--</span>
     </div>
   </div>
 
@@ -80,8 +91,8 @@
     </div>
     <div class="fogo-tile-value" id="kpiMonthSales">جاري التحميل...</div>
     <div class="fogo-tile-footer">
-      <span class="fogo-badge-pill" id="kpiMonthSalesSub">--</span>
-      <div class="kpi-spark-wrap"><canvas id="spark4"></canvas></div>
+      <span class="trend-pill loading" id="kpiMonthTrend"><i class="fa-solid fa-spinner fa-spin"></i> --</span>
+      <span class="kpi-sub-meta" id="kpiMonthSalesSub">--</span>
     </div>
   </div>
 
@@ -95,7 +106,6 @@
     <div class="fogo-tile-value" id="kpiMonthPurchase">جاري التحميل...</div>
     <div class="fogo-tile-footer">
       <span class="fogo-badge-pill" id="kpiMonthPurchaseSub">--</span>
-      <div class="kpi-spark-wrap"><canvas id="spark5"></canvas></div>
     </div>
   </div>
 
@@ -109,7 +119,6 @@
     <div class="fogo-tile-value" id="kpiCurrentStock">--</div>
     <div class="fogo-tile-footer">
       <span class="fogo-badge-pill" id="kpiCurrentStockSub" data-i18n="stock_pending_sub">قيد التفعيل لاحقاً</span>
-      <div class="kpi-spark-wrap"><canvas id="spark6"></canvas></div>
     </div>
   </div>
 </section><section class="blue-summary-report-card" id="blueSummaryReportSection"><div class="blue-report-controls-bar"><div class="blue-report-title-side"><div class="blue-report-brand"><strong data-i18n="brand_ar">الموسى التجارية</strong><span>almoosa trading</span></div><span class="blue-report-red-heading" data-i18n="blue_report_heading">تقرير ملخص المبيعات اليومي بالرسم البياني</span></div><div class="blue-report-picker-wrap"><span class="blue-report-range-badge" id="blueReportRangeLabel">Yesterday</span><button type="button" class="blue-report-mini-btn" id="blueReportPickerBtn" data-i18n-title="picker_btn_title" title="اختيار اليوم أو الفترة"><i class="fa-regular fa-calendar-days"></i><span data-i18n="picker_btn_label">اختر اليوم / الفترة</span><i class="fa-solid fa-caret-down"></i></button><div class="blue-report-popover hidden" id="blueReportPopover"><div class="popover-presets"><button type="button" class="popover-preset-btn active" data-preset="yesterday" data-i18n="preset_yesterday">أمس (الافتراضي)</button><button type="button" class="popover-preset-btn" data-preset="today" data-i18n="preset_today">اليوم</button><button type="button" class="popover-preset-btn" data-preset="week" data-i18n="preset_week">هذا الأسبوع</button><button type="button" class="popover-preset-btn" data-preset="month" data-i18n="preset_month">هذا الشهر</button></div><div class="popover-custom-dates"><div><label for="blueReportFromInput" data-i18n="from_date">من تاريخ</label><input type="date" id="blueReportFromInput" /></div><div><label for="blueReportToInput" data-i18n="to_date">إلى تاريخ</label><input type="date" id="blueReportToInput" /></div></div><button type="button" class="popover-apply-btn" id="blueReportApplyBtn" data-i18n="apply_filter_btn">عرض البيانات</button></div></div></div><div class="blue-report-ltr-body"><div class="blue-report-row"><div class="blue-report-left"><div class="excel-table-scroll"><table class="excel-blue-table" id="blueQtyTable"><thead><tr><th>SHOP</th><th>...</th></tr></thead><tbody><tr><td>QTY</td><td>0</td></tr></tbody></table></div><div class="blue-chart-frame"><div class="blue-chart-caption" data-i18n="chart_cap_qty">إجمالي الكميات المباعة لجميع الفروع</div><div class="blue-chart-canvas-wrap"><canvas id="blueQtyBarChart"></canvas></div></div></div><div class="blue-report-right"><div class="grand-total-navy-box"><div class="grand-total-navy-head" data-i18n="grand_total_qty">إجمالي الكميات المباعة</div><div class="grand-total-navy-val" id="blueGrandTotalQty">0</div></div></div></div><div class="blue-report-row"><div class="blue-report-left"><div class="excel-table-scroll"><table class="excel-blue-table" id="blueSalesTable"><thead><tr><th>SHOP</th><th>...</th></tr></thead><tbody><tr><td>SALES</td><td>0</td></tr></tbody></table></div><div class="blue-chart-frame"><div class="blue-chart-caption" data-i18n="chart_cap_sales">إجمالي المبيعات لجميع الفروع</div><div class="blue-chart-canvas-wrap"><canvas id="blueSalesBarChart"></canvas></div></div></div><div class="blue-report-right"><div class="grand-total-navy-box"><div class="grand-total-navy-head" data-i18n="grand_total_sales">الإجمالي العام للمبيعات</div><div class="grand-total-navy-val" id="blueGrandTotalSales">0</div></div></div></div></div></section><section class="grid-2-charts" id="analyticsCategoryCharts"><div class="panel-card"><div><div class="panel-header"><span class="panel-title" data-i18n="panel_gender">مبيعات حسب النوع والفئة</span><span class="panel-badge-sync filter-sync-label">Yesterday</span></div><div class="donut-chart-box"><canvas id="genderSalesPieChart"></canvas></div></div><div class="mini-stat-boxes-row" id="genderMiniBoxes"></div></div><div class="panel-card"><div><div class="panel-header"><span class="panel-title" data-i18n="panel_dept">مبيعات الأقسام (ملابس، أحذية، حقائب، إكسسوارات)</span><span class="panel-badge-sync filter-sync-label">Yesterday</span></div><div class="donut-chart-box"><canvas id="categorySalesPieChart"></canvas></div></div><div class="mini-stat-boxes-row" id="categoryMiniBoxes"></div></div></section><section class="saudi-map-section-grid" id="saudiRegionMapSection"><div class="saudi-map-card"><div class="panel-header"><span class="panel-title"><i class="fa-solid fa-map-location-dot" style="color:#1d4ed8; margin-inline-end:6px;"></i><span data-i18n="ksa_map_title">المبيعات حسب مناطق المملكة العربية السعودية</span></span><span class="panel-badge-sync filter-sync-label">Yesterday</span></div><div class="saudi-map-canvas-area" id="ksaMapContainer"><div class="map-hover-tooltip hidden" id="ksaMapTooltip"><div class="map-tooltip-header"><span class="map-tooltip-title" id="ttRegionName">عنيزة</span><span class="map-tooltip-code" id="ttRegionBranches">019, 002, 001</span></div><div class="map-tooltip-row"><span data-i18n="tt_sales_label">إجمالي المبيعات:</span><strong id="ttRegionSales">SAR 0</strong></div><div class="map-tooltip-row"><span data-i18n="tt_qty_label">الكمية المباعة:</span><strong id="ttRegionQty">0 pcs</strong></div><div class="map-tooltip-row"><span data-i18n="tt_share_label">نسبة المساهمة:</span><strong id="ttRegionShare">0%</strong></div></div><div class="map-intensity-legend"><span data-i18n="legend_low">أقل</span><div class="legend-gradient-bar"></div><span data-i18n="legend_high">أعلى مبيعاً</span></div><div class="map-compass-badge" title="North"><i class="fa-regular fa-compass"></i></div><svg class="saudi-svg-map" viewBox="0 0 860 700" xmlns="http://www.w3.org/2000/svg"><defs><filter id="ksaRealShadow" x="-12%" y="-12%" width="124%" height="124%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.2" /></filter><pattern id="seaGrid" width="24" height="24" patternUnits="userSpaceOnUse"><path d="M 24 0 L 0 0 0 24" fill="none" stroke="#93c5fd" stroke-width="0.6" opacity="0.45"/></pattern></defs><rect x="0" y="0" width="860" height="700" fill="url(#seaGrid)"/><path class="ksa-neighbor-land" d="M60,30 L215,30 L195,95 L145,105 L105,128 L60,115 Z" /><path class="ksa-neighbor-land" d="M215,30 L520,30 L515,175 L465,192 L410,165 L355,120 L275,92 L195,95 Z" /><path class="ksa-neighbor-land" d="M605,315 L635,310 L642,348 L608,352 Z" /><path class="ksa-neighbor-land" d="M665,375 L780,355 L825,445 L755,585 L685,565 L745,455 L695,392 Z" /><path class="ksa-neighbor-land" d="M295,638 L365,595 L465,602 L585,575 L685,565 L710,675 L285,675 Z" /><text class="ksa-neighbor-label" x="125" y="72">JORDAN</text><text class="ksa-neighbor-label" x="355" y="75">IRAQ</text><text class="ksa-neighbor-label" x="488" y="152">KUWAIT</text><text class="ksa-neighbor-label" x="615" y="336">QATAR</text><text class="ksa-neighbor-label" x="725" y="405">UAE</text><text class="ksa-neighbor-label" x="752" y="510">OMAN</text><text class="ksa-neighbor-label" x="465" y="645">YEMEN</text><text class="ksa-sea-text" x="115" y="455" transform="rotate(62 115,455)">البحر الأحمر • RED SEA</text><text class="ksa-sea-text" x="625" y="220" transform="rotate(38 625,220)">الخليج العربي • ARABIAN GULF</text><g filter="url(#ksaRealShadow)"><path class="ksa-region-path inactive-region" d="M165,98 L195,95 L235,78 L275,92 L355,120 L410,165 L465,192 L435,212 L378,185 L318,162 L255,152 L212,135 L182,118 Z" /><text class="ksa-province-subtext" x="305" y="138" text-anchor="middle">الحدود الشمالية والجوف</text><path id="map-reg-tabuk" class="ksa-region-path" data-region-key="reg_tabuk" d="M84,132 L105,128 L145,105 L165,98 L182,118 L212,135 L224,182 L202,248 L168,282 L144,258 L124,218 L104,182 L92,152 Z" /><path id="map-reg-hail" class="ksa-region-path" data-region-key="reg_hail" d="M212,135 L255,152 L318,162 L378,185 L392,232 L354,268 L286,272 L242,246 L224,182 Z" /><path id="map-reg-buraidah" class="ksa-region-path" data-region-key="reg_buraidah_rass" d="M286,272 L354,268 L398,286 L404,324 L356,348 L304,338 L282,304 Z" /><path id="map-reg-unaizah" class="ksa-region-path" data-region-key="reg_unaizah" d="M356,348 L404,324 L436,344 L424,378 L372,374 Z" /><path class="ksa-region-path inactive-region" d="M168,282 L202,248 L242,246 L286,272 L282,304 L304,338 L278,392 L222,398 L184,358 L158,316 Z" /><text class="ksa-province-subtext" x="228" y="332" text-anchor="middle">المدينة المنورة</text><path class="ksa-region-path inactive-region" d="M304,338 L356,348 L372,374 L424,378 L478,352 L518,396 L544,475 L472,510 L388,498 L338,455 L298,405 Z" /><text class="ksa-province-subtext" x="425" y="435" text-anchor="middle">منطقة الرياض</text><path id="map-reg-eastern" class="ksa-region-path" data-region-key="reg_eastern" d="M435,212 L465,192 L505,182 L522,222 L568,274 L602,315 L608,352 L642,348 L665,375 L695,392 L745,455 L685,565 L585,575 L498,556 L472,510 L544,475 L518,396 L478,352 L436,344 L404,324 L398,286 L392,232 L378,185 Z" /><path id="map-reg-jeddah" class="ksa-region-path" data-region-key="reg_jeddah" d="M184,358 L222,398 L278,392 L298,405 L338,455 L312,508 L266,522 L232,482 L202,424 Z" /><path class="ksa-region-path inactive-region" d="M232,482 L266,522 L312,508 L338,455 L388,498 L472,510 L498,556 L465,602 L365,595 L295,638 L268,614 L252,554 Z" /><text class="ksa-province-subtext" x="355" y="558" text-anchor="middle">عسير وجازان ونجران</text></g><g class="ksa-city-pin" data-region-key="reg_tabuk" transform="translate(154, 184)"><circle class="ksa-pin-pulse" r="14"></circle><circle r="7" fill="#132240" stroke="#ffffff" stroke-width="2.2"></circle><rect class="ksa-pin-badge-bg" x="-26" y="-30" width="52" height="20"></rect><text class="ksa-pin-label" x="0" y="-16" text-anchor="middle">تبوك</text></g><g class="ksa-city-pin" data-region-key="reg_hail" transform="translate(302, 216)"><circle class="ksa-pin-pulse" r="14"></circle><circle r="7" fill="#132240" stroke="#ffffff" stroke-width="2.2"></circle><rect class="ksa-pin-badge-bg" x="-26" y="-30" width="52" height="20"></rect><text class="ksa-pin-label" x="0" y="-16" text-anchor="middle">حائل</text></g><g class="ksa-city-pin" data-region-key="reg_buraidah_rass" transform="translate(342, 304)"><circle class="ksa-pin-pulse" r="14"></circle><circle r="7" fill="#132240" stroke="#ffffff" stroke-width="2.2"></circle><rect class="ksa-pin-badge-bg" x="-42" y="-30" width="84" height="20"></rect><text class="ksa-pin-label" x="0" y="-16" text-anchor="middle">بريدة والرس</text></g><g class="ksa-city-pin" data-region-key="reg_unaizah" transform="translate(402, 354)"><circle class="ksa-pin-pulse" r="15"></circle><circle r="7.5" fill="#2563eb" stroke="#ffffff" stroke-width="2.5"></circle><rect class="ksa-pin-badge-bg" x="12" y="-10" width="54" height="20"></rect><text class="ksa-pin-label" x="39" y="4" text-anchor="middle">عنيزة</text></g><g class="ksa-city-pin" data-region-key="reg_eastern" transform="translate(556, 318)"><circle class="ksa-pin-pulse" r="14"></circle><circle r="7.5" fill="#132240" stroke="#ffffff" stroke-width="2.2"></circle><rect class="ksa-pin-badge-bg" x="-34" y="-30" width="68" height="20"></rect><text class="ksa-pin-label" x="0" y="-16" text-anchor="middle">الشرقية</text></g><g class="ksa-city-pin" data-region-key="reg_jeddah" transform="translate(248, 442)"><circle class="ksa-pin-pulse" r="14"></circle><circle r="7.5" fill="#132240" stroke="#ffffff" stroke-width="2.2"></circle><rect class="ksa-pin-badge-bg" x="-38" y="-30" width="76" height="20"></rect><text class="ksa-pin-label" x="0" y="-16" text-anchor="middle">منطقة جدة</text></g></svg></div><div class="map-bottom-metrics"><div class="map-metric-item"><span data-i18n="map_top_sales">الأعلى مبيعاً</span><strong id="mapTopSalesRegion">--</strong></div><div class="map-metric-item"><span data-i18n="map_top_qty">الأكثر كمية مباعة</span><strong id="mapTopQtyRegion">--</strong></div><div class="map-metric-item"><span data-i18n="map_active_regions">المناطق النشطة</span><strong id="mapActiveRegionsCount">6 مناطق</strong></div></div></div><div class="region-sales-side-card"><div><div class="panel-header"><span class="panel-title" data-i18n="panel_regions">مبيعات المناطق والكميات</span><span class="panel-badge-sync filter-sync-label">Yesterday</span></div><div class="region-list-stack" id="regionSalesListContainer"></div></div></div></section></main></div></div><script>(function () {
@@ -217,7 +226,17 @@ gen_usx: 'مشترك / أطفال',
 dept_apparel: 'ملابس',
 dept_footwear: 'أحذية',
 dept_bags: 'حقائب',
-dept_accessories: 'إكسسوارات'
+dept_accessories: 'إكسسوارات',
+vs_yesterday_lbl: 'مقارنة بأمس',
+vs_day_before_lbl: 'مقارنة بأول أمس',
+vs_last_week_lfl: 'مقارنة بنفس أيام الأسبوع الماضي',
+vs_last_month_lfl: 'مقارنة بنفس أيام الشهر الماضي',
+days_count_word: 'أيام',
+vs_yesterday_same_time: 'مقارنة بأمس حتى نفس الساعة',
+vs_day_before_lbl: 'مقارنة بأول أمس (يوم كامل)',
+vs_last_week_same_time: 'مقارنة بنفس أيام الأسبوع الماضي حتى نفس الساعة',
+vs_last_month_same_time: 'مقارنة بنفس أيام الشهر الماضي حتى نفس الساعة',
+until_hour_word: 'حتى الساعة',
 },
 en: {
 page_title: 'Almoosa ERP — Dashboard',
@@ -308,7 +327,22 @@ gen_usx: 'USX',
 dept_apparel: 'Apparel',
 dept_footwear: 'Footwear',
 dept_bags: 'Bags',
-dept_accessories: 'Accessories'
+dept_accessories: 'Accessories',
+vs_yesterday_lbl: 'vs Yesterday',
+vs_day_before_lbl: 'vs Day Before',
+vs_last_week_lfl: 'vs Same Days Last Week',
+vs_last_month_lfl: 'vs Same Days Last Month',
+days_count_word: 'days',
+vs_yesterday_same_time: 'कल इसी समय तक की तुलना में',
+vs_day_before_lbl: 'परसों (पूरे दिन) की तुलना में',
+vs_last_week_same_time: 'पिछले सप्ताह के इन्हीं दिनों इसी समय तक',
+vs_last_month_same_time: 'पिछले महीने के इन्हीं दिनों इसी समय तक',
+until_hour_word: 'तक',
+vs_yesterday_same_time: 'vs Yesterday up to same time',
+vs_day_before_lbl: 'vs Day Before (full day)',
+vs_last_week_same_time: 'vs Same Days Last Week up to same time',
+vs_last_month_same_time: 'vs Same Days Last Month up to same time',
+until_hour_word: 'until',
 },
 hi: {
 page_title: 'अलमूसा ERP — डैशबोर्ड',
@@ -399,7 +433,12 @@ gen_usx: 'USX',
 dept_apparel: 'Apparel',
 dept_footwear: 'Footwear',
 dept_bags: 'Bags',
-dept_accessories: 'Accessories'
+dept_accessories: 'Accessories',
+vs_yesterday_lbl: 'vs Yesterday',
+vs_day_before_lbl: 'vs Day Before',
+vs_last_week_lfl: 'vs Same Days Last Week',
+vs_last_month_lfl: 'vs Same Days Last Month',
+days_count_word: 'days',
 },
 ur: {
 page_title: 'الموسیٰ ERP — ڈیش بورڈ',
@@ -490,7 +529,17 @@ gen_usx: 'USX',
 dept_apparel: 'Apparel',
 dept_footwear: 'Footwear',
 dept_bags: 'Bags',
-dept_accessories: 'Accessories'
+dept_accessories: 'Accessories',
+vs_yesterday_lbl: 'کل کے مقابلے میں',
+vs_day_before_lbl: 'پرسوں کے مقابلے میں',
+vs_last_week_lfl: 'پچھلے ہفتے کے انہی دنوں سے',
+vs_last_month_lfl: 'پچھلے مہینے کے انہی دنوں سے',
+days_count_word: 'دن',
+vs_yesterday_same_time: 'کل اسی وقت تک کے مقابلے میں',
+vs_day_before_lbl: 'پرسوں (مکمل دن) کے مقابلے میں',
+vs_last_week_same_time: 'پچھلے ہفتے کے انہی دنوں اسی وقت تک',
+vs_last_month_same_time: 'پچھلے مہینے کے انہی دنوں اسی وقت تک',
+until_hour_word: 'تک',
 }
 };
 const REGION_RULES = [
@@ -584,19 +633,30 @@ mode: 'yesterday',
 from: '',
 to: ''
 };
+let activeDashboardLoadId = 0;
 let lastLoadedSnapshot = {
 rows: [],
 itemsBreakdown: [],
 labelText: 'Yesterday',
 todaySummary: null,
 yestSummary: null,
+dayBeforeSummary: null,
 weekSummary: null,
+prevWeekLflSummary: null,
 monthSummary: null,
+prevMonthLflSummary: null,
 monthPurchaseVal: 0,
 todayStr: '',
 yestStr: '',
+dayBeforeStr: '',
 weekStartStr: '',
+prevWeekStartStr: '',
+prevWeekEndStr: '',
 monthStartStr: '',
+prevMonthStartStr: '',
+prevMonthEndStr: '',
+weekDaysCount: 1,
+monthDaysCount: 1,
 lastSyncTimeStr: '--:--'
 };
 let graphs = {};
@@ -606,11 +666,50 @@ const m = String(dateObj.getMonth() + 1).padStart(2, '0');
 const d = String(dateObj.getDate()).padStart(2, '0');
 return `${y}-${m}-${d}`;
 }
+function addDays(dateObj, days) {
+const d = new Date(dateObj);
+d.setDate(d.getDate() + days);
+return d;
+}
 function getShortBranchCode(branchName) {
 if (!branchName) return '000';
 const match = String(branchName).match(/\d{3}/);
 if (match) return match[0];
 return String(branchName).substring(0, 3);
+}
+function renderTrendPill(elId, currentVal, previousVal, compareTitle) {
+const el = document.getElementById(elId);
+if (!el) return;
+const cur = Number(currentVal || 0);
+const prev = Number(previousVal || 0);
+el.className = 'trend-pill';
+if (prev <= 0 && cur <= 0) {
+el.classList.add('flat');
+el.title = compareTitle || '';
+el.innerHTML = `<i class="fa-solid fa-minus"></i> 0.0%`;
+return;
+}
+if (prev <= 0 && cur > 0) {
+el.classList.add('up');
+el.title = compareTitle || '';
+el.innerHTML = `<i class="fa-solid fa-arrow-trend-up"></i> +100%`;
+return;
+}
+const diffPct = ((cur - prev) / prev) * 100;
+const absPct = Math.abs(diffPct).toFixed(1);
+const diffAmount = Math.round(cur - prev).toLocaleString('en-US');
+const prevFormatted = Math.round(prev).toLocaleString('en-US');
+el.title = `${compareTitle}: SAR ${prevFormatted} (${diffPct >= 0 ? '+' : ''}${diffAmount} SAR)`;
+if (diffPct > 0.05) {
+el.classList.add('up');
+el.innerHTML = `<i class="fa-solid fa-arrow-up"></i> +${absPct}%`;
+} else if (diffPct < -0.05) {
+el.classList.add('down');
+el.innerHTML = `<i class="fa-solid fa-arrow-down"></i> -${absPct}%`;
+} else {
+el.classList.add('flat');
+el.innerHTML = `<i class="fa-solid fa-arrows-left-right"></i> 0.0%`;
+}
 }
 if (dateInput) {
 dateInput.value = toYMD(new Date());
@@ -824,7 +923,91 @@ function fmtSAR(val) {
 const num = Number(val || 0);
 return 'SAR ' + num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
+const salesQueryCache = new Map();
+
+function getCurrentTimeHMS() {
+const now = new Date();
+const hh = String(now.getHours()).padStart(2, '0');
+const mm = String(now.getMinutes()).padStart(2, '0');
+const ss = String(now.getSeconds()).padStart(2, '0');
+return `${hh}:${mm}:${ss}`;
+}
+function getCurrentTimeHM() {
+const now = new Date();
+const hh = String(now.getHours()).padStart(2, '0');
+const mm = String(now.getMinutes()).padStart(2, '0');
+return `${hh}:${mm}`;
+}
+async function fetchSingleDaySalesUpToTime(dateStr, cutoffHMS) {
+const cacheKey = `cutoff:${dateStr}:${cutoffHMS}`;
+if (salesQueryCache.has(cacheKey)) {
+return salesQueryCache.get(cacheKey);
+}
+try {
+// Ultra-fast server-side SQL aggregation (returns 1 single row instead of hundreds of invoices!)
+const res = await fetch(`${POS_CONFIG.serverUrl}/api/method/frappe.client.get_list`, {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+'Authorization': `token ${POS_CONFIG.apiKey}:${POS_CONFIG.apiSecret}`
+},
+body: JSON.stringify({
+doctype: 'POS Invoice',
+fields: [
+'sum(net_total) as net_sales',
+'sum(grand_total) as gross_sales',
+'sum(total_qty) as qty_sum',
+'count(name) as inv_count'
+],
+filters: [
+['posting_date', '=', dateStr],
+['posting_time', '<=', cutoffHMS],
+['docstatus', '=', 1]
+],
+limit_page_length: 1
+})
+});
+if (!res.ok) {
+return await fetchBranchSalesSummary(dateStr, dateStr);
+}
+const jsonRes = await res.json();
+const row = (Array.isArray(jsonRes.message) && jsonRes.message[0]) ? jsonRes.message[0] : {};
+const totalSales = parseFloat(row.net_sales ?? row.gross_sales ?? 0);
+const totalInvoices = parseInt(row.inv_count || 0, 10);
+const totalQty = parseFloat(row.qty_sum || 0);
+const result = { totalSales, totalInvoices, totalQty, rows: [] };
+salesQueryCache.set(cacheKey, result);
+return result;
+} catch (_) {
+return await fetchBranchSalesSummary(dateStr, dateStr);
+}
+}
+async function fetchRangeSalesWithFinalDayCutoff(startDateStr, endDateStr, cutoffHMS, isRealToday) {
+if (!isRealToday) {
+return await fetchBranchSalesSummary(startDateStr, endDateStr);
+}
+if (startDateStr === endDateStr) {
+return await fetchSingleDaySalesUpToTime(endDateStr, cutoffHMS);
+}
+const endObj = new Date(endDateStr + 'T00:00:00');
+const prevFullDayObj = addDays(endObj, -1);
+const prevFullDayStr = toYMD(prevFullDayObj);
+const [fullDaysPart, partialLastDayPart] = await Promise.all([
+fetchBranchSalesSummary(startDateStr, prevFullDayStr),
+fetchSingleDaySalesUpToTime(endDateStr, cutoffHMS)
+]);
+return {
+totalSales: fullDaysPart.totalSales + partialLastDayPart.totalSales,
+totalInvoices: fullDaysPart.totalInvoices + partialLastDayPart.totalInvoices,
+totalQty: fullDaysPart.totalQty + partialLastDayPart.totalQty,
+rows: fullDaysPart.rows
+};
+}
 async function fetchBranchSalesSummary(fromDate, toDate) {
+const cacheKey = `branch:${fromDate}:${toDate}`;
+if (salesQueryCache.has(cacheKey)) {
+return salesQueryCache.get(cacheKey);
+}
 const url = `${POS_CONFIG.serverUrl}/api/method/get_branch_sales_cost_summary?from_date=${fromDate}&to_date=${toDate}`;
 const res = await fetch(url, {
 method: 'GET',
@@ -846,7 +1029,9 @@ totalSales += parseFloat(r.Total_Sales || 0);
 totalInvoices += parseInt(r.Invoice_Count || 0, 10);
 totalQty += parseFloat(r.Total_Qty || 0);
 });
-return { totalSales, totalInvoices, totalQty, rows };
+const result = { totalSales, totalInvoices, totalQty, rows };
+salesQueryCache.set(cacheKey, result);
+return result;
 }
 async function fetchInvoiceItemsBreakdown(fromDate, toDate) {
 try {
@@ -1021,31 +1206,6 @@ return `${pct.toFixed(1)}%`;
 function initGraphs() {
 if (graphs.initialized) return;
 graphs.initialized = true;
-['spark1', 'spark2', 'spark3', 'spark4', 'spark5', 'spark6'].forEach((id) => {
-const ctx = document.getElementById(id);
-if (!ctx) return;
-new Chart(ctx, {
-type: 'line',
-data: {
-labels: [1, 2, 3, 4, 5, 6],
-datasets: [{
-data: [12, 16, 14, 20, 18, 24],
-borderColor: '#ffffff',
-backgroundColor: 'rgba(255, 255, 255, 0.25)',
-borderWidth: 2,
-pointRadius: 0,
-fill: true,
-tension: 0.35
-}]
-},
-options: {
-responsive: true,
-maintainAspectRatio: false,
-plugins: { legend: { display: false }, datalabels: { display: false } },
-scales: { x: { display: false }, y: { display: false } }
-}
-});
-});
 graphs.blueQtyBar = new Chart(document.getElementById('blueQtyBarChart'), {
 type: 'bar',
 data: {
@@ -1394,40 +1554,132 @@ function updateKpiTextsFromSnapshot() {
 const {
 todaySummary,
 yestSummary,
+yestSameTimeSummary,
+dayBeforeSummary,
 weekSummary,
+prevWeekLflSummary,
 monthSummary,
+prevMonthLflSummary,
 monthPurchaseVal,
 todayStr,
 yestStr,
-weekStartStr,
-monthStartStr
+prevWeekStartStr,
+prevWeekEndStr,
+prevMonthStartStr,
+prevMonthEndStr,
+weekDaysCount,
+monthDaysCount,
+isRealToday,
+cutoffHM
 } = lastLoadedSnapshot;
-if (!todaySummary) return;
+
+const timeTag = isRealToday ? ` (${t('until_hour_word')} ${cutoffHM})` : '';
+
+// 1. TODAY SALES (value & invoice count appear IMMEDIATELY, comparison pill appears as soon as comparison data arrives)
+if (todaySummary) {
 document.getElementById('kpiTodaySales').textContent = fmtSAR(todaySummary.totalSales);
-document.getElementById('kpiTodaySalesSub').textContent = `${todaySummary.totalInvoices} ${t('invoices_word')} (${todayStr})`;
+document.getElementById('kpiTodaySalesSub').textContent = isRealToday
+? `${todaySummary.totalInvoices} ${t('invoices_word')} • ${cutoffHM}`
+: `${todaySummary.totalInvoices} ${t('invoices_word')}`;
+const yestBaselineForToday = isRealToday ? yestSameTimeSummary : yestSummary;
+if (yestBaselineForToday) {
+const todayCompLabel = isRealToday
+? `${t('vs_yesterday_same_time')} (${yestStr} ${cutoffHM})`
+: `${t('vs_yesterday_lbl')} (${yestStr})`;
+renderTrendPill('kpiTodayTrend', todaySummary.totalSales, yestBaselineForToday.totalSales, todayCompLabel);
+}
+}
+
+// 2. YESTERDAY SALES (value & invoice count appear IMMEDIATELY, day-before comparison pill appears when ready)
+if (yestSummary) {
 document.getElementById('kpiYesterdaySales').textContent = fmtSAR(yestSummary.totalSales);
-document.getElementById('kpiYesterdaySalesSub').textContent = `${yestSummary.totalInvoices} ${t('invoices_word')} (${yestStr})`;
+document.getElementById('kpiYesterdaySalesSub').textContent = `${yestSummary.totalInvoices} ${t('invoices_word')}`;
+if (dayBeforeSummary) {
+renderTrendPill('kpiYesterdayTrend', yestSummary.totalSales, dayBeforeSummary.totalSales, `${t('vs_day_before_lbl')} (${lastLoadedSnapshot.dayBeforeStr})`);
+}
+}
+
+// 3. WEEK SALES (value & days/invoices appear IMMEDIATELY as soon as weekSummary arrives, even before prevWeekLflSummary!)
+if (weekSummary) {
 document.getElementById('kpiWeekSales').textContent = fmtSAR(weekSummary.totalSales);
-document.getElementById('kpiWeekSalesSub').textContent = `${t('from_to_prefix')} ${weekStartStr} ${t('to_word')} ${todayStr}`;
+document.getElementById('kpiWeekSalesSub').textContent = `${weekDaysCount} ${t('days_count_word')} (${weekSummary.totalInvoices} ${t('invoices_word')})`;
+if (prevWeekLflSummary) {
+const weekCompLabel = isRealToday
+? `${t('vs_last_week_same_time')} (${prevWeekStartStr} → ${prevWeekEndStr}${timeTag})`
+: `${t('vs_last_week_lfl')} (${prevWeekStartStr} → ${prevWeekEndStr})`;
+renderTrendPill(
+'kpiWeekTrend',
+weekSummary.totalSales,
+prevWeekLflSummary.totalSales,
+weekCompLabel
+);
+}
+}
+
+// 4. MONTH SALES (value & days/invoices appear IMMEDIATELY as soon as monthSummary arrives, even before prevMonthLflSummary!)
+if (monthSummary) {
 document.getElementById('kpiMonthSales').textContent = fmtSAR(monthSummary.totalSales);
-document.getElementById('kpiMonthSalesSub').textContent = `${t('from_to_prefix')} ${monthStartStr} ${t('to_word')} ${todayStr}`;
+document.getElementById('kpiMonthSalesSub').textContent = `${monthDaysCount} ${t('days_count_word')} (${monthSummary.totalInvoices} ${t('invoices_word')})`;
+if (prevMonthLflSummary) {
+const monthCompLabel = isRealToday
+? `${t('vs_last_month_same_time')} (${prevMonthStartStr} → ${prevMonthEndStr}${timeTag})`
+: `${t('vs_last_month_lfl')} (${prevMonthStartStr} → ${prevMonthEndStr})`;
+renderTrendPill(
+'kpiMonthTrend',
+monthSummary.totalSales,
+prevMonthLflSummary.totalSales,
+monthCompLabel
+);
+}
+}
+
+if (typeof monthPurchaseVal === 'number') {
 document.getElementById('kpiMonthPurchase').textContent = fmtSAR(monthPurchaseVal);
 document.getElementById('kpiMonthPurchaseSub').textContent = t('month_purchase_sub');
+}
 initCurrentStockPlaceholder();
 }
+
 async function loadSalesDashboardData() {
-const baseDateStr = dateInput.value || toYMD(new Date());
+const loadId = ++activeDashboardLoadId;
+const realNowStr = toYMD(new Date());
+const baseDateStr = dateInput.value || realNowStr;
 const baseDate = new Date(baseDateStr + 'T00:00:00');
+const isRealToday = (baseDateStr === realNowStr);
+const cutoffHMS = getCurrentTimeHMS();
+const cutoffHM = getCurrentTimeHM();
+
 const todayStr = toYMD(baseDate);
-const yestDate = new Date(baseDate);
-yestDate.setDate(baseDate.getDate() - 1);
+const yestDate = addDays(baseDate, -1);
 const yestStr = toYMD(yestDate);
-const weekStart = new Date(baseDate);
+const dayBeforeDate = addDays(baseDate, -2);
+const dayBeforeStr = toYMD(dayBeforeDate);
+
 const diffToSat = (baseDate.getDay() + 1) % 7;
-weekStart.setDate(baseDate.getDate() - diffToSat);
+const weekStart = addDays(baseDate, -diffToSat);
 const weekStartStr = toYMD(weekStart);
+const weekDaysCount = diffToSat + 1;
+
+const prevWeekStart = addDays(weekStart, -7);
+const prevWeekEnd = addDays(prevWeekStart, diffToSat);
+const prevWeekStartStr = toYMD(prevWeekStart);
+const prevWeekEndStr = toYMD(prevWeekEnd);
+
+const currentDayOfMonth = baseDate.getDate();
 const monthStart = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1);
 const monthStartStr = toYMD(monthStart);
+
+const prevMonthYear = baseDate.getMonth() === 0 ? baseDate.getFullYear() - 1 : baseDate.getFullYear();
+const prevMonthIdx = baseDate.getMonth() === 0 ? 11 : baseDate.getMonth() - 1;
+const daysInPrevMonth = new Date(prevMonthYear, prevMonthIdx + 1, 0).getDate();
+const clampedPrevMonthDay = Math.min(currentDayOfMonth, daysInPrevMonth);
+
+const prevMonthStart = new Date(prevMonthYear, prevMonthIdx, 1);
+const prevMonthEnd = new Date(prevMonthYear, prevMonthIdx, clampedPrevMonthDay);
+const prevMonthStartStr = toYMD(prevMonthStart);
+const prevMonthEndStr = toYMD(prevMonthEnd);
+const monthDaysCount = currentDayOfMonth;
+
 if (blueReportState.mode === 'yesterday') {
 blueReportState.from = yestStr;
 blueReportState.to = yestStr;
@@ -1435,62 +1687,166 @@ blueFromInput.value = yestStr;
 blueToInput.value = yestStr;
 }
 highlightActiveFilterCard(blueReportState.mode);
+
 ['kpiTodaySales', 'kpiYesterdaySales', 'kpiWeekSales', 'kpiMonthSales', 'kpiMonthPurchase'].forEach((id) => {
 document.getElementById(id).textContent = t('fetching_txt');
 });
+['kpiTodayTrend', 'kpiYesterdayTrend', 'kpiWeekTrend', 'kpiMonthTrend'].forEach((id) => {
+const el = document.getElementById(id);
+if (el) {
+el.className = 'trend-pill loading';
+el.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> --';
+}
+});
 initCurrentStockPlaceholder();
-try {
-const [
-todaySummary,
-yestSummary,
-weekSummary,
-monthSummary,
-monthPurchaseVal
-] = await Promise.all([
-fetchBranchSalesSummary(todayStr, todayStr),
-fetchBranchSalesSummary(yestStr, yestStr),
-fetchBranchSalesSummary(weekStartStr, todayStr),
-fetchBranchSalesSummary(monthStartStr, todayStr),
-fetchMonthPurchaseValue()
-]);
-const syncTimeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
 lastLoadedSnapshot = {
 ...lastLoadedSnapshot,
-todaySummary,
-yestSummary,
-weekSummary,
-monthSummary,
-monthPurchaseVal,
+todaySummary: null,
+yestSummary: null,
+yestSameTimeSummary: null,
+dayBeforeSummary: null,
+weekSummary: null,
+prevWeekLflSummary: null,
+monthSummary: null,
+prevMonthLflSummary: null,
 todayStr,
 yestStr,
+dayBeforeStr,
 weekStartStr,
+prevWeekStartStr,
+prevWeekEndStr,
 monthStartStr,
-lastSyncTimeStr: syncTimeNow
+prevMonthStartStr,
+prevMonthEndStr,
+weekDaysCount,
+monthDaysCount,
+isRealToday,
+cutoffHM
 };
+
+try {
+// =========================================================================
+// STEP 1: Fetch core sales values (Today, Yesterday, Week, Month) INDEPENDENTLY
+// Each card shows its sales value & invoices IMMEDIATELY as soon as its own fetch completes!
+// =========================================================================
+const todayFetch = fetchBranchSalesSummary(todayStr, todayStr).then((todaySummary) => {
+if (loadId !== activeDashboardLoadId) return todaySummary;
+lastLoadedSnapshot = { ...lastLoadedSnapshot, todaySummary };
+updateKpiTextsFromSnapshot();
+return todaySummary;
+});
+
+const yestFetch = fetchBranchSalesSummary(yestStr, yestStr).then((yestSummary) => {
+if (loadId !== activeDashboardLoadId) return yestSummary;
+lastLoadedSnapshot = { ...lastLoadedSnapshot, yestSummary };
 updateKpiTextsFromSnapshot();
 if (blueReportState.mode === 'yesterday') {
-const yestItems = await fetchInvoiceItemsBreakdown(yestStr, yestStr);
 const yestLabel = `${t('preset_yesterday').split(' ')[0]} (${yestStr})`;
+renderAllFilteredVisuals(yestSummary.rows, [], yestLabel);
+fetchInvoiceItemsBreakdown(yestStr, yestStr).then((yestItems) => {
+if (loadId === activeDashboardLoadId && blueReportState.mode === 'yesterday') {
 renderAllFilteredVisuals(yestSummary.rows, yestItems, yestLabel);
+}
+});
 } else {
 const lbl = blueReportState.from === blueReportState.to
 ? blueReportState.from
 : `${blueReportState.from} → ${blueReportState.to}`;
-await loadFilteredSections(blueReportState.from, blueReportState.to, lbl);
+loadFilteredSections(blueReportState.from, blueReportState.to, lbl);
 }
-if (yestSummary.totalSales > 0) {
-const diffPct = (((todaySummary.totalSales - yestSummary.totalSales) / yestSummary.totalSales) * 100).toFixed(1);
+return yestSummary;
+});
+
+const weekFetch = (async () => {
+const wk = (weekStartStr === todayStr)
+? await todayFetch
+: await fetchBranchSalesSummary(weekStartStr, todayStr);
+if (loadId !== activeDashboardLoadId) return wk;
+lastLoadedSnapshot = { ...lastLoadedSnapshot, weekSummary: wk };
+updateKpiTextsFromSnapshot();
+return wk;
+})();
+
+const monthFetch = (async () => {
+let mo;
+if (monthStartStr === todayStr) {
+mo = await todayFetch;
+} else if (monthStartStr === weekStartStr) {
+mo = await weekFetch;
+} else {
+mo = await fetchBranchSalesSummary(monthStartStr, todayStr);
+}
+if (loadId !== activeDashboardLoadId) return mo;
+const syncTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+lastLoadedSnapshot = {
+...lastLoadedSnapshot,
+monthSummary: mo,
+lastSyncTimeStr: syncTime
+};
+updateKpiTextsFromSnapshot();
+document.getElementById('sideMonthInvoices').textContent = mo.totalInvoices.toLocaleString('en-US');
+document.getElementById('lastSyncTime').textContent = `${t('last_sync_prefix')} ${syncTime}`;
+return mo;
+})();
+
+fetchMonthPurchaseValue().then((monthPurchaseVal) => {
+if (loadId !== activeDashboardLoadId) return;
+lastLoadedSnapshot = { ...lastLoadedSnapshot, monthPurchaseVal };
+updateKpiTextsFromSnapshot();
+});
+
+// =========================================================================
+// STEP 2: Run comparison & same-hour analytics AFTER the sales values are already displayed!
+// =========================================================================
+Promise.all([todayFetch, yestFetch]).then(([todaySummary, yestSummary]) => {
+if (loadId !== activeDashboardLoadId) return;
+const yestSameTimePromise = isRealToday
+? fetchSingleDaySalesUpToTime(yestStr, cutoffHMS)
+: Promise.resolve(yestSummary);
+const dayBeforePromise = fetchBranchSalesSummary(dayBeforeStr, dayBeforeStr);
+
+Promise.all([yestSameTimePromise, dayBeforePromise]).then(([yestSameTimeSummary, dayBeforeSummary]) => {
+if (loadId !== activeDashboardLoadId) return;
+lastLoadedSnapshot = {
+...lastLoadedSnapshot,
+yestSameTimeSummary,
+dayBeforeSummary
+};
+updateKpiTextsFromSnapshot();
+const yestCompBase = isRealToday && yestSameTimeSummary ? yestSameTimeSummary : yestSummary;
+if (yestCompBase && yestCompBase.totalSales > 0) {
+const diffPct = (((todaySummary.totalSales - yestCompBase.totalSales) / yestCompBase.totalSales) * 100).toFixed(1);
 document.getElementById('sideVsYesterday').textContent = diffPct >= 0 ? `+${diffPct}%` : `${diffPct}%`;
 } else {
 document.getElementById('sideVsYesterday').textContent = 'N/A';
 }
-document.getElementById('sideMonthInvoices').textContent = monthSummary.totalInvoices.toLocaleString('en-US');
-document.getElementById('lastSyncTime').textContent = `${t('last_sync_prefix')} ${syncTimeNow}`;
+});
+});
+
+weekFetch.then((weekSummary) => {
+if (loadId !== activeDashboardLoadId) return;
+fetchRangeSalesWithFinalDayCutoff(prevWeekStartStr, prevWeekEndStr, cutoffHMS, isRealToday).then((prevWeekLflSummary) => {
+if (loadId !== activeDashboardLoadId) return;
+lastLoadedSnapshot = { ...lastLoadedSnapshot, prevWeekLflSummary };
+updateKpiTextsFromSnapshot();
+});
+});
+
+monthFetch.then((monthSummary) => {
+if (loadId !== activeDashboardLoadId) return;
+fetchRangeSalesWithFinalDayCutoff(prevMonthStartStr, prevMonthEndStr, cutoffHMS, isRealToday).then((prevMonthLflSummary) => {
+if (loadId !== activeDashboardLoadId) return;
+lastLoadedSnapshot = { ...lastLoadedSnapshot, prevMonthLflSummary };
+updateKpiTextsFromSnapshot();
+});
+});
+
 } catch (err) {
 console.error('Dashboard Sales Load Error:', err);
 }
 }
-document.getElementById('refreshDashBtn').addEventListener('click', loadSalesDashboardData);
+document.getElementById('refreshDashBtn').addEventListener('click', () => { salesQueryCache.clear(); loadSalesDashboardData(); });
 dateInput.addEventListener('change', loadSalesDashboardData);
 window.addEventListener('DOMContentLoaded', checkExistingSession);
 })();</script></body></html>
