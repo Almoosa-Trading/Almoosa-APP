@@ -82,12 +82,25 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
 .submenu a.active { color: #38bdf8; background: rgba(56,189,248,0.1); }
 .submenu a i { font-size: 5px; color: #60a5fa; }
 
+.app-layout { --sidebar-width: 250px; }
+.sidebar { width: var(--sidebar-width); z-index: 120; }
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  z-index: 115;
+}
+.sidebar-backdrop.active { display: block; }
+
 /* Topbar Styling */
 .app-topbar {
-  position: fixed; top: 0; inset-inline-start: 250px; inset-inline-end: 0; height: 60px;
+  position: fixed; top: 0; inset-inline-start: var(--sidebar-width); inset-inline-end: 0; height: 60px;
   background: var(--navy-topbar); color: #ffffff; display: flex; align-items: center; justify-content: space-between;
   padding-inline: 20px; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition: inset-inline-start 0.25s ease;
 }
+.topbar-left-group { display: flex; align-items: center; gap: 12px; }
 .topbar-right-actions { display: flex; align-items: center; gap: 10px; }
 .topbar-btn {
   width: 36px; height: 36px; border-radius: 9px; background: rgba(255,255,255,0.08);
@@ -100,7 +113,50 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
 }
 .lang-select-top option { background: #0f172a; color: #ffffff; }
 
-.app-main-content { flex-grow: 1; margin-inline-start: 250px; margin-top: 60px; padding: 22px; background: var(--bg-body); overflow-y: auto; min-width: 0; }
+.app-main-content {
+  flex-grow: 1; margin-inline-start: var(--sidebar-width); margin-top: 60px; padding: 22px;
+  background: var(--bg-body); overflow-y: auto; min-width: 0;
+  transition: margin-inline-start 0.25s ease;
+}
+
+/* سلوك الشاشات الكبيرة (الكمبيوتر: 992px فأعلى) */
+@media (min-width: 992px) {
+  .app-layout.sidebar-collapsed .sidebar {
+    transform: translateX(100%);
+  }
+  html[dir="ltr"] .app-layout.sidebar-collapsed .sidebar {
+    transform: translateX(-100%);
+  }
+  .app-layout.sidebar-collapsed .app-topbar,
+  .app-layout.sidebar-collapsed .app-main-content {
+    inset-inline-start: 0;
+    margin-inline-start: 0;
+  }
+  .sidebar-backdrop {
+    display: none !important;
+  }
+}
+
+/* سلوك الموبايل والتابلت (أقل من 992px) */
+@media (max-width: 991.98px) {
+  .sidebar {
+    transform: translateX(100%);
+  }
+  html[dir="ltr"] .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0) !important;
+  }
+  .app-topbar {
+    inset-inline-start: 0 !important;
+    padding-inline: 12px;
+  }
+  .app-main-content {
+    margin-inline-start: 0 !important;
+    padding: 14px;
+  }
+}
 .mobile-container { width: 100%; max-width: 1350px; margin: 0 auto; }
 .view-hidden { display: none !important; }
 
@@ -245,7 +301,7 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
 </style>
 </head>
 <body data-theme="light">
-<div class="app-layout">
+<div class="app-layout" id="appLayout">
   <!-- القائمة الجانبية الموحدة والمترجمة بالكامل -->
   <aside class="sidebar" id="sidebarMenu">
     <div class="sidebar-brand-header">
@@ -322,9 +378,16 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
     </div>
   </aside>
 
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
   <!-- شريط العلوي (TopBar) -->
   <header class="app-topbar">
-    <div style="font-size: 16px; font-weight: 800;" data-i18n="nav_sales_per_day">المبيعات اليومية</div>
+    <div class="topbar-left-group">
+      <button type="button" class="topbar-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" title="القائمة الجانبية" aria-label="Toggle Sidebar">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div style="font-size: 16px; font-weight: 800;" data-i18n="nav_sales_per_day">المبيعات اليومية</div>
+    </div>
     <div class="topbar-right-actions">
       <button type="button" class="topbar-btn" id="refreshBtn" data-i18n-title="title_refresh" title="تحديث البيانات" onclick="loadDailySales()">
         <i class="fa-solid fa-rotate"></i>
@@ -691,6 +754,59 @@ const I18N = {
   }
 };
 
+const DESKTOP_BREAKPOINT = 992;
+let isDesktopSidebarOpen = window.innerWidth >= DESKTOP_BREAKPOINT;
+let isMobileSidebarOpen = false;
+
+function isDesktopViewport() {
+  return window.innerWidth >= DESKTOP_BREAKPOINT;
+}
+
+function applySidebarState() {
+  const layout = document.getElementById('appLayout');
+  const sidebar = document.getElementById('sidebarMenu');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (!layout || !sidebar || !backdrop) return;
+
+  if (isDesktopViewport()) {
+    sidebar.classList.remove('mobile-open');
+    backdrop.classList.remove('active');
+    layout.classList.toggle('sidebar-collapsed', !isDesktopSidebarOpen);
+  } else {
+    layout.classList.remove('sidebar-collapsed');
+    sidebar.classList.toggle('mobile-open', isMobileSidebarOpen);
+    backdrop.classList.toggle('active', isMobileSidebarOpen);
+  }
+}
+
+function toggleSidebar() {
+  if (isDesktopViewport()) {
+    isDesktopSidebarOpen = !isDesktopSidebarOpen;
+  } else {
+    isMobileSidebarOpen = !isMobileSidebarOpen;
+  }
+  applySidebarState();
+}
+
+function closeSidebar() {
+  if (isDesktopViewport()) {
+    isDesktopSidebarOpen = false;
+  } else {
+    isMobileSidebarOpen = false;
+  }
+  applySidebarState();
+}
+
+window.addEventListener('resize', () => {
+  if (isDesktopViewport() && !document.getElementById('appLayout')?.classList.contains('sidebar-collapsed')) {
+    isDesktopSidebarOpen = true;
+  }
+  if (!isDesktopViewport()) {
+    isMobileSidebarOpen = false;
+  }
+  applySidebarState();
+});
+
 let currentLang = localStorage.getItem('app_lang') || 'ar';
 let currentViewMode = 'cards';
 let expandedDays = new Set();
@@ -760,6 +876,10 @@ function setLanguage(lang) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  isDesktopSidebarOpen = isDesktopViewport();
+  isMobileSidebarOpen = false;
+  applySidebarState();
+
   const savedLang = localStorage.getItem('app_lang') || 'ar';
   applyLanguageUI(savedLang);
 
