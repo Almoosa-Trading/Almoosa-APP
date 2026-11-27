@@ -26,6 +26,7 @@
   --border: #e2e8f0;
   --radius: 14px;
   --shadow: 0 4px 14px rgba(15,23,42,0.05);
+  --sidebar-width: 250px;
 }
 [data-theme="dark"] {
   --bg-body: #0b1120;
@@ -44,11 +45,35 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 .app-layout { display: flex; min-height: 100vh; }
+
+/* القائمة الجانبية */
 .sidebar {
-  position: fixed; top: 0; bottom: 0; inset-inline-start: 0; width: 250px;
-  background: var(--navy-sidebar); color: #cbd5e1; z-index: 110; display: flex; flex-direction: column;
-  border-inline-end: 1px solid rgba(255,255,255,0.07); transition: transform 0.25s ease;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: 0;
+  width: var(--sidebar-width);
+  background: var(--navy-sidebar);
+  color: #cbd5e1;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  border-inline-end: 1px solid rgba(255,255,255,0.07);
+  transition: transform 0.25s ease;
 }
+
+/* طبقة التعتيم خلف القائمة على الموبايل */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  z-index: 115;
+}
+.sidebar-backdrop.active {
+  display: block;
+}
+
 .sidebar-brand-header {
   height: 60px; padding: 0 18px; display: flex; align-items: center; gap: 11px;
   background: var(--navy-topbar); border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;
@@ -84,12 +109,14 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
 .submenu a.active { color: #38bdf8; background: rgba(56,189,248,0.1); }
 .submenu a i { font-size: 5px; color: #60a5fa; }
 
-/* Topbar Styling with Action Buttons */
+/* Topbar & Main Content */
 .app-topbar {
-  position: fixed; top: 0; inset-inline-start: 250px; inset-inline-end: 0; height: 60px;
+  position: fixed; top: 0; inset-inline-start: var(--sidebar-width); inset-inline-end: 0; height: 60px;
   background: var(--navy-topbar); color: #ffffff; display: flex; align-items: center; justify-content: space-between;
   padding-inline: 20px; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition: inset-inline-start 0.25s ease;
 }
+.topbar-left-group { display: flex; align-items: center; gap: 12px; }
 .topbar-right-actions { display: flex; align-items: center; gap: 10px; }
 .topbar-btn {
   width: 36px; height: 36px; border-radius: 9px; background: rgba(255,255,255,0.08);
@@ -102,7 +129,63 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
 }
 .lang-select-top option { background: #0f172a; color: #ffffff; }
 
-.app-main-content { flex-grow: 1; margin-inline-start: 250px; margin-top: 60px; padding: 22px; background: var(--bg-body); overflow-y: auto; min-width: 0; }
+.app-main-content {
+  flex-grow: 1; margin-inline-start: var(--sidebar-width); margin-top: 60px; padding: 22px;
+  background: var(--bg-body); overflow-y: auto; min-width: 0;
+  transition: margin-inline-start 0.25s ease;
+}
+
+/* سلوك الشاشات الكبيرة (الكمبيوتر: 992px فأعلى) */
+@media (min-width: 992px) {
+  .app-layout.sidebar-collapsed .sidebar {
+    transform: translateX(calc(var(--sidebar-width) * -1));
+  }
+  html[dir="ltr"] .app-layout.sidebar-collapsed .sidebar {
+    transform: translateX(calc(var(--sidebar-width) * -1));
+  }
+  .app-layout.sidebar-collapsed .app-topbar,
+  .app-layout.sidebar-collapsed .app-main-content {
+    inset-inline-start: 0;
+    margin-inline-start: 0;
+  }
+  .sidebar-backdrop {
+    display: none !important;
+  }
+}
+
+/* سلوك الموبايل والتابلت (أقل من 992px): مغلقة افتراضياً */
+@media (max-width: 991.98px) {
+  .sidebar {
+    transform: translateX(100%);
+  }
+  html[dir="ltr"] .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0) !important;
+  }
+  .app-topbar {
+    inset-inline-start: 0 !important;
+    padding-inline: 12px;
+  }
+  .app-main-content {
+    margin-inline-start: 0 !important;
+    padding: 14px;
+  }
+  .topbar-right-actions {
+    gap: 6px;
+  }
+  .topbar-btn {
+    width: 32px;
+    height: 32px;
+  }
+  .lang-select-top {
+    height: 32px;
+    padding-inline: 6px;
+    font-size: 11px;
+  }
+}
+
 .mobile-container { width: 100%; max-width: 1350px; margin: 0 auto; }
 .view-hidden { display: none !important; }
 
@@ -125,7 +208,6 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
 }
 .hero-stat-pill i { color: #38bdf8; }
 
-/* Fully Aligned Embedded Controls Grid & Period Chips */
 .hero-embedded-controls {
   display: flex; flex-direction: column; gap: 14px; padding: 14px 0;
   border-top: 1px solid rgba(255, 255, 255, 0.15); border-bottom: 1px solid rgba(255, 255, 255, 0.15); margin-bottom: 16px;
@@ -296,8 +378,8 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
 </style>
 </head>
 <body data-theme="light">
-<div class="app-layout">
-  <!-- القائمة الجانبية الموحدة والمترجمة بالكامل -->
+<div class="app-layout" id="appLayout">
+  <!-- القائمة الجانبية -->
   <aside class="sidebar" id="sidebarMenu">
     <div class="sidebar-brand-header">
       <div class="brand-fogo-icon"><i class="fa-solid fa-chart-simple"></i></div>
@@ -373,26 +455,29 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
     </div>
   </aside>
 
-  <!-- شريط العلوي (TopBar) يحتوي على أزرار التحديث، الوضع الليلي، واختيار اللغات -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
+  <!-- الشريط العلوي -->
   <header class="app-topbar">
-    <div style="font-size: 16px; font-weight: 800;" data-i18n="nav_sales_summary">ملخص المبيعات</div>
+    <div class="topbar-left-group">
+      <button type="button" class="topbar-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" data-i18n-title="title_menu" title="القائمة الجانبية" aria-label="Toggle Sidebar">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div style="font-size: 16px; font-weight: 800;" data-i18n="nav_sales_summary">ملخص المبيعات</div>
+    </div>
     <div class="topbar-right-actions">
-      <!-- زر تحديث البيانات -->
       <button type="button" class="topbar-btn" id="refreshBtn" data-i18n-title="title_refresh" title="تحديث البيانات">
         <i class="fa-solid fa-rotate"></i>
       </button>
-      <!-- قائمة اختيار اللغة (عربي، إنجليزي، هندي، أوردو) -->
       <select id="langSelect" class="lang-select-top" aria-label="Language Selector">
         <option value="ar">العربية</option>
         <option value="en">English</option>
         <option value="hi">हिन्दी</option>
         <option value="ur">اردو</option>
       </select>
-      <!-- زر الوضع الليلي -->
       <button type="button" class="topbar-btn" id="darkModeToggleBtn" data-i18n-title="title_darkmode" title="الوضع الليلي">
         <i class="fa-solid fa-moon"></i>
       </button>
-      <!-- زر ملء الشاشة -->
       <button type="button" class="topbar-btn" id="fullscreenBtn" data-i18n-title="title_fullscreen" title="ملء الشاشة">
         <i class="fa-solid fa-expand"></i>
       </button>
@@ -402,7 +487,7 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
   <main class="app-main-content">
     <div class="mobile-container">
 
-      <!-- Hero Card المدمج مع فلاتر الفترات (اليوم، أمس، الأسبوع، الشهر، السنة، مخصص) والفرع والأزرار الداخلية -->
+      <!-- Hero Card -->
       <div class="hero-card">
         <div class="hero-top-row">
           <div class="hero-title-area">
@@ -416,7 +501,6 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
         </div>
 
         <div class="hero-embedded-controls">
-          <!-- أزرار فترات الوقت السريعة (اليوم، أمس، الأسبوع، الشهر، السنة، مخصص) -->
           <div class="period-chips">
             <div class="chip" data-preset="today" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
             <div class="chip" data-preset="yesterday" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
@@ -558,7 +642,59 @@ html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: r
 </div>
 
 <script>
-/* نظام الترجمات المتكامل والمدعوم للغات الأربع (ar, en, hi, ur) */
+const DESKTOP_BREAKPOINT = 992;
+let isDesktopSidebarOpen = window.innerWidth >= DESKTOP_BREAKPOINT;
+let isMobileSidebarOpen = false;
+
+function isDesktopViewport() {
+  return window.innerWidth >= DESKTOP_BREAKPOINT;
+}
+
+function applySidebarState() {
+  const layout = document.getElementById('appLayout');
+  const sidebar = document.getElementById('sidebarMenu');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (!layout || !sidebar || !backdrop) return;
+
+  if (isDesktopViewport()) {
+    sidebar.classList.remove('mobile-open');
+    backdrop.classList.remove('active');
+    layout.classList.toggle('sidebar-collapsed', !isDesktopSidebarOpen);
+  } else {
+    layout.classList.remove('sidebar-collapsed');
+    sidebar.classList.toggle('mobile-open', isMobileSidebarOpen);
+    backdrop.classList.toggle('active', isMobileSidebarOpen);
+  }
+}
+
+function toggleSidebar() {
+  if (isDesktopViewport()) {
+    isDesktopSidebarOpen = !isDesktopSidebarOpen;
+  } else {
+    isMobileSidebarOpen = !isMobileSidebarOpen;
+  }
+  applySidebarState();
+}
+
+function closeSidebar() {
+  if (isDesktopViewport()) {
+    isDesktopSidebarOpen = false;
+  } else {
+    isMobileSidebarOpen = false;
+  }
+  applySidebarState();
+}
+
+window.addEventListener('resize', () => {
+  if (isDesktopViewport() && !document.getElementById('appLayout')?.classList.contains('sidebar-collapsed')) {
+    isDesktopSidebarOpen = true;
+  }
+  if (!isDesktopViewport()) {
+    isMobileSidebarOpen = false;
+  }
+  applySidebarState();
+});
+
 const TRANSLATIONS = {
   ar: {
     sales_page_title: "ملخص المبيعات - الموسى ERP",
@@ -620,6 +756,7 @@ const TRANSLATIONS = {
     dash_card_region: "📍 المبيعات حسب المناطق",
     dash_card_gender: "👥 المبيعات حسب النوع/الفئة",
     dash_card_category: "🏷️ المبيعات حسب التصنيفات",
+    title_menu: "القائمة الجانبية",
     title_refresh: "تحديث البيانات",
     title_darkmode: "الوضع الليلي",
     title_fullscreen: "ملء الشاشة"
@@ -684,6 +821,7 @@ const TRANSLATIONS = {
     dash_card_region: "📍 Sales by Region",
     dash_card_gender: "👥 Sales by Gender",
     dash_card_category: "🏷️ Sales by Category",
+    title_menu: "Sidebar Menu",
     title_refresh: "Refresh Data",
     title_darkmode: "Dark Mode",
     title_fullscreen: "Toggle Fullscreen"
@@ -748,6 +886,7 @@ const TRANSLATIONS = {
     dash_card_region: "📍 क्षेत्र द्वारा बिक्री",
     dash_card_gender: "👥 लिंग द्वारा बिक्री",
     dash_card_category: "🏷️ श्रेणी द्वारा बिक्री",
+    title_menu: "साइडबार मेनू",
     title_refresh: "डेटा रीफ्रेश करें",
     title_darkmode: "डार्क मोड",
     title_fullscreen: "फुल स्क्रीन"
@@ -812,13 +951,13 @@ const TRANSLATIONS = {
     dash_card_region: "📍 علاقوں کے لحاظ سے فروخت",
     dash_card_gender: "👥 صنف کے لحاظ سے فروخت",
     dash_card_category: "🏷️ کیٹیگری کے لحاظ سے فروخت",
+    title_menu: "سائیڈ بار مینو",
     title_refresh: "ڈیٹا تازہ کریں",
     title_darkmode: "ڈارک موڈ",
     title_fullscreen: "فل سکرین"
   }
 };
 
-/* وظيفة تطبيق الترجمة الفورية وتحديث اتجاه الصفحة RTL/LTR تلقائياً */
 function applyLanguageUI(lang) {
   const selectedLang = TRANSLATIONS[lang] ? lang : 'ar';
   localStorage.setItem('app_lang', selectedLang);
@@ -846,6 +985,7 @@ function applyLanguageUI(lang) {
     }
   });
 
+  applySidebarState();
   updateBranchViewTexts();
 }
 
@@ -939,6 +1079,10 @@ let genderChartInstance = null;
 let categoryChartInstance = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+  isDesktopSidebarOpen = isDesktopViewport();
+  isMobileSidebarOpen = false;
+  applySidebarState();
+
   const savedLang = localStorage.getItem('app_lang') || 'ar';
   applyLanguageUI(savedLang);
 
@@ -973,7 +1117,6 @@ document.addEventListener('DOMContentLoaded', () => {
   syncBranchesViewSwitcherUI();
   updateBranchViewTexts();
   
-  // مزامنة الفلتر الافتراضي (اليوم) أو المحفوظ
   syncWithSalesFilter();
   renderCalendar();
 
