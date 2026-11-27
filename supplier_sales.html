@@ -769,12 +769,25 @@ const I18N = {
 };
 
 const DESKTOP_BREAKPOINT = 992;
-let isDesktopSidebarOpen = window.innerWidth >= DESKTOP_BREAKPOINT;
-let isMobileSidebarOpen = false;
+const SIDEBAR_STORAGE_KEY = 'almoosa_sidebar_open';
 
 function isDesktopViewport() {
   return window.innerWidth >= DESKTOP_BREAKPOINT;
 }
+
+function loadSavedSidebarOpen() {
+  const saved = localStorage.getItem(SIDEBAR_STORAGE_KEY);
+  if (saved === 'true') return true;
+  if (saved === 'false') return false;
+  return isDesktopViewport();
+}
+
+function saveSidebarOpen(isOpen) {
+  localStorage.setItem(SIDEBAR_STORAGE_KEY, String(Boolean(isOpen)));
+}
+
+let isDesktopSidebarOpen = loadSavedSidebarOpen();
+let isMobileSidebarOpen = false;
 
 function applySidebarState() {
   const layout = document.getElementById('appLayout');
@@ -796,15 +809,65 @@ function applySidebarState() {
 function toggleSidebar() {
   if (isDesktopViewport()) {
     isDesktopSidebarOpen = !isDesktopSidebarOpen;
+    saveSidebarOpen(isDesktopSidebarOpen);
   } else {
     isMobileSidebarOpen = !isMobileSidebarOpen;
   }
-  applySidebarState();
+  
+    const ACCORDION_STATE_KEY = 'almoosa_nav_accordions_state_v1';
+
+    function loadSavedAccordionStates() {
+      try {
+        const raw = localStorage.getItem(ACCORDION_STATE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function saveAccordionStates() {
+      try {
+        const items = Array.from(document.querySelectorAll('.sidebar .nav-item'));
+        const states = items
+          .map((item, idx) => ({
+            idx,
+            hasSubmenu: Boolean(item.querySelector('.nav-accordion-btn')),
+            open: item.classList.contains('open')
+          }))
+          .filter(x => x.hasSubmenu);
+        localStorage.setItem(ACCORDION_STATE_KEY, JSON.stringify(states));
+      } catch (_) {}
+    }
+
+    function applySavedAccordionStates() {
+      const saved = loadSavedAccordionStates();
+      if (!Array.isArray(saved) || !saved.length) return;
+      const items = Array.from(document.querySelectorAll('.sidebar .nav-item'));
+      saved.forEach(entry => {
+        const el = items[entry.idx];
+        if (el && el.querySelector('.nav-accordion-btn')) {
+          el.classList.toggle('open', Boolean(entry.open));
+        }
+      });
+    }
+
+    function bindAccordionPersistence() {
+      applySavedAccordionStates();
+      document.querySelectorAll('.sidebar .nav-accordion-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          setTimeout(saveAccordionStates, 0);
+        });
+      });
+    }
+
+    applySidebarState();
+    bindAccordionPersistence();
 }
 
 function closeSidebar() {
   if (isDesktopViewport()) {
     isDesktopSidebarOpen = false;
+    saveSidebarOpen(false);
   } else {
     isMobileSidebarOpen = false;
   }
@@ -812,10 +875,9 @@ function closeSidebar() {
 }
 
 window.addEventListener('resize', () => {
-  if (isDesktopViewport() && !document.getElementById('appLayout')?.classList.contains('sidebar-collapsed')) {
-    isDesktopSidebarOpen = true;
-  }
-  if (!isDesktopViewport()) {
+  if (isDesktopViewport()) {
+    isDesktopSidebarOpen = loadSavedSidebarOpen();
+  } else {
     isMobileSidebarOpen = false;
   }
   applySidebarState();
@@ -862,7 +924,7 @@ function changeLanguage(lang) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    isDesktopSidebarOpen = isDesktopViewport();
+    isDesktopSidebarOpen = loadSavedSidebarOpen();
     isMobileSidebarOpen = false;
     applySidebarState();
 
@@ -893,12 +955,12 @@ document.addEventListener('DOMContentLoaded', () => {
     syncWithSalesPageFilter();
     renderCalendar();
 
-    window.onclick = function(event) {
+    document.addEventListener('click', function(event) {
         if (!event.target.closest('.multi-select-dropdown') && !event.target.closest('.control-group')) {
             document.querySelectorAll('.multi-select-content').forEach(el => el.classList.remove('open'));
-            document.getElementById('calendarContainer').classList.remove('open');
+            document.getElementById('calendarContainer')?.classList.remove('open');
         }
-    };
+    });
 });
 
 function updateViewModeTexts() {
@@ -1109,7 +1171,7 @@ async function loadSupplierSalesData() {
     rawSupplierData = [];
 
     try {
-        const res = await fetch(`${CONFIG.serverUrl}/api/method/get_supplier_sales_summary?from_date=${currentQueryFrom}&to_date=${currentQueryTo}`, {
+        const res = await fetch(`${CONFIG.serverUrl}/api/method/get_supplier_sales_summary?from_date=${encodeURIComponent(currentQueryFrom)}&to_date=${encodeURIComponent(currentQueryTo)}`, {
             method: "GET",
             headers: {
                 "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`,
@@ -1189,42 +1251,51 @@ function buildCheckboxes(containerId, dataSet, btnTextId) {
     
     const allDiv = document.createElement('label');
     allDiv.className = 'checkbox-item';
-    allDiv.innerHTML = `<input type="checkbox" checked onchange="toggleSelectAll(this, '${containerId}')"> <b>${t('text_select_all')}</b>`;
+    allDiv.innerHTML = `<input type="checkbox" data-role="select-all" checked onchange="toggleSelectAll(this, '${containerId}', '${btnTextId}')"> <b>${t('text_select_all')}</b>`;
     container.appendChild(allDiv);
 
     Array.from(dataSet).sort().forEach(val => {
+        const safeVal = String(val).replace(/"/g, '&quot;');
         const lbl = document.createElement('label');
         lbl.className = 'checkbox-item';
-        lbl.innerHTML = `<input type="checkbox" value="${val}" checked onchange="updateButtonText('${containerId}', '${btnTextId}')"> ${val}`;
+        lbl.innerHTML = `<input type="checkbox" data-role="filter-item" value="${safeVal}" checked onchange="updateButtonText('${containerId}', '${btnTextId}')"> ${val}`;
         container.appendChild(lbl);
     });
     updateButtonText(containerId, btnTextId);
 }
 
-function toggleSelectAll(masterCheckbox, containerId) {
-    const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]`);
-    checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
-    updateButtonText(containerId, containerId.replace('Content', 'BtnText'));
-    renderReports();
+function toggleSelectAll(masterCheckbox, containerId, btnTextId) {
+    const targetBtnId = btnTextId || containerId.replace('Content', 'BtnText');
+    const items = document.querySelectorAll(`#${containerId} input[data-role="filter-item"]`);
+    items.forEach(cb => cb.checked = masterCheckbox.checked);
+    updateButtonText(containerId, targetBtnId);
 }
 
 function updateButtonText(containerId, btnTextId) {
-    const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]`);
-    const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
+    const itemCheckboxes = Array.from(document.querySelectorAll(`#${containerId} input[data-role="filter-item"]`));
+    const selectAllCb = document.querySelector(`#${containerId} input[data-role="select-all"]`);
+    const checked = itemCheckboxes.filter(cb => cb.checked);
     const btnText = document.getElementById(btnTextId);
 
-    if (checked.length === 0 || checked.length === checkboxes.length - 1) {
-        btnText.textContent = t('text_all_selected');
-    } else {
-        btnText.textContent = `${t('text_selected_count')} (${checked.length})`;
+    if (selectAllCb && itemCheckboxes.length > 0) {
+        selectAllCb.checked = checked.length === itemCheckboxes.length;
+    }
+
+    if (btnText) {
+        if (itemCheckboxes.length === 0 || checked.length === itemCheckboxes.length) {
+            btnText.textContent = t('text_all_selected');
+        } else if (checked.length === 0) {
+            btnText.textContent = `${t('text_selected_count')} (0)`;
+        } else {
+            btnText.textContent = `${t('text_selected_count')} (${checked.length})`;
+        }
     }
     renderReports();
 }
 
 function getSelectedValues(containerId) {
-    const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]`);
-    const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
-    return checked.map(cb => cb.value);
+    const itemCheckboxes = Array.from(document.querySelectorAll(`#${containerId} input[data-role="filter-item"]`));
+    return itemCheckboxes.filter(cb => cb.checked).map(cb => cb.value);
 }
 
 function formatGenderName(gRaw, itemGroupStr, dcsStr) {
@@ -1523,6 +1594,16 @@ function toggleAccordion(headerEl) {
         }
     }
 }
+</script>
+<script>
+    window.addEventListener('storage', (e) => {
+      if (e.key === SIDEBAR_STORAGE_KEY) {
+        isDesktopSidebarOpen = loadSavedSidebarOpen();
+        applySidebarState();
+      } else if (e.key === ACCORDION_STATE_KEY) {
+        applySavedAccordionStates();
+      }
+    });
 </script>
 </body>
 </html>

@@ -84,7 +84,6 @@
         .submenu a.active { color: #38bdf8; background: rgba(56,189,248,0.1); }
         .submenu a i { font-size: 5px; color: #60a5fa; }
 
-        /* Topbar Styling with Action Buttons */
         .app-layout { --sidebar-width: 250px; }
         .sidebar { width: var(--sidebar-width); z-index: 120; }
         .sidebar-backdrop {
@@ -96,7 +95,6 @@
         }
         .sidebar-backdrop.active { display: block; }
 
-        /* Topbar Styling with Action Buttons */
         .app-topbar {
           position: fixed; top: 0; inset-inline-start: var(--sidebar-width); inset-inline-end: 0; height: 60px;
           background: var(--navy-topbar); color: #ffffff; display: flex; align-items: center; justify-content: space-between;
@@ -122,7 +120,6 @@
           transition: margin-inline-start 0.25s ease;
         }
 
-        /* سلوك الشاشات الكبيرة (الكمبيوتر: 992px فأعلى) */
         @media (min-width: 992px) {
           .app-layout.sidebar-collapsed .sidebar {
             transform: translateX(100%);
@@ -140,7 +137,6 @@
           }
         }
 
-        /* سلوك الموبايل والتابلت (أقل من 992px) */
         @media (max-width: 991.98px) {
           .sidebar {
             transform: translateX(100%);
@@ -163,7 +159,6 @@
         .mobile-container { width: 100%; max-width: 1350px; margin: 0 auto; }
         .view-hidden { display: none !important; }
 
-        /* Hero Summary Card Design (Top Section with embedded Date Presets & Branch Filter) */
         .hero-summary-card {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #0284c7 100%);
             color: white;
@@ -779,7 +774,6 @@
 </head>
 <body data-theme="light">
 <div class="app-layout" id="appLayout">
-  <!-- القائمة الجانبية الموحدة والمترجمة بالكامل -->
   <aside class="sidebar" id="sidebarMenu">
     <div class="sidebar-brand-header">
       <div class="brand-fogo-icon"><i class="fa-solid fa-chart-simple"></i></div>
@@ -857,7 +851,6 @@
 
   <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
 
-  <!-- شريط العلوي (TopBar) يحتوي على أزرار التحديث، الوضع الليلي، واختيار اللغات -->
   <header class="app-topbar">
     <div class="topbar-left-group">
       <button type="button" class="topbar-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" title="القائمة الجانبية" aria-label="Toggle Sidebar">
@@ -866,22 +859,18 @@
       <div style="font-size: 16px; font-weight: 800;" data-i18n="nav_sales_group">المبيعات حسب المجموعة</div>
     </div>
     <div class="topbar-right-actions">
-      <!-- زر تحديث البيانات -->
       <button type="button" class="topbar-btn" id="refreshBtn" onclick="loadGroupSalesData()" data-i18n-title="title_refresh" title="تحديث البيانات">
         <i class="fa-solid fa-rotate"></i>
       </button>
-      <!-- قائمة اختيار اللغة (عربي، إنجليزي، هندي، أوردو) -->
       <select id="langSelect" class="lang-select-top" onchange="applyLanguageUI(this.value)" aria-label="Language Selector">
         <option value="ar">العربية</option>
         <option value="en">English</option>
         <option value="hi">हिन्दी</option>
         <option value="ur">اردو</option>
       </select>
-      <!-- زر الوضع الليلي -->
       <button type="button" class="topbar-btn" id="darkModeToggleBtn" onclick="toggleTheme()" data-i18n-title="title_darkmode" title="الوضع الليلي">
         <i class="fa-solid fa-moon" id="themeIcon"></i>
       </button>
-      <!-- زر ملء الشاشة -->
       <button type="button" class="topbar-btn" id="fullscreenBtn" data-i18n-title="title_fullscreen" title="ملء الشاشة">
         <i class="fa-solid fa-expand"></i>
       </button>
@@ -891,7 +880,6 @@
   <main class="app-main-content">
     <div class="mobile-container">
 
-        <!-- Hero Summary Card (مدمج في الأعلى: فلاتر التاريخ، اختيار الفرع، ومؤشرات المبيعات) -->
         <div class="hero-summary-card">
             <div class="hero-filters-top">
                 <div class="period-chips">
@@ -912,9 +900,9 @@
                         </div>
                         <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
                             <div class="calendar-header">
-                                <button onclick="changeMonth(-1)">&#9664;</button>
+                                <button type="button" onclick="changeMonth(-1)">&#9664;</button>
                                 <span id="calendarTitle">أكتوبر 2026</span>
-                                <button onclick="changeMonth(1)">&#9654;</button>
+                                <button type="button" onclick="changeMonth(1)">&#9654;</button>
                             </div>
                             <div class="calendar-grid" id="calendarDaysGrid"></div>
                         </div>
@@ -993,12 +981,25 @@
 
 <script>
         const DESKTOP_BREAKPOINT = 992;
-    let isDesktopSidebarOpen = window.innerWidth >= DESKTOP_BREAKPOINT;
-    let isMobileSidebarOpen = false;
+    const SIDEBAR_STORAGE_KEY = 'almoosa_sidebar_open';
 
     function isDesktopViewport() {
       return window.innerWidth >= DESKTOP_BREAKPOINT;
     }
+
+    function loadSavedSidebarOpen() {
+      const saved = localStorage.getItem(SIDEBAR_STORAGE_KEY);
+      if (saved === 'true') return true;
+      if (saved === 'false') return false;
+      return isDesktopViewport();
+    }
+
+    function saveSidebarOpen(isOpen) {
+      localStorage.setItem(SIDEBAR_STORAGE_KEY, String(Boolean(isOpen)));
+    }
+
+    let isDesktopSidebarOpen = loadSavedSidebarOpen();
+    let isMobileSidebarOpen = false;
 
     function applySidebarState() {
       const layout = document.getElementById('appLayout');
@@ -1020,15 +1021,65 @@
     function toggleSidebar() {
       if (isDesktopViewport()) {
         isDesktopSidebarOpen = !isDesktopSidebarOpen;
+        saveSidebarOpen(isDesktopSidebarOpen);
       } else {
         isMobileSidebarOpen = !isMobileSidebarOpen;
       }
-      applySidebarState();
+      
+    const ACCORDION_STATE_KEY = 'almoosa_nav_accordions_state_v1';
+
+    function loadSavedAccordionStates() {
+      try {
+        const raw = localStorage.getItem(ACCORDION_STATE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function saveAccordionStates() {
+      try {
+        const items = Array.from(document.querySelectorAll('.sidebar .nav-item'));
+        const states = items
+          .map((item, idx) => ({
+            idx,
+            hasSubmenu: Boolean(item.querySelector('.nav-accordion-btn')),
+            open: item.classList.contains('open')
+          }))
+          .filter(x => x.hasSubmenu);
+        localStorage.setItem(ACCORDION_STATE_KEY, JSON.stringify(states));
+      } catch (_) {}
+    }
+
+    function applySavedAccordionStates() {
+      const saved = loadSavedAccordionStates();
+      if (!Array.isArray(saved) || !saved.length) return;
+      const items = Array.from(document.querySelectorAll('.sidebar .nav-item'));
+      saved.forEach(entry => {
+        const el = items[entry.idx];
+        if (el && el.querySelector('.nav-accordion-btn')) {
+          el.classList.toggle('open', Boolean(entry.open));
+        }
+      });
+    }
+
+    function bindAccordionPersistence() {
+      applySavedAccordionStates();
+      document.querySelectorAll('.sidebar .nav-accordion-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          setTimeout(saveAccordionStates, 0);
+        });
+      });
+    }
+
+    applySidebarState();
+    bindAccordionPersistence();
     }
 
     function closeSidebar() {
       if (isDesktopViewport()) {
         isDesktopSidebarOpen = false;
+        saveSidebarOpen(false);
       } else {
         isMobileSidebarOpen = false;
       }
@@ -1036,16 +1087,14 @@
     }
 
     window.addEventListener('resize', () => {
-      if (isDesktopViewport() && !document.getElementById('appLayout')?.classList.contains('sidebar-collapsed')) {
-        isDesktopSidebarOpen = true;
-      }
-      if (!isDesktopViewport()) {
+      if (isDesktopViewport()) {
+        isDesktopSidebarOpen = loadSavedSidebarOpen();
+      } else {
         isMobileSidebarOpen = false;
       }
       applySidebarState();
     });
 
-    /* نظام الترجمات المتكامل والمدعوم للغات الأربع (ar, en, hi, ur) */
     const TRANSLATIONS = {
       ar: {
         sales_group_title: "مبيعات المجموعات - الموسى ERP",
@@ -1221,7 +1270,6 @@
       }
     };
 
-    /* وظيفة تطبيق الترجمة الفورية وتحديث اتجاه الصفحة RTL/LTR تلقائياً */
     function applyLanguageUI(lang) {
       const selectedLang = TRANSLATIONS[lang] ? lang : 'ar';
       localStorage.setItem('app_lang', selectedLang);
@@ -1257,7 +1305,6 @@
       return localStorage.getItem('app_lang') || 'ar'; 
     }
 
-    /* وظيفة تبديل الوضع الليلي / النهارى وتحديث الأيقونة */
     function toggleTheme() {
       const currentTheme = document.body.getAttribute('data-theme');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -1351,7 +1398,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        isDesktopSidebarOpen = isDesktopViewport();
+        isDesktopSidebarOpen = loadSavedSidebarOpen();
         isMobileSidebarOpen = false;
         applySidebarState();
 
@@ -1376,19 +1423,19 @@
         syncWithSalesPageFilter();
         renderCalendar();
 
-        window.onclick = function(event) {
+        document.addEventListener('click', function(event) {
             if (!event.target.closest('.hero-control-group') && !event.target.closest('.period-chips') && !event.target.closest('.multi-select-dropdown')) {
-                document.getElementById('calendarContainer').classList.remove('open');
+                document.getElementById('calendarContainer')?.classList.remove('open');
                 document.querySelectorAll('.multi-select-content').forEach(el => el.classList.remove('open'));
             }
-        }
+        });
     });
 
     function toggleDropdown(id) {
         document.querySelectorAll('.multi-select-content').forEach(el => {
             if (el.id !== id) el.classList.remove('open');
         });
-        document.getElementById(id).classList.toggle('open');
+        document.getElementById(id)?.classList.toggle('open');
     }
 
     function syncWithSalesPageFilter() {
@@ -1415,7 +1462,7 @@
     }
 
     function toggleCalendar() {
-        document.getElementById('calendarContainer').classList.toggle('open');
+        document.getElementById('calendarContainer')?.classList.toggle('open');
     }
 
     function changeMonth(direction) {
@@ -1542,7 +1589,7 @@
         rawGroupData = [];
 
         try {
-            const res = await fetch(`${CONFIG.serverUrl}/api/method/get_supplier_sales_summary?from_date=${currentQueryFrom}&to_date=${currentQueryTo}`, {
+            const res = await fetch(`${CONFIG.serverUrl}/api/method/get_supplier_sales_summary?from_date=${encodeURIComponent(currentQueryFrom)}&to_date=${encodeURIComponent(currentQueryTo)}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`,
@@ -1554,7 +1601,7 @@
                 const jsonRes = await res.json();
                 const fetchedRows = jsonRes.message?.data || jsonRes.message || [];
                 
-                rawGroupData = fetchedRows.map(row => {
+                rawGroupData = (Array.isArray(fetchedRows) ? fetchedRows : []).map(row => {
                     const itemGrp = row.item_group || "";
                     const parts = itemGrp.split('.');
                     let group = row.group || row.Group || (parts.length >= 4 ? parts[3] : (parts.length > 0 ? parts[parts.length - 1] : "غير محدد"));
@@ -1604,34 +1651,41 @@
 
         const allDiv = document.createElement('label');
         allDiv.className = 'checkbox-item';
-        allDiv.innerHTML = `<input type="checkbox" checked onchange="toggleSelectAllBranches(this)"> <b>${selectAllText}</b>`;
+        allDiv.innerHTML = `<input type="checkbox" data-role="select-all" checked onchange="toggleSelectAllBranches(this)"> <b>${selectAllText}</b>`;
         container.appendChild(allDiv);
 
         Array.from(branchSet).sort().forEach(val => {
+            const safeVal = String(val).replace(/"/g, '&quot;');
             const lbl = document.createElement('label');
             lbl.className = 'checkbox-item';
-            lbl.innerHTML = `<input type="checkbox" value="${val}" checked onchange="updateBranchButtonText()"> ${val}`;
+            lbl.innerHTML = `<input type="checkbox" data-role="branch-item" value="${safeVal}" checked onchange="updateBranchButtonText()"> ${val}`;
             container.appendChild(lbl);
         });
         updateBranchButtonText();
     }
 
     function toggleSelectAllBranches(master) {
-        document.querySelectorAll('#branchContent input[type="checkbox"]').forEach(cb => cb.checked = master.checked);
+        document.querySelectorAll('#branchContent input[data-role="branch-item"]').forEach(cb => cb.checked = master.checked);
         updateBranchButtonText();
-        processAndRenderGroups();
     }
 
     function updateBranchButtonText() {
         const lang = getActiveLang();
-        const checkboxes = document.querySelectorAll('#branchContent input[type="checkbox"]');
-        const checked = Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on");
+        const itemCheckboxes = Array.from(document.querySelectorAll('#branchContent input[data-role="branch-item"]'));
+        const selectAllCb = document.querySelector('#branchContent input[data-role="select-all"]');
+        const checked = itemCheckboxes.filter(cb => cb.checked);
         const btnText = document.getElementById('branchBtnText');
         const allSelectedText = TRANSLATIONS[lang].all_branches_selected || "الكل مختار";
         const selectedCountText = TRANSLATIONS[lang].selected_count || "مختار";
 
-        if (checked.length === 0 || checked.length === checkboxes.length - 1) {
+        if (selectAllCb && itemCheckboxes.length > 0) {
+            selectAllCb.checked = checked.length === itemCheckboxes.length;
+        }
+
+        if (itemCheckboxes.length === 0 || checked.length === itemCheckboxes.length) {
             btnText.textContent = allSelectedText;
+        } else if (checked.length === 0) {
+            btnText.textContent = `${selectedCountText} (0)`;
         } else {
             btnText.textContent = `${selectedCountText} (${checked.length})`;
         }
@@ -1639,8 +1693,8 @@
     }
 
     function getSelectedBranches() {
-        const checkboxes = document.querySelectorAll('#branchContent input[type="checkbox"]');
-        return Array.from(checkboxes).filter(cb => cb.checked && cb.value !== "on").map(cb => cb.value);
+        const itemCheckboxes = Array.from(document.querySelectorAll('#branchContent input[data-role="branch-item"]'));
+        return itemCheckboxes.filter(cb => cb.checked).map(cb => cb.value);
     }
 
     function processAndRenderGroups() {
@@ -1761,7 +1815,7 @@
                     } else if (lang === 'ur') {
                         gLabelAr = gKey === 'Man' ? 'مردانه (Men)' : (gKey === 'Woman' ? 'زنانہ (Women)' : 'متفرق (Unisex)');
                     } else if (lang === 'hi') {
-                        gLabelAr = gKey === 'Man' ? 'पुरुष (Men)' : (gKey === 'Woman' ? 'महिला (Women)' : 'यूनisex');
+                        gLabelAr = gKey === 'Man' ? 'पुरुष (Men)' : (gKey === 'Woman' ? 'महिला (Women)' : 'यूनिसेक्स (Unisex)');
                     }
 
                     let supTotalSales = Object.values(supObj).reduce((sum, i) => sum + i.sales, 0);
@@ -1939,6 +1993,16 @@ document.addEventListener("click", function(e) {
     if (targetUrl.origin === window.location.origin && anchor.target !== "_blank") { e.preventDefault(); window.location.assign(anchor.href); }
   }
 }, true);
+</script>
+<script>
+    window.addEventListener('storage', (e) => {
+      if (e.key === SIDEBAR_STORAGE_KEY) {
+        isDesktopSidebarOpen = loadSavedSidebarOpen();
+        applySidebarState();
+      } else if (e.key === ACCORDION_STATE_KEY) {
+        applySavedAccordionStates();
+      }
+    });
 </script>
 </body>
 </html>
