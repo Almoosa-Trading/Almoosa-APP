@@ -5,105 +5,395 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title data-i18n="page_title">قائمة شحنات الموردين والتحليل الموسمي - الموسى التجارية</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=2026.18">
+    <link rel="stylesheet" href="style.css?v=2026.20">
 
     <style>
+        :root {
+            --navy-sidebar: #0f172a;
+            --navy-topbar: #0b1120;
+            --blue-primary: #1d4ed8;
+            --blue-accent: #2563eb;
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 14px;
+            --shadow: 0 4px 14px rgba(15,23,42,0.05);
+            --sidebar-width: 250px;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #0b1120;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Cairo', 'Inter', 'Noto Sans Devanagari', 'Noto Nastaliq Urdu', sans-serif;
+            background: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            inset-inline-start: 0;
+            width: var(--sidebar-width);
+            background: var(--navy-sidebar);
+            color: #cbd5e1;
+            z-index: 120;
+            display: flex;
+            flex-direction: column;
+            border-inline-end: 1px solid rgba(255, 255, 255, 0.07);
+            transition: transform 0.25s ease;
+        }
+
+        .sidebar-brand-header {
+            height: 60px;
+            padding: 0 18px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            background: var(--navy-topbar);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            flex-shrink: 0;
+        }
+
+        .brand-fogo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            color: #ffffff;
+            display: grid;
+            place-items: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .brand-text-group .brand-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+            display: block;
+            line-height: 1.15;
+        }
+
+        .brand-text-group .brand-sub {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #60a5fa;
+            display: block;
+        }
+
+        .sidebar-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .sidebar-scroll-area::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar-scroll-area::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 4px;
+        }
+
+        .nav-section-caption {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #64748b;
+            padding: 12px 12px 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .nav-item {
+            margin-bottom: 4px;
+        }
+
+        .nav-link-btn, .nav-accordion-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9.5px 12px;
+            border-radius: 9px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #cbd5e1;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-left i {
+            width: 18px;
+            text-align: center;
+            font-size: 13.5px;
+            color: #94a3b8;
+        }
+
+        .nav-link-btn:hover, .nav-accordion-btn:hover {
+            background: rgba(255, 255, 255, 0.07);
+            color: #ffffff;
+        }
+
+        .nav-link-btn.active {
+            background: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        }
+
+        .nav-link-btn.active .nav-left i {
+            color: #ffffff;
+        }
+
+        .chevron-icon {
+            font-size: 10px;
+            color: #94a3b8;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item.open > .nav-accordion-btn .chevron-icon {
+            transform: rotate(-90deg);
+        }
+
+        html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon {
+            transform: rotate(90deg);
+        }
+
+        .submenu {
+            display: none;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 3px;
+            margin-bottom: 6px;
+            padding-inline-start: 14px;
+            border-inline-start: 1.5px solid rgba(255, 255, 255, 0.12);
+            margin-inline-start: 16px;
+        }
+
+        .nav-item.open > .submenu {
+            display: flex;
+        }
+
+        .submenu a {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 6.5px 10px;
+            border-radius: 7px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .submenu a:hover {
+            background: rgba(37, 99, 235, 0.22);
+            color: #ffffff;
+        }
+
+        .submenu a.active {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        .submenu a i {
+            font-size: 5px;
+            color: #60a5fa;
+        }
+
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            z-index: 115;
+        }
+
+        .sidebar-backdrop.active {
+            display: block;
+        }
+
+        /* Topbar matching sales_3.html */
+        .app-topbar {
+            position: fixed;
+            top: 0;
+            inset-inline-start: var(--sidebar-width);
+            inset-inline-end: 0;
+            height: 60px;
+            background: var(--navy-topbar);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-inline: 20px;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            transition: inset-inline-start 0.25s ease;
+        }
+
+        .topbar-left-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+
+        .topbar-page-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .topbar-right-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .topbar-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: #e2e8f0;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s;
+            font-size: 13px;
+        }
+
+        .topbar-btn:hover {
+            background: #2563eb;
+            color: #fff;
+            border-color: #2563eb;
+        }
+
+        .lang-select-top {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: #ffffff;
+            height: 36px;
+            padding-inline: 10px;
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .lang-select-top option {
+            background: #0f172a;
+            color: #ffffff;
+        }
+
+        .app-main-content {
+            flex-grow: 1;
+            margin-inline-start: var(--sidebar-width);
+            margin-top: 60px;
+            padding: 22px;
+            background: var(--bg-body);
+            overflow-y: auto;
+            min-width: 0;
+            transition: margin-inline-start 0.25s ease;
+        }
+
+        /* سلوك الشاشات الكبيرة (الكمبيوتر: 992px فأعلى) */
+        @media (min-width: 992px) {
+            .app-layout.sidebar-collapsed .sidebar {
+                transform: translateX(100%);
+            }
+            html[dir="ltr"] .app-layout.sidebar-collapsed .sidebar {
+                transform: translateX(-100%);
+            }
+            .app-layout.sidebar-collapsed .app-topbar,
+            .app-layout.sidebar-collapsed .app-main-content {
+                inset-inline-start: 0;
+                margin-inline-start: 0;
+            }
+            .sidebar-backdrop {
+                display: none !important;
+            }
+        }
+
+        /* سلوك الموبايل والتابلت (أقل من 992px) */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                transform: translateX(100%);
+            }
+            html[dir="ltr"] .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.mobile-open {
+                transform: translateX(0) !important;
+            }
+            .app-topbar {
+                inset-inline-start: 0 !important;
+                padding-inline: 12px;
+            }
+            .topbar-page-title {
+                font-size: 13.5px;
+            }
+            .app-main-content {
+                margin-inline-start: 0 !important;
+                padding: 14px;
+            }
+            .topbar-right-actions {
+                gap: 6px;
+            }
+            .topbar-btn {
+                width: 32px;
+                height: 32px;
+            }
+            .lang-select-top {
+                height: 32px;
+                padding-inline: 6px;
+                font-size: 11px;
+            }
+        }
+
         .main-container {
             width: 100%;
             max-width: 1380px;
             margin: 0 auto;
-            padding: 0 15px;
         }
-
-        header {
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            flex-wrap: nowrap !important;
-            gap: 6px !important;
-            margin-bottom: 18px !important;
-            padding: 12px 14px !important;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0284c7 100%) !important;
-            color: #ffffff !important;
-            border-radius: 14px !important;
-            box-shadow: 0 8px 20px -4px rgba(2, 132, 199, 0.2);
-            border: 2px solid #38bdf8 !important;
-            position: relative;
-            overflow: hidden;
-        }
-
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #38bdf8, #3b82f6, #10b981);
-        }
-
-        .header-title-box { flex: 1 1 auto !important; min-width: 0 !important; }
-        .header-title-box h1 {
-            font-size: 14px !important;
-            color: #ffffff !important;
-            font-weight: 800;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-            margin: 0 !important;
-            line-height: 1.3;
-        }
-        .header-title-box p {
-            font-size: 9.5px !important;
-            color: #bae6fd !important;
-            margin: 0 !important;
-            font-weight: 600;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-        }
-
-        .header-left-group {
-            display: flex !important;
-            align-items: center !important;
-            gap: 5px !important;
-            flex-shrink: 0 !important;
-        }
-
-        .action-btn-icon {
-            background: rgba(255, 255, 255, 0.15) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            width: 34px !important;
-            height: 34px !important;
-            border-radius: 9px !important;
-            cursor: pointer;
-            font-size: 13px !important;
-            color: #ffffff !important;
-            text-decoration: none;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            transition: all 0.25s;
-        }
-        .action-btn-icon:hover {
-            background: rgba(255, 255, 255, 0.28) !important;
-            transform: translateY(-2px);
-        }
-
-        .lang-select {
-            background: rgba(255, 255, 255, 0.15) !important;
-            border: 1.5px solid rgba(255, 255, 255, 0.3) !important;
-            padding: 0 6px !important;
-            border-radius: 9px !important;
-            font-size: 10.5px !important;
-            font-weight: 700;
-            cursor: pointer;
-            color: #ffffff !important;
-            outline: none;
-            height: 34px !important;
-        }
-        .lang-select option { background: #1e293b; color: #ffffff; }
 
         .filter-bar {
             background: var(--bg-card);
@@ -132,6 +422,7 @@
             outline: none;
             height: 42px;
             transition: border-color 0.2s;
+            box-sizing: border-box;
         }
         .search-input:focus { border-color: #0284c7; }
 
@@ -258,6 +549,7 @@
             border: 1.5px solid #0284c7;
             width: 100%;
             justify-content: space-between;
+            box-sizing: border-box;
         }
 
         .selection-btns-group {
@@ -509,186 +801,284 @@
             padding: 6px;
         }
         .modal-close-btn:hover { color: #ef4444; }
-
-        @media (min-width: 768px) {
-            header { padding: 20px 28px !important; }
-            .header-title-box h1 { font-size: 18px !important; }
-            .header-title-box p { font-size: 11.5px !important; }
-            .action-btn-icon { width: 42px !important; height: 42px !important; font-size: 16px !important; border-radius: 12px !important; }
-            .lang-select { height: 42px !important; font-size: 12px !important; padding: 0 12px !important; border-radius: 12px !important; }
-        }
     </style>
 </head>
 <body data-theme="light">
+<div class="app-layout" id="appLayout">
+  <aside class="sidebar" id="sidebarMenu">
+    <div class="sidebar-brand-header">
+      <div class="brand-fogo-icon"><i class="fa-solid fa-chart-simple"></i></div>
+      <div class="brand-text-group">
+        <span class="brand-name" data-i18n="brand_name">الموسى ERP</span>
+        <span class="brand-sub" data-i18n="brand_sub">Financial & Retail</span>
+      </div>
+    </div>
+    <div class="sidebar-scroll-area">
+      <div class="nav-section-caption" data-i18n="menu_caption">القائمة الرئيسية</div>
 
-<div class="main-container">
-    <header>
-        <div class="header-title-box">
-            <h1 data-i18n="header_title">Purchase Receipts & Seasonal Analytics</h1>
-            <p data-i18n="header_subtitle">الموسى التجارية - تحليل الشحنات والمشتريات حسب المواسم</p>
-        </div>
-        <div class="header-left-group">
-            <button class="action-btn-icon" id="themeToggleBtn" onclick="toggleTheme()" data-i18n-title="title_theme" title="تغيير المظهر">
-                <i class="fa-solid fa-moon" id="themeIcon"></i>
-            </button>
-            <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
-                <option value="ar">العربية</option>
-                <option value="en">English</option>
-                <option value="hi">हिन्दी</option>
-                <option value="ur">اردو</option>
-            </select>
-            <a href="index.html" class="action-btn-icon" data-i18n-title="title_home" title="الرئيسية">
-                <i class="fa-solid fa-house"></i>
-            </a>
-        </div>
-    </header>
+      <div class="nav-item">
+        <a href="./index.html" class="nav-link-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-table-cells-large"></i>
+            <span data-i18n="nav_dashboard">لوحة التحكم</span>
+          </span>
+        </a>
+      </div>
 
-    <div class="filter-bar">
-        <input type="text" id="searchInput" class="search-input" placeholder="بحث بالبراند، المورد، رقم الشحنة، التاريخ..." onkeyup="filterTable()" data-i18n-placeholder="search_placeholder">
-        
-        <div class="season-tabs" id="seasonTabs">
-            <button class="season-pill active" data-season="all" onclick="selectSeason('all', this)">
-                <i class="fa-solid fa-layer-group"></i>
-                <span data-i18n="btn_all">كل المشتريات</span>
-            </button>
-            <button class="season-pill" data-season="Summer" onclick="selectSeason('Summer', this)">
-                <i class="fa-solid fa-sun" style="color:#f59e0b;"></i>
-                <span data-i18n="btn_summer">الصيف</span>
-            </button>
-            <button class="season-pill" data-season="Winter" onclick="selectSeason('Winter', this)">
-                <i class="fa-solid fa-snowflake" style="color:#38bdf8;"></i>
-                <span data-i18n="btn_winter">الشتاء</span>
-            </button>
-            <button class="season-pill" data-season="All-Season" onclick="selectSeason('All-Season', this)">
-                <i class="fa-solid fa-arrows-spin" style="color:#10b981;"></i>
-                <span data-i18n="btn_all_season">جميع الفصول</span>
-            </button>
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span data-i18n="nav_sales">المبيعات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./Sales.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_summary">ملخص المبيعات</span></a>
+          <a href="./sales_group.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_group">المبيعات حسب المجموعة</span></a>
+          <a href="./supplier_sales.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_supplier">المبيعات حسب المورد</span></a>
+          <a href="./sales_per_day.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_per_day">المبيعات اليومية</span></a>
         </div>
+      </div>
+
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span data-i18n="nav_purchase">المشتريات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./purchases.html" class="active"><i class="fa-solid fa-circle"></i><span data-i18n="nav_purchases_list">قوائم المشتريات</span></a>
+          <a href="./purchase_comparieso.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_purchase_comparison">تحليل المشتريات والمبيعات</span></a>
+        </div>
+      </div>
+
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-warehouse"></i>
+            <span data-i18n="nav_warehouse">إدارة المستودعات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./warhouse.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_warehouse_staff">أداء موظفي المستودع</span></a>
+        </div>
+      </div>
+
+      <div class="nav-section-caption" data-i18n="support_caption">الحساب والنظام</div>
+      <div class="nav-item">
+        <button type="button" class="nav-link-btn" id="logoutBtn">
+          <span class="nav-left">
+            <i class="fa-solid fa-power-off" style="color:#f87171;"></i>
+            <span data-i18n="nav_logout">تسجيل الخروج</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
+  <!-- الشريط العلوي (مطابق لشريط المبيعات) -->
+  <header class="app-topbar">
+    <div class="topbar-left-group">
+      <button type="button" class="topbar-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" data-i18n-title="title_menu" title="القائمة الجانبية" aria-label="Toggle Sidebar">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="topbar-page-title" data-i18n="header_title">قوائم المشتريات والتحليل الموسمي</div>
+    </div>
+    <div class="topbar-right-actions">
+      <button type="button" class="topbar-btn" id="refreshBtn" onclick="loadData(currentSeason)" data-i18n-title="title_refresh" title="تحديث البيانات" aria-label="Refresh Data">
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+      <select id="langSelect" class="lang-select-top" onchange="changeLanguage(this.value)" aria-label="Language Selector">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="ur">اردو</option>
+      </select>
+      <button type="button" class="topbar-btn" id="darkModeToggleBtn" onclick="toggleTheme()" data-i18n-title="title_darkmode" title="الوضع الليلي" aria-label="Toggle Dark Mode">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+      </button>
+      <button type="button" class="topbar-btn" id="fullscreenBtn" onclick="toggleFullscreen()" data-i18n-title="title_fullscreen" title="ملء الشاشة" aria-label="Toggle Fullscreen">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-main-content">
+    <div class="main-container">
+      <div class="filter-bar">
+          <input type="text" id="searchInput" class="search-input" placeholder="بحث بالبراند، المورد، رقم الشحنة، التاريخ..." onkeyup="filterTable()" data-i18n-placeholder="search_placeholder">
+          
+          <div class="season-tabs" id="seasonTabs">
+              <button class="season-pill active" data-season="all" onclick="selectSeason('all', this)">
+                  <i class="fa-solid fa-layer-group"></i>
+                  <span data-i18n="btn_all">كل المشتريات</span>
+              </button>
+              <button class="season-pill" data-season="Summer" onclick="selectSeason('Summer', this)">
+                  <i class="fa-solid fa-sun" style="color:#f59e0b;"></i>
+                  <span data-i18n="btn_summer">الصيف</span>
+              </button>
+              <button class="season-pill" data-season="Winter" onclick="selectSeason('Winter', this)">
+                  <i class="fa-solid fa-snowflake" style="color:#38bdf8;"></i>
+                  <span data-i18n="btn_winter">الشتاء</span>
+              </button>
+              <button class="season-pill" data-season="All-Season" onclick="selectSeason('All-Season', this)">
+                  <i class="fa-solid fa-arrows-spin" style="color:#10b981;"></i>
+                  <span data-i18n="btn_all_season">جميع الفصول</span>
+              </button>
+          </div>
+      </div>
+
+      <div class="kpi-grid" id="kpiGrid">
+          <div class="kpi-card">
+              <div class="kpi-top">
+                  <span class="kpi-title" data-i18n="kpi_received">صافي الكمية المستلمة</span>
+                  <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
+                      <i class="fa-solid fa-boxes-stacked"></i>
+                  </div>
+              </div>
+              <div class="kpi-value" id="kpiReceived">0 Pcs</div>
+          </div>
+
+          <div class="kpi-card">
+              <div class="kpi-top">
+                  <span class="kpi-title" data-i18n="kpi_po_qty">إجمالي كمية PO</span>
+                  <div class="kpi-icon" style="background: rgba(2, 132, 199, 0.12); color: #0284c7;">
+                      <i class="fa-solid fa-file-contract"></i>
+                  </div>
+              </div>
+              <div class="kpi-value" id="kpiPoQty">0 Pcs</div>
+          </div>
+
+          <div class="kpi-card">
+              <div class="kpi-top">
+                  <span class="kpi-title" data-i18n="kpi_cost">صافي التكلفة (SAR)</span>
+                  <div class="kpi-icon" style="background: rgba(59, 130, 246, 0.12); color: #2563eb;">
+                      <i class="fa-solid fa-file-invoice-dollar"></i>
+                  </div>
+              </div>
+              <div class="kpi-value" id="kpiCost">0.00 SAR</div>
+          </div>
+
+          <div class="kpi-card">
+              <div class="kpi-top">
+                  <span class="kpi-title" data-i18n="kpi_po_cost">إجمالي تكلفة PO</span>
+                  <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
+                      <i class="fa-solid fa-coins"></i>
+                  </div>
+              </div>
+              <div class="kpi-value" id="kpiPoCost">0.00 SAR</div>
+          </div>
+      </div>
+
+      <div class="table-wrapper">
+          <div class="print-toolbar">
+              <button class="btn-print-mode" id="btnStartPrintSelect" onclick="togglePrintSelectMode(true)">
+                  <i class="fa-solid fa-check-double"></i>
+                  <span data-i18n="btn_select_mode">تحديد الشحنات والموردين</span>
+              </button>
+
+              <div class="selection-actions-bar" id="selectionActionsBar">
+                  <span style="font-size: 13px; font-weight: 800; color: #0284c7;">
+                      <span data-i18n="selected_suppliers_label">المحدد:</span> <b id="selectedCountBadge">0</b>
+                  </span>
+                  <div class="selection-btns-group">
+                      <button class="btn-confirm-selection" onclick="openViewSelectionModal()">
+                          <i class="fa-solid fa-eye"></i>
+                          <span data-i18n="btn_view_purchases">عرض المشتريات المحددة</span>
+                      </button>
+                      <button class="btn-cancel-selection" onclick="togglePrintSelectMode(false)">
+                          <i class="fa-solid fa-xmark"></i>
+                          <span data-i18n="btn_cancel">إلغاء</span>
+                      </button>
+                  </div>
+              </div>
+          </div>
+
+          <div class="table-header-bar">
+              <div>
+                  <span id="activeSeasonLabel" style="font-size: 13px; font-weight: 900; color: #0284c7; margin-inline-end: 12px;">كل المشتريات</span>
+                  <span id="recordCount" style="font-size: 12px; color: var(--text-muted); font-weight: 800;">جاري التحميل...</span>
+              </div>
+              <div class="sorting-controls">
+                  <select id="sortBy" class="sort-select" onchange="filterTable()">
+                      <option value="shipment" data-i18n="sort_shipment">ترتيب برقم الشحنة</option>
+                      <option value="date" data-i18n="sort_date">ترتيب بالتاريخ</option>
+                      <option value="supplier" data-i18n="sort_supplier">ترتيب باسم المورد</option>
+                  </select>
+                  <select id="sortOrder" class="sort-select" onchange="filterTable()">
+                      <option value="asc" data-i18n="sort_asc">تصاعدي (Asc)</option>
+                      <option value="desc" data-i18n="sort_desc">تنازلي (Desc)</option>
+                  </select>
+              </div>
+          </div>
+
+          <div class="status-box" id="statusBox" data-i18n="status_loading">جاري تحميل البيانات...</div>
+          
+          <table class="report-table" id="receiptsTable" style="display: none;">
+              <thead id="tableHead"></thead>
+              <tbody id="tableBody"></tbody>
+          </table>
+      </div>
     </div>
 
-    <div class="kpi-grid" id="kpiGrid">
-        <div class="kpi-card">
-            <div class="kpi-top">
-                <span class="kpi-title" data-i18n="kpi_received">صافي الكمية المستلمة</span>
-                <div class="kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #059669;">
-                    <i class="fa-solid fa-boxes-stacked"></i>
-                </div>
+    <div class="modal-overlay" id="viewSelectionModal" onclick="if(event.target === this) closeViewModal()">
+        <div class="modal-card">
+            <div class="modal-title" data-i18n="modal_title">اختر مستوى عرض وطباعة المشتريات المحددة</div>
+            <div class="modal-subtitle" id="modalSelectionInfo">العناصر المحددة: 0</div>
+            
+            <div class="modal-buttons-group">
+                <button class="view-option-btn" onclick="redirectToAnalyticsPrint('variants')">
+                    <span data-i18n="opt_model">على مستوى الموديل (Model Number)</span>
+                    <i class="fa-solid fa-shirt"></i>
+                </button>
+                <button class="view-option-btn" onclick="redirectToAnalyticsPrint('groups')">
+                    <span data-i18n="opt_group">على مستوى المجموعة (Sub Group)</span>
+                    <i class="fa-solid fa-folder-tree"></i>
+                </button>
+                <button class="view-option-btn" onclick="redirectToAnalyticsPrint('items')">
+                    <span data-i18n="opt_item">على مستوى الصنف (Item)</span>
+                    <i class="fa-solid fa-box"></i>
+                </button>
             </div>
-            <div class="kpi-value" id="kpiReceived">0 Pcs</div>
-        </div>
 
-        <div class="kpi-card">
-            <div class="kpi-top">
-                <span class="kpi-title" data-i18n="kpi_po_qty">إجمالي كمية PO</span>
-                <div class="kpi-icon" style="background: rgba(2, 132, 199, 0.12); color: #0284c7;">
-                    <i class="fa-solid fa-file-contract"></i>
-                </div>
-            </div>
-            <div class="kpi-value" id="kpiPoQty">0 Pcs</div>
-        </div>
-
-        <div class="kpi-card">
-            <div class="kpi-top">
-                <span class="kpi-title" data-i18n="kpi_cost">صافي التكلفة (SAR)</span>
-                <div class="kpi-icon" style="background: rgba(59, 130, 246, 0.12); color: #2563eb;">
-                    <i class="fa-solid fa-file-invoice-dollar"></i>
-                </div>
-            </div>
-            <div class="kpi-value" id="kpiCost">0.00 SAR</div>
-        </div>
-
-        <div class="kpi-card">
-            <div class="kpi-top">
-                <span class="kpi-title" data-i18n="kpi_po_cost">إجمالي تكلفة PO</span>
-                <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
-                    <i class="fa-solid fa-coins"></i>
-                </div>
-            </div>
-            <div class="kpi-value" id="kpiPoCost">0.00 SAR</div>
+            <button class="modal-close-btn" onclick="closeViewModal()" data-i18n="btn_cancel_modal">إلغاء الأمر</button>
         </div>
     </div>
-
-    <div class="table-wrapper">
-        <div class="print-toolbar">
-            <button class="btn-print-mode" id="btnStartPrintSelect" onclick="togglePrintSelectMode(true)">
-                <i class="fa-solid fa-check-double"></i>
-                <span data-i18n="btn_select_mode">تحديد الشحنات والموردين</span>
-            </button>
-
-            <div class="selection-actions-bar" id="selectionActionsBar">
-                <span style="font-size: 13px; font-weight: 800; color: #0284c7;">
-                    <span data-i18n="selected_suppliers_label">المحدد:</span> <b id="selectedCountBadge">0</b>
-                </span>
-                <div class="selection-btns-group">
-                    <button class="btn-confirm-selection" onclick="openViewSelectionModal()">
-                        <i class="fa-solid fa-eye"></i>
-                        <span data-i18n="btn_view_purchases">عرض المشتريات المحددة</span>
-                    </button>
-                    <button class="btn-cancel-selection" onclick="togglePrintSelectMode(false)">
-                        <i class="fa-solid fa-xmark"></i>
-                        <span data-i18n="btn_cancel">إلغاء</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="table-header-bar">
-            <div>
-                <span id="activeSeasonLabel" style="font-size: 13px; font-weight: 900; color: #0284c7; margin-inline-end: 12px;">كل المشتريات</span>
-                <span id="recordCount" style="font-size: 12px; color: var(--text-muted); font-weight: 800;">جاري التحميل...</span>
-            </div>
-            <div class="sorting-controls">
-                <select id="sortBy" class="sort-select" onchange="filterTable()">
-                    <option value="shipment" data-i18n="sort_shipment">ترتيب برقم الشحنة</option>
-                    <option value="date" data-i18n="sort_date">ترتيب بالتاريخ</option>
-                    <option value="supplier" data-i18n="sort_supplier">ترتيب باسم المورد</option>
-                </select>
-                <select id="sortOrder" class="sort-select" onchange="filterTable()">
-                    <option value="asc" data-i18n="sort_asc">تصاعدي (Asc)</option>
-                    <option value="desc" data-i18n="sort_desc">تنازلي (Desc)</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="status-box" id="statusBox" data-i18n="status_loading">جاري تحميل البيانات...</div>
-        
-        <table class="report-table" id="receiptsTable" style="display: none;">
-            <thead id="tableHead"></thead>
-            <tbody id="tableBody"></tbody>
-        </table>
-    </div>
-</div>
-
-<div class="modal-overlay" id="viewSelectionModal" onclick="if(event.target === this) closeViewModal()">
-    <div class="modal-card">
-        <div class="modal-title" data-i18n="modal_title">اختر مستوى عرض وطباعة المشتريات المحددة</div>
-        <div class="modal-subtitle" id="modalSelectionInfo">العناصر المحددة: 0</div>
-        
-        <div class="modal-buttons-group">
-            <button class="view-option-btn" onclick="redirectToAnalyticsPrint('variants')">
-                <span data-i18n="opt_model">على مستوى الموديل (Model Number)</span>
-                <i class="fa-solid fa-shirt"></i>
-            </button>
-            <button class="view-option-btn" onclick="redirectToAnalyticsPrint('groups')">
-                <span data-i18n="opt_group">على مستوى المجموعة (Sub Group)</span>
-                <i class="fa-solid fa-folder-tree"></i>
-            </button>
-            <button class="view-option-btn" onclick="redirectToAnalyticsPrint('items')">
-                <span data-i18n="opt_item">على مستوى الصنف (Item)</span>
-                <i class="fa-solid fa-box"></i>
-            </button>
-        </div>
-
-        <button class="modal-close-btn" onclick="closeViewModal()" data-i18n="btn_cancel_modal">إلغاء الأمر</button>
-    </div>
+  </main>
 </div>
 
 <script>
     const translations = {
         ar: {
             page_title: "قائمة شحنات الموردين والتحليل الموسمي - الموسى التجارية",
-            header_title: "Purchase Receipts & Seasonal Analytics",
+            brand_name: "الموسى ERP",
+            brand_sub: "Financial & Retail",
+            menu_caption: "القائمة الرئيسية",
+            support_caption: "الحساب والنظام",
+            nav_dashboard: "لوحة التحكم",
+            nav_sales: "المبيعات",
+            nav_sales_summary: "ملخص المبيعات",
+            nav_sales_group: "المبيعات حسب المجموعة",
+            nav_sales_supplier: "المبيعات حسب المورد",
+            nav_sales_per_day: "المبيعات اليومية",
+            nav_purchase: "المشتريات",
+            nav_purchases_list: "قوائم المشتريات",
+            nav_purchase_comparison: "تحليل المشتريات والمبيعات",
+            nav_warehouse: "إدارة المستودعات",
+            nav_warehouse_staff: "أداء موظفي المستودع",
+            nav_logout: "تسجيل الخروج",
+            header_title: "قوائم المشتريات والتحليل الموسمي",
             header_subtitle: "الموسى التجارية - تحليل الشحنات والمشتريات حسب المواسم",
+            title_menu: "القائمة الجانبية",
+            title_refresh: "تحديث البيانات",
+            title_darkmode: "الوضع الليلي",
+            title_fullscreen: "ملء الشاشة",
             title_theme: "تغيير المظهر",
             title_home: "الرئيسية",
             search_placeholder: "بحث بالبراند، المورد، رقم الشحنة، التاريخ...",
@@ -734,8 +1124,28 @@
         },
         en: {
             page_title: "Purchase Receipts & Seasonal Analytics - Almoosa Trading",
+            brand_name: "Almoosa ERP",
+            brand_sub: "Financial & Retail",
+            menu_caption: "Main Menu",
+            support_caption: "Account & System",
+            nav_dashboard: "Dashboard",
+            nav_sales: "Sales",
+            nav_sales_summary: "Sales Summary",
+            nav_sales_group: "Sales by Group",
+            nav_sales_supplier: "Sales per Supplier",
+            nav_sales_per_day: "Sales per Day",
+            nav_purchase: "Purchases",
+            nav_purchases_list: "Purchases List",
+            nav_purchase_comparison: "Purchase & Sales Analysis",
+            nav_warehouse: "Warehouse Management",
+            nav_warehouse_staff: "Warehouse Staff Performance",
+            nav_logout: "Logout",
             header_title: "Purchase Receipts & Seasonal Analytics",
             header_subtitle: "Almoosa Trading - Supplier, Shipment & Seasonal Performance",
+            title_menu: "Sidebar Menu",
+            title_refresh: "Refresh Data",
+            title_darkmode: "Dark Mode",
+            title_fullscreen: "Toggle Fullscreen",
             title_theme: "Toggle Theme",
             title_home: "Home",
             search_placeholder: "Search by brand, supplier, shipment no, date...",
@@ -781,8 +1191,28 @@
         },
         hi: {
             page_title: "खरीद रसीद और मौसमी विश्लेषण - अलमूसा ट्रेडिंग",
+            brand_name: "अलमूसा ERP",
+            brand_sub: "Financial & Retail",
+            menu_caption: "मुख्य मेनू",
+            support_caption: "खाता और सिस्टम",
+            nav_dashboard: "डैशबोर्ड",
+            nav_sales: "बिक्री",
+            nav_sales_summary: "बिक्री सारांश",
+            nav_sales_group: "समूह द्वारा बिक्री",
+            nav_sales_supplier: "आपूर्तिकर्ता द्वारा बिक्री",
+            nav_sales_per_day: "दैनिक बिक्री",
+            nav_purchase: "खरीद",
+            nav_purchases_list: "खरीद सूची",
+            nav_purchase_comparison: "खरीद और बिक्री विश्लेषण",
+            nav_warehouse: "गोदाम प्रबंधन",
+            nav_warehouse_staff: "गोदाम स्टाफ प्रदर्शन",
+            nav_logout: "लॉग आउट",
             header_title: "Purchase Receipts & Seasonal Analytics",
             header_subtitle: "अलमूसा ट्रेडिंग - आपूर्तिकर्ता और मौसमी प्रदर्शन",
+            title_menu: "साइडबार मेनू",
+            title_refresh: "डेटा रीफ्रेश करें",
+            title_darkmode: "डार्क मोड",
+            title_fullscreen: "फुल स्क्रीन",
             title_theme: "थीम बदलें",
             title_home: "होम",
             search_placeholder: "ब्रांड, आपूर्तिकर्ता, शिपमेंट नंबर द्वारा खोजें...",
@@ -828,8 +1258,28 @@
         },
         ur: {
             page_title: "پرچیز ریسیٹس اور موسمی تجزیہ - الموسی ٹریڈنگ",
+            brand_name: "الموسیٰ ERP",
+            brand_sub: "Financial & Retail",
+            menu_caption: "مین مینو",
+            support_caption: "اکاؤنٹ اور سسٹم",
+            nav_dashboard: "ڈیش بورڈ",
+            nav_sales: "فروخت",
+            nav_sales_summary: "فروخت کا خلاصہ",
+            nav_sales_group: "گروپ کے لحاظ سے فروخت",
+            nav_sales_supplier: "سپلائر کے لحاظ سے فروخت",
+            nav_sales_per_day: "یومیہ فروخت",
+            nav_purchase: "خریداری",
+            nav_purchases_list: "خریداری کی فہرست",
+            nav_purchase_comparison: "خرید و فروخت کا تجزیہ",
+            nav_warehouse: "گودام مینجمنٹ",
+            nav_warehouse_staff: "گودام عملے کی کارکردگی",
+            nav_logout: "لاگ آؤٹ",
             header_title: "Purchase Receipts & Seasonal Analytics",
             header_subtitle: "الموسی ٹریڈنگ - سپلائر اور موسمی کارکردگی",
+            title_menu: "سائیڈ بار مینو",
+            title_refresh: "ڈیٹا تازہ کریں",
+            title_darkmode: "ڈارک موڈ",
+            title_fullscreen: "فل سکرین",
             title_theme: "تھیم تبدیل کریں",
             title_home: "ہوم",
             search_placeholder: "برانڈ، سپلائر، شپمنٹ نمبر تلاش کریں...",
@@ -893,12 +1343,86 @@
         return `${r.shipment_number || ''}|${r.supplier || ''}|${r.posting_date || ''}|${idx}`;
     }
 
+    const DESKTOP_BREAKPOINT = 992;
+    let isDesktopSidebarOpen = window.innerWidth >= DESKTOP_BREAKPOINT;
+    let isMobileSidebarOpen = false;
+
+    function isDesktopViewport() {
+        return window.innerWidth >= DESKTOP_BREAKPOINT;
+    }
+
+    function applySidebarState() {
+        const layout = document.getElementById('appLayout');
+        const sidebar = document.getElementById('sidebarMenu');
+        const backdrop = document.getElementById('sidebarBackdrop');
+        if (!layout || !sidebar || !backdrop) return;
+
+        if (isDesktopViewport()) {
+            sidebar.classList.remove('mobile-open');
+            backdrop.classList.remove('active');
+            layout.classList.toggle('sidebar-collapsed', !isDesktopSidebarOpen);
+        } else {
+            layout.classList.remove('sidebar-collapsed');
+            sidebar.classList.toggle('mobile-open', isMobileSidebarOpen);
+            backdrop.classList.toggle('active', isMobileSidebarOpen);
+        }
+    }
+
+    function toggleSidebar() {
+        if (isDesktopViewport()) {
+            isDesktopSidebarOpen = !isDesktopSidebarOpen;
+        } else {
+            isMobileSidebarOpen = !isMobileSidebarOpen;
+        }
+        applySidebarState();
+    }
+
+    function closeSidebar() {
+        if (isDesktopViewport()) {
+            isDesktopSidebarOpen = false;
+        } else {
+            isMobileSidebarOpen = false;
+        }
+        applySidebarState();
+    }
+
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+            document.exitFullscreen().catch(() => {});
+        }
+    }
+
+    window.addEventListener('resize', () => {
+        if (isDesktopViewport() && !document.getElementById('appLayout')?.classList.contains('sidebar-collapsed')) {
+            isDesktopSidebarOpen = true;
+        }
+        if (!isDesktopViewport()) {
+            isMobileSidebarOpen = false;
+        }
+        applySidebarState();
+    });
+
+    document.querySelectorAll('.nav-accordion-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const item = btn.closest('.nav-item');
+            if (item) item.classList.toggle('open');
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
+        isDesktopSidebarOpen = isDesktopViewport();
+        isMobileSidebarOpen = false;
+        applySidebarState();
         setLanguage(currentLang);
         const savedTheme = localStorage.getItem('app_theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
         document.body.setAttribute('data-theme', savedTheme);
-        document.getElementById('themeIcon').className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeIcon) {
+            themeIcon.className = savedTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
         
         loadData('all');
     });
@@ -1016,6 +1540,7 @@
             }
         });
 
+        applySidebarState();
         updateSeasonLabel();
         if (currentData.length > 0) filterTable();
     }
@@ -1030,7 +1555,10 @@
         document.documentElement.setAttribute('data-theme', newTheme);
         document.body.setAttribute('data-theme', newTheme);
         localStorage.setItem('app_theme', newTheme);
-        document.getElementById('themeIcon').className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        const themeIcon = document.getElementById('themeIcon');
+        if (themeIcon) {
+            themeIcon.className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        }
     }
 
     function updateSeasonLabel() {
@@ -1159,11 +1687,9 @@
         const allSelected = data.length > 0 && data.every((r, idx) => selectedRowKeys.has(getUniqueRowKey(r, idx)));
         const checkboxHeader = isPrintSelectMode ? `<th style="width:42px; text-align:center;"><input type="checkbox" class="ship-checkbox" onchange="toggleSelectAllRows(this)" ${allSelected ? 'checked' : ''}></th>` : '';
 
-        // هل نحن في وضع فلاتر المواسم أم في وضع "كل المشتريات"؟
         const isSeasonMode = (currentSeason !== 'all');
 
         if (isSeasonMode) {
-            // أعمدة فلاتر المواسم (المطلوبة)
             thead.innerHTML = `
                 <tr>
                     ${checkboxHeader}
@@ -1177,7 +1703,6 @@
                 </tr>
             `;
         } else {
-            // أعمدة كل المشتريات الافتراضية الكاملة
             thead.innerHTML = `
                 <tr>
                     ${checkboxHeader}
