@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+<link rel="manifest" href="./manifest.json">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title data-i18n="page_title_offers">ملخص العروض والخصومات - الموسى ERP</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css?v=2026.20">
+<script src="app.js" defer></script>
+<style>
+:root {
+  --navy-sidebar: #0f172a;
+  --navy-topbar: #0b1120;
+  --blue-primary: #1d4ed8;
+  --blue-accent: #2563eb;
+  --bg-body: #f1f5f9;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --radius: 14px;
+  --shadow: 0 4px 14px rgba(15,23,42,0.05);
+  --sidebar-width: 250px;
+}
+[data-theme="dark"] {
+  --bg-body: #0b1120;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: #334155;
+}
+body {
+  font-family: 'Cairo', 'Inter', 'Noto Sans Devanagari', 'Noto Nastaliq Urdu', sans-serif;
+  background: var(--bg-body);
+  color: var(--text-main);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+.app-layout { display: flex; min-height: 100vh; }
+
+/* القائمة الجانبية */
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: 0;
+  width: var(--sidebar-width);
+  background: var(--navy-sidebar);
+  color: #cbd5e1;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  border-inline-end: 1px solid rgba(255,255,255,0.07);
+  transition: transform 0.25s ease;
+}
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  z-index: 115;
+}
+.sidebar-backdrop.active { display: block; }
+.sidebar-brand-header {
+  height: 60px; padding: 0 18px; display: flex; align-items: center; gap: 11px;
+  background: var(--navy-topbar); border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;
+}
+.brand-fogo-icon {
+  width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg,#2563eb 0%,#4f46e5 100%);
+  color: #ffffff; display: grid; place-items: center; font-size: 15px; flex-shrink: 0;
+}
+.brand-text-group .brand-name { font-size: 15px; font-weight: 800; color: #ffffff; display: block; line-height: 1.15; }
+.brand-text-group .brand-sub { font-size: 10.5px; font-weight: 700; color: #60a5fa; display: block; }
+.sidebar-scroll-area { flex: 1; overflow-y: auto; padding: 12px; }
+.sidebar-scroll-area::-webkit-scrollbar { width: 4px; }
+.sidebar-scroll-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 4px; }
+.nav-section-caption { font-size: 10.5px; font-weight: 700; color: #64748b; padding: 12px 12px 6px; text-transform: uppercase; letter-spacing: 0.4px; }
+.nav-item { margin-bottom: 4px; }
+.nav-link-btn, .nav-accordion-btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 9.5px 12px;
+  border-radius: 9px; border: 1px solid transparent; background: transparent; color: #cbd5e1;
+  font-family: inherit; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.15s ease;
+}
+.nav-left { display: flex; align-items: center; gap: 10px; }
+.nav-left i { width: 18px; text-align: center; font-size: 13.5px; color: #94a3b8; }
+.nav-link-btn:hover, .nav-accordion-btn:hover { background: rgba(255,255,255,0.07); color: #ffffff; }
+.nav-link-btn.active { background: #2563eb; color: #ffffff; box-shadow: 0 4px 12px rgba(37,99,235,0.35); }
+.nav-link-btn.active .nav-left i { color: #ffffff; }
+.chevron-icon { font-size: 10px; color: #94a3b8; transition: transform 0.2s ease; }
+.nav-item.open > .nav-accordion-btn .chevron-icon { transform: rotate(-90deg); }
+html[dir="ltr"] .nav-item.open > .nav-accordion-btn .chevron-icon { transform: rotate(90deg); }
+.submenu { display: none; flex-direction: column; gap: 2px; margin-top: 3px; margin-bottom: 6px; padding-inline-start: 14px; border-inline-start: 1.5px solid rgba(255,255,255,0.12); margin-inline-start: 16px; }
+.nav-item.open > .submenu { display: flex; }
+.submenu a { display: flex; align-items: center; gap: 9px; padding: 6.5px 10px; border-radius: 7px; color: #94a3b8; text-decoration: none; font-size: 12px; font-weight: 600; }
+.submenu a:hover { background: rgba(37,99,235,0.22); color: #ffffff; }
+.submenu a.active { color: #38bdf8; background: rgba(56,189,248,0.1); }
+.submenu a i { font-size: 5px; color: #60a5fa; }
+
+/* Topbar & Main Content */
+.app-topbar {
+  position: fixed; top: 0; inset-inline-start: var(--sidebar-width); inset-inline-end: 0; height: 60px;
+  background: var(--navy-topbar); color: #ffffff; display: flex; align-items: center; justify-content: space-between;
+  padding-inline: 20px; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition: inset-inline-start 0.25s ease;
+}
+.topbar-left-group { display: flex; align-items: center; gap: 12px; }
+.topbar-right-actions { display: flex; align-items: center; gap: 10px; }
+.topbar-btn {
+  width: 36px; height: 36px; border-radius: 9px; background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14); color: #e2e8f0; display: grid; place-items: center; cursor: pointer; transition: 0.2s;
+}
+.topbar-btn:hover { background: #2563eb; color: #fff; border-color: #2563eb; }
+.topbar-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.lang-select-top {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); color: #ffffff;
+  height: 36px; padding-inline: 10px; border-radius: 9px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; outline: none;
+}
+.lang-select-top option { background: #0f172a; color: #ffffff; }
+
+.app-main-content {
+  flex-grow: 1; margin-inline-start: var(--sidebar-width); margin-top: 60px; padding: 22px;
+  background: var(--bg-body); overflow-y: auto; min-width: 0;
+  transition: margin-inline-start 0.25s ease;
+}
+
+@media (min-width: 992px) {
+  .app-layout.sidebar-collapsed .sidebar { transform: translateX(100%); }
+  html[dir="ltr"] .app-layout.sidebar-collapsed .sidebar { transform: translateX(-100%); }
+  .app-layout.sidebar-collapsed .app-topbar,
+  .app-layout.sidebar-collapsed .app-main-content { inset-inline-start: 0; margin-inline-start: 0; }
+  .sidebar-backdrop { display: none !important; }
+}
+
+@media (max-width: 991.98px) {
+  .sidebar { transform: translateX(100%); }
+  html[dir="ltr"] .sidebar { transform: translateX(-100%); }
+  .sidebar.mobile-open { transform: translateX(0) !important; }
+  .app-topbar { inset-inline-start: 0 !important; padding-inline: 12px; }
+  .app-main-content { margin-inline-start: 0 !important; padding: 14px; }
+}
+
+.mobile-container { width: 100%; max-width: 1350px; margin: 0 auto; }
+
+/* Hero Card */
+.hero-card {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1d4ed8 100%);
+  color: white; border-radius: 20px; padding: 22px; margin-bottom: 24px;
+  box-shadow: 0 15px 35px -8px rgba(29, 78, 216, 0.45); border: 2px solid #3b82f6; position: relative;
+}
+.hero-top-row { display: flex; flex-direction: column; gap: 14px; margin-bottom: 18px; }
+@media(min-width: 992px) { .hero-top-row { flex-direction: row; justify-content: space-between; align-items: flex-start; } }
+.hero-title-area { display: flex; flex-direction: column; gap: 4px; }
+.hero-title { font-size: 11.5px; color: #93c5fd; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 0; }
+.hero-amount { font-size: 30px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; line-height: 1.1; }
+.hero-badges-wrapper { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.hero-stat-pill {
+  background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(4px); padding: 7px 12px;
+  border-radius: 10px; font-size: 11.5px; color: #f8fafc; font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.15); display: flex; align-items: center; gap: 6px;
+}
+.hero-stat-pill i { color: #38bdf8; }
+
+.hero-embedded-controls {
+  display: flex; flex-direction: column; gap: 14px; padding: 14px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.15); border-bottom: 1px solid rgba(255, 255, 255, 0.15); margin-bottom: 16px;
+}
+.period-chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; }
+@media (min-width: 768px) { .period-chips { grid-template-columns: repeat(6, 1fr); } }
+.chip {
+  background: rgba(255, 255, 255, 0.08); border: 1.5px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 6px; border-radius: 10px; font-size: 11.5px; font-weight: 700; text-align: center;
+  cursor: pointer; color: #e2e8f0; transition: all 0.2s;
+}
+.chip:hover { background: rgba(255, 255, 255, 0.18); color: #fff; }
+.chip.active { background: #2563eb; color: white; border-color: #60a5fa; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+
+.hero-controls-grid { display: grid; grid-template-columns: 1fr; gap: 12px; width: 100%; }
+@media(min-width: 992px) { .hero-controls-grid { grid-template-columns: 250px 250px 1fr; align-items: center; gap: 16px; } }
+.hero-control-group { display: flex; flex-direction: column; gap: 5px; position: relative; width: 100%; }
+.hero-control-label { font-size: 11px; color: #94a3b8; font-weight: 700; }
+.hero-select, .hero-date-btn, .hero-search-input {
+  background: rgba(15, 23, 42, 0.7); border: 1.5px solid rgba(255, 255, 255, 0.2); color: #fff;
+  padding: 8px 12px; border-radius: 10px; font-size: 11.5px; font-weight: 700; outline: none;
+  height: 38px; width: 100%; display: flex; align-items: center; justify-content: space-between; box-sizing: border-box;
+  font-family: inherit;
+}
+.hero-select option { background: #1e293b; color: #fff; }
+
+.calendar-container {
+  border: 2px solid var(--border); border-radius: 14px; padding: 14px; background: var(--bg-card);
+  display: none; position: absolute; top: 65px; left: 0; z-index: 1000; width: 310px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.25); color: var(--text-main);
+}
+.calendar-container.open { display: block; }
+.calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 800; color: var(--text-main); }
+.calendar-header button { background: none; border: 2px solid var(--border); border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 12px; color: var(--text-main); font-weight: 700; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; }
+.calendar-day-name { font-size: 11px; color: var(--text-muted); font-weight: 800; padding-bottom: 6px; }
+.calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: var(--bg-body); color: var(--text-main); border-radius: 8px; cursor: pointer; border: 1px solid var(--border); }
+.calendar-day.selected { background: var(--blue-accent); color: white; border-color: var(--blue-accent); }
+.calendar-day.in-range { background: #bfdbfe; color: var(--blue-primary); }
+
+.hero-grid-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+@media(min-width: 768px) { .hero-grid-stats { grid-template-columns: repeat(4, 1fr); } }
+.hero-sub-stat-box { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); padding: 12px 14px; border-radius: 12px; border: 1.5px solid rgba(255, 255, 255, 0.15); }
+.hero-sub-stat-box label { font-size: 11px; color: #cbd5e1; display: block; margin-bottom: 4px; font-weight: 700; }
+.hero-sub-stat-box span { font-size: 14px; font-weight: 800; color: #ffffff; }
+.hero-sub-stat-box.tax-box span { color: #fbbf24; }
+.hero-sub-stat-box.cost-box span { color: #38bdf8; }
+.hero-sub-stat-box.profit-box { background: rgba(16, 185, 129, 0.18); border-color: rgba(16, 185, 129, 0.35); }
+.hero-sub-stat-box.profit-box span { color: #34d399; }
+
+/* بطاقات تجميع العروض والخصومات */
+.section-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+.section-title i {
+  color: var(--blue-accent);
+}
+
+.offers-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 640px) {
+  .offers-cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .offers-cards-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.offer-summary-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  position: relative;
+  overflow: hidden;
+}
+.offer-summary-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--blue-accent);
+  box-shadow: 0 10px 24px rgba(37, 99, 235, 0.12);
+}
+.offer-summary-card.card-oc10 {
+  border-color: #3b82f6;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.05) 0%, var(--bg-card) 100%);
+}
+.offer-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.offer-reason-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.35;
+  word-break: break-word;
+}
+.offer-level-tag {
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 4px 9px;
+  border-radius: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tag-invoice-level {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #93c5fd;
+}
+.tag-item-level {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}
+
+.offer-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.offer-metric-box {
+  background: var(--bg-body);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  text-align: center;
+}
+.offer-metric-label {
+  display: block;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.offer-metric-value {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+.offer-metric-box.highlight-invoices .offer-metric-value {
+  color: var(--blue-accent);
+  font-size: 15px;
+}
+.offer-metric-box.highlight-discount .offer-metric-value {
+  color: #059669;
+}
+
+.status-banner {
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 36px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 700;
+  grid-column: 1 / -1;
+}
+</style>
+</head>
+<body data-theme="light">
+<div class="app-layout" id="appLayout">
+  <!-- القائمة الجانبية -->
+  <aside class="sidebar" id="sidebarMenu">
+    <div class="sidebar-brand-header">
+      <div class="brand-fogo-icon"><i class="fa-solid fa-chart-simple"></i></div>
+      <div class="brand-text-group">
+        <span class="brand-name" data-i18n="brand_name">الموسى ERP</span>
+        <span class="brand-sub" data-i18n="brand_sub">Financial & Retail</span>
+      </div>
+    </div>
+    <div class="sidebar-scroll-area">
+      <div class="nav-section-caption" data-i18n="menu_caption">القائمة الرئيسية</div>
+      
+      <div class="nav-item">
+        <a href="./index.html" class="nav-link-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-table-cells-large"></i>
+            <span data-i18n="nav_dashboard">لوحة التحكم</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span data-i18n="nav_sales">المبيعات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./sales.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_summary">ملخص المبيعات</span></a>
+          <a href="./sales_group.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_group">المبيعات حسب المجموعة</span></a>
+          <a href="./supplier_sales.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_supplier">المبيعات حسب المورد</span></a>
+          <a href="./sales_per_day.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_per_day">المبيعات اليومية</span></a>
+          <a href="./sales_invoices_offers.html" class="active"><i class="fa-solid fa-circle"></i><span data-i18n="nav_sales_invoices_offers">ملخص العروض والخصومات</span></a>
+        </div>
+      </div>
+
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span data-i18n="nav_purchase">المشتريات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./purchases.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_purchases_list">قوائم المشتريات</span></a>
+          <a href="./purchase_comparieso.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_purchase_comparison">تحليل المشتريات والمبيعات</span></a>
+        </div>
+      </div>
+
+      <div class="nav-item open">
+        <button type="button" class="nav-accordion-btn">
+          <span class="nav-left">
+            <i class="fa-solid fa-warehouse"></i>
+            <span data-i18n="nav_warehouse">إدارة المستودعات</span>
+          </span>
+          <i class="fa-solid fa-chevron-left chevron-icon"></i>
+        </button>
+        <div class="submenu">
+          <a href="./warhouse.html"><i class="fa-solid fa-circle"></i><span data-i18n="nav_warehouse_staff">أداء موظفي المستودع</span></a>
+        </div>
+      </div>
+
+      <div class="nav-section-caption" data-i18n="support_caption">الحساب والنظام</div>
+      <div class="nav-item">
+        <button type="button" class="nav-link-btn" id="logoutBtn">
+          <span class="nav-left">
+            <i class="fa-solid fa-power-off" style="color:#f87171;"></i>
+            <span data-i18n="nav_logout">تسجيل الخروج</span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
+  <!-- الشريط العلوي -->
+  <header class="app-topbar">
+    <div class="topbar-left-group">
+      <button type="button" class="topbar-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" title="القائمة الجانبية">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div style="font-size: 16px; font-weight: 800;" data-i18n="nav_sales_invoices_offers">ملخص العروض والخصومات</div>
+    </div>
+    <div class="topbar-right-actions">
+      <button type="button" class="topbar-btn" id="refreshBtn" title="تحديث البيانات">
+        <i class="fa-solid fa-rotate"></i>
+      </button>
+      <select id="langSelect" class="lang-select-top" aria-label="Language Selector">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="ur">اردو</option>
+      </select>
+      <button type="button" class="topbar-btn" id="darkModeToggleBtn" title="الوضع الليلي">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+      <button type="button" class="topbar-btn" id="fullscreenBtn" title="ملء الشاشة">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-main-content">
+    <div class="mobile-container">
+
+      <!-- Hero Card -->
+      <div class="hero-card">
+        <div class="hero-top-row">
+          <div class="hero-title-area">
+            <span class="hero-title" data-i18n="kpi_discounted_sales">إجمالي مبيعات العروض والخصومات (Grand Total)</span>
+            <div class="hero-amount" id="totalSalesAmount">0.00 SAR</div>
+          </div>
+          <div class="hero-badges-wrapper">
+            <div class="hero-stat-pill"><i class="fa-solid fa-tags"></i><span id="offerTypesBadge">0 عرض / خصم</span></div>
+            <div class="hero-stat-pill"><i class="fa-solid fa-receipt"></i><span id="invoiceCountBadge">0 فاتورة</span></div>
+          </div>
+        </div>
+
+        <div class="hero-embedded-controls">
+          <div class="period-chips">
+            <div class="chip" data-preset="today" onclick="setPreset('today', this)" data-i18n="chip_today">اليوم</div>
+            <div class="chip active" data-preset="yesterday" onclick="setPreset('yesterday', this)" data-i18n="chip_yesterday">أمس</div>
+            <div class="chip" data-preset="week" onclick="setPreset('week', this)" data-i18n="chip_week">الأسبوع</div>
+            <div class="chip" data-preset="month" onclick="setPreset('month', this)" data-i18n="chip_month">الشهر</div>
+            <div class="chip" data-preset="year" onclick="setPreset('year', this)" data-i18n="chip_year">السنة</div>
+            <div class="chip" data-preset="custom" onclick="toggleCalendar()" data-i18n="chip_custom">📅 مخصص</div>
+          </div>
+
+          <div class="hero-controls-grid">
+            <div class="hero-control-group">
+              <label class="hero-control-label" data-i18n="label_time_range">النطاق الزمني:</label>
+              <div class="hero-date-btn" onclick="toggleCalendar()"><span id="dateButtonText">اختر التاريخ...</span><span>▼</span></div>
+              <div class="calendar-container" id="calendarContainer" onclick="event.stopPropagation()">
+                <div class="calendar-header"><button onclick="changeMonth(-1)">&#9664;</button><span id="calendarTitle">نوفمبر 2026</span><button onclick="changeMonth(1)">&#9654;</button></div>
+                <div class="calendar-grid" id="calendarDaysGrid"></div>
+              </div>
+            </div>
+            <div class="hero-control-group">
+              <label class="hero-control-label" data-i18n="label_branch">الفرع:</label>
+              <select id="branchSelect" class="hero-select" onchange="renderOffersSummary()">
+                <option value="ALL" data-i18n="opt_all_branches">جميع الفروع</option>
+              </select>
+            </div>
+            <div class="hero-control-group">
+              <label class="hero-control-label" data-i18n="label_search">بحث باسم العرض أو سبب الخصم:</label>
+              <input type="text" id="offerSearchInput" class="hero-search-input" placeholder="اكتب OC10 أو اسم العرض..." oninput="renderOffersSummary()" />
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-grid-stats">
+          <div class="hero-sub-stat-box"><label data-i18n="kpi_without_vat">صافي المبيعات (Excl. VAT):</label><span id="totalSalesExclTax">0.00 SAR</span></div>
+          <div class="hero-sub-stat-box tax-box"><label data-i18n="kpi_vat_15">الضريبة (VAT 15%):</label><span id="totalTaxAmount">0.00 SAR</span></div>
+          <div class="hero-sub-stat-box cost-box"><label data-i18n="kpi_oc10_count">فواتير OC10 (خصم فاتورة):</label><span id="oc10CountDisplay">0 فاتورة</span></div>
+          <div class="hero-sub-stat-box profit-box"><label data-i18n="kpi_total_discounts">إجمالي قيمة الخصومات:</label><span id="totalDiscountDisplay">0.00 SAR</span></div>
+        </div>
+      </div>
+
+      <!-- قسم ملخص الخصومات والعروض المجمعة -->
+      <div class="section-header-bar">
+        <h2 class="section-title">
+          <i class="fa-solid fa-layer-group"></i>
+          <span data-i18n="section_grouped_offers">تجميع العروض والخصومات وعدد الفواتير لكل خصم</span>
+        </h2>
+      </div>
+
+      <div class="offers-cards-grid" id="offersSummaryGrid">
+        <div class="status-banner" data-i18n="status_loading">جاري تجميع بيانات العروض والخصومات...</div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+const DESKTOP_BREAKPOINT = 992;
+let isDesktopSidebarOpen = window.innerWidth >= DESKTOP_BREAKPOINT;
+let isMobileSidebarOpen = false;
+
+function isDesktopViewport() { return window.innerWidth >= DESKTOP_BREAKPOINT; }
+function applySidebarState() {
+  const layout = document.getElementById('appLayout');
+  const sidebar = document.getElementById('sidebarMenu');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (!layout || !sidebar || !backdrop) return;
+  if (isDesktopViewport()) {
+    sidebar.classList.remove('mobile-open');
+    backdrop.classList.remove('active');
+    layout.classList.toggle('sidebar-collapsed', !isDesktopSidebarOpen);
+  } else {
+    layout.classList.remove('sidebar-collapsed');
+    sidebar.classList.toggle('mobile-open', isMobileSidebarOpen);
+    backdrop.classList.toggle('active', isMobileSidebarOpen);
+  }
+}
+function toggleSidebar() {
+  if (isDesktopViewport()) { isDesktopSidebarOpen = !isDesktopSidebarOpen; }
+  else { isMobileSidebarOpen = !isMobileSidebarOpen; }
+  applySidebarState();
+}
+function closeSidebar() {
+  isDesktopSidebarOpen = false;
+  isMobileSidebarOpen = false;
+  applySidebarState();
+}
+window.addEventListener('resize', applySidebarState);
+
+const TRANSLATIONS = {
+  ar: {
+    page_title_offers: "ملخص العروض والخصومات - الموسى ERP",
+    brand_name: "الموسى ERP",
+    brand_sub: "Financial & Retail",
+    menu_caption: "القائمة الرئيسية",
+    support_caption: "الحساب والنظام",
+    nav_dashboard: "لوحة التحكم",
+    nav_sales: "المبيعات",
+    nav_sales_summary: "ملخص المبيعات",
+    nav_sales_group: "المبيعات حسب المجموعة",
+    nav_sales_supplier: "المبيعات حسب المورد",
+    nav_sales_per_day: "المبيعات اليومية",
+    nav_sales_invoices_offers: "ملخص العروض والخصومات",
+    nav_purchase: "المشتريات",
+    nav_purchases_list: "قوائم المشتريات",
+    nav_purchase_comparison: "تحليل المشتريات والمبيعات",
+    nav_warehouse: "إدارة المستودعات",
+    nav_warehouse_staff: "أداء موظفي المستودع",
+    nav_logout: "تسجيل الخروج",
+    chip_today: "اليوم",
+    chip_yesterday: "أمس",
+    chip_week: "الأسبوع",
+    chip_month: "الشهر",
+    chip_year: "السنة",
+    chip_custom: "📅 مخصص",
+    kpi_discounted_sales: "إجمالي مبيعات العروض والخصومات (Grand Total)",
+    label_branch: "الفرع:",
+    opt_all_branches: "جميع الفروع",
+    label_time_range: "النطاق الزمني:",
+    label_search: "بحث باسم العرض أو سبب الخصم:",
+    kpi_without_vat: "صافي المبيعات (Excl. VAT):",
+    kpi_vat_15: "الضريبة (VAT 15%):",
+    kpi_oc10_count: "فواتير OC10 (خصم فاتورة):",
+    kpi_total_discounts: "إجمالي قيمة الخصومات:",
+    section_grouped_offers: "تجميع العروض والخصومات وعدد الفواتير لكل خصم",
+    status_loading: "جاري تجميع بيانات العروض والخصومات...",
+    status_no_data: "لا توجد عروض أو خصومات مسجلة في هذه الفترة"
+  },
+  en: {
+    page_title_offers: "Offers & Discounts Summary - Almoosa ERP",
+    brand_name: "Almoosa ERP",
+    brand_sub: "Financial & Retail",
+    menu_caption: "Main Menu",
+    support_caption: "Account & System",
+    nav_dashboard: "Dashboard",
+    nav_sales: "Sales",
+    nav_sales_summary: "Sales Summary",
+    nav_sales_group: "Sales by Group",
+    nav_sales_supplier: "Sales per Supplier",
+    nav_sales_per_day: "Sales per Day",
+    nav_sales_invoices_offers: "Offers & Discounts Summary",
+    nav_purchase: "Purchases",
+    nav_purchases_list: "Purchases List",
+    nav_purchase_comparison: "Purchase & Sales Analysis",
+    nav_warehouse: "Warehouse Management",
+    nav_warehouse_staff: "Warehouse Staff Performance",
+    nav_logout: "Logout",
+    chip_today: "Today",
+    chip_yesterday: "Yesterday",
+    chip_week: "Week",
+    chip_month: "Month",
+    chip_year: "Year",
+    chip_custom: "📅 Custom",
+    kpi_discounted_sales: "Total Offers & Discounts Sales (Grand Total)",
+    label_branch: "Branch:",
+    opt_all_branches: "All Branches",
+    label_time_range: "Time Range:",
+    label_search: "Search Offer / Discount Reason:",
+    kpi_without_vat: "Net Sales (Excl. VAT):",
+    kpi_vat_15: "VAT (15%):",
+    kpi_oc10_count: "OC10 Invoices (Invoice Level):",
+    kpi_total_discounts: "Total Discounts Amount:",
+    section_grouped_offers: "Grouped Offers & Discounts (Invoice Count per Reason)",
+    status_loading: "Aggregating offers and discounts data...",
+    status_no_data: "No offers or discounts recorded in this period"
+  }
+};
+
+function applyLanguageUI(lang) {
+  const selectedLang = TRANSLATIONS[lang] ? lang : 'ar';
+  localStorage.setItem('app_lang', selectedLang);
+  const htmlRoot = document.getElementById('htmlRoot');
+  htmlRoot.lang = selectedLang;
+  htmlRoot.dir = (selectedLang === 'ar' || selectedLang === 'ur') ? 'rtl' : 'ltr';
+  const langSelect = document.getElementById('langSelect');
+  if (langSelect && langSelect.value !== selectedLang) langSelect.value = selectedLang;
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const key = el.getAttribute('data-i18n');
+    if (TRANSLATIONS[selectedLang] && TRANSLATIONS[selectedLang][key]) {
+      el.textContent = TRANSLATIONS[selectedLang][key];
+    }
+  });
+  applySidebarState();
+}
+
+function getActiveLang() { return localStorage.getItem('app_lang') || 'ar'; }
+
+const CONFIG = {
+  serverUrl: "https://87-237-225-155.nip.io",
+  apiKey: "6f039a5a6130b79",
+  apiSecret: "9e6d920a8fda252",
+  // اسم الـ Server Script API Method الذي ستنشئه في ERPNext
+  serverScriptMethod: "get_offers_and_discounts_summary"
+};
+
+let serverPayload = {
+  branches: [],
+  offers: [],
+  total_discounted_invoices: 0,
+  oc10_invoices_count: 0
+};
+let currentQueryFrom = '';
+let currentQueryTo = '';
+let selectionState = { startDate: null, endDate: null };
+let viewDate = new Date();
+let isFetchingData = false;
+
+document.addEventListener('DOMContentLoaded', () => {
+  applySidebarState();
+  applyLanguageUI(getActiveLang());
+
+  document.getElementById('langSelect').addEventListener('change', (e) => {
+    applyLanguageUI(e.target.value);
+    renderOffersSummary();
+  });
+
+  document.getElementById('refreshBtn').addEventListener('click', () => loadOffersData());
+
+  document.getElementById('darkModeToggleBtn').addEventListener('click', () => {
+    const currentTheme = document.body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', newTheme);
+    localStorage.setItem('app_theme', newTheme);
+  });
+
+  const savedTheme = localStorage.getItem('app_theme') || 'light';
+  document.body.setAttribute('data-theme', savedTheme);
+
+  document.getElementById('fullscreenBtn').addEventListener('click', () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+    else document.exitFullscreen().catch(() => {});
+  });
+
+  document.querySelectorAll('.nav-accordion-btn').forEach((btn) => {
+    btn.addEventListener('click', () => btn.closest('.nav-item').classList.toggle('open'));
+  });
+
+  // ضبط فلتر "أمس" كافتراضي عند فتح الصفحة
+  setPreset('yesterday', document.querySelector('.chip[data-preset="yesterday"]'));
+  renderCalendar();
+
+  window.onclick = function(event) {
+    if (!event.target.closest('.hero-control-group') && !event.target.closest('.period-chips')) {
+      document.getElementById('calendarContainer').classList.remove('open');
+    }
+  };
+});
+
+function formatDateStr(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function setPreset(type, element) {
+  if (element) {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    element.classList.add('active');
+  }
+  const today = new Date();
+  let start = new Date(), end = new Date();
+  if (type === 'today') { start = new Date(today); end = new Date(today); }
+  else if (type === 'yesterday') { start = new Date(today); start.setDate(today.getDate() - 1); end = new Date(start); }
+  else if (type === 'week') { start = new Date(today); start.setDate(today.getDate() - 6); end = new Date(today); }
+  else if (type === 'month') { start = new Date(today.getFullYear(), today.getMonth(), 1); end = new Date(today); }
+  else if (type === 'year') { start = new Date(today.getFullYear(), 0, 1); end = new Date(today); }
+
+  currentQueryFrom = formatDateStr(start);
+  currentQueryTo = formatDateStr(end);
+  selectionState.startDate = currentQueryFrom;
+  selectionState.endDate = currentQueryTo;
+  viewDate = new Date(end);
+
+  document.getElementById('dateButtonText').textContent = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} إلى ${currentQueryTo}`;
+  renderCalendar();
+  loadOffersData();
+}
+
+function toggleCalendar() { document.getElementById('calendarContainer').classList.toggle('open'); }
+function changeMonth(direction) { viewDate.setMonth(viewDate.getMonth() + direction); renderCalendar(); }
+function renderCalendar() {
+  const grid = document.getElementById('calendarDaysGrid');
+  const titleEl = document.getElementById('calendarTitle');
+  grid.innerHTML = '';
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+  const arMonths = ["يناير", "فبراير", "مارس", "إبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+  titleEl.textContent = `${arMonths[month]} ${year}`;
+  const daysShort = ['أحد', 'إثن', 'ثلا', 'أرب', 'خميس', 'جمع', 'سبت'];
+  daysShort.forEach(d => { const div = document.createElement('div'); div.className = 'calendar-day-name'; div.textContent = d; grid.appendChild(div); });
+  const firstDayIndex = new Date(year, month, 1).getDay();
+  const totalDays = new Date(year, month + 1, 0).getDate();
+  for (let i = 0; i < firstDayIndex; i++) { const emptyDiv = document.createElement('div'); emptyDiv.className = 'calendar-day empty'; grid.appendChild(emptyDiv); }
+  for (let day = 1; day <= totalDays; day++) {
+    const dayDiv = document.createElement('div');
+    dayDiv.className = 'calendar-day';
+    dayDiv.textContent = day;
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    if (selectionState.startDate && dateStr === selectionState.startDate) dayDiv.classList.add('selected');
+    if (selectionState.endDate && dateStr === selectionState.endDate) dayDiv.classList.add('selected');
+    if (selectionState.startDate && selectionState.endDate && dateStr > selectionState.startDate && dateStr < selectionState.endDate) dayDiv.classList.add('in-range');
+    dayDiv.onclick = (e) => { e.stopPropagation(); onCalendarDayClick(dateStr); };
+    grid.appendChild(dayDiv);
+  }
+}
+
+function onCalendarDayClick(dateStr) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  const customChip = document.querySelector('.chip[data-preset="custom"]');
+  if (customChip) customChip.classList.add('active');
+
+  if (!selectionState.startDate || (selectionState.startDate && selectionState.endDate)) {
+    selectionState.startDate = dateStr;
+    selectionState.endDate = null;
+    currentQueryFrom = dateStr;
+    currentQueryTo = '';
+    document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
+    renderCalendar();
+  } else {
+    if (dateStr < selectionState.startDate) {
+      selectionState.startDate = dateStr;
+      currentQueryFrom = dateStr;
+      currentQueryTo = '';
+      document.getElementById('dateButtonText').textContent = `${currentQueryFrom} (اختر نهاية الفترة)`;
+      renderCalendar();
+    } else {
+      selectionState.endDate = dateStr;
+      currentQueryTo = dateStr;
+      document.getElementById('dateButtonText').textContent = currentQueryFrom === currentQueryTo ? currentQueryFrom : `${currentQueryFrom} إلى ${currentQueryTo}`;
+      renderCalendar();
+      loadOffersData();
+      toggleCalendar();
+    }
+  }
+}
+
+function fmtNum(num) { return Number(num || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+// استدعاء API مع إعادة محاولة تلقائية في حالة Cold Start أو انقطاع عابر
+async function fetchWithRetry(url, options, retries = 2, delayMs = 800) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return await response.json();
+    } catch (err) {
+      if (attempt === retries) throw err;
+      await new Promise(resolve => setTimeout(resolve, delayMs * (attempt + 1)));
+    }
+  }
+}
+
+async function loadOffersData() {
+  if (isFetchingData) return;
+  isFetchingData = true;
+
+  const refreshBtn = document.getElementById('refreshBtn');
+  if (refreshBtn) refreshBtn.disabled = true;
+
+  const grid = document.getElementById('offersSummaryGrid');
+  const lang = getActiveLang();
+  grid.innerHTML = `<div class="status-banner">${TRANSLATIONS[lang].status_loading}</div>`;
+
+  const queryToDate = currentQueryTo || currentQueryFrom;
+  const selectedBranch = document.getElementById('branchSelect').value || 'ALL';
+
+  try {
+    // طلب واحد سريع إلى Server Script في ERPNext
+    const responseJson = await fetchWithRetry(
+      `${CONFIG.serverUrl}/api/method/${CONFIG.serverScriptMethod}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `token ${CONFIG.apiKey}:${CONFIG.apiSecret}`
+        },
+        body: JSON.stringify({
+          from_date: currentQueryFrom,
+          to_date: queryToDate,
+          warehouse: selectedBranch
+        })
+      },
+      2,
+      700
+    );
+
+    const payload = responseJson.message || {};
+    serverPayload = {
+      branches: Array.isArray(payload.branches) ? payload.branches : [],
+      offers: Array.isArray(payload.offers) ? payload.offers : [],
+      total_discounted_invoices: Number(payload.total_discounted_invoices || 0),
+      oc10_invoices_count: Number(payload.oc10_invoices_count || 0)
+    };
+
+    // تحديث قائمة الفروع ديناميكياً
+    const branchSelect = document.getElementById('branchSelect');
+    const prevBranch = branchSelect.value;
+    branchSelect.innerHTML = `<option value="ALL">${TRANSLATIONS[lang].opt_all_branches}</option>`;
+    serverPayload.branches.forEach(b => {
+      const opt = document.createElement('option');
+      opt.value = b;
+      opt.textContent = b;
+      branchSelect.appendChild(opt);
+    });
+    if (prevBranch === 'ALL' || serverPayload.branches.includes(prevBranch)) {
+      branchSelect.value = prevBranch;
+    }
+
+    renderOffersSummary();
+
+  } catch (err) {
+    console.error("Error calling Server Script:", err);
+    grid.innerHTML = `
+      <div class="status-banner" style="color:#dc2626;">
+        حدث خطأ أثناء الاتصال بالسيرفر لجلب بيانات العروض
+        <div style="margin-top:10px;">
+          <button onclick="loadOffersData()" style="background:#2563eb;color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:inherit;font-weight:700;cursor:pointer;">
+            إعادة المحاولة الآن
+          </button>
+        </div>
+      </div>`;
+  } finally {
+    isFetchingData = false;
+    if (refreshBtn) refreshBtn.disabled = false;
+  }
+}
+
+function renderOffersSummary() {
+  const searchTerm = (document.getElementById('offerSearchInput').value || '').trim().toLowerCase();
+  const grid = document.getElementById('offersSummaryGrid');
+  const lang = getActiveLang();
+
+  let groupedList = [...serverPayload.offers];
+
+  if (searchTerm) {
+    groupedList = groupedList.filter(g => String(g.reason || '').toLowerCase().includes(searchTerm));
+  }
+
+  const totalDiscountedSalesSum = groupedList.reduce((acc, g) => acc + Number(g.total_sales || 0), 0);
+  const totalDiscountAmtSum = groupedList.reduce((acc, g) => acc + Number(g.total_discount || 0), 0);
+
+  const totalExclTax = totalDiscountedSalesSum / 1.15;
+  const totalTax = totalDiscountedSalesSum - totalExclTax;
+  const invWord = lang === 'ar' ? 'فاتورة' : 'Invoices';
+  const offerWord = lang === 'ar' ? 'عرض / خصم' : 'Offers';
+
+  document.getElementById('totalSalesAmount').textContent = fmtNum(totalDiscountedSalesSum) + ' SAR';
+  document.getElementById('offerTypesBadge').textContent = `${groupedList.length.toLocaleString('en-US')} ${offerWord}`;
+  document.getElementById('invoiceCountBadge').textContent = `${serverPayload.total_discounted_invoices.toLocaleString('en-US')} ${invWord}`;
+  document.getElementById('totalSalesExclTax').textContent = fmtNum(totalExclTax) + ' SAR';
+  document.getElementById('totalTaxAmount').textContent = fmtNum(totalTax) + ' SAR';
+  document.getElementById('oc10CountDisplay').textContent = `${serverPayload.oc10_invoices_count.toLocaleString('en-US')} ${invWord}`;
+  document.getElementById('totalDiscountDisplay').textContent = fmtNum(totalDiscountAmtSum) + ' SAR';
+
+  if (groupedList.length === 0) {
+    grid.innerHTML = `<div class="status-banner">${TRANSLATIONS[lang].status_no_data}</div>`;
+    return;
+  }
+
+  const labelInvoicesCount = lang === 'ar' ? 'عدد الفواتير' : 'Invoices Count';
+  const labelSalesVal = lang === 'ar' ? 'الإجمالي (Grand Total)' : 'Grand Total';
+  const labelDiscountVal = lang === 'ar' ? 'قيمة الخصم' : 'Discount Value';
+
+  grid.innerHTML = groupedList.map(grp => {
+    const isInvoiceLevel = grp.level_type === 'invoice';
+    const cardExtraClass = grp.reason === 'OC10' ? 'card-oc10' : '';
+    const tagClass = isInvoiceLevel ? 'tag-invoice-level' : 'tag-item-level';
+    const tagText = isInvoiceLevel
+      ? (lang === 'ar' ? 'خصم فاتورة' : 'Invoice Discount')
+      : (lang === 'ar' ? 'خصم صنف (Item)' : 'Item Discount');
+
+    return `
+      <div class="offer-summary-card ${cardExtraClass}">
+        <div class="offer-card-top">
+          <div class="offer-reason-name">${grp.reason}</div>
+          <span class="offer-level-tag ${tagClass}">${tagText}</span>
+        </div>
+        <div class="offer-metrics-row">
+          <div class="offer-metric-box highlight-invoices">
+            <span class="offer-metric-label">${labelInvoicesCount}</span>
+            <span class="offer-metric-value">${Number(grp.invoice_count || 0).toLocaleString('en-US')} <small>${invWord}</small></span>
+          </div>
+          <div class="offer-metric-box">
+            <span class="offer-metric-label">${labelSalesVal}</span>
+            <span class="offer-metric-value">${fmtNum(grp.total_sales)}</span>
+          </div>
+          <div class="offer-metric-box highlight-discount">
+            <span class="offer-metric-label">${labelDiscountVal}</span>
+            <span class="offer-metric-value">${fmtNum(grp.total_discount)}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+</script>
+</body>
+</html>
