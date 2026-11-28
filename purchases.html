@@ -7,6 +7,9 @@
     <title data-i18n="page_title">قائمة شحنات الموردين والتحليل الموسمي - الموسى التجارية</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- مكتبات التصدير Excel (مع دعم التنسيق والألوان) و PDF -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css?v=2026.20">
 
     <style>
@@ -243,7 +246,6 @@
             display: block;
         }
 
-        /* Topbar matching sales_3.html */
         .app-topbar {
             position: fixed;
             top: 0;
@@ -335,7 +337,6 @@
             transition: margin-inline-start 0.25s ease;
         }
 
-        /* سلوك الشاشات الكبيرة (الكمبيوتر: 992px فأعلى) */
         @media (min-width: 992px) {
             .app-layout.sidebar-collapsed .sidebar {
                 transform: translateX(100%);
@@ -353,7 +354,6 @@
             }
         }
 
-        /* سلوك الموبايل والتابلت (أقل من 992px) */
         @media (max-width: 991.98px) {
             .sidebar {
                 transform: translateX(100%);
@@ -411,7 +411,7 @@
 
         .search-input {
             flex: 1;
-            min-width: 240px;
+            min-width: 200px;
             background: var(--bg-body);
             border: 2px solid var(--border);
             color: var(--text-main);
@@ -463,7 +463,7 @@
 
         .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 14px;
             margin-bottom: 18px;
         }
@@ -488,21 +488,21 @@
             margin-bottom: 8px;
         }
         .kpi-title {
-            font-size: 11.5px;
+            font-size: 11px;
             font-weight: 800;
             color: var(--text-muted);
         }
         .kpi-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 13px;
         }
         .kpi-value {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 900;
             color: var(--text-main);
             direction: ltr;
@@ -520,23 +520,84 @@
             border-bottom: 1.5px solid var(--border);
         }
 
-        .btn-print-mode {
+        .btn-action-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .btn-custom {
             background: linear-gradient(135deg, #0f172a 0%, #0284c7 100%);
             color: #ffffff;
             border: none;
-            padding: 9px 18px;
-            border-radius: 11px;
+            padding: 8px 14px;
+            border-radius: 10px;
             font-family: 'Cairo', sans-serif;
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 800;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+            gap: 6px;
+            box-shadow: 0 3px 10px rgba(2, 132, 199, 0.2);
             transition: transform 0.2s;
         }
-        .btn-print-mode:hover { transform: translateY(-1px); }
+        .btn-custom:hover { transform: translateY(-1px); }
+        .btn-excel { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
+        .btn-pdf { background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%); }
+        .btn-print { background: linear-gradient(135deg, #475569 0%, #64748b 100%); }
+
+
+        /* Unified Export/Print Dropdown Menu */
+        .export-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .export-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 6px);
+            inset-inline-start: 0;
+            min-width: 195px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.18);
+            z-index: 500;
+            padding: 6px;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .export-dropdown-menu.show {
+            display: flex;
+        }
+        .dropdown-item-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border: none;
+            background: transparent;
+            color: var(--text-main);
+            font-family: 'Cairo', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: start;
+            transition: background 0.15s ease;
+        }
+        .dropdown-item-btn:hover {
+            background: rgba(2, 132, 199, 0.1);
+            color: #0284c7;
+        }
+        .dropdown-item-btn i {
+            width: 18px;
+            text-align: center;
+            font-size: 14px;
+        }
 
         .selection-actions-bar {
             display: none;
@@ -559,41 +620,9 @@
             flex-wrap: wrap;
         }
 
-        .btn-confirm-selection {
-            background: #10b981;
-            color: #ffffff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 9px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-confirm-selection:hover { background: #059669; }
-
-        .btn-cancel-selection {
-            background: #ef4444;
-            color: #ffffff;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 9px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 12px;
-            font-weight: 800;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-cancel-selection:hover { background: #dc2626; }
-
         .ship-checkbox {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
             cursor: pointer;
             accent-color: #0284c7;
             vertical-align: middle;
@@ -603,7 +632,7 @@
             background: var(--bg-card);
             border: 2px solid var(--border);
             border-radius: 18px;
-            padding: 16px;
+            padding: 14px;
             box-shadow: var(--shadow);
             overflow-x: auto;
             margin-bottom: 30px;
@@ -629,11 +658,11 @@
             background: var(--bg-body);
             border: 1.5px solid var(--border);
             color: var(--text-main);
-            padding: 0 10px;
+            padding: 0 8px;
             border-radius: 9px;
             font-size: 11px;
             font-weight: 700;
-            height: 36px;
+            height: 34px;
             outline: none;
             cursor: pointer;
         }
@@ -641,22 +670,23 @@
         .report-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
-            min-width: 1100px;
+            font-size: 11px;
+            table-layout: auto;
         }
 
         .report-table th, .report-table td {
-            padding: 11px 12px;
+            padding: 7px 6px;
             border-bottom: 1.5px solid var(--border);
             text-align: start;
-            white-space: nowrap;
             color: var(--text-main);
+            white-space: nowrap;
         }
 
         .report-table th {
             background: var(--bg-body);
             font-weight: 850;
             color: var(--text-muted);
+            font-size: 10.5px;
         }
 
         .report-table tbody tr {
@@ -673,9 +703,9 @@
         .shipment-no-badge {
             background: rgba(245, 158, 11, 0.15);
             color: #d97706;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 11.5px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 10.5px;
             font-weight: 900;
             border: 1px solid rgba(245, 158, 11, 0.3);
             display: inline-block;
@@ -684,20 +714,20 @@
         .badge-qty {
             background: rgba(16, 185, 129, 0.15);
             color: #059669;
-            padding: 4px 9px;
-            border-radius: 8px;
+            padding: 2px 6px;
+            border-radius: 6px;
             font-weight: 850;
-            font-size: 11px;
+            font-size: 10px;
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .badge-diff-qty {
             background: rgba(239, 68, 68, 0.12);
             color: #dc2626;
-            padding: 4px 9px;
-            border-radius: 8px;
+            padding: 2px 6px;
+            border-radius: 6px;
             font-weight: 850;
-            font-size: 11px;
+            font-size: 10px;
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
         .badge-diff-qty.positive {
@@ -710,7 +740,7 @@
             text-align: center;
             padding: 35px;
             color: var(--text-muted);
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 800;
         }
 
@@ -740,7 +770,7 @@
         }
 
         .modal-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 900;
             color: var(--text-main);
         }
@@ -765,10 +795,10 @@
             background: var(--bg-body);
             border: 2px solid var(--border);
             color: var(--text-main);
-            padding: 13px 16px;
+            padding: 12px 14px;
             border-radius: 12px;
             font-family: 'Cairo', sans-serif;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 800;
             cursor: pointer;
             display: flex;
@@ -776,31 +806,11 @@
             justify-content: space-between;
             transition: all 0.2s ease;
         }
-
         .view-option-btn:hover {
             background: rgba(2, 132, 199, 0.1);
             border-color: #0284c7;
             color: #0284c7;
-            transform: translateY(-2px);
         }
-
-        .view-option-btn i {
-            font-size: 16px;
-            color: #0284c7;
-        }
-
-        .modal-close-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-family: 'Cairo', sans-serif;
-            font-size: 12.5px;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 6px;
-            padding: 6px;
-        }
-        .modal-close-btn:hover { color: #ef4444; }
     </style>
 </head>
 <body data-theme="light">
@@ -882,28 +892,27 @@
 
   <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
 
-  <!-- الشريط العلوي (مطابق لشريط المبيعات) -->
   <header class="app-topbar">
     <div class="topbar-left-group">
-      <button type="button" class="topbar-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" data-i18n-title="title_menu" title="القائمة الجانبية" aria-label="Toggle Sidebar">
+      <button type="button" class="topbar-btn" id="sidebarToggleBtn" onclick="toggleSidebar()" data-i18n-title="title_menu" title="القائمة الجانبية">
         <i class="fa-solid fa-bars"></i>
       </button>
       <div class="topbar-page-title" data-i18n="header_title">قوائم المشتريات والتحليل الموسمي</div>
     </div>
     <div class="topbar-right-actions">
-      <button type="button" class="topbar-btn" id="refreshBtn" onclick="loadData(currentSeason)" data-i18n-title="title_refresh" title="تحديث البيانات" aria-label="Refresh Data">
+      <button type="button" class="topbar-btn" id="refreshBtn" onclick="loadData(currentSeason)" data-i18n-title="title_refresh" title="تحديث البيانات">
         <i class="fa-solid fa-rotate"></i>
       </button>
-      <select id="langSelect" class="lang-select-top" onchange="changeLanguage(this.value)" aria-label="Language Selector">
+      <select id="langSelect" class="lang-select-top" onchange="changeLanguage(this.value)">
         <option value="ar">العربية</option>
         <option value="en">English</option>
         <option value="hi">हिन्दी</option>
         <option value="ur">اردو</option>
       </select>
-      <button type="button" class="topbar-btn" id="darkModeToggleBtn" onclick="toggleTheme()" data-i18n-title="title_darkmode" title="الوضع الليلي" aria-label="Toggle Dark Mode">
+      <button type="button" class="topbar-btn" id="darkModeToggleBtn" onclick="toggleTheme()" data-i18n-title="title_darkmode" title="الوضع الليلي">
         <i class="fa-solid fa-moon" id="themeIcon"></i>
       </button>
-      <button type="button" class="topbar-btn" id="fullscreenBtn" onclick="toggleFullscreen()" data-i18n-title="title_fullscreen" title="ملء الشاشة" aria-label="Toggle Fullscreen">
+      <button type="button" class="topbar-btn" id="fullscreenBtn" onclick="toggleFullscreen()" data-i18n-title="title_fullscreen" title="ملء الشاشة">
         <i class="fa-solid fa-expand"></i>
       </button>
     </div>
@@ -947,7 +956,7 @@
 
           <div class="kpi-card">
               <div class="kpi-top">
-                  <span class="kpi-title" data-i18n="kpi_po_qty">إجمالي كمية PO</span>
+                  <span class="kpi-title" data-i18n="kpi_po_qty">إجمالي كمية أمر الشراء</span>
                   <div class="kpi-icon" style="background: rgba(2, 132, 199, 0.12); color: #0284c7;">
                       <i class="fa-solid fa-file-contract"></i>
                   </div>
@@ -957,42 +966,89 @@
 
           <div class="kpi-card">
               <div class="kpi-top">
-                  <span class="kpi-title" data-i18n="kpi_cost">صافي التكلفة (SAR)</span>
+                  <span class="kpi-title" data-i18n="kpi_cost">صافي التكلفة</span>
                   <div class="kpi-icon" style="background: rgba(59, 130, 246, 0.12); color: #2563eb;">
                       <i class="fa-solid fa-file-invoice-dollar"></i>
                   </div>
               </div>
-              <div class="kpi-value" id="kpiCost">0.00 SAR</div>
+              <div class="kpi-value" id="kpiCost">0.00</div>
           </div>
 
           <div class="kpi-card">
               <div class="kpi-top">
-                  <span class="kpi-title" data-i18n="kpi_po_cost">إجمالي تكلفة PO</span>
+                  <span class="kpi-title" data-i18n="kpi_po_cost">إجمالي تكلفة أمر الشراء</span>
                   <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.12); color: #d97706;">
                       <i class="fa-solid fa-coins"></i>
                   </div>
               </div>
-              <div class="kpi-value" id="kpiPoCost">0.00 SAR</div>
+              <div class="kpi-value" id="kpiPoCost">0.00</div>
           </div>
       </div>
 
-      <div class="table-wrapper">
+      <div class="table-wrapper" id="printableArea">
           <div class="print-toolbar">
-              <button class="btn-print-mode" id="btnStartPrintSelect" onclick="togglePrintSelectMode(true)">
-                  <i class="fa-solid fa-check-double"></i>
-                  <span data-i18n="btn_select_mode">تحديد الشحنات والموردين</span>
-              </button>
+              <div class="btn-action-group" id="defaultActionGroup">
+                  <button class="btn-custom" id="btnStartPrintSelect" onclick="togglePrintSelectMode(true)">
+                      <i class="fa-solid fa-check-double"></i>
+                      <span data-i18n="btn_select_mode">تحديد الشحنات والموردين</span>
+                  </button>
+
+                  <div class="export-dropdown-wrapper">
+                      <button type="button" class="btn-custom" style="background: linear-gradient(135deg, #059669 0%, #0284c7 100%);" onclick="toggleExportMenu('mainExportMenu', event)">
+                          <i class="fa-solid fa-file-export"></i>
+                          <span data-i18n="btn_export_print_menu">تصدير وطباعة</span>
+                          <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-inline-start: 4px;"></i>
+                      </button>
+                      <div class="export-dropdown-menu" id="mainExportMenu">
+                          <button type="button" class="dropdown-item-btn" onclick="closeAllExportMenus(); exportToExcel();">
+                              <i class="fa-solid fa-file-excel" style="color: #059669;"></i>
+                              <span data-i18n="btn_export_excel">تصدير Excel</span>
+                          </button>
+                          <button type="button" class="dropdown-item-btn" onclick="closeAllExportMenus(); exportToPDF();">
+                              <i class="fa-solid fa-file-pdf" style="color: #dc2626;"></i>
+                              <span data-i18n="btn_export_pdf">تصدير PDF</span>
+                          </button>
+                          <button type="button" class="dropdown-item-btn" onclick="closeAllExportMenus(); triggerPrint();">
+                              <i class="fa-solid fa-print" style="color: #1e293b;"></i>
+                              <span data-i18n="btn_print">طباعة</span>
+                          </button>
+                      </div>
+                  </div>
+              </div>
 
               <div class="selection-actions-bar" id="selectionActionsBar">
                   <span style="font-size: 13px; font-weight: 800; color: #0284c7;">
                       <span data-i18n="selected_suppliers_label">المحدد:</span> <b id="selectedCountBadge">0</b>
                   </span>
                   <div class="selection-btns-group">
-                      <button class="btn-confirm-selection" onclick="openViewSelectionModal()">
+                      <button class="btn-custom" style="background:#10b981;" onclick="openViewSelectionModal()">
                           <i class="fa-solid fa-eye"></i>
                           <span data-i18n="btn_view_purchases">عرض المشتريات المحددة</span>
                       </button>
-                      <button class="btn-cancel-selection" onclick="togglePrintSelectMode(false)">
+
+                      <div class="export-dropdown-wrapper">
+                          <button type="button" class="btn-custom" style="background: linear-gradient(135deg, #059669 0%, #0284c7 100%);" onclick="toggleExportMenu('selectedExportMenu', event)">
+                              <i class="fa-solid fa-file-export"></i>
+                              <span data-i18n="btn_export_print_selected_menu">تصدير وطباعة المحدد</span>
+                              <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-inline-start: 4px;"></i>
+                          </button>
+                          <div class="export-dropdown-menu" id="selectedExportMenu">
+                              <button type="button" class="dropdown-item-btn" onclick="closeAllExportMenus(); exportToExcel();">
+                                  <i class="fa-solid fa-file-excel" style="color: #059669;"></i>
+                                  <span>Excel للمحدد</span>
+                              </button>
+                              <button type="button" class="dropdown-item-btn" onclick="closeAllExportMenus(); exportToPDF();">
+                                  <i class="fa-solid fa-file-pdf" style="color: #dc2626;"></i>
+                                  <span>PDF للمحدد</span>
+                              </button>
+                              <button type="button" class="dropdown-item-btn" onclick="closeAllExportMenus(); triggerPrint();">
+                                  <i class="fa-solid fa-print" style="color: #1e293b;"></i>
+                                  <span>طباعة المحدد</span>
+                              </button>
+                          </div>
+                      </div>
+
+                      <button class="btn-custom" style="background:#ef4444;" onclick="togglePrintSelectMode(false)">
                           <i class="fa-solid fa-xmark"></i>
                           <span data-i18n="btn_cancel">إلغاء</span>
                       </button>
@@ -1012,8 +1068,8 @@
                       <option value="supplier" data-i18n="sort_supplier">ترتيب باسم المورد</option>
                   </select>
                   <select id="sortOrder" class="sort-select" onchange="filterTable()">
-                      <option value="asc" data-i18n="sort_asc">تصاعدي (Asc)</option>
-                      <option value="desc" data-i18n="sort_desc">تنازلي (Desc)</option>
+                      <option value="asc" data-i18n="sort_asc">تصاعدي</option>
+                      <option value="desc" data-i18n="sort_desc">تنازلي</option>
                   </select>
               </div>
           </div>
@@ -1023,6 +1079,7 @@
           <table class="report-table" id="receiptsTable" style="display: none;">
               <thead id="tableHead"></thead>
               <tbody id="tableBody"></tbody>
+              <tfoot id="tableFoot" style="font-weight:900; background:var(--bg-body);"></tfoot>
           </table>
       </div>
     </div>
@@ -1034,20 +1091,20 @@
             
             <div class="modal-buttons-group">
                 <button class="view-option-btn" onclick="redirectToAnalyticsPrint('variants')">
-                    <span data-i18n="opt_model">على مستوى الموديل (Model Number)</span>
+                    <span data-i18n="opt_model">على مستوى الموديل</span>
                     <i class="fa-solid fa-shirt"></i>
                 </button>
                 <button class="view-option-btn" onclick="redirectToAnalyticsPrint('groups')">
-                    <span data-i18n="opt_group">على مستوى المجموعة (Sub Group)</span>
+                    <span data-i18n="opt_group">على مستوى المجموعة</span>
                     <i class="fa-solid fa-folder-tree"></i>
                 </button>
                 <button class="view-option-btn" onclick="redirectToAnalyticsPrint('items')">
-                    <span data-i18n="opt_item">على مستوى الصنف (Item)</span>
+                    <span data-i18n="opt_item">على مستوى الصنف</span>
                     <i class="fa-solid fa-box"></i>
                 </button>
             </div>
 
-            <button class="modal-close-btn" onclick="closeViewModal()" data-i18n="btn_cancel_modal">إلغاء الأمر</button>
+            <button class="view-option-btn" style="background:transparent; border:none; justify-content:center; color:#ef4444; margin-top:4px;" onclick="closeViewModal()" data-i18n="btn_cancel_modal">إلغاء الأمر</button>
         </div>
     </div>
   </main>
@@ -1074,53 +1131,53 @@
             nav_warehouse_staff: "أداء موظفي المستودع",
             nav_logout: "تسجيل الخروج",
             header_title: "قوائم المشتريات والتحليل الموسمي",
-            header_subtitle: "الموسى التجارية - تحليل الشحنات والمشتريات حسب المواسم",
             title_menu: "القائمة الجانبية",
             title_refresh: "تحديث البيانات",
             title_darkmode: "الوضع الليلي",
             title_fullscreen: "ملء الشاشة",
-            title_theme: "تغيير المظهر",
-            title_home: "الرئيسية",
             search_placeholder: "بحث بالبراند، المورد، رقم الشحنة، التاريخ...",
             sort_shipment: "ترتيب برقم الشحنة",
             sort_date: "ترتيب بالتاريخ",
             sort_supplier: "ترتيب باسم المورد",
-            sort_asc: "تصاعدي (Asc)",
-            sort_desc: "تنازلي (Desc)",
+            sort_asc: "تصاعدي",
+            sort_desc: "تنازلي",
             btn_all: "كل المشتريات",
             btn_summer: "الصيف",
             btn_winter: "الشتاء",
             btn_all_season: "جميع الفصول",
             btn_select_mode: "تحديد الشحنات والموردين",
+            btn_export_print_menu: "تصدير وطباعة",
+            btn_export_print_selected_menu: "تصدير وطباعة المحدد",
+            btn_export_excel: "تصدير Excel",
+            btn_export_pdf: "تصدير PDF",
+            btn_print: "طباعة",
             selected_suppliers_label: "المحدد:",
             btn_view_purchases: "عرض المشتريات المحددة",
             btn_cancel: "إلغاء",
             alert_select_one: "يرجى تحديد صف واحد على الأقل للمتابعة.",
             modal_title: "اختر مستوى عرض وطباعة المشتريات المحددة",
-            opt_model: "على مستوى الموديل (Model Number)",
-            opt_group: "على مستوى المجموعة (Sub Group)",
-            opt_item: "على مستوى الصنف (Item)",
+            opt_model: "على مستوى الموديل",
+            opt_group: "على مستوى المجموعة",
+            opt_item: "على مستوى الصنف",
             btn_cancel_modal: "إلغاء الأمر",
-            kpi_cost: "صافي التكلفة (SAR)",
+            kpi_cost: "صافي التكلفة",
             kpi_received: "صافي الكمية المستلمة",
-            kpi_po_qty: "إجمالي كمية PO",
-            kpi_po_cost: "إجمالي تكلفة PO",
+            kpi_po_qty: "إجمالي كمية أمر الشراء",
+            kpi_po_cost: "إجمالي تكلفة أمر الشراء",
             status_loading: "جاري تحميل البيانات...",
             no_records: "لا توجد بيانات مطابقة لهذا الفلتر",
-            error_server: "فشل جلب البيانات من السيرفر",
-            error_connection: "تعذر الاتصال بالسيرفر",
             records_count: "عدد السجلات: ",
-            th_shipment_no: "رقم الشحنة (Shipment No)",
-            th_supplier: "المورد (Supplier)",
-            th_main_date: "التاريخ (Date)",
-            th_po_qty: "كمية أمر الشراء (PO Qty)",
-            th_received_qty: "الكمية المستلمة (Received Qty)",
-            th_diff_qty: "فرق الكمية (Qty Diff)",
-            th_po_cost: "تكلفة أمر الشراء (PO Cost)",
-            th_received_cost: "تكلفة الاستلام (Receipt Cost)",
-            th_diff_cost: "فرق التكلفة (Cost Diff)",
-            th_sold_qty: "الكمية المباعة (Sold Qty)",
-            th_sold_amount: "قيمة المبيعات (Sold Amount)"
+            th_shipment_no: "رقم الشحنة",
+            th_supplier: "المورد",
+            th_main_date: "التاريخ",
+            th_po_qty: "كمية أمر الشراء",
+            th_received_qty: "الكمية المستلمة",
+            th_diff_qty: "فرق الكمية",
+            th_po_cost: "تكلفة أمر الشراء",
+            th_received_cost: "تكلفة الاستلام",
+            th_diff_cost: "فرق التكلفة",
+            th_sold_qty: "الكمية المباعة",
+            th_sold_amount: "قيمة المبيعات"
         },
         en: {
             page_title: "Purchase Receipts & Seasonal Analytics - Almoosa Trading",
@@ -1141,13 +1198,10 @@
             nav_warehouse_staff: "Warehouse Staff Performance",
             nav_logout: "Logout",
             header_title: "Purchase Receipts & Seasonal Analytics",
-            header_subtitle: "Almoosa Trading - Supplier, Shipment & Seasonal Performance",
             title_menu: "Sidebar Menu",
             title_refresh: "Refresh Data",
             title_darkmode: "Dark Mode",
             title_fullscreen: "Toggle Fullscreen",
-            title_theme: "Toggle Theme",
-            title_home: "Home",
             search_placeholder: "Search by brand, supplier, shipment no, date...",
             sort_shipment: "Sort by Shipment No",
             sort_date: "Sort by Date",
@@ -1159,6 +1213,11 @@
             btn_winter: "Winter",
             btn_all_season: "All-Season",
             btn_select_mode: "Select Shipments & Suppliers",
+            btn_export_print_menu: "Export & Print",
+            btn_export_print_selected_menu: "Export & Print Selected",
+            btn_export_excel: "Export Excel",
+            btn_export_pdf: "Export PDF",
+            btn_print: "Print",
             selected_suppliers_label: "Selected:",
             btn_view_purchases: "View Selected Purchases",
             btn_cancel: "Cancel",
@@ -1168,14 +1227,12 @@
             opt_group: "By Sub Group",
             opt_item: "By Item",
             btn_cancel_modal: "Cancel",
-            kpi_cost: "Net Cost (SAR)",
+            kpi_cost: "Net Cost",
             kpi_received: "Net Received Qty",
             kpi_po_qty: "Total PO Qty",
             kpi_po_cost: "Total PO Cost",
             status_loading: "Loading data...",
             no_records: "No records found for this filter",
-            error_server: "Failed to fetch data from server",
-            error_connection: "Server connection error",
             records_count: "Records: ",
             th_shipment_no: "Shipment No",
             th_supplier: "Supplier",
@@ -1208,41 +1265,41 @@
             nav_warehouse_staff: "गोदाम स्टाफ प्रदर्शन",
             nav_logout: "लॉग आउट",
             header_title: "Purchase Receipts & Seasonal Analytics",
-            header_subtitle: "अलमूसा ट्रेडिंग - आपूर्तिकर्ता और मौसमी प्रदर्शन",
             title_menu: "साइडबार मेनू",
             title_refresh: "डेटा रीफ्रेश करें",
             title_darkmode: "डार्क मोड",
             title_fullscreen: "फुल स्क्रीन",
-            title_theme: "थीम बदलें",
-            title_home: "होम",
             search_placeholder: "ब्रांड, आपूर्तिकर्ता, शिपमेंट नंबर द्वारा खोजें...",
             sort_shipment: "शिपमेंट नंबर से क्रमबद्ध करें",
             sort_date: "तारीख से क्रमबद्ध करें",
             sort_supplier: "आपूर्तिकर्ता से क्रमबद्ध करें",
-            sort_asc: "आरोही (Asc)",
-            sort_desc: "अवरोही (Desc)",
+            sort_asc: "आरोही",
+            sort_desc: "अवरोही",
             btn_all: "सभी खरीद",
             btn_summer: "गर्मी",
             btn_winter: "सर्दी",
             btn_all_season: "सभी मौसम",
             btn_select_mode: "शिपमेंट चुनें",
+            btn_export_print_menu: "निर्यात और प्रिंट",
+            btn_export_print_selected_menu: "चयनित निर्यात/प्रिंट",
+            btn_export_excel: "Excel निर्यात",
+            btn_export_pdf: "PDF निर्यात",
+            btn_print: "प्रिंट",
             selected_suppliers_label: "चयनित:",
             btn_view_purchases: "चयनित खरीद देखें",
             btn_cancel: "रद्द करें",
-            alert_select_one: "कृपया आगे बढ़ने के लिए कम से कम एक पंक्ति चुनें।",
-            modal_title: "चयनित खरीद के लिए स्तर चुनें",
+            alert_select_one: "कृपया कम से कम एक पंक्ति चुनें।",
+            modal_title: "स्तर चुनें",
             opt_model: "मॉडल नंबर के अनुसार",
             opt_group: "सब ग्रुप के अनुसार",
             opt_item: "आइटम के अनुसार",
             btn_cancel_modal: "रद्द करें",
-            kpi_cost: "शुद्ध लागत (SAR)",
+            kpi_cost: "शुद्ध लागत",
             kpi_received: "शुद्ध प्राप्त मात्रा",
             kpi_po_qty: "कुल PO मात्रा",
             kpi_po_cost: "कुल PO लागत",
             status_loading: "लोड हो रहा है...",
-            no_records: "कोई रिकॉर्ड नहीं मिला",
-            error_server: "सर्वर से डेटा लाने में विफल",
-            error_connection: "कनेक्शन त्रुटि",
+            no_records: "कोई रिकॉर्ड नहीं",
             records_count: "रिकॉर्ड: ",
             th_shipment_no: "शिपमेंट नंबर",
             th_supplier: "आपूर्तिकर्ता",
@@ -1275,41 +1332,41 @@
             nav_warehouse_staff: "گودام عملے کی کارکردگی",
             nav_logout: "لاگ آؤٹ",
             header_title: "Purchase Receipts & Seasonal Analytics",
-            header_subtitle: "الموسی ٹریڈنگ - سپلائر اور موسمی کارکردگی",
             title_menu: "سائیڈ بار مینو",
             title_refresh: "ڈیٹا تازہ کریں",
             title_darkmode: "ڈارک موڈ",
             title_fullscreen: "فل سکرین",
-            title_theme: "تھیم تبدیل کریں",
-            title_home: "ہوم",
             search_placeholder: "برانڈ، سپلائر، شپمنٹ نمبر تلاش کریں...",
             sort_shipment: "شپمنٹ نمبر کے لحاظ سے ترتیب",
             sort_date: "تاریخ کے لحاظ سے ترتیب",
             sort_supplier: "سپلائر کے نام سے ترتیب",
-            sort_asc: "صعودی (Asc)",
-            sort_desc: "نزولی (Desc)",
+            sort_asc: "صعودی",
+            sort_desc: "نزولی",
             btn_all: "تمام خریداریاں",
             btn_summer: "گرمی",
             btn_winter: "سردی",
             btn_all_season: "تمام موسم",
             btn_select_mode: "شپمنٹس منتخب کریں",
+            btn_export_print_menu: "ایکسپورٹ اور پرنٹ",
+            btn_export_print_selected_menu: "منتخب ایکسپورٹ/پرنٹ",
+            btn_export_excel: "Excel ایکسپورٹ",
+            btn_export_pdf: "PDF ایکسپورٹ",
+            btn_print: "پرنٹ",
             selected_suppliers_label: "منتخب کردہ:",
             btn_view_purchases: "منتخب خریداریاں دیکھیں",
             btn_cancel: "منسوخ کریں",
-            alert_select_one: "براہ کرم آگے بڑھنے کے لیے کم از کم ایک قطار منتخب کریں۔",
-            modal_title: "منتخب خریداریوں کے لیے سطح منتخب کریں",
+            alert_select_one: "براہ کرم کم از کم ایک قطار منتخب کریں۔",
+            modal_title: "سطح منتخب کریں",
             opt_model: "ماڈل نمبر کے لحاظ سے",
             opt_group: "سب گروپ کے لحاظ سے",
             opt_item: "آئٹم کے لحاظ سے",
             btn_cancel_modal: "منسوخ کریں",
-            kpi_cost: "خالص لاگت (SAR)",
+            kpi_cost: "خالص لاگت",
             kpi_received: "خالص موصولہ مقدار",
             kpi_po_qty: "کل PO مقدار",
             kpi_po_cost: "کل PO لاگت",
             status_loading: "ڈیٹا لوڈ ہو رہا ہے...",
             no_records: "کوئی ڈیٹا نہیں ملا",
-            error_server: "سرور کی خرابی",
-            error_connection: "کنکشن کی خرابی",
             records_count: "ریکارڈز: ",
             th_shipment_no: "شپمنٹ نمبر",
             th_supplier: "سپلائر",
@@ -1369,20 +1426,14 @@
     }
 
     function toggleSidebar() {
-        if (isDesktopViewport()) {
-            isDesktopSidebarOpen = !isDesktopSidebarOpen;
-        } else {
-            isMobileSidebarOpen = !isMobileSidebarOpen;
-        }
+        if (isDesktopViewport()) { isDesktopSidebarOpen = !isDesktopSidebarOpen; }
+        else { isMobileSidebarOpen = !isMobileSidebarOpen; }
         applySidebarState();
     }
 
     function closeSidebar() {
-        if (isDesktopViewport()) {
-            isDesktopSidebarOpen = false;
-        } else {
-            isMobileSidebarOpen = false;
-        }
+        isDesktopSidebarOpen = false;
+        isMobileSidebarOpen = false;
         applySidebarState();
     }
 
@@ -1427,12 +1478,32 @@
         loadData('all');
     });
 
+
+    function toggleExportMenu(menuId, event) {
+        if (event) event.stopPropagation();
+        const menu = document.getElementById(menuId);
+        const isOpen = menu && menu.classList.contains('show');
+        closeAllExportMenus();
+        if (menu && !isOpen) {
+            menu.classList.add('show');
+        }
+    }
+
+    function closeAllExportMenus() {
+        document.querySelectorAll('.export-dropdown-menu').forEach(m => m.classList.remove('show'));
+    }
+
+    document.addEventListener('click', () => {
+        closeAllExportMenus();
+    });
+
     function togglePrintSelectMode(enable) {
         isPrintSelectMode = enable;
         selectedRowKeys.clear();
         updateSelectedCountUI();
+        closeAllExportMenus();
 
-        document.getElementById('btnStartPrintSelect').style.display = enable ? 'none' : 'inline-flex';
+        document.getElementById('defaultActionGroup').style.display = enable ? 'none' : 'flex';
         document.getElementById('selectionActionsBar').style.display = enable ? 'flex' : 'none';
         renderView(filteredData);
     }
@@ -1482,10 +1553,7 @@
 
     function redirectToAnalyticsPrint(viewType) {
         closeViewModal();
-        const rowsToPrint = filteredData.filter((r, idx) => {
-            return selectedRowKeys.has(getUniqueRowKey(r, idx));
-        });
-
+        const rowsToPrint = filteredData.filter((r, idx) => selectedRowKeys.has(getUniqueRowKey(r, idx)));
         if (rowsToPrint.length === 0) return;
 
         const shipments = rowsToPrint.map(r => (r.shipment_number && r.shipment_number !== 'بدون رقم شحنة') ? r.shipment_number : '').filter(Boolean).join(',');
@@ -1493,11 +1561,7 @@
         const brand = rowsToPrint[0].brand || '';
 
         let targetUrl = `purchases-analytics.html?shipment=${encodeURIComponent(shipments)}&supplier=${encodeURIComponent(suppliers)}&view_type=${viewType}&season=${encodeURIComponent(currentSeason)}&auto_print=true`;
-        
-        if (brand && brand !== 'غير محدد') {
-            targetUrl += `&brand=${encodeURIComponent(brand)}`;
-        }
-        
+        if (brand && brand !== 'غير محدد') targetUrl += `&brand=${encodeURIComponent(brand)}`;
         window.location.href = targetUrl;
     }
 
@@ -1507,6 +1571,403 @@
         if (brand) targetUrl += `&brand=${encodeURIComponent(brand)}`;
         if (season) targetUrl += `&season=${encodeURIComponent(season)}`;
         window.location.href = targetUrl;
+    }
+
+    function getActiveDatasetForExport() {
+        if (selectedRowKeys.size > 0) {
+            return filteredData.filter((r, idx) => selectedRowKeys.has(getUniqueRowKey(r, idx)));
+        }
+        return filteredData;
+    }
+
+    // تصدير Excel احترافي بالتنسيق المطلوب (عنوان مدمج أزرق غامق، ترويسة زرقاء، بيانات Bold، عرض أعمدة تلقائي)
+    function exportToExcel() {
+        const dataset = getActiveDatasetForExport();
+        if (dataset.length === 0) {
+            alert("لا توجد بيانات للتصدير");
+            return;
+        }
+        const isSeasonMode = (currentSeason !== 'all');
+        const totalCols = isSeasonMode ? 8 : 10;
+
+        let aoa = [];
+
+        // الصف الأول (Index 0): العنوان الرئيسي مدمج في المنتصف بلون أزرق غامق
+        let titleRow = new Array(totalCols).fill("");
+        titleRow[0] = "تقرير قوائم المشتريات والشحنات";
+        aoa.push(titleRow);
+
+        // الصف الثاني (Index 1): سطر فارغ للجمالية
+        aoa.push(new Array(totalCols).fill(""));
+
+        // الصف الثالث (Index 2): عناوين الجدول
+        const headers = isSeasonMode
+            ? ["م", "رقم الشحنة", "المورد", "التاريخ", "الكمية المستلمة", "تكلفة الاستلام", "الكمية المباعة", "قيمة المبيعات"]
+            : ["م", "رقم الشحنة", "المورد", "التاريخ", "كمية أمر الشراء", "الكمية المستلمة", "فرق الكمية", "تكلفة أمر الشراء", "تكلفة الاستلام", "فرق التكلفة"];
+        aoa.push(headers);
+
+        let subRecQty = 0, subPoQty = 0, subCostSar = 0, subPoCostSar = 0, subSoldQty = 0, subSoldAmount = 0;
+
+        // بيانات الجدول (من Index 3)
+        dataset.forEach((r, i) => {
+            const poQty = parseFloat(r.po_qty || 0);
+            const recQty = parseFloat(r.net_qty || r.received_qty || 0);
+            const poCost = parseFloat(r.po_cost || 0);
+            const recCost = parseFloat(r.net_cost_sar || r.shipment_cost || 0);
+            const soldQty = parseFloat(r.sold_qty || 0);
+            const soldAmt = parseFloat(r.sold_amount || 0);
+
+            subPoQty += poQty;
+            subRecQty += recQty;
+            subPoCostSar += poCost;
+            subCostSar += recCost;
+            subSoldQty += soldQty;
+            subSoldAmount += soldAmt;
+
+            if (isSeasonMode) {
+                aoa.push([i + 1, r.shipment_number || '-', r.supplier_name || r.supplier || '', r.posting_date || '', recQty, recCost, soldQty, soldAmt]);
+            } else {
+                aoa.push([i + 1, r.shipment_number || '-', r.supplier_name || r.supplier || '', r.posting_date || '', poQty, recQty, recQty - poQty, poCost, recCost, recCost - poCost]);
+            }
+        });
+
+        // صف الإجمالي الكلي
+        if (isSeasonMode) {
+            aoa.push(["", "الإجمالي الكلي", `${dataset.length} سجل`, "", subRecQty, subCostSar, subSoldQty, subSoldAmount]);
+        } else {
+            aoa.push(["", "الإجمالي الكلي", `${dataset.length} سجل`, "", subPoQty, subRecQty, subRecQty - subPoQty, subPoCostSar, subCostSar, subCostSar - subPoCostSar]);
+        }
+
+        const worksheet = XLSX.utils.aoa_to_sheet(aoa);
+
+        // دمج خلايا الصف الأول للعنوان الرئيسي
+        worksheet['!merges'] = [
+            { s: { r: 0, c: 0 }, e: { r: 0, c: totalCols - 1 } }
+        ];
+
+        // ضبط اتجاه الورقة من اليمين لليسار (RTL)
+        if (!worksheet['!views']) worksheet['!views'] = [];
+        worksheet['!views'].push({ rightToLeft: true });
+
+        // ضبط ارتفاع الصفوف
+        worksheet['!rows'] = [
+            { hpt: 32 }, // صف العنوان الرئيسي
+            { hpt: 10 }, // صف فارغ
+            { hpt: 26 }  // صف عناوين الجدول
+        ];
+
+        // حساب عرض الأعمدة تلقائياً بناءً على أطول نص لتجنب قص الكلام
+        const colWidths = headers.map((h, colIdx) => {
+            let maxLen = h.length + 4;
+            for (let r = 3; r < aoa.length; r++) {
+                const val = aoa[r][colIdx] !== undefined && aoa[r][colIdx] !== null ? aoa[r][colIdx].toString() : "";
+                if (val.length + 4 > maxLen) maxLen = val.length + 4;
+            }
+            return { wch: Math.max(maxLen, colIdx === 0 ? 6 : 15) };
+        });
+        worksheet['!cols'] = colWidths;
+
+        const borderStyle = {
+            top: { style: "thin", color: { rgb: "CBD5E1" } },
+            bottom: { style: "thin", color: { rgb: "CBD5E1" } },
+            left: { style: "thin", color: { rgb: "CBD5E1" } },
+            right: { style: "thin", color: { rgb: "CBD5E1" } }
+        };
+
+        // 1. تنسيق العنوان الرئيسي المدمج (أزرق غامق + نص أبيض Bold في المنتصف)
+        for (let c = 0; c < totalCols; c++) {
+            const cellRef = XLSX.utils.encode_cell({ r: 0, c: c });
+            if (!worksheet[cellRef]) worksheet[cellRef] = { t: 's', v: '' };
+            worksheet[cellRef].s = {
+                font: { name: "Cairo", sz: 15, bold: true, color: { rgb: "FFFFFF" } },
+                fill: { fgColor: { rgb: "0F172A" } }, // أزرق غامق داكن
+                alignment: { horizontal: "center", vertical: "center" }
+            };
+        }
+
+        // 2. تنسيق صف عناوين الجدول (أزرق + نص أبيض Bold أكبر)
+        const headerRowIdx = 2;
+        for (let c = 0; c < totalCols; c++) {
+            const cellRef = XLSX.utils.encode_cell({ r: headerRowIdx, c: c });
+            if (worksheet[cellRef]) {
+                worksheet[cellRef].s = {
+                    font: { name: "Cairo", sz: 12, bold: true, color: { rgb: "FFFFFF" } },
+                    fill: { fgColor: { rgb: "1D4ED8" } }, // أزرق واضح
+                    alignment: { horizontal: "center", vertical: "center", wrapText: true },
+                    border: borderStyle
+                };
+            }
+        }
+
+        // 3. تنسيق البيانات وصف الإجمالي (كافة البيانات بخط Bold)
+        const totalRowIdx = aoa.length - 1;
+        for (let r = 3; r <= totalRowIdx; r++) {
+            const isTotalRow = (r === totalRowIdx);
+            const isEvenRow = (r % 2 === 0);
+
+            for (let c = 0; c < totalCols; c++) {
+                const cellRef = XLSX.utils.encode_cell({ r: r, c: c });
+                if (!worksheet[cellRef]) continue;
+
+                // تنسيق الأرقام بفواصل عشرية وآلاف
+                if (typeof worksheet[cellRef].v === 'number') {
+                    if (isSeasonMode) {
+                        worksheet[cellRef].z = (c === 5 || c === 7) ? '#,##0.00' : '#,##0';
+                    } else {
+                        worksheet[cellRef].z = (c >= 7) ? '#,##0.00' : '#,##0';
+                    }
+                }
+
+                worksheet[cellRef].s = {
+                    font: {
+                        name: "Cairo",
+                        sz: isTotalRow ? 12 : 11,
+                        bold: true,
+                        color: { rgb: "0F172A" }
+                    },
+                    fill: {
+                        fgColor: { rgb: isTotalRow ? "E2E8F0" : (isEvenRow ? "F8FAFC" : "FFFFFF") }
+                    },
+                    alignment: {
+                        horizontal: (c === 2 && !isTotalRow) ? "right" : "center",
+                        vertical: "center"
+                    },
+                    border: borderStyle
+                };
+            }
+        }
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "المشتريات");
+        XLSX.writeFile(workbook, `Almoosa_Purchases_${currentSeason}_${new Date().toISOString().slice(0, 10)}.xlsx`);
+    }
+
+    // توليد تقرير PDF وطباعة فائق الوضوح والحدة (لون أسود داكن صريح #000000 وخطوط عريضة Bold لمنع البهتان)
+    function generateProfessionalReportHTML() {
+        const dataset = getActiveDatasetForExport();
+        const isSeasonMode = (currentSeason !== 'all');
+        const seasonName = document.getElementById('activeSeasonLabel').textContent;
+        const currentDate = new Date().toISOString().slice(0, 10);
+
+        let subRecQty = 0, subPoQty = 0, subCostSar = 0, subPoCostSar = 0, subSoldQty = 0, subSoldAmount = 0;
+        dataset.forEach(r => {
+            subRecQty += parseFloat(r.net_qty || r.received_qty || 0);
+            subPoQty += parseFloat(r.po_qty || 0);
+            subCostSar += parseFloat(r.net_cost_sar || r.shipment_cost || 0);
+            subPoCostSar += parseFloat(r.po_cost || 0);
+            subSoldQty += parseFloat(r.sold_qty || 0);
+            subSoldAmount += parseFloat(r.sold_amount || 0);
+        });
+
+        const thStyle = "padding:8px 6px; border:1.5px solid #000000; background:#0f172a; color:#ffffff; font-weight:900; font-size:11px; -webkit-font-smoothing:antialiased;";
+        const tdBase = "padding:7px 6px; border:1.5px solid #334155; color:#000000; font-weight:800; font-size:11px; -webkit-font-smoothing:antialiased;";
+
+        let tableHeaders = '';
+        let tableRowsHTML = '';
+
+        if (isSeasonMode) {
+            tableHeaders = `
+                <tr>
+                    <th style="${thStyle} text-align:center;">م</th>
+                    <th style="${thStyle} text-align:right;">رقم الشحنة</th>
+                    <th style="${thStyle} text-align:right;">المورد</th>
+                    <th style="${thStyle} text-align:center;">التاريخ</th>
+                    <th style="${thStyle} text-align:center;">الكمية المستلمة</th>
+                    <th style="${thStyle} text-align:left;">تكلفة الاستلام</th>
+                    <th style="${thStyle} text-align:center;">الكمية المباعة</th>
+                    <th style="${thStyle} text-align:left;">قيمة المبيعات</th>
+                </tr>
+            `;
+            dataset.forEach((r, i) => {
+                const bg = i % 2 === 0 ? '#ffffff' : '#f1f5f9';
+                tableRowsHTML += `
+                    <tr style="background:${bg}; page-break-inside:avoid;">
+                        <td style="${tdBase} text-align:center;">${i + 1}</td>
+                        <td style="${tdBase} text-align:right; color:#92400e; font-weight:900;">${r.shipment_number || '-'}</td>
+                        <td style="${tdBase} text-align:right; font-weight:900;">${r.supplier_name || r.supplier || ''}</td>
+                        <td style="${tdBase} text-align:center;">${r.posting_date || ''}</td>
+                        <td style="${tdBase} text-align:center; font-weight:900;">${parseFloat(r.net_qty || r.received_qty || 0).toLocaleString('en-US')}</td>
+                        <td style="${tdBase} text-align:left; font-weight:900;">${parseFloat(r.net_cost_sar || r.shipment_cost || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td style="${tdBase} text-align:center; font-weight:900;">${parseFloat(r.sold_qty || 0).toLocaleString('en-US')}</td>
+                        <td style="${tdBase} text-align:left; font-weight:900; color:#065f46;">${parseFloat(r.sold_amount || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    </tr>
+                `;
+            });
+        } else {
+            tableHeaders = `
+                <tr>
+                    <th style="${thStyle} text-align:center;">م</th>
+                    <th style="${thStyle} text-align:right;">رقم الشحنة</th>
+                    <th style="${thStyle} text-align:right;">المورد</th>
+                    <th style="${thStyle} text-align:center;">التاريخ</th>
+                    <th style="${thStyle} text-align:center;">كمية أمر الشراء</th>
+                    <th style="${thStyle} text-align:center;">الكمية المستلمة</th>
+                    <th style="${thStyle} text-align:center;">فرق الكمية</th>
+                    <th style="${thStyle} text-align:left;">تكلفة أمر الشراء</th>
+                    <th style="${thStyle} text-align:left;">تكلفة الاستلام</th>
+                    <th style="${thStyle} text-align:left;">فرق التكلفة</th>
+                </tr>
+            `;
+            dataset.forEach((r, i) => {
+                const bg = i % 2 === 0 ? '#ffffff' : '#f1f5f9';
+                const poQty = parseFloat(r.po_qty || 0);
+                const recQty = parseFloat(r.net_qty || r.received_qty || 0);
+                const diffQty = recQty - poQty;
+                const poCost = parseFloat(r.po_cost || 0);
+                const recCost = parseFloat(r.net_cost_sar || r.shipment_cost || 0);
+                const diffCost = recCost - poCost;
+
+                tableRowsHTML += `
+                    <tr style="background:${bg}; page-break-inside:avoid;">
+                        <td style="${tdBase} text-align:center;">${i + 1}</td>
+                        <td style="${tdBase} text-align:right; color:#92400e; font-weight:900;">${r.shipment_number || '-'}</td>
+                        <td style="${tdBase} text-align:right; font-weight:900;">${r.supplier_name || r.supplier || ''}</td>
+                        <td style="${tdBase} text-align:center;">${r.posting_date || ''}</td>
+                        <td style="${tdBase} text-align:center; font-weight:900;">${poQty.toLocaleString('en-US')}</td>
+                        <td style="${tdBase} text-align:center; font-weight:900;">${recQty.toLocaleString('en-US')}</td>
+                        <td style="${tdBase} text-align:center; color:${diffQty >= 0 ? '#065f46' : '#991b1b'}; font-weight:900;">${diffQty > 0 ? '+' : ''}${diffQty.toLocaleString('en-US')}</td>
+                        <td style="${tdBase} text-align:left; font-weight:900;">${poCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td style="${tdBase} text-align:left; font-weight:900;">${recCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td style="${tdBase} text-align:left; color:${diffCost <= 0 ? '#065f46' : '#991b1b'}; font-weight:900;">${diffCost > 0 ? '+' : ''}${diffCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        const totalDiffQty = subRecQty - subPoQty;
+        const totalDiffCost = subCostSar - subPoCostSar;
+        const totalTdStyle = "padding:9px 6px; border:2px solid #000000; background:#cbd5e1; color:#000000; font-weight:900; font-size:11.5px;";
+
+        const totalRowHTML = isSeasonMode ? `
+            <tr style="page-break-inside:avoid;">
+                <td colspan="4" style="${totalTdStyle} text-align:right;">الإجمالي الكلي (${dataset.length} سجل):</td>
+                <td style="${totalTdStyle} text-align:center;">${subRecQty.toLocaleString('en-US')}</td>
+                <td style="${totalTdStyle} text-align:left;">${subCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                <td style="${totalTdStyle} text-align:center;">${subSoldQty.toLocaleString('en-US')}</td>
+                <td style="${totalTdStyle} text-align:left; color:#065f46;">${subSoldAmount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            </tr>
+        ` : `
+            <tr style="page-break-inside:avoid;">
+                <td colspan="4" style="${totalTdStyle} text-align:right;">الإجمالي الكلي (${dataset.length} سجل):</td>
+                <td style="${totalTdStyle} text-align:center;">${subPoQty.toLocaleString('en-US')}</td>
+                <td style="${totalTdStyle} text-align:center;">${subRecQty.toLocaleString('en-US')}</td>
+                <td style="${totalTdStyle} text-align:center; color:${totalDiffQty >= 0 ? '#065f46' : '#991b1b'};">${totalDiffQty > 0 ? '+' : ''}${totalDiffQty.toLocaleString('en-US')}</td>
+                <td style="${totalTdStyle} text-align:left;">${subPoCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                <td style="${totalTdStyle} text-align:left;">${subCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                <td style="${totalTdStyle} text-align:left; color:${totalDiffCost <= 0 ? '#065f46' : '#991b1b'};">${totalDiffCost > 0 ? '+' : ''}${totalDiffCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            </tr>
+        `;
+
+        return `
+            <div dir="rtl" style="font-family:'Cairo', sans-serif; padding:12px 15px 25px 15px; background:#ffffff; color:#000000; width:100%; box-sizing:border-box; opacity:1;">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #000000; padding-bottom:10px; margin-bottom:12px;">
+                    <div>
+                        <h1 style="margin:0; font-size:18px; font-weight:900; color:#000000;">شركة محمد عبد الله الموسى التجارية</h1>
+                        <h2 style="margin:3px 0 0; font-size:14.5px; font-weight:900; color:#0369a1;">تقرير قوائم المشتريات والشحنات</h2>
+                        <p style="margin:4px 0 0; font-size:11.5px; font-weight:800; color:#000000;">
+                            التصنيف: <b>${seasonName}</b> &nbsp;|&nbsp;
+                            تاريخ الطباعة: <b>${currentDate}</b> &nbsp;|&nbsp;
+                            عدد السجلات: <b>${dataset.length}</b>
+                            ${selectedRowKeys.size > 0 ? ' &nbsp;|&nbsp; <span style="color:#065f46; font-weight:900;">(مخصص للسجلات المحددة فقط)</span>' : ''}
+                        </p>
+                    </div>
+                    <div>
+                        <img src="https://raw.githubusercontent.com/Almoosa-Trading/Almoosa-APP/main/Almoosa%20App.png" crossorigin="anonymous" alt="شعار الموسى التجارية" style="height:52px; object-fit:contain;">
+                    </div>
+                </div>
+
+                <table style="width:100%; border-collapse:collapse; font-size:11px; margin-bottom:12px;">
+                    <thead>
+                        ${tableHeaders}
+                    </thead>
+                    <tbody>
+                        ${tableRowsHTML}
+                        ${totalRowHTML}
+                    </tbody>
+                </table>
+
+                <div style="margin-top:10px; text-align:center; font-size:10.5px; font-weight:800; color:#000000; border-top:1.5px solid #000000; padding-top:6px;">
+                    تم استخراج هذا التقرير آلياً من نظام الموسى الذكي (ERPNext) - جميع الحقوق محفوظة لشركة محمد عبد الله الموسى التجارية © 2026
+                </div>
+            </div>
+        `;
+    }
+
+    async function exportToPDF() {
+        const dataset = getActiveDatasetForExport();
+        if (dataset.length === 0) {
+            alert("لا توجد بيانات للتصدير");
+            return;
+        }
+        // انتظار تحميل خطوط Cairo بالكامل قبل التصوير لمنع بهتان أو تشوه الحروف
+        if (document.fonts && document.fonts.ready) {
+            await document.fonts.ready;
+        }
+        const reportHTML = generateProfessionalReportHTML();
+        const container = document.createElement('div');
+        container.style.background = '#ffffff';
+        container.style.color = '#000000';
+        container.innerHTML = reportHTML;
+
+        const opt = {
+            margin:       [8, 8, 12, 8],
+            filename:     `Almoosa_Purchases_Report_${new Date().toISOString().slice(0,10)}.pdf`,
+            image:        { type: 'png', quality: 1.0 },
+            html2canvas:  { scale: 3, useCORS: true, logging: false, scrollY: 0, backgroundColor: '#ffffff', letterRendering: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+        };
+
+        html2pdf().from(container).set(opt).save();
+    }
+
+    function triggerPrint() {
+        const dataset = getActiveDatasetForExport();
+        if (dataset.length === 0) {
+            alert("لا توجد بيانات للطباعة");
+            return;
+        }
+        const reportHTML = generateProfessionalReportHTML();
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html lang="ar" dir="rtl">
+            <head>
+                <meta charset="UTF-8">
+                <title>طباعة تقرير المشتريات - الموسى التجارية</title>
+                <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet">
+                <style>
+                    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+                    body { font-family: 'Cairo', sans-serif; background: #ffffff; color: #000000; margin: 0; padding: 10px; font-weight: 800; }
+                    table, th, td { border-color: #000000 !important; }
+                    @media print {
+                        @page { size: landscape; margin: 8mm 8mm 12mm 8mm; }
+                        body { background: #ffffff !important; color: #000000 !important; }
+                    }
+                </style>
+            </head>
+            <body>
+                ${reportHTML}
+                <script>
+                    window.onload = function() {
+                        if (document.fonts && document.fonts.ready) {
+                            document.fonts.ready.then(function() {
+                                setTimeout(function() {
+                                    window.print();
+                                    window.close();
+                                }, 300);
+                            });
+                        } else {
+                            setTimeout(function() {
+                                window.print();
+                                window.close();
+                            }, 500);
+                        }
+                    }
+                <\/script>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
     }
 
     function setLanguage(lang) {
@@ -1607,10 +2068,9 @@
             } else {
                 const errorBody = await res.text();
                 statusBox.innerHTML = `خطأ من السيرفر (${res.status}): <pre dir="ltr" style="text-align:left; background:#fee2e2; padding:10px; border-radius:8px; margin-top:5px; font-size:11px; color:#991b1b; overflow:auto;">${errorBody}</pre>`;
-                console.error("Server Error details:", errorBody);
             }
         } catch (err) {
-            statusBox.textContent = `${translations[currentLang].error_connection}: ${err.message}`;
+            statusBox.textContent = `تعذر الاتصال بالسيرفر: ${err.message}`;
         }
     }
 
@@ -1653,6 +2113,7 @@
         const table = document.getElementById('receiptsTable');
         const thead = document.getElementById('tableHead');
         const tbody = document.getElementById('tableBody');
+        const tfoot = document.getElementById('tableFoot');
         const t = translations[currentLang];
 
         document.getElementById('recordCount').textContent = `${t.records_count}${data.length}`;
@@ -1670,8 +2131,8 @@
 
         document.getElementById('kpiReceived').textContent = `${totalRecQty.toLocaleString('en-US')} Pcs`;
         document.getElementById('kpiPoQty').textContent = `${totalPoQty.toLocaleString('en-US')} Pcs`;
-        document.getElementById('kpiCost').textContent = `${totalCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR`;
-        document.getElementById('kpiPoCost').textContent = `${totalPoCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR`;
+        document.getElementById('kpiCost').textContent = `${totalCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        document.getElementById('kpiPoCost').textContent = `${totalPoCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
         if (data.length === 0) {
             table.style.display = 'none';
@@ -1685,7 +2146,7 @@
         tbody.innerHTML = '';
 
         const allSelected = data.length > 0 && data.every((r, idx) => selectedRowKeys.has(getUniqueRowKey(r, idx)));
-        const checkboxHeader = isPrintSelectMode ? `<th style="width:42px; text-align:center;"><input type="checkbox" class="ship-checkbox" onchange="toggleSelectAllRows(this)" ${allSelected ? 'checked' : ''}></th>` : '';
+        const checkboxHeader = isPrintSelectMode ? `<th style="width:32px; text-align:center;"><input type="checkbox" class="ship-checkbox" onchange="toggleSelectAllRows(this)" ${allSelected ? 'checked' : ''}></th>` : '';
 
         const isSeasonMode = (currentSeason !== 'all');
 
@@ -1721,7 +2182,7 @@
 
         data.forEach((r, idx) => {
             const rowKey = getUniqueRowKey(r, idx);
-            const safeRowKey = rowKey.replace(/'/g, "\\'");
+            const safeRowKey = rowKey.replace(/'/g, "\'");
             const supKey = r.supplier || r.supplier_name || '';
             const shipKey = r.shipment_number || '';
             const isChecked = selectedRowKeys.has(rowKey);
@@ -1750,10 +2211,10 @@
                     <td><span class="shipment-no-badge">${shipKey || '-'}</span></td>
                     <td><strong>${r.supplier_name || r.supplier}</strong></td>
                     <td>${r.posting_date || ''}</td>
-                    <td><span class="badge-qty">${recQty.toLocaleString('en-US')} Pcs</span></td>
-                    <td><strong>${recCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</strong></td>
-                    <td><span class="badge-qty" style="background: rgba(59, 130, 246, 0.15); color: #2563eb; border-color: rgba(59, 130, 246, 0.3);">${soldQty.toLocaleString('en-US')} Pcs</span></td>
-                    <td><strong style="color: #059669;">${soldAmount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</strong></td>
+                    <td><span class="badge-qty">${recQty.toLocaleString('en-US')}</span></td>
+                    <td><strong>${recCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong></td>
+                    <td><span class="badge-qty" style="background: rgba(59, 130, 246, 0.15); color: #2563eb;">${soldQty.toLocaleString('en-US')}</span></td>
+                    <td><strong style="color: #059669;">${soldAmount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong></td>
                 `;
             } else {
                 const poQty = parseFloat(r.po_qty || 0);
@@ -1772,16 +2233,56 @@
                     <td><span class="shipment-no-badge">${shipKey || '-'}</span></td>
                     <td><strong>${r.supplier_name || r.supplier}</strong></td>
                     <td>${r.posting_date || ''}</td>
-                    <td><span class="badge-qty">${poQty.toLocaleString('en-US')} Pcs</span></td>
-                    <td><span class="badge-qty">${recQty.toLocaleString('en-US')} Pcs</span></td>
-                    <td><span class="${qtyDiffClass}">${qtyDiff > 0 ? '+' : ''}${qtyDiff.toLocaleString('en-US')} Pcs</span></td>
-                    <td><strong>${poCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</strong></td>
-                    <td><strong>${recCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</strong></td>
-                    <td><strong style="color: ${costDiffColor};">${costDiff > 0 ? '+' : ''}${costDiff.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} SAR</strong></td>
+                    <td><span class="badge-qty">${poQty.toLocaleString('en-US')}</span></td>
+                    <td><span class="badge-qty">${recQty.toLocaleString('en-US')}</span></td>
+                    <td><span class="${qtyDiffClass}">${qtyDiff > 0 ? '+' : ''}${qtyDiff.toLocaleString('en-US')}</span></td>
+                    <td><strong>${poCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong></td>
+                    <td><strong>${recCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong></td>
+                    <td><strong style="color: ${costDiffColor};">${costDiff > 0 ? '+' : ''}${costDiff.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong></td>
                 `;
             }
             tbody.appendChild(tr);
         });
+
+        const activeDataset = getActiveDatasetForExport();
+        let subRecQty = 0, subPoQty = 0, subCostSar = 0, subPoCostSar = 0, subSoldQty = 0, subSoldAmount = 0;
+        activeDataset.forEach(r => {
+            subRecQty += parseFloat(r.net_qty || r.received_qty || 0);
+            subPoQty += parseFloat(r.po_qty || 0);
+            subCostSar += parseFloat(r.net_cost_sar || r.shipment_cost || 0);
+            subPoCostSar += parseFloat(r.po_cost || 0);
+            subSoldQty += parseFloat(r.sold_qty || 0);
+            subSoldAmount += parseFloat(r.sold_amount || 0);
+        });
+
+        const totalDiffQty = subRecQty - subPoQty;
+        const totalDiffCost = subCostSar - subPoCostSar;
+
+        if (isSeasonMode) {
+            tfoot.innerHTML = `
+                <tr>
+                    ${isPrintSelectMode ? '<td></td>' : ''}
+                    <td colspan="3">الإجمالي (${activeDataset.length}):</td>
+                    <td>${subRecQty.toLocaleString('en-US')}</td>
+                    <td>${subCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td>${subSoldQty.toLocaleString('en-US')}</td>
+                    <td style="color:#059669;">${subSoldAmount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                </tr>
+            `;
+        } else {
+            tfoot.innerHTML = `
+                <tr>
+                    ${isPrintSelectMode ? '<td></td>' : ''}
+                    <td colspan="3">الإجمالي (${activeDataset.length}):</td>
+                    <td>${subPoQty.toLocaleString('en-US')}</td>
+                    <td>${subRecQty.toLocaleString('en-US')}</td>
+                    <td style="color:${totalDiffQty >= 0 ? '#059669' : '#dc2626'};">${totalDiffQty > 0 ? '+' : ''}${totalDiffQty.toLocaleString('en-US')}</td>
+                    <td>${subPoCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td>${subCostSar.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td style="color:${totalDiffCost <= 0 ? '#059669' : '#dc2626'};">${totalDiffCost > 0 ? '+' : ''}${totalDiffCost.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                </tr>
+            `;
+        }
     }
 </script>
 
